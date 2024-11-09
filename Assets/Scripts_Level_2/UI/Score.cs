@@ -6,10 +6,6 @@ public class Score : MonoBehaviour
 {
     [SerializeField] private TimeGame timeGame;
     private float _score;
-    void Start()
-    {
-        
-    }
     public void AddScore(int score)
     {
         _score += score + AdditionalScore();

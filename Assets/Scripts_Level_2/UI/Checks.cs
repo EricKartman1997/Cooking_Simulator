@@ -29,7 +29,7 @@ public class Checks : MonoBehaviour
     }
     void Update()
     {
-        if (Heroik.MakeOrders == Level.NumberOrdersInLevel || (timeGame.GetSeconds() >= Level.TimeLevel[0] && timeGame.GetMinutes() >= Level.TimeLevel[1]) )
+        if (Heroik.MakeOrders == Level.NumberOrdersInLevel || (timeGame.GetSeconds() <= 0f && timeGame.GetMinutes() <= 0f) )
         {
             Debug.Log("Игра закончена, время больше не идет");
             Destroy(SecondCheck);

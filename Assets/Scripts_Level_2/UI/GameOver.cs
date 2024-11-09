@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class GameOver : MonoBehaviour
 {
     [SerializeField] private GameObject windowScore;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI timeText;
-    [SerializeField] private TextMeshProUGUI assignmentTimeText;
+    [SerializeField] private TextMeshProUGUI scoreNumbersText;
+    [SerializeField] private TextMeshProUGUI timeNumbersText;
+    [SerializeField] private TextMeshProUGUI assignmentNumbersTimeText;
     [SerializeField] private Button continueButton;
     
     [SerializeField] private Score score;
@@ -23,9 +23,9 @@ public class GameOver : MonoBehaviour
     public void ShowWindowScore()
     {
         windowScore.SetActive(true);
-        scoreText.text = $"Score: {score.GetScore()}";
-        timeText.text = "Time: " + $"{timeGame.GetMinutes():00}:{timeGame.GetSeconds():00}";
-        assignmentTimeText.text = "Assignment Time: " + $"{Level.TimeLevel[1]:00}:{Level.TimeLevel[0]:00}";
+        scoreNumbersText.text = $"{Mathf.Round(score.GetScore())}";
+        timeNumbersText.text = $"{timeGame.GetMinutes():00}:{timeGame.GetSeconds():00}";
+        assignmentNumbersTimeText.text = $"{Level.TimeLevel[1]:00}:{Level.TimeLevel[0]:00}";
     }
 
 }
