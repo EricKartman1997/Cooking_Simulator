@@ -47,19 +47,19 @@ public class Checks : MonoBehaviour
             _currentTime += Time.deltaTime;
             if (FirstCheck == null && _currentTime >= _timeAddCheck)
             {
-                Debug.Log("поиск 1 чека");
+                //Debug.Log("поиск 1 чека");
                 AddCheck(readyFood[Random.Range(0, readyFood.Count)],1);
                 _timeAddCheck = _currentTime + 10f;
             }
             else if(SecondCheck == null && _currentTime >= _timeAddCheck)
             {
-                Debug.Log("поиск 2 чека");
+                //Debug.Log("поиск 2 чека");
                 AddCheck(readyFood[Random.Range(0, readyFood.Count)],2);
                 _timeAddCheck = _currentTime + 15f;
             }
             else if(ThirdCheck == null && _currentTime >= _timeAddCheck)
             {
-                Debug.Log("поиск 3 чека");
+                //Debug.Log("поиск 3 чека");
                 AddCheck(readyFood[Random.Range(0, readyFood.Count)],3);
                 _timeAddCheck = _currentTime + 15f;
             }
@@ -70,7 +70,7 @@ public class Checks : MonoBehaviour
             }
             else
             {
-                Debug.Log("Выполнены все условия");
+                //Debug.Log("Выполнены все условия");
             }
         }
     }
@@ -83,17 +83,17 @@ public class Checks : MonoBehaviour
             {
                 if (number == 1 && FirstCheck == null)
                 {
-                    Debug.Log("создание 1 чека");
+                    //Debug.Log("создание 1 чека");
                     FirstCheck = Instantiate(pref,Content.transform) as GameObject;
                 }
                 else if (number == 2 && SecondCheck == null)
                 {
-                    Debug.Log("создание 2 чека");
+                    //Debug.Log("создание 2 чека");
                     SecondCheck = Instantiate(pref,Content.transform) as GameObject;
                 }
                 else if (number == 3 && ThirdCheck == null)
                 {
-                    Debug.Log("создание 3 чека");
+                    //Debug.Log("создание 3 чека");
                     ThirdCheck = Instantiate(pref,Content.transform) as GameObject;
                 }
                 else
@@ -113,7 +113,7 @@ public class Checks : MonoBehaviour
                 {
                     Destroy(FirstCheck);
                     FirstCheck = null;
-                    Debug.Log("удалил первый чек");
+                    //Debug.Log("удалил первый чек");
                     Heroik.MakeOrders++;
                     score.AddScore(100);
                     numberOrder.UpdateOrders();
@@ -126,7 +126,7 @@ public class Checks : MonoBehaviour
                 {
                     Destroy(SecondCheck);
                     SecondCheck = null;
-                    Debug.Log("удалил второй чек");
+                    //Debug.Log("удалил второй чек");
                     Heroik.MakeOrders++;
                     score.AddScore(100);
                     numberOrder.UpdateOrders();
@@ -139,7 +139,7 @@ public class Checks : MonoBehaviour
                 {
                     Destroy(ThirdCheck);
                     ThirdCheck = null;
-                    Debug.Log("удалил третий чек");
+                    //Debug.Log("удалил третий чек");
                     Heroik.MakeOrders++;
                     score.AddScore(100);
                     numberOrder.UpdateOrders();
