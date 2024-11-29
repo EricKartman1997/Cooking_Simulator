@@ -22,7 +22,7 @@ public class Heroik : MonoBehaviour
             Obj.SetActive(false);
         }
     }
-    public void ActiveObjHands(GameObject objTable)
+    public void ActiveObjHands(GameObject objTable) // взять объект в руки
     {
         foreach (var Obj in TakenObjects)
         {
@@ -34,7 +34,7 @@ public class Heroik : MonoBehaviour
             }
         }
     }
-    public GameObject GiveObjHands()
+    public GameObject GiveObjHands() // отдать объект из рук
     {
         _curentTakenObjects.SetActive(false);
         IsBusyHands = false;

@@ -15,7 +15,6 @@ public class Blender : MonoBehaviour
     
     [SerializeField] private GameObject[] objectOnTheTable;
     [SerializeField] private GameObject[] readyFoods;
-    [SerializeField] private GameObject rubbish;
     
     private GameObject _ingedient_1 = null;
     private GameObject _ingedient_2 = null;
@@ -25,7 +24,7 @@ public class Blender : MonoBehaviour
     void Start()
     {
         _animator = GetComponent<Animator>();
-        _animator.SetBool("Work", false);
+        //_animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
     }
 
@@ -379,11 +378,14 @@ public class Blender : MonoBehaviour
                 }
             }
         }
-        else
+        foreach (var obj in readyFoods)
         {
-            return rubbish;
-        }
-        return rubbish;
+            if (obj.name == "Rubbish")
+            {
+                return obj; 
+            }
+        } 
+        return null;
     }
     private void CreatResultObj(GameObject obj)
     {
@@ -402,7 +404,7 @@ public class Blender : MonoBehaviour
         _animator.SetBool("Work", true);
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
-    public void TurnOffBlender()
+    private void TurnOffBlender()
     {
         _isWork = false;
         _ingedient_1 = null;

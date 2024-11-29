@@ -111,11 +111,11 @@ public class Checks : MonoBehaviour
             {
                 if (FirstCheck.name == food.name + "(Clone)")
                 {
+                    score.AddScore(100,FirstCheck.GetComponent<InfoAboutCheck>().score);
                     Destroy(FirstCheck);
                     FirstCheck = null;
                     //Debug.Log("удалил первый чек");
                     Heroik.MakeOrders++;
-                    score.AddScore(100);
                     numberOrder.UpdateOrders();
                     break;
                 }
@@ -124,11 +124,11 @@ public class Checks : MonoBehaviour
             {
                 if (SecondCheck.name == food.name + "(Clone)")
                 {
+                    score.AddScore(100,SecondCheck.GetComponent<InfoAboutCheck>().score);
                     Destroy(SecondCheck);
                     SecondCheck = null;
                     //Debug.Log("удалил второй чек");
                     Heroik.MakeOrders++;
-                    score.AddScore(100);
                     numberOrder.UpdateOrders();
                     break;
                 }
@@ -137,11 +137,11 @@ public class Checks : MonoBehaviour
             {
                 if (ThirdCheck.name == food.name + "(Clone)")
                 {
+                    score.AddScore(100,ThirdCheck.GetComponent<InfoAboutCheck>().score);
                     Destroy(ThirdCheck);
                     ThirdCheck = null;
                     //Debug.Log("удалил третий чек");
                     Heroik.MakeOrders++;
-                    score.AddScore(100);
                     numberOrder.UpdateOrders();
                     break;
                 }

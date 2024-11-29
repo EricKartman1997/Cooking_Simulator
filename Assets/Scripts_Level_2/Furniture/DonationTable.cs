@@ -10,7 +10,7 @@ public class DonationTable : MonoBehaviour
     void Start()
     {
         _outline = GetComponent<Outline>();
-        //objectOnTheTable.SetActive(true);
+        objectOnTheTable.SetActive(true);
     }
     private void OnTriggerStay(Collider other)
     {

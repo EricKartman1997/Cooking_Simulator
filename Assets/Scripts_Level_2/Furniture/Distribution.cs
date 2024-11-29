@@ -92,21 +92,21 @@ public class Distribution : MonoBehaviour
     {
         if (checks.FirstCheck != null)
         {
-            if (checks.FirstCheck.name == obj.name+ "(Clone)")
+            if (checks.FirstCheck.name == obj.name + "(Clone)")
             {
                 return true;
             }
         }
         if (checks.SecondCheck != null)
         {
-            if (checks.SecondCheck.name == obj.name+ "(Clone)")
+            if (checks.SecondCheck.name == obj.name + "(Clone)")
             {
                 return true;
             }
         }
         if (checks.ThirdCheck != null)
         {
-            if (checks.ThirdCheck.name == obj.name+ "(Clone)")
+            if (checks.ThirdCheck.name == obj.name + "(Clone)")
             {
                 return true;
             }

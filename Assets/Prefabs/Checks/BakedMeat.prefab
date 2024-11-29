@@ -321,6 +321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6127328840767039485}
+  - component: {fileID: 3898275563621489168}
   m_Layer: 0
   m_Name: BakedMeat
   m_TagString: Untagged
@@ -348,3 +349,16 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3898275563621489168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6350094252167404600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca1979a0d8ebf48478ff29ec9382ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 55
