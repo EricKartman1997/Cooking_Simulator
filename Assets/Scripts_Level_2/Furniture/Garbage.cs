@@ -15,15 +15,14 @@ public class Garbage : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            var heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
+            
             if(Input.GetKeyDown(KeyCode.E))
             {
                 try
                 {
-                    var discardedObj = other.GetComponent<Heroik>()._curentTakenObjects;
-                    discardedObj.SetActive(false);
-                    Heroik.IsBusyHands = false;
-                    other.GetComponent<Heroik>()._curentTakenObjects = null;
+                    GameObject discardedObj = heroik.GiveObjHands();
                     Debug.Log($"Руки пустые: {Heroik.IsBusyHands},объект под названием {discardedObj.name} выкинут");
                 }
                 catch (Exception e)

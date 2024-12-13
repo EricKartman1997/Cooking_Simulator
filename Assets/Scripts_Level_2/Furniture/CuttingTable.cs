@@ -31,6 +31,7 @@ public class CuttingTable : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            var heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
@@ -46,7 +47,7 @@ public class CuttingTable : MonoBehaviour
                         {
                             if (ActiveObjectsOnTheTable() == 1) //один активный объект
                             {
-                                other.GetComponent<Heroik>().ActiveObjHands(_firstFood);
+                                heroik.ActiveObjHands(_firstFood);
                                 _firstFood.SetActive(false);
                                 _firstFood = null;
                             }
@@ -57,8 +58,7 @@ public class CuttingTable : MonoBehaviour
                         }
                         else // забрать предмет результат
                         {
-                            other.GetComponent<Heroik>().ActiveObjHands(GiveResult());
-                            _result = null;
+                            heroik.ActiveObjHands(GiveResult());
                             //Debug.Log("Вы забрали конечный продукт"); 
                         }
                     }
@@ -75,11 +75,10 @@ public class CuttingTable : MonoBehaviour
                         {
                             if (ActiveObjectsOnTheTable() == 1 )//один активный объект
                             {
-                                var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Interactable>()) ;
+                                var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(heroik._curentTakenObjects.GetComponent<Interactable>()) ;
                                 if (nameBolud != "None")
                                 {
-                                    ToAcceptObjsFood(other.GetComponent<Heroik>().GiveObjHands(), 2);
-                                    other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                    ToAcceptObjsFood(heroik.GiveObjHands(), 2);
                                     TurnOnCuttingTable(); 
                                     yield return new WaitForSeconds(3f);
                                     TurnOffCuttingTable(); 
@@ -92,10 +91,9 @@ public class CuttingTable : MonoBehaviour
                             }
                             else// активного объекта нет
                             {
-                                if(other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Interactable>() && other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<ObjsForCutting>())
+                                if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
                                 {
-                                    ToAcceptObjsFood(other.GetComponent<Heroik>().GiveObjHands(), 1);
-                                    other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                    ToAcceptObjsFood(heroik.GiveObjHands(), 1);
                                 }
                                 else
                                 {
@@ -177,8 +175,9 @@ public class CuttingTable : MonoBehaviour
     private GameObject GiveResult()
     {
         _result.SetActive(false);
-        return _result;
-        // не забудь _result = null;
+        GameObject obj = _result;
+        _result = null;
+        return obj;
     }
     private void TurnOnCuttingTable()
     {

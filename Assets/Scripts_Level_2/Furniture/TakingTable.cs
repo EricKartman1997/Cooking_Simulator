@@ -21,6 +21,7 @@ public class TakingTable : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            var heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
@@ -40,11 +41,11 @@ public class TakingTable : MonoBehaviour
                             }
                             else
                             {
-                                other.GetComponent<Heroik>().ActiveObjHands(obj);
+                                heroik.ActiveObjHands(obj);
                                 obj.SetActive(false);
+                                break;
                             }
                         }
-                        Heroik.IsBusyHands = true;
                     }
                 }
                 else // заняты
@@ -54,21 +55,18 @@ public class TakingTable : MonoBehaviour
                         int count = 0;
                         foreach (var obj in objectOnTheTable)
                         {
-                            if (other.GetComponent<Heroik>()._curentTakenObjects.name == obj.name)
+                            if (heroik._curentTakenObjects.name == obj.name)
                             {
-                                obj.SetActive(true);
-                                //Debug.Log($"Объект: {other.GetComponent<Heroik>()._curentTakenObjects} перемещен на стол ");
-                                other.GetComponent<Heroik>()._curentTakenObjects.SetActive(false);
-                                Heroik.IsBusyHands = false;
-                                other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                GameObject objHeroik = heroik.GiveObjHands();
+                                obj.SetActive(true); // принять объект
                                 break;
                             }
-                            else if(other.GetComponent<Heroik>()._curentTakenObjects.name != obj.name)
+                            else if(heroik._curentTakenObjects.name != obj.name)
                             {
                                 count++;
                                 if (count == objectOnTheTable.Length)
                                 {
-                                    Debug.Log($"объекта с именем {other.GetComponent<Heroik>()._curentTakenObjects.name} нет в списке");
+                                    Debug.Log($"объекта с именем {heroik._curentTakenObjects.name} нет в списке");
                                 }
                             }
                         }

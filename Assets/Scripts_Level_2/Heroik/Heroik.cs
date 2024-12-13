@@ -38,8 +38,9 @@ public class Heroik : MonoBehaviour
     {
         _curentTakenObjects.SetActive(false);
         IsBusyHands = false;
-        return _curentTakenObjects;
-        // не забывай прописывать _curentTakenObjects = null;
+        var Obj = _curentTakenObjects;
+        _curentTakenObjects = null;
+        return Obj;
     }
 
 
