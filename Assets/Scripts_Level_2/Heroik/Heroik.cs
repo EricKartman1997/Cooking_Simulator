@@ -10,7 +10,7 @@ public class Heroik : MonoBehaviour
     [SerializeField] private LightAttack lightAttack;
     [SerializeField] private ListEnemy listEnemy;
     
-    public GameObject _curentTakenObjects = null;// переделать
+    public GameObject _curentTakenObjects= null;// переделать
     public static bool IsBusyHands = false; // руки не заняты
     public static byte MakeOrders = 0;
     public GameObject[] TakenObjects;
@@ -42,6 +42,11 @@ public class Heroik : MonoBehaviour
         _curentTakenObjects = null;
         return Obj;
     }
+    public GameObject GetCurentTakenObjects()
+    {
+        return _curentTakenObjects;
+    }
+    
 
 
     

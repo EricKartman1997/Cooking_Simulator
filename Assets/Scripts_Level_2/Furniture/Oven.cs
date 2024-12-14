@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 
-public class Oven : MonoBehaviour
+public class Oven : FurnitureAbstact
 {
     [SerializeField] private GameObject glassOn;
     [SerializeField] private GameObject glassOff;
@@ -20,6 +20,8 @@ public class Oven : MonoBehaviour
     private Outline _outline;
     private bool _isWork = false;
     private GameObject _result;
+
+
     void Start()
     {
         _outline = GetComponent<Outline>();
@@ -29,6 +31,7 @@ public class Oven : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            var heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
@@ -42,10 +45,7 @@ public class Oven : MonoBehaviour
                     {
                         if (_result != null)
                         {
-                            _result.SetActive(false);
-                            other.GetComponent<Heroik>().ActiveObjHands(_result);
-                            _result = null;
-                            Debug.Log("забираем предмет");
+                            heroik.ActiveObjHands(GiveObj());
                         }
                         else
                         {
@@ -68,26 +68,23 @@ public class Oven : MonoBehaviour
                         else
                         {
                             int count = 0;
-                            //Debug.Log("ложим предмет в печку");
                             foreach (GameObject obj in foodOnTheOver)
                             {
-                                if (other.GetComponent<Heroik>()._curentTakenObjects.name == obj.name)
+                                if (heroik.GetCurentTakenObjects().name == obj.name)
                                 {
-                                    TurnOnOven();
-                                    Heroik.IsBusyHands = false;
-                                    other.GetComponent<Heroik>()._curentTakenObjects.SetActive(false);
-                                    other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                    TurnOn();
+                                    AcceptObject(heroik.GiveObjHands(),0);
                                     yield return new WaitForSeconds(5f);
-                                    TurnOffOven();
-                                    _result = IssuanceOfTheResult(obj);
+                                    TurnOff();
+                                    CreateResult(obj.name);
                                     break;
                                 }
-                                else if(other.GetComponent<Heroik>()._curentTakenObjects.name != obj.name)
+                                if(heroik.GetCurentTakenObjects().name != obj.name)
                                 {
                                     count++;
                                     if (count == foodOnTheOver.Length)
                                     {
-                                        Debug.Log($"Из этого объекта {other.GetComponent<Heroik>()._curentTakenObjects.name} ничего нельзя пригоовить в духовке");
+                                        Debug.LogError($"Из этого объекта {heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
                                     }
                                 }
                             }
@@ -107,23 +104,23 @@ public class Oven : MonoBehaviour
     }
 
 
-    private void TurnOnOven()
-    {
-        _isWork = true;
-        glassOff.SetActive(false);
-        glassOn.SetActive(true);
-        switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
-        switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
-        Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
-    }
-    private void TurnOffOven()
-    {
-        _isWork = false;
-        glassOff.SetActive(true);
-        glassOn.SetActive(false);
-        switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
-        switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
+    // private void TurnOnOven()
+    // {
+    //     _isWork = true;
+    //     glassOff.SetActive(false);
+    //     glassOn.SetActive(true);
+    //     switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
+    //     switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
+    //     Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
+    // }
+    // private void TurnOffOven()
+    // {
+    //     _isWork = false;
+    //     glassOff.SetActive(true);
+    //     glassOn.SetActive(false);
+    //     switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
+    //     switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
+    // }
 
     // private GameObject IssuanceOfTheResult(GameObject obj)
     // {
@@ -201,5 +198,74 @@ public class Oven : MonoBehaviour
         }
         Debug.Log($"из этого {obj.name} продукта ничего не приготовить //Ошибка");
         return null;
+    }
+
+    protected override GameObject GiveObj()
+    {
+        Debug.Log("забираем предмет");
+        _result.SetActive(false);
+        var obj = _result;
+        _result = null;
+        return obj;
+    }
+
+    protected override void AcceptObject(GameObject obj, byte numberObj)
+    {
+
+    }
+
+    protected override void CreateResult(string obj)
+    {
+        if (obj == "Apple")
+        {
+            FindObject("BakedApple");
+        }
+        else if (obj == "Orange")
+        {
+            FindObject("BakedOrange");
+        }
+        else if (obj == "Fish")
+        {
+            FindObject("BakedFish");
+        }
+        else if (obj == "Meat")
+        {
+            FindObject("BakedMeat");
+        }
+        else
+        {
+            Debug.Log($"из этого {obj} продукта ничего не приготовить //Ошибка");
+        }
+    }
+
+    protected override void TurnOn()
+    {
+        _isWork = true;
+        glassOff.SetActive(false);
+        glassOn.SetActive(true);
+        switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
+        switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
+        Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
+    }
+
+    protected override void TurnOff()
+    {
+        _isWork = false;
+        glassOff.SetActive(true);
+        glassOn.SetActive(false);
+        switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
+        switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    
+    private void FindObject(string obj)
+    {
+        foreach (var cookedFood in cookedFoodOnTheOver)
+        {
+            if (cookedFood.name == obj)
+            {
+                cookedFood.SetActive(true);
+                _result = cookedFood;
+            }
+        }
     }
 }

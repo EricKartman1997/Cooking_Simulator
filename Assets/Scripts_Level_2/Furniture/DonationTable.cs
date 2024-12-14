@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DonationTable : MonoBehaviour
+public class DonationTable : Furniture
 {
     [SerializeField] private GameObject objectOnTheTable;
     private Outline _outline;

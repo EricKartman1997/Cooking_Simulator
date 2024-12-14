@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TakingTable : MonoBehaviour
+public class TakingTable : Furniture
 {
     [SerializeField] private GameObject[] objectOnTheTable;
 

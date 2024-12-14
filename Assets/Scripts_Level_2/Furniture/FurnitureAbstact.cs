@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class FurnitureAbstact : MonoBehaviour
 {
-    public abstract GameObject GiveObj();// отдать объект
-    public abstract void AcceptObject(); // принять объект
-    public abstract void CreateResult(); // создать объект
-    public abstract void TurnOn();       // включить
-    public abstract void TurnOff();      // выключить
+    protected abstract GameObject GiveObj();// отдать объект
+    protected abstract void AcceptObject(GameObject obj, byte numberObj); // принять объект
+    protected abstract void CreateResult(string nameBolud); // создать объект
+    protected abstract void TurnOn();       // включить
+    protected abstract void TurnOff();      // выключить
 }

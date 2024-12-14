@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingTable : MonoBehaviour
+public class CuttingTable : FurnitureAbstact
 {
     private Animator _animator;
     
@@ -19,7 +19,8 @@ public class CuttingTable : MonoBehaviour
     private Outline _outline;
     private GameObject _result = null;
     private bool _isWork = false;
-    
+
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -58,7 +59,7 @@ public class CuttingTable : MonoBehaviour
                         }
                         else // забрать предмет результат
                         {
-                            heroik.ActiveObjHands(GiveResult());
+                            heroik.ActiveObjHands(GiveObj());
                             //Debug.Log("Вы забрали конечный продукт"); 
                         }
                     }
@@ -78,11 +79,11 @@ public class CuttingTable : MonoBehaviour
                                 var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(heroik._curentTakenObjects.GetComponent<Interactable>()) ;
                                 if (nameBolud != "None")
                                 {
-                                    ToAcceptObjsFood(heroik.GiveObjHands(), 2);
-                                    TurnOnCuttingTable(); 
+                                    AcceptObject(heroik.GiveObjHands(), 2);
+                                    TurnOn(); 
                                     yield return new WaitForSeconds(3f);
-                                    TurnOffCuttingTable(); 
-                                    CreatResultObj(nameBolud);
+                                    TurnOff(); 
+                                    CreateResult(nameBolud);
                                 }
                                 else
                                 {
@@ -93,7 +94,7 @@ public class CuttingTable : MonoBehaviour
                             {
                                 if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
                                 {
-                                    ToAcceptObjsFood(heroik.GiveObjHands(), 1);
+                                    AcceptObject(heroik.GiveObjHands(), 1);
                                 }
                                 else
                                 {
@@ -132,13 +133,21 @@ public class CuttingTable : MonoBehaviour
         }
         return 0; //  ошибка
     }
-    private void ToAcceptObjsFood(GameObject acceptObjFood, byte numberObj)
+    
+    protected override GameObject GiveObj()
+    {
+        _result.SetActive(false);
+        GameObject obj = _result;
+        _result = null;
+        return obj;
+    }
+    protected override void AcceptObject(GameObject acceptObj, byte numberObj)
     {
         if (numberObj == 1)
         {
             foreach (var obj in objectOnTheTable)
             {
-                if (obj.name == acceptObjFood.name)
+                if (obj.name == acceptObj.name)
                 {
                     obj.SetActive(true);
                     _firstFood = obj;
@@ -149,7 +158,7 @@ public class CuttingTable : MonoBehaviour
         {
             foreach (var obj in objectOnTheTable)
             {
-                if (obj.name == acceptObjFood.name)
+                if (obj.name == acceptObj.name)
                 {
                     obj.SetActive(true);
                     _secondFood = obj;
@@ -161,7 +170,7 @@ public class CuttingTable : MonoBehaviour
             Debug.Log("Ошибка");
         }
     }
-    private void CreatResultObj(string nameBolud)
+    protected override void CreateResult(string nameBolud)
     {
         foreach (var obj in readyFoods)
         {
@@ -172,14 +181,7 @@ public class CuttingTable : MonoBehaviour
             }
         }
     }
-    private GameObject GiveResult()
-    {
-        _result.SetActive(false);
-        GameObject obj = _result;
-        _result = null;
-        return obj;
-    }
-    private void TurnOnCuttingTable()
+    protected override void TurnOn()
     {
         _isWork = true;
         _firstFood.SetActive(false);
@@ -187,15 +189,11 @@ public class CuttingTable : MonoBehaviour
         _animator.SetBool("Work", true);
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
-    public void TurnOffCuttingTable()
+    protected override void TurnOff()
     {
         _isWork = false;
         _firstFood = null;
         _secondFood = null;
         _animator.SetBool("Work", false);
-    }
-    public bool GetIsWork()
-    {
-        return _isWork;
     }
 }
