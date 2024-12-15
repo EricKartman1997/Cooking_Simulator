@@ -59,7 +59,7 @@ public class CuttingTable : FurnitureAbstact
                         }
                         else // забрать предмет результат
                         {
-                            heroik.ActiveObjHands(GiveObj());
+                            heroik.ActiveObjHands(GiveObj(ref _result));
                             //Debug.Log("Вы забрали конечный продукт"); 
                         }
                     }
@@ -134,12 +134,12 @@ public class CuttingTable : FurnitureAbstact
         return 0; //  ошибка
     }
     
-    protected override GameObject GiveObj()
+    protected override GameObject GiveObj(ref GameObject obj)
     {
-        _result.SetActive(false);
-        GameObject obj = _result;
-        _result = null;
-        return obj;
+        obj.SetActive(false);
+        GameObject Cobj = obj;
+        obj = null;
+        return Cobj;
     }
     protected override void AcceptObject(GameObject acceptObj, byte numberObj)
     {

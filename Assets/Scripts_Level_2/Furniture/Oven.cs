@@ -20,6 +20,7 @@ public class Oven : FurnitureAbstact
     private Outline _outline;
     private bool _isWork = false;
     private GameObject _result;
+    private FurnitureAbstact _furnitureAbstactImplementation;
 
 
     void Start()
@@ -45,7 +46,7 @@ public class Oven : FurnitureAbstact
                     {
                         if (_result != null)
                         {
-                            heroik.ActiveObjHands(GiveObj());
+                            heroik.ActiveObjHands(GiveObj(ref _result));
                         }
                         else
                         {
@@ -200,13 +201,14 @@ public class Oven : FurnitureAbstact
         return null;
     }
 
-    protected override GameObject GiveObj()
+
+    protected override GameObject GiveObj(ref GameObject obj)
     {
         Debug.Log("забираем предмет");
-        _result.SetActive(false);
-        var obj = _result;
-        _result = null;
-        return obj;
+        obj.SetActive(false);
+        var Cobj = obj;
+        obj = null;
+        return Cobj;
     }
 
     protected override void AcceptObject(GameObject obj, byte numberObj)

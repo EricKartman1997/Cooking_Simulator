@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Blender : MonoBehaviour
+public class Blender : FurnitureAbstact
 {
     private Animator _animator;
     
@@ -21,6 +21,7 @@ public class Blender : MonoBehaviour
     private GameObject _ingedient_3 = null;
     private GameObject _result = null;
     private bool _isWork = false;
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -32,6 +33,7 @@ public class Blender : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            var heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -53,22 +55,17 @@ public class Blender : MonoBehaviour
                             {
                                 if (_ingedient_2 == null)
                                 {
-                                    other.GetComponent<Heroik>().ActiveObjHands(_ingedient_1);
-                                    _ingedient_1.SetActive(false);
-                                    _ingedient_1 = null;
+                                    heroik.ActiveObjHands(GiveObj(ref _ingedient_1));
                                 }
                                 else
                                 {
-                                    other.GetComponent<Heroik>().ActiveObjHands(_ingedient_2);
-                                    _ingedient_2.SetActive(false);
-                                    _ingedient_2 = null;
+                                    heroik.ActiveObjHands(GiveObj(ref _ingedient_2));
                                 }
                             }
                         }
                         else
                         {
-                            other.GetComponent<Heroik>().ActiveObjHands(GiveResult());
-                            _result = null;
+                            heroik.ActiveObjHands(GiveObj(ref _result));
                         }
                     }
                 }
@@ -84,10 +81,9 @@ public class Blender : MonoBehaviour
                         {
                             if (_ingedient_1 == null)
                             {
-                                if(other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Interactable>() && other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Fruit>())
+                                if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
                                 {
-                                    ToAcceptObjsFood(other.GetComponent<Heroik>().GiveObjHands(), 1);
-                                    other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                    AcceptObject(heroik.GiveObjHands(), 1);
                                     Debug.Log("Предмет первый положен в блендер");
                                 }
                                 else
@@ -99,10 +95,9 @@ public class Blender : MonoBehaviour
                             {
                                 if (_ingedient_2 == null)
                                 {
-                                    if(other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Interactable>() && other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Fruit>())
+                                    if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
                                     {
-                                        ToAcceptObjsFood(other.GetComponent<Heroik>().GiveObjHands(), 2);
-                                        other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                        AcceptObject(heroik.GiveObjHands(), 2);
                                         Debug.Log("Предмет второй положен в блендер");
                                     }
                                     else
@@ -112,16 +107,15 @@ public class Blender : MonoBehaviour
                                 }
                                 else
                                 {
-                                    if(other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Interactable>() && other.GetComponent<Heroik>()._curentTakenObjects.GetComponent<Fruit>())
+                                    if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
                                     {
-                                        ToAcceptObjsFood(other.GetComponent<Heroik>().GiveObjHands(), 3);
-                                        other.GetComponent<Heroik>()._curentTakenObjects = null;
+                                        AcceptObject(heroik.GiveObjHands(), 3);
                                         Debug.Log("Предмет третий положен в блендер");
-                                        TurnOnBlender(); 
+                                        TurnOn(); 
                                         var objdish = FindReadyFood(_ingedient_1,_ingedient_2,_ingedient_3);
                                         yield return new WaitForSeconds(4f);
-                                        TurnOffBlender();
-                                        CreatResultObj(objdish);
+                                        TurnOff();
+                                        CreateResult(objdish.name);
                                     }
                                     else
                                     {
@@ -147,54 +141,6 @@ public class Blender : MonoBehaviour
             _outline.OutlineWidth = 0f;
         }
     }
-    
-    private GameObject GiveResult()
-    {
-        _result.SetActive(false);
-        return _result;
-        // не забудь _result = null;
-    }
-    private void ToAcceptObjsFood(GameObject acceptObjFood, byte numberObj)
-    {
-        if (numberObj == 1)
-        {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObjFood.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient_1 = obj;
-                }
-            }
-        }
-        else if (numberObj == 2)
-        {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObjFood.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient_2 = obj;
-                }
-            }
-        }
-        else if (numberObj == 3)
-        {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObjFood.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient_3 = obj;
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("Ошибка");
-        }
-    }
-
     private GameObject FindReadyFood(GameObject ingedient_1, GameObject ingedient_2, GameObject ingedient_3)
     {
         string Apple = "Apple";
@@ -387,15 +333,68 @@ public class Blender : MonoBehaviour
         } 
         return null;
     }
-    private void CreatResultObj(GameObject obj)
+    protected override GameObject GiveObj(ref GameObject obj)
     {
-        if (obj != null)
+        obj.SetActive(false);
+        var cObj = obj;
+        obj = null;
+        return cObj;
+    }
+
+    protected override void AcceptObject(GameObject acceptObj, byte numberObj)
+    {
+        if (numberObj == 1)
         {
-            obj.SetActive(true);
-            _result = obj;
+            foreach (var obj in objectOnTheTable)
+            {
+                if (obj.name == acceptObj.name)
+                {
+                    obj.SetActive(true);
+                    _ingedient_1 = obj;
+                }
+            }
+        }
+        else if (numberObj == 2)
+        {
+            foreach (var obj in objectOnTheTable)
+            {
+                if (obj.name == acceptObj.name)
+                {
+                    obj.SetActive(true);
+                    _ingedient_2 = obj;
+                }
+            }
+        }
+        else if (numberObj == 3)
+        {
+            foreach (var obj in objectOnTheTable)
+            {
+                if (obj.name == acceptObj.name)
+                {
+                    obj.SetActive(true);
+                    _ingedient_3 = obj;
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Ошибка");
         }
     }
-    private void TurnOnBlender()
+
+    protected override void CreateResult(string nameBolud)
+    {
+        foreach (var obj in readyFoods)
+        {
+            if (obj.name == nameBolud)
+            {
+                obj.SetActive(true);
+                _result = obj; 
+            }
+        }
+    }
+
+    protected override void TurnOn()
     {
         _isWork = true;
         _ingedient_1.SetActive(false);
@@ -404,7 +403,8 @@ public class Blender : MonoBehaviour
         _animator.SetBool("Work", true);
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
-    private void TurnOffBlender()
+
+    protected override void TurnOff()
     {
         _isWork = false;
         _ingedient_1 = null;
