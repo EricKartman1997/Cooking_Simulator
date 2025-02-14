@@ -8,6 +8,10 @@ public class TakingTable : Furniture
     [SerializeField] private GameObject[] objectOnTheTable;
 
     private Outline _outline;
+    
+    private bool _onTrigger = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private float _timeCurrent = 0.17f;
     void Start()
     {
         _outline = GetComponent<Outline>();
@@ -17,76 +21,93 @@ public class TakingTable : Furniture
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.GetComponent<Heroik>())
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            var heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    if (ActiveObjectOnTheTable()) // ни одного активного объекта
+                    if(!Heroik.IsBusyHands) // руки не заняты
                     {
-                        Debug.Log("У вас пустые руки и прилавок пуст");
-                    }
-                    else // активного объект есть
-                    {
-                        foreach (var obj in objectOnTheTable)
+                        if (ActiveObjectOnTheTable()) // ни одного активного объекта
                         {
-                            if (!obj.activeInHierarchy)
-                            {
-                                
-                            }
-                            else
-                            {
-                                heroik.ActiveObjHands(obj);
-                                obj.SetActive(false);
-                                break;
-                            }
+                            Debug.Log("У вас пустые руки и прилавок пуст");
                         }
-                    }
-                }
-                else // заняты
-                {
-                    if (ActiveObjectOnTheTable())// ни одного активного объекта
-                    {
-                        int count = 0;
-                        foreach (var obj in objectOnTheTable)
+                        else // активного объект есть
                         {
-                            if (heroik._curentTakenObjects.name == obj.name)
+                            foreach (var obj in objectOnTheTable)
                             {
-                                GameObject objHeroik = heroik.GiveObjHands();
-                                obj.SetActive(true); // принять объект
-                                break;
-                            }
-                            else if(heroik._curentTakenObjects.name != obj.name)
-                            {
-                                count++;
-                                if (count == objectOnTheTable.Length)
+                                if (!obj.activeInHierarchy)
                                 {
-                                    Debug.Log($"объекта с именем {heroik._curentTakenObjects.name} нет в списке");
+                                
+                                }
+                                else
+                                {
+                                    _heroik.ActiveObjHands(obj);
+                                    obj.SetActive(false);
+                                    break;
                                 }
                             }
                         }
                     }
-                    else// активного объект есть
+                    else // заняты
                     {
-                        Debug.Log("У вас полные руки и прилавок полон");
+                        if (ActiveObjectOnTheTable())// ни одного активного объекта
+                        {
+                            int count = 0;
+                            foreach (var obj in objectOnTheTable)
+                            {
+                                if (_heroik._curentTakenObjects.name == obj.name)
+                                {
+                                    GameObject objHeroik = _heroik.GiveObjHands();
+                                    obj.SetActive(true); // принять объект
+                                    break;
+                                }
+                                else if(_heroik._curentTakenObjects.name != obj.name)
+                                {
+                                    count++;
+                                    if (count == objectOnTheTable.Length)
+                                    {
+                                        Debug.Log($"объекта с именем {_heroik._curentTakenObjects.name} нет в списке");
+                                    }
+                                }
+                            }
+                        }
+                        else// активного объект есть
+                        {
+                            Debug.Log("У вас полные руки и прилавок полон");
+                        }
                     }
+                    _timeCurrent = 0f;
+                }
+                else
+                {
+                    Debug.LogWarning("Ждите перезарядки кнопки");
                 }
             }
-            
         }
         
     }
-
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
+        }
+    }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
+            _heroik = null;
             _outline.OutlineWidth = 0f;
+            _onTrigger = false;
         }
     }
     

@@ -18,8 +18,8 @@ public class Blender : FurnitureAbstact
     private GameObject _ingedient2 = null;
     private GameObject _ingedient3 = null;
     private GameObject _result = null;
-    private bool _onTrigger = false;
     private bool _isWork = false;
+    private bool _onTrigger = false;
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
 

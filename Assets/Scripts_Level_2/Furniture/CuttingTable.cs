@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CuttingTable : FurnitureAbstact
@@ -19,6 +20,10 @@ public class CuttingTable : FurnitureAbstact
     private Outline _outline;
     private GameObject _result = null;
     private bool _isWork = false;
+    
+    private float _timeCurrent = 0.17f;
+    private bool _onTrigger = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
 
 
     void Start()
@@ -28,97 +33,113 @@ public class CuttingTable : FurnitureAbstact
         _outline = GetComponent<Outline>();
     }
 
-    private IEnumerator OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.GetComponent<Heroik>())
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            var heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    if (_isWork)
+                    if(!Heroik.IsBusyHands) // руки не заняты
                     {
-                        Debug.Log("ждите блюдо готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
+                        if (_isWork)
                         {
-                            if (ActiveObjectsOnTheTable() == 1) //один активный объект
-                            {
-                                heroik.ActiveObjHands(_firstFood);
-                                _firstFood.SetActive(false);
-                                _firstFood = null;
-                            }
-                            else// активного объекта нет
-                            {
-                                Debug.Log("У вас пустые руки и прилавок пуст");
-                            }
-                        }
-                        else // забрать предмет результат
-                        {
-                            heroik.ActiveObjHands(GiveObj(ref _result));
-                            //Debug.Log("Вы забрали конечный продукт"); 
-                        }
-                    }
-                }
-                else // заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блюдо готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (ActiveObjectsOnTheTable() == 1 )//один активный объект
-                            {
-                                var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(heroik._curentTakenObjects.GetComponent<Interactable>()) ;
-                                if (nameBolud != "None")
-                                {
-                                    AcceptObject(heroik.GiveObjHands(), 2);
-                                    TurnOn(); 
-                                    yield return new WaitForSeconds(3f);
-                                    TurnOff(); 
-                                    CreateResult(nameBolud);
-                                }
-                                else
-                                {
-                                    Debug.Log("Объект не подъходит для слияния");
-                                }
-                            }
-                            else// активного объекта нет
-                            {
-                                if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
-                                {
-                                    AcceptObject(heroik.GiveObjHands(), 1);
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
-                                }
-                            }
+                            Debug.Log("ждите блюдо готовится");
                         }
                         else
                         {
-                            Debug.Log("Сначала уберите предемет из рук");
+                            if (_result == null)
+                            {
+                                if (ActiveObjectsOnTheTable() == 1) //один активный объект
+                                {
+                                    _heroik.ActiveObjHands(_firstFood);
+                                    _firstFood.SetActive(false);
+                                    _firstFood = null;
+                                }
+                                else// активного объекта нет
+                                {
+                                    Debug.Log("У вас пустые руки и прилавок пуст");
+                                }
+                            }
+                            else // забрать предмет результат
+                            {
+                                _heroik.ActiveObjHands(GiveObj(ref _result));
+                                //Debug.Log("Вы забрали конечный продукт"); 
+                            }
                         }
-                        
                     }
+                    else // заняты
+                    {
+                        if (_isWork)
+                        {
+                            Debug.Log("ждите блюдо готовится");
+                        }
+                        else
+                        {
+                            if (_result == null)
+                            {
+                                if (ActiveObjectsOnTheTable() == 1 )//один активный объект
+                                {
+                                    var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(_heroik._curentTakenObjects.GetComponent<Interactable>()) ;
+                                    if (nameBolud != "None")
+                                    {
+                                        AcceptObject(_heroik.GiveObjHands(), 2);
+                                        TurnOn();
+                                        StartCookingProcess(nameBolud);
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Объект не подъходит для слияния");
+                                    }
+                                }
+                                else// активного объекта нет
+                                {
+                                    if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
+                                    {
+                                        AcceptObject(_heroik.GiveObjHands(), 1);
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("с предметом нельзя взаимодействовать");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("Сначала уберите предемет из рук");
+                            }
+                        
+                        }
                     
+                    }
+                    _timeCurrent = 0f;
                 }
+                else
+                {
+                    Debug.LogWarning("Ждите перезарядки кнопки");
+                }
+                
             }
-            
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
+            _heroik = null;
             _outline.OutlineWidth = 0f;
+            _onTrigger = false;
         }
     }
     private byte ActiveObjectsOnTheTable()
@@ -196,4 +217,12 @@ public class CuttingTable : FurnitureAbstact
         _secondFood = null;
         _animator.SetBool("Work", false);
     }
+    
+    private async void StartCookingProcess(string obj)
+    {
+        await Task.Delay(3000);
+        TurnOff();
+        CreateResult(obj);
+    }
+    
 }
