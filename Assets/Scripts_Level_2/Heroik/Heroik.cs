@@ -1,19 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Threading.Tasks;
 using UnityEngine;
-using Random = UnityEngine.Random;
-
 public class Heroik : MonoBehaviour
 {
     [SerializeField] private LightAttack lightAttack;
     [SerializeField] private ListEnemy listEnemy;
     
-    public GameObject _curentTakenObjects= null;// переделать
+    public GameObject _curentTakenObjects = null;// переделать
     public static bool IsBusyHands = false; // руки не заняты
     public static byte MakeOrders = 0;
     public GameObject[] TakenObjects;
+    
+    
+    [SerializeField] private bool _interactionFurniture = false;
+   
 
     private void Start()
     {
@@ -46,8 +45,44 @@ public class Heroik : MonoBehaviour
     {
         return _curentTakenObjects;
     }
-    
+    // public void SetInteractionFurnitureTrue()
+    // {
+    //     _interactionFurniture = true;
+    // }
+    // public void SetInteractionFurnitureFalse()
+    // {
+    //     _interactionFurniture = false;
+    // }
 
+    public bool GetInteractionFurniture()
+    {
+        return _interactionFurniture;
+    }
 
-    
+    // private void OnEnable()
+    // {
+    //     EventBus.NotPressE += SetInteractionFurnitureFalse;
+    //     EventBus.PressE += SetInteractionFurnitureTrue;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.NotPressE -= SetInteractionFurnitureFalse;
+    //     EventBus.PressE -= SetInteractionFurnitureTrue;
+    // }
+
+    // private void Update()
+    // {
+    //
+    //     if (Input.GetKeyDown(KeyCode.E))
+    //     {
+    //
+    //         SetInteractionFurnitureFalse();
+    //         SetInteractionFurnitureTrue();
+    //     }
+    // }
+    // private async void DelayPressE()
+    // {
+    //     await Task.Delay(1000);
+    // }
 }

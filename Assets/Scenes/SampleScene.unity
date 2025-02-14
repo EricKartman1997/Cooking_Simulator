@@ -296,6 +296,7 @@ MonoBehaviour:
   listEnemy: {fileID: 963194229}
   _curentTakenObjects: {fileID: 0}
   TakenObjects: []
+  _interactionFurniture: 0
 --- !u!54 &34883250
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2813,8 +2814,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933141563}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29658106, y: -0.000000040250566, z: 0.000000012499956, w: 0.95500773}
-  m_LocalPosition: {x: 5.535, y: 22.6, z: -52.18}
+  m_LocalRotation: {x: 0.31112298, y: -1.2879196e-15, z: 1.7219742e-16, w: 0.95036966}
+  m_LocalPosition: {x: 5.535, y: 22.5, z: -50.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3120,6 +3121,8 @@ GameObject:
   - component: {fileID: 963194232}
   - component: {fileID: 963194234}
   - component: {fileID: 963194233}
+  - component: {fileID: 963194235}
+  - component: {fileID: 963194236}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3194,8 +3197,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2965811, y: -0.00000004025057, z: 0.000000012499959, w: 0.9550077}
-  m_LocalPosition: {x: 5.535, y: 22.6, z: -52.18}
+  m_LocalRotation: {x: 0.311123, y: -1.3793771e-15, z: 4.515674e-16, w: 0.95036966}
+  m_LocalPosition: {x: 5.535, y: 22.5, z: -50.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3332,6 +3335,30 @@ MonoBehaviour:
   continueButton: {fileID: 1621936256}
   score: {fileID: 963194233}
   timeGame: {fileID: 37693206}
+--- !u!114 &963194235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9595d502f9b0ccb47aedc1b2026a909d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &963194236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 484257f6cd4a0a2448d38a42dd0c7496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &970925158 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2542820051160836022, guid: 9644910e1eadf4947862bc28f9939602, type: 3}
@@ -5084,10 +5111,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 22.1, z: -32.15}
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_FollowOffset: {x: 0, y: 22, z: -30}
+  m_XDamping: 0.2
+  m_YDamping: 0.7
+  m_ZDamping: 0.7
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -5615,6 +5642,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 788519003}
     m_Modifications:
+    - target: {fileID: 803557567444794634, guid: b8da76dc332fb424cbc7b105cae4296a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1607525992464586156, guid: b8da76dc332fb424cbc7b105cae4296a, type: 3}
       propertyPath: m_Name
       value: CuttingTable

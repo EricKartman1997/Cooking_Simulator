@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Blender : FurnitureAbstact
@@ -16,11 +14,14 @@ public class Blender : FurnitureAbstact
     [SerializeField] private GameObject[] objectOnTheTable;
     [SerializeField] private GameObject[] readyFoods;
     
-    private GameObject _ingedient_1 = null;
-    private GameObject _ingedient_2 = null;
-    private GameObject _ingedient_3 = null;
+    private GameObject _ingedient1 = null;
+    private GameObject _ingedient2 = null;
+    private GameObject _ingedient3 = null;
     private GameObject _result = null;
+    private bool _onTrigger = false;
     private bool _isWork = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private float _timeCurrent = 0.17f;
 
     void Start()
     {
@@ -28,120 +29,147 @@ public class Blender : FurnitureAbstact
         //_animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
     }
-
-    private IEnumerator OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.GetComponent<Heroik>())
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            var heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKey(KeyCode.E))
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    if (_isWork)
+                    if(!Heroik.IsBusyHands) // руки не заняты
                     {
-                        Debug.Log("ждите блэндер готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
+                        if (_isWork)
                         {
-                            if (_ingedient_1 == null)
-                            {
-                                Debug.Log("Руки пусты ингридиентов нет");
-                            }
-                            else
-                            {
-                                if (_ingedient_2 == null)
-                                {
-                                    heroik.ActiveObjHands(GiveObj(ref _ingedient_1));
-                                }
-                                else
-                                {
-                                    heroik.ActiveObjHands(GiveObj(ref _ingedient_2));
-                                }
-                            }
+                            Debug.Log("ждите блэндер готовится");
                         }
                         else
                         {
-                            heroik.ActiveObjHands(GiveObj(ref _result));
+                            if (_result == null)
+                            {
+                                if (_ingedient1 == null)
+                                {
+                                    Debug.Log("Руки пусты ингридиентов нет");
+                                }
+                                else
+                                {
+                                    if (_ingedient2 == null)
+                                    {
+                                        _heroik.ActiveObjHands(GiveObj(ref _ingedient1));
+                                    }
+                                    else
+                                    {
+                                        _heroik.ActiveObjHands(GiveObj(ref _ingedient2));
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _heroik.ActiveObjHands(GiveObj(ref _result));
+                            }
+                        
+                        }
+                    
+                    }
+                    else // руки заняты
+                    {
+                        if (_isWork)
+                        {
+                            Debug.Log("ждите блэндер готовится");
+                        }
+                        else
+                        {
+                            if (_result == null)
+                            {
+                                if (_ingedient1 == null)
+                                {
+                                    if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
+                                    {
+                                        AcceptObject(_heroik.GiveObjHands(), 1);
+                                        Debug.Log("Предмет первый положен в блендер");
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("с предметом нельзя взаимодействовать");
+                                    }
+                                }
+                                else
+                                {
+                                    if (_ingedient2 == null)
+                                    {
+                                        if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
+                                        {
+                                            AcceptObject(_heroik.GiveObjHands(), 2);
+                                            Debug.Log("Предмет второй положен в блендер");
+                                        }
+                                        else
+                                        {
+                                            Debug.Log("с предметом нельзя взаимодействовать");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
+                                        {
+                                            AcceptObject(_heroik.GiveObjHands(), 3);
+                                            Debug.Log("Предмет третий положен в блендер");
+                                            TurnOn(); 
+                                            var objdish = FindReadyFood(_ingedient1,_ingedient2,_ingedient3);
+                                            StartCookingProcess(objdish);
+                                            //yield return new WaitForSeconds(4f);
+                                            //TurnOff();
+                                            //CreateResult(objdish.name);
+                                        }
+                                        else
+                                        {
+                                            Debug.Log("с предметом нельзя взаимодействовать");
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("Руки полные уберите предмет");
+                            }
                         }
                     }
+                    _timeCurrent = 0f;
                 }
-                else // руки заняты
+                else
                 {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блэндер готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (_ingedient_1 == null)
-                            {
-                                if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
-                                {
-                                    AcceptObject(heroik.GiveObjHands(), 1);
-                                    Debug.Log("Предмет первый положен в блендер");
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
-                                }
-                            }
-                            else
-                            {
-                                if (_ingedient_2 == null)
-                                {
-                                    if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
-                                    {
-                                        AcceptObject(heroik.GiveObjHands(), 2);
-                                        Debug.Log("Предмет второй положен в блендер");
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("с предметом нельзя взаимодействовать");
-                                    }
-                                }
-                                else
-                                {
-                                    if(heroik._curentTakenObjects.GetComponent<Interactable>() && heroik._curentTakenObjects.GetComponent<Fruit>())
-                                    {
-                                        AcceptObject(heroik.GiveObjHands(), 3);
-                                        Debug.Log("Предмет третий положен в блендер");
-                                        TurnOn(); 
-                                        var objdish = FindReadyFood(_ingedient_1,_ingedient_2,_ingedient_3);
-                                        yield return new WaitForSeconds(4f);
-                                        TurnOff();
-                                        CreateResult(objdish.name);
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("с предметом нельзя взаимодействовать");
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log("Руки полные уберите предмет");
-                        }
-                    }
+                    Debug.LogWarning("Ждите перезарядки кнопки");
                 }
             }
         }
     }
 
+    private async void StartCookingProcess(GameObject obj)
+    {
+        await Task.Delay(4000);
+        TurnOff();
+        CreateResult(obj.name);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
+        }
+    }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
+            _heroik = null;
             _outline.OutlineWidth = 0f;
+            _onTrigger = false;
         }
     }
-    private GameObject FindReadyFood(GameObject ingedient_1, GameObject ingedient_2, GameObject ingedient_3)
+    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
     {
         string Apple = "Apple";
         string Orange = "Orange";
@@ -150,11 +178,11 @@ public class Blender : FurnitureAbstact
         string Lime = "Lime";
         string Blueberry = "Blueberry";
         
-        if (ingedient_1.name == Apple)
+        if (ingedient1.name == Apple)
         {
-            if (ingedient_2.name == Lime)
+            if (ingedient2.name == Lime)
             {
-                if (ingedient_3.name == Strawberry)
+                if (ingedient3.name == Strawberry)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -165,96 +193,9 @@ public class Blender : FurnitureAbstact
                     }
                 }
             }
-            if (ingedient_2.name == Strawberry)
+            if (ingedient2.name == Strawberry)
             {
-                if (ingedient_3.name == Lime)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient_1.name == Orange)
-        {
-            if (ingedient_2.name == Cherry)
-            {
-                if (ingedient_3.name == Blueberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient_2.name == Blueberry)
-            {
-                if (ingedient_3.name == Cherry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient_1.name == Cherry)
-        {
-            if (ingedient_2.name == Orange)
-            {
-                if (ingedient_3.name == Blueberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient_2.name == Blueberry)
-            {
-                if (ingedient_3.name == Orange)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient_1.name == Strawberry)
-        {
-            if (ingedient_2.name == Lime)
-            {
-                if (ingedient_3.name == Apple)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient_2.name == Apple)
-            {
-                if (ingedient_3.name == Lime)
+                if (ingedient3.name == Lime)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -266,11 +207,69 @@ public class Blender : FurnitureAbstact
                 }
             }
         }
-        else if (ingedient_1.name == Lime)
+        else if (ingedient1.name == Orange)
         {
-            if (ingedient_2.name == Strawberry)
+            if (ingedient2.name == Cherry)
             {
-                if (ingedient_3.name == Apple)
+                if (ingedient3.name == Blueberry)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "WildBerryCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+            if (ingedient2.name == Blueberry)
+            {
+                if (ingedient3.name == Cherry)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "WildBerryCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+        }
+        else if (ingedient1.name == Cherry)
+        {
+            if (ingedient2.name == Orange)
+            {
+                if (ingedient3.name == Blueberry)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "WildBerryCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+            if (ingedient2.name == Blueberry)
+            {
+                if (ingedient3.name == Orange)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "WildBerryCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+        }
+        else if (ingedient1.name == Strawberry)
+        {
+            if (ingedient2.name == Lime)
+            {
+                if (ingedient3.name == Apple)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -281,9 +280,9 @@ public class Blender : FurnitureAbstact
                     }
                 }
             }
-            if (ingedient_2.name == Apple)
+            if (ingedient2.name == Apple)
             {
-                if (ingedient_3.name == Strawberry)
+                if (ingedient3.name == Lime)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -295,11 +294,40 @@ public class Blender : FurnitureAbstact
                 }
             }
         }
-        else if (ingedient_1.name == Blueberry)
+        else if (ingedient1.name == Lime)
         {
-            if (ingedient_2.name == Orange)
+            if (ingedient2.name == Strawberry)
             {
-                if (ingedient_3.name == Cherry)
+                if (ingedient3.name == Apple)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "FreshnessCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+            if (ingedient2.name == Apple)
+            {
+                if (ingedient3.name == Strawberry)
+                {
+                    foreach (var obj in readyFoods)
+                    {
+                        if (obj.name == "FreshnessCocktail")
+                        {
+                            return obj; //свежесть
+                        }
+                    }
+                }
+            }
+        }
+        else if (ingedient1.name == Blueberry)
+        {
+            if (ingedient2.name == Orange)
+            {
+                if (ingedient3.name == Cherry)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -310,9 +338,9 @@ public class Blender : FurnitureAbstact
                     }
                 }
             }
-            if (ingedient_2.name == Cherry)
+            if (ingedient2.name == Cherry)
             {
-                if (ingedient_3.name == Orange)
+                if (ingedient3.name == Orange)
                 {
                     foreach (var obj in readyFoods)
                     {
@@ -350,7 +378,7 @@ public class Blender : FurnitureAbstact
                 if (obj.name == acceptObj.name)
                 {
                     obj.SetActive(true);
-                    _ingedient_1 = obj;
+                    _ingedient1 = obj;
                 }
             }
         }
@@ -361,7 +389,7 @@ public class Blender : FurnitureAbstact
                 if (obj.name == acceptObj.name)
                 {
                     obj.SetActive(true);
-                    _ingedient_2 = obj;
+                    _ingedient2 = obj;
                 }
             }
         }
@@ -372,7 +400,7 @@ public class Blender : FurnitureAbstact
                 if (obj.name == acceptObj.name)
                 {
                     obj.SetActive(true);
-                    _ingedient_3 = obj;
+                    _ingedient3 = obj;
                 }
             }
         }
@@ -397,9 +425,9 @@ public class Blender : FurnitureAbstact
     protected override void TurnOn()
     {
         _isWork = true;
-        _ingedient_1.SetActive(false);
-        _ingedient_2.SetActive(false);
-        _ingedient_3.SetActive(false);
+        _ingedient1.SetActive(false);
+        _ingedient2.SetActive(false);
+        _ingedient3.SetActive(false);
         _animator.SetBool("Work", true);
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
@@ -407,9 +435,9 @@ public class Blender : FurnitureAbstact
     protected override void TurnOff()
     {
         _isWork = false;
-        _ingedient_1 = null;
-        _ingedient_2 = null;
-        _ingedient_3 = null;
+        _ingedient1 = null;
+        _ingedient2 = null;
+        _ingedient3 = null;
         _animator.SetBool("Work", false);
     }
 }
