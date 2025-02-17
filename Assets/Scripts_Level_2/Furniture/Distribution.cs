@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +17,10 @@ public class Distribution : MonoBehaviour
     
     [SerializeField] private GameObject[] cookedFood;
     [SerializeField] private Checks checks;
+    
+    private bool _onTrigger = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private float _timeCurrent = 0.17f;
 
     void Start()
     {
@@ -22,59 +28,88 @@ public class Distribution : MonoBehaviour
         _outline = GetComponent<Outline>();
     }
 
-    private IEnumerator OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.GetComponent<Heroik>())
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    Debug.Log("У вас пустые руки");
-                }
-                else// руки заняты
-                {
-                    if (_isWork)
+                    if(!Heroik.IsBusyHands) // руки не заняты
                     {
-                        Debug.Log("Ждите блюдо еще не забрали");
+                        Debug.Log("У вас пустые руки");
                     }
-                    else
+                    else// руки заняты
                     {
-                        if (IsCheckDistribution(other.GetComponent<Heroik>()._curentTakenObjects))
+                        if (_isWork)
                         {
-                            if (IsCheckOrder(other.GetComponent<Heroik>()._curentTakenObjects))
-                            {
-                                Debug.Log("Это блюдо есть в чеках");
-                                _food = other.GetComponent<Heroik>().GiveObjHands();
-                                other.GetComponent<Heroik>()._curentTakenObjects = null;
-                                _animator.Play("Distribution");
-                                AcceptFood();
-                                yield return new WaitForSeconds(1.85f);
-                                TakeToTheHall();
-                            }
-                            else
-                            {
-                                Debug.Log("Это блюдо не было заказано");
-                            }
+                            Debug.Log("Ждите блюдо еще не забрали");
                         }
                         else
                         {
-                            Debug.Log("Это блюдо нельзя подавать гостям");
+                            if (IsCheckDistribution(_heroik._curentTakenObjects))
+                            {
+                                if (IsCheckOrder(_heroik._curentTakenObjects))
+                                {
+                                    Debug.Log("Это блюдо есть в чеках");
+                                    _food = _heroik.GiveObjHands();
+                                    _heroik._curentTakenObjects = null;
+                                    _animator.Play("Distribution");
+                                    AcceptFood();
+                                    StopCookingProcessAsync();
+                                }
+                                else
+                                {
+                                    Debug.Log("Это блюдо не было заказано");
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("Это блюдо нельзя подавать гостям");
+                            }
                         }
                     }
+                    _timeCurrent = 0f;
+                }
+                else
+                {
+                    Debug.LogWarning("Ждите перезарядки кнопки");
                 }
             }
         }
     }
-    private IEnumerator OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
-            _outline.OutlineWidth = 0f;
-            yield return new WaitForSeconds(1.85f);
-            _animator.Play("None");
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = null;
+            _outline.OutlineWidth = 0f;
+            _onTrigger = false;
+            StopAnimatorProcessAsync();
+        }
+    }
+    
+    private async void StopAnimatorProcessAsync()
+    {
+        await Task.Delay(1850);
+        _animator.Play("None");
+    }
+    
+    private async void StopCookingProcessAsync()
+    {
+        await Task.Delay(1850);
+        TakeToTheHall();
     }
 
     private bool IsCheckDistribution(GameObject obj)

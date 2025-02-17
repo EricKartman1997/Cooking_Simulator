@@ -116,7 +116,7 @@ public class Blender : FurnitureAbstact
                                             Debug.Log("Предмет третий положен в блендер");
                                             TurnOn(); 
                                             var objdish = FindReadyFood(_ingedient1,_ingedient2,_ingedient3);
-                                            StartCookingProcess(objdish);
+                                            StartCookingProcessAsync(objdish);
                                             //yield return new WaitForSeconds(4f);
                                             //TurnOff();
                                             //CreateResult(objdish.name);
@@ -144,7 +144,7 @@ public class Blender : FurnitureAbstact
         }
     }
 
-    private async void StartCookingProcess(GameObject obj)
+    private async void StartCookingProcessAsync(GameObject obj)
     {
         await Task.Delay(4000);
         TurnOff();

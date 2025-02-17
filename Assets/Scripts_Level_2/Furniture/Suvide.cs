@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Suvide : MonoBehaviour
@@ -33,7 +34,9 @@ public class Suvide : MonoBehaviour
     private bool _isCookedSecondResult = false;
     private bool _isCookedThirdResult = false;
     
-    private Heroik _heroik;
+    private bool _onTrigger = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private float _timeCurrent = 0.17f;
 
     private void Start()
     {
@@ -54,103 +57,99 @@ public class Suvide : MonoBehaviour
             _isWork = false;
             NotWorkingSuvide();
         }
-    }
-
-    private IEnumerator OnTriggerStay(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
+        
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    if (_firstResult != null)
+                    if(!Heroik.IsBusyHands) // руки не заняты
                     {
-                        GiveResult(1);
-                    }
-                    else
-                    {
-                        if (_secondResult != null)
+                        if (_firstResult != null)
                         {
-                            GiveResult(2);
+                            GiveResult(1);
                         }
                         else
                         {
-                            if (_thirdResult != null)
+                            if (_secondResult != null)
                             {
-                                GiveResult(3);
+                                GiveResult(2);
                             }
                             else
                             {
-                                Debug.Log("Сувид пуст руки тоже");
+                                if (_thirdResult != null)
+                                {
+                                    GiveResult(3);
+                                }
+                                else
+                                {
+                                    Debug.Log("Сувид пуст руки тоже");
+                                }
                             }
                         }
                     }
-                }
-                else // руки заняты
-                {
-                    if (_isWork) // работает
+                    else // руки заняты
                     {
-                        if (_firstResult == null && !_isCookedFirstResult)
+                        if (_isWork) // работает
                         {
-                            //проверка на подъодит ли предмет
-                            if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
-                            {
-                                ToAcceptObjsFood(_heroik.GiveObjHands(),1);
-                                _heroik._curentTakenObjects = null;
-                                TurnOnSuvide(firstTimer, out _isCookedFirstResult);
-                                yield return new WaitForSeconds(10);
-                                CreatResult(1);
-                                TurnOffSuvide(1);
-                            }
-                            else
-                            {
-                                Debug.Log("продукт не подходит для сувида");
-                            }
-                        }
-                        else if (_firstResult != null || (_firstResult == null && _isCookedFirstResult))
-                        {
-                            if (_secondResult == null && !_isCookedSecondResult)
+                            if (_firstResult == null && !_isCookedFirstResult)
                             {
                                 //проверка на подъодит ли предмет
                                 if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                 {
-                                    ToAcceptObjsFood(_heroik.GiveObjHands(),2);
+                                    ToAcceptObjsFood(_heroik.GiveObjHands(),1);
                                     _heroik._curentTakenObjects = null;
-                                    TurnOnSuvide(secondTimer, out _isCookedSecondResult);
-                                    yield return new WaitForSeconds(10);
-                                    CreatResult(2);
-                                    TurnOffSuvide(2);
+                                    TurnOn(firstTimer, out _isCookedFirstResult);
+                                    StartCookingProcessAsync(1);
                                 }
                                 else
                                 {
-                                    Debug.LogWarning("продукт не подходит для сувида");
+                                    Debug.Log("продукт не подходит для сувида");
                                 }
                             }
-                            else if (_secondResult != null || (_secondResult == null && _isCookedSecondResult))
+                            else if (_firstResult != null || (_firstResult == null && _isCookedFirstResult))
                             {
-                                if (_thirdResult == null && !_isCookedThirdResult)
+                                if (_secondResult == null && !_isCookedSecondResult)
                                 {
                                     //проверка на подъодит ли предмет
                                     if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                     {
-                                        ToAcceptObjsFood(_heroik.GiveObjHands(),3);
-                                        _heroik._curentTakenObjects = null;
-                                        TurnOnSuvide(thirdTimer, out _isCookedThirdResult);
-                                        yield return new WaitForSeconds(10);
-                                        CreatResult(3);
-                                        TurnOffSuvide(3);
+                                        ToAcceptObjsFood(_heroik.GiveObjHands(),2);
+                                        
+                                        TurnOn(secondTimer, out _isCookedSecondResult);
+                                        StartCookingProcessAsync(2);
                                     }
                                     else
                                     {
                                         Debug.LogWarning("продукт не подходит для сувида");
                                     }
                                 }
-                                else if (_thirdResult != null || (_thirdResult == null && _isCookedThirdResult))
+                                else if (_secondResult != null || (_secondResult == null && _isCookedSecondResult))
                                 {
-                                    Debug.LogWarning("сувид заполнен");
+                                    if (_thirdResult == null && !_isCookedThirdResult)
+                                    {
+                                        //проверка на подъодит ли предмет
+                                        if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
+                                        {
+                                            ToAcceptObjsFood(_heroik.GiveObjHands(),3);
+                                            TurnOn(thirdTimer, out _isCookedThirdResult);
+                                            StartCookingProcessAsync(3);
+                                        }
+                                        else
+                                        {
+                                            Debug.LogWarning("продукт не подходит для сувида");
+                                        }
+                                    }
+                                    else if (_thirdResult != null || (_thirdResult == null && _isCookedThirdResult))
+                                    {
+                                        Debug.LogWarning("сувид заполнен");
+                                    }
+                                    else
+                                    {
+                                        Debug.LogError("Условие не сработало");
+                                    }
                                 }
                                 else
                                 {
@@ -162,32 +161,39 @@ public class Suvide : MonoBehaviour
                                 Debug.LogError("Условие не сработало");
                             }
                         }
-                        else
+                        else // не работает
                         {
-                            Debug.LogError("Условие не сработало");
-                        }
-                    }
-                    else // не работает
-                    {
-                        if (_firstResult != null)
-                        {
-                            if (_secondResult != null)
+                            if (_firstResult != null)
                             {
-                                if (_thirdResult != null)
+                                if (_secondResult != null)
                                 {
-                                    Debug.LogWarning("Сувид полный заберите готовый продукт");
+                                    if (_thirdResult != null)
+                                    {
+                                        Debug.LogWarning("Сувид полный заберите готовый продукт");
+                                    }
+                                    else
+                                    {
+                                        //проверка на подъодит ли предмет
+                                        if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
+                                        {
+                                            ToAcceptObjsFood(_heroik.GiveObjHands(),3);
+                                            TurnOn(thirdTimer, out _isCookedThirdResult);
+                                            StartCookingProcessAsync(3);
+                                        }
+                                        else
+                                        {
+                                            Debug.LogWarning("продукт не подходит для сувида");
+                                        }
+                                    }
                                 }
                                 else
                                 {
                                     //проверка на подъодит ли предмет
                                     if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                     {
-                                        ToAcceptObjsFood(_heroik.GiveObjHands(),3);
-                                        _heroik._curentTakenObjects = null;
-                                        TurnOnSuvide(thirdTimer, out _isCookedThirdResult);
-                                        yield return new WaitForSeconds(10);
-                                        CreatResult(3);
-                                        TurnOffSuvide(3);
+                                        ToAcceptObjsFood(_heroik.GiveObjHands(),2);
+                                        TurnOn(secondTimer, out _isCookedSecondResult);
+                                        StartCookingProcessAsync(2);
                                     }
                                     else
                                     {
@@ -200,12 +206,9 @@ public class Suvide : MonoBehaviour
                                 //проверка на подъодит ли предмет
                                 if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                 {
-                                    ToAcceptObjsFood(_heroik.GiveObjHands(),2);
-                                    _heroik._curentTakenObjects = null;
-                                    TurnOnSuvide(secondTimer, out _isCookedSecondResult);
-                                    yield return new WaitForSeconds(10);
-                                    CreatResult(2);
-                                    TurnOffSuvide(2);
+                                    ToAcceptObjsFood(_heroik.GiveObjHands(),1);
+                                    TurnOn(firstTimer, out _isCookedFirstResult);
+                                    StartCookingProcessAsync(1);
                                 }
                                 else
                                 {
@@ -213,36 +216,43 @@ public class Suvide : MonoBehaviour
                                 }
                             }
                         }
-                        else
-                        {
-                            //проверка на подъодит ли предмет
-                            if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
-                            {
-                                ToAcceptObjsFood(_heroik.GiveObjHands(),1);
-                                _heroik._curentTakenObjects = null;
-                                TurnOnSuvide(firstTimer, out _isCookedFirstResult);
-                                yield return new WaitForSeconds(10);
-                                CreatResult(1);
-                                TurnOffSuvide(1);
-                            }
-                            else
-                            {
-                                Debug.LogWarning("продукт не подходит для сувида");
-                            }
-                        }
                     }
+                    _timeCurrent = 0f;
+                }
+                else
+                {
+                    Debug.LogWarning("Ждите перезарядки кнопки");
                 }
             }
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
-            _outline.OutlineWidth = 0f;
             _heroik = null;
+            _outline.OutlineWidth = 0f;
+            _onTrigger = false;
         }
     }
+    
+    private async void StartCookingProcessAsync(byte number)
+    {
+        await Task.Delay(10000);
+        CreateResult(number);
+        TurnOff(number);
+    }
+    
     private void GiveResult(byte numberObj)
     {
         if (numberObj == 1)
@@ -311,7 +321,7 @@ public class Suvide : MonoBehaviour
         }
 
     }
-    // private void CreatResult(byte numberObj)
+    // private void CreateResult(byte numberObj)
     // {
     //     if (numberObj == 1)
     //     {
@@ -390,14 +400,14 @@ public class Suvide : MonoBehaviour
     //     }
     //
     // }
-    private void TurnOnSuvide(Timer_Prefab timer,out bool isCooked)
+    private void TurnOn(Timer_Prefab timer,out bool isCooked)
     {
         _isWork = true;
         isCooked = true;
         //_animator.SetBool("Work", true);
         Instantiate(timer.timer, timer.timerPoint.position, Quaternion.identity,timer.timerParent);
     }
-    private void TurnOffSuvide(byte numberObj)
+    private void TurnOff(byte numberObj)
     {
         switch (numberObj)
         {
@@ -463,11 +473,11 @@ public class Suvide : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Ошибка");
+            Debug.LogError("Ошибка: неправильное название ингридиента или неправильно выбрана настройка");
         }
     }
     
-    private void CreatResult(byte numberObj)
+    private void CreateResult(byte numberObj)
 {
     string ingredientName = GetIngredientName(numberObj);
     string bakedName = GetBakedName(numberObj);

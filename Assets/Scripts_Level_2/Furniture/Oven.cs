@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Oven : FurnitureAbstact
@@ -20,7 +21,10 @@ public class Oven : FurnitureAbstact
     private Outline _outline;
     private bool _isWork = false;
     private GameObject _result;
-    private FurnitureAbstact _furnitureAbstactImplementation;
+
+    private bool _onTrigger = false;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private float _timeCurrent = 0.17f;
 
 
     void Start()
@@ -28,80 +32,109 @@ public class Oven : FurnitureAbstact
         _outline = GetComponent<Outline>();
     }
 
-    private IEnumerator OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.GetComponent<Heroik>())
+        _timeCurrent += Time.deltaTime;
+        if (_onTrigger)
         {
-            var heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
             if(Input.GetKeyDown(KeyCode.E))
             {
-                if (!Heroik.IsBusyHands) // руки не заняты
+                if (_timeCurrent >= 0.17f)
                 {
-                    if (_isWork)
+                    if (!Heroik.IsBusyHands) // руки не заняты
                     {
-                        Debug.Log("ждите печка работает");
-                    }
-                    else
-                    {
-                        if (_result != null)
+                        if (_isWork)
                         {
-                            heroik.ActiveObjHands(GiveObj(ref _result));
+                            Debug.Log("ждите печка работает");
                         }
                         else
                         {
-                            Debug.Log("печка пуста руки тоже");
-                        }
-                    }
-                }
-                else // заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите печка работает");
-                    }
-                    else
-                    {
-                        if (_result != null)
-                        {
-                            Debug.Log("Сначала заберите предмет");
-                        }
-                        else
-                        {
-                            int count = 0;
-                            foreach (GameObject obj in foodOnTheOver)
+                            if (_result != null)
                             {
-                                if (heroik.GetCurentTakenObjects().name == obj.name)
+                                _heroik.ActiveObjHands(GiveObj(ref _result));
+                            }
+                            else
+                            {
+                                Debug.Log("печка пуста руки тоже");
+                            }
+                        }
+                    }
+                    else // заняты
+                    {
+                        if (_isWork)
+                        {
+                            Debug.Log("ждите печка работает");
+                        }
+                        else
+                        {
+                            if (_result != null)
+                            {
+                                Debug.Log("Сначала заберите предмет");
+                            }
+                            else
+                            {
+                                int count = 0;
+                                foreach (GameObject obj in foodOnTheOver)
                                 {
-                                    TurnOn();
-                                    AcceptObject(heroik.GiveObjHands(),0);
-                                    yield return new WaitForSeconds(5f);
-                                    TurnOff();
-                                    CreateResult(obj.name);
-                                    break;
-                                }
-                                if(heroik.GetCurentTakenObjects().name != obj.name)
-                                {
-                                    count++;
-                                    if (count == foodOnTheOver.Length)
+                                    if (_heroik.GetCurentTakenObjects().name == obj.name)
                                     {
-                                        Debug.LogError($"Из этого объекта {heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
+                                        TurnOn();
+                                        AcceptObject(_heroik.GiveObjHands(),0);
+                                        StartCookingProcessAsync(obj);
+                                        //yield return new WaitForSeconds(5f);
+                                        // TurnOff();
+                                        // CreateResult(obj.name);
+                                        break;
+                                    }
+                                    if(_heroik.GetCurentTakenObjects().name != obj.name)
+                                    {
+                                        count++;
+                                        if (count == foodOnTheOver.Length)
+                                        {
+                                            Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    
+                    _timeCurrent = 0f;
                 }
+                else
+                {
+                    Debug.LogWarning("Ждите перезарядки кнопки");
+                }
+
+                
             }
-            
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _onTrigger = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
+            _heroik = null;
             _outline.OutlineWidth = 0f;
+            _onTrigger = false;
         }
+    }
+    
+    private async void StartCookingProcessAsync(GameObject obj)
+    {
+        await Task.Delay(5000);
+        TurnOff();
+        CreateResult(obj.name);
     }
 
 
@@ -200,6 +233,8 @@ public class Oven : FurnitureAbstact
         Debug.Log($"из этого {obj.name} продукта ничего не приготовить //Ошибка");
         return null;
     }
+    
+    
 
 
     protected override GameObject GiveObj(ref GameObject obj)
