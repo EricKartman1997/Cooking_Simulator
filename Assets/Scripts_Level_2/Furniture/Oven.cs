@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -13,120 +9,98 @@ public class Oven : FurnitureAbstact
     [SerializeField] private GameObject switchSecond;
     [SerializeField] private GameObject[] foodOnTheOver;
     [SerializeField] private GameObject[] cookedFoodOnTheOver;
-    
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
     
-    private Outline _outline;
     private bool _isWork = false;
+    private bool _heroikIsTrigger = false;
     private GameObject _result;
-
-    private bool _onTrigger = false;
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
-
-
-    void Start()
+    
+    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject[] foodOnTheOver,GameObject[] cookedFoodOnTheOver,GameObject timer,Transform timerPoint,Transform timerParent,Heroik _heroik)
     {
-        _outline = GetComponent<Outline>();
+        this.glassOn = glassOn;
+        this.glassOff = glassOff;
+        this.switchFirst = switchFirst;
+        this.switchSecond = switchSecond;
+        this.foodOnTheOver = foodOnTheOver;
+        this.cookedFoodOnTheOver = cookedFoodOnTheOver;
+        this.timer = timer;
+        this.timerPoint = timerPoint;
+        this.timerParent = timerParent;
+        this._heroik = _heroik;
     }
-
+    
     private void Update()
     {
         _timeCurrent += Time.deltaTime;
-        if (_onTrigger)
+        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger )
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            if (_timeCurrent >= 0.17f)
             {
-                if (_timeCurrent >= 0.17f)
+                if (!Heroik.IsBusyHands) // руки не заняты
                 {
-                    if (!Heroik.IsBusyHands) // руки не заняты
+                    if (_isWork)
                     {
-                        if (_isWork)
+                        //Debug.Log("ждите печка работает");
+                    }
+                    else
+                    {
+                        if (_result != null)
                         {
-                            Debug.Log("ждите печка работает");
+                            _heroik.ActiveObjHands(GiveObj(ref _result));
                         }
                         else
                         {
-                            if (_result != null)
-                            {
-                                _heroik.ActiveObjHands(GiveObj(ref _result));
-                            }
-                            else
-                            {
-                                Debug.Log("печка пуста руки тоже");
-                            }
+                            //Debug.Log("печка пуста руки тоже");
                         }
                     }
-                    else // заняты
+                }
+                else // заняты
+                {
+                    if (_isWork)
                     {
-                        if (_isWork)
+                        //Debug.Log("ждите печка работает");
+                    }
+                    else
+                    {
+                        if (_result != null)
                         {
-                            Debug.Log("ждите печка работает");
+                            //Debug.Log("Сначала заберите предмет");
                         }
                         else
                         {
-                            if (_result != null)
+                            int count = 0;
+                            foreach (GameObject obj in foodOnTheOver)
                             {
-                                Debug.Log("Сначала заберите предмет");
-                            }
-                            else
-                            {
-                                int count = 0;
-                                foreach (GameObject obj in foodOnTheOver)
+                                if (_heroik.GetCurentTakenObjects().name == obj.name)
                                 {
-                                    if (_heroik.GetCurentTakenObjects().name == obj.name)
+                                    TurnOn();
+                                    AcceptObject(_heroik.GiveObjHands(),0);
+                                    StartCookingProcessAsync(obj);
+                                    break;
+                                }
+                                if(_heroik.GetCurentTakenObjects().name != obj.name)
+                                {
+                                    count++;
+                                    if (count == foodOnTheOver.Length)
                                     {
-                                        TurnOn();
-                                        AcceptObject(_heroik.GiveObjHands(),0);
-                                        StartCookingProcessAsync(obj);
-                                        //yield return new WaitForSeconds(5f);
-                                        // TurnOff();
-                                        // CreateResult(obj.name);
-                                        break;
-                                    }
-                                    if(_heroik.GetCurentTakenObjects().name != obj.name)
-                                    {
-                                        count++;
-                                        if (count == foodOnTheOver.Length)
-                                        {
-                                            Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
-                                        }
+                                        //Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
                                     }
                                 }
                             }
                         }
                     }
+                }
                     
-                    _timeCurrent = 0f;
-                }
-                else
-                {
-                    Debug.LogWarning("Ждите перезарядки кнопки");
-                }
-
-                
+                _timeCurrent = 0f;
             }
-        }
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _onTrigger = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _onTrigger = false;
+            else
+            {
+                Debug.LogWarning("Ждите перезарядки кнопки");
+            }
         }
     }
     
@@ -137,62 +111,6 @@ public class Oven : FurnitureAbstact
         CreateResult(obj.name);
     }
 
-
-    // private void TurnOnOven()
-    // {
-    //     _isWork = true;
-    //     glassOff.SetActive(false);
-    //     glassOn.SetActive(true);
-    //     switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
-    //     switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
-    //     Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
-    // }
-    // private void TurnOffOven()
-    // {
-    //     _isWork = false;
-    //     glassOff.SetActive(true);
-    //     glassOn.SetActive(false);
-    //     switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
-    //     switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
-    // }
-
-    // private GameObject IssuanceOfTheResult(GameObject obj)
-    // {
-    //     switch (obj.name)
-    //     {
-    //         case "Apple":
-    //             foreach (var cookedFood in cookedFoodOnTheOver)
-    //             {
-    //                 if (cookedFood.name == "BakedApple")
-    //                 {
-    //                     cookedFood.SetActive(true);
-    //                     return cookedFood;
-    //                 }
-    //                 else
-    //                 {
-    //                     Debug.Log("ошибка");
-    //                 }
-    //             }
-    //             break;
-    //         case "Orange":
-    //             foreach (var cookedFood in cookedFoodOnTheOver)
-    //             {
-    //                 if (cookedFood.name == "BakedOrange")
-    //                 {
-    //                     cookedFood.SetActive(true);
-    //                     return cookedFood;
-    //                 }
-    //                 else
-    //                 {
-    //                     Debug.Log("ошибка");
-    //                 }
-    //             } 
-    //             break;
-    //         
-    //     }
-    //     Debug.Log($"из этого {obj.name} продукта ничего не приготовить //Ошибка");
-    //     return null;
-    // }
     private GameObject IssuanceOfTheResult(GameObject obj)
     {
         foreach (var cookedFood in cookedFoodOnTheOver)
@@ -234,9 +152,6 @@ public class Oven : FurnitureAbstact
         return null;
     }
     
-    
-
-
     protected override GameObject GiveObj(ref GameObject obj)
     {
         Debug.Log("забираем предмет");
@@ -304,5 +219,18 @@ public class Oven : FurnitureAbstact
                 _result = cookedFood;
             }
         }
+    }
+    
+    public bool IsAllowDestroy()
+    {
+        if (!_isWork && _result == null)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void HeroikIsTrigger()
+    {
+        _heroikIsTrigger = !_heroikIsTrigger;
     }
 }
