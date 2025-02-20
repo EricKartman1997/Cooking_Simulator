@@ -2,15 +2,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class Heroik : MonoBehaviour
 {
-    [SerializeField] private LightAttack lightAttack;
-    [SerializeField] private ListEnemy listEnemy;
-    
     public GameObject _curentTakenObjects = null;// переделать
     public static bool IsBusyHands = false; // руки не заняты
     public static byte MakeOrders = 0;
     public GameObject[] TakenObjects;
-    
-    
     [SerializeField] private bool _interactionFurniture = false;
    
 
@@ -70,19 +65,5 @@ public class Heroik : MonoBehaviour
     //     EventBus.NotPressE -= SetInteractionFurnitureFalse;
     //     EventBus.PressE -= SetInteractionFurnitureTrue;
     // }
-
-    // private void Update()
-    // {
-    //
-    //     if (Input.GetKeyDown(KeyCode.E))
-    //     {
-    //
-    //         SetInteractionFurnitureFalse();
-    //         SetInteractionFurnitureTrue();
-    //     }
-    // }
-    // private async void DelayPressE()
-    // {
-    //     await Task.Delay(1000);
-    // }
+    
 }
