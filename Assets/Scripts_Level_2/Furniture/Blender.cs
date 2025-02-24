@@ -34,7 +34,7 @@ public class Blender : FurnitureAbstact
         _timeCurrent += Time.deltaTime;
         if (_onTrigger)
         {
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 if (_timeCurrent >= 0.17f)
                 {

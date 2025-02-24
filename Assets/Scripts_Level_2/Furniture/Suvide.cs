@@ -34,19 +34,29 @@ public class Suvide : MonoBehaviour
     private bool _isCookedSecondResult = false;
     private bool _isCookedThirdResult = false;
     
-    private bool _onTrigger = false;
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
+    private bool _heroikIsTrigger = false;
 
-    private void Start()
+    public void Initialize(Animator _animator,Heroik _heroik, GameObject[] readyFood,GameObject[] food,Timer_Prefab firstTimer,
+        Timer_Prefab secondTimer, Timer_Prefab thirdTimer, GameObject switchTemperPrefab,GameObject switchTimePrefab,
+        GameObject waterPrefab)
     {
-        _animator = GetComponent<Animator>();
-        //_animator.SetBool("Work", false);
-        _outline = GetComponent<Outline>();
+        this._animator = _animator;
+        this._heroik = _heroik;
+        this.readyFood = readyFood;
+        this.food = food;
+        this.firstTimer = firstTimer;
+        this.secondTimer = secondTimer;
+        this.thirdTimer = thirdTimer;
+        this.switchTemperPrefab = switchTemperPrefab;
+        this.switchTimePrefab = switchTimePrefab;
+        this.waterPrefab = waterPrefab;
     }
-
+    
     private void Update()
     {
+        // переделать в отдельный метод
         if (_isCookedFirstResult || _isCookedSecondResult || _isCookedThirdResult)
         {
             _isWork = true;
@@ -59,97 +69,90 @@ public class Suvide : MonoBehaviour
         }
         
         _timeCurrent += Time.deltaTime;
-        if (_onTrigger)
+        if (Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (_timeCurrent >= 0.17f)
             {
-                if (_timeCurrent >= 0.17f)
+                if(!Heroik.IsBusyHands) // руки не заняты
                 {
-                    if(!Heroik.IsBusyHands) // руки не заняты
+                    if (_firstResult != null)
                     {
-                        if (_firstResult != null)
+                        GiveResult(1);
+                    }
+                    else
+                    {
+                        if (_secondResult != null)
                         {
-                            GiveResult(1);
+                            GiveResult(2);
                         }
                         else
                         {
-                            if (_secondResult != null)
+                            if (_thirdResult != null)
                             {
-                                GiveResult(2);
+                                GiveResult(3);
                             }
                             else
                             {
-                                if (_thirdResult != null)
-                                {
-                                    GiveResult(3);
-                                }
-                                else
-                                {
-                                    Debug.Log("Сувид пуст руки тоже");
-                                }
+                                Debug.Log("Сувид пуст руки тоже");
                             }
                         }
                     }
-                    else // руки заняты
+                }
+                else // руки заняты
+                {
+                    if (_isWork) // работает
                     {
-                        if (_isWork) // работает
+                        if (_firstResult == null && !_isCookedFirstResult)
                         {
-                            if (_firstResult == null && !_isCookedFirstResult)
+                            //проверка на подъодит ли предмет
+                            if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
+                            {
+                                ToAcceptObjsFood(_heroik.GiveObjHands(),1);
+                                _heroik._curentTakenObjects = null;
+                                TurnOn(firstTimer, out _isCookedFirstResult);
+                                StartCookingProcessAsync(1);
+                            }
+                            else
+                            {
+                                Debug.Log("продукт не подходит для сувида");
+                            }
+                        }
+                        else if (_firstResult != null || (_firstResult == null && _isCookedFirstResult))
+                        {
+                            if (_secondResult == null && !_isCookedSecondResult)
                             {
                                 //проверка на подъодит ли предмет
                                 if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                 {
-                                    ToAcceptObjsFood(_heroik.GiveObjHands(),1);
-                                    _heroik._curentTakenObjects = null;
-                                    TurnOn(firstTimer, out _isCookedFirstResult);
-                                    StartCookingProcessAsync(1);
+                                    ToAcceptObjsFood(_heroik.GiveObjHands(),2);
+                                        
+                                    TurnOn(secondTimer, out _isCookedSecondResult);
+                                    StartCookingProcessAsync(2);
                                 }
                                 else
                                 {
-                                    Debug.Log("продукт не подходит для сувида");
+                                    Debug.LogWarning("продукт не подходит для сувида");
                                 }
                             }
-                            else if (_firstResult != null || (_firstResult == null && _isCookedFirstResult))
+                            else if (_secondResult != null || (_secondResult == null && _isCookedSecondResult))
                             {
-                                if (_secondResult == null && !_isCookedSecondResult)
+                                if (_thirdResult == null && !_isCookedThirdResult)
                                 {
                                     //проверка на подъодит ли предмет
                                     if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                     {
-                                        ToAcceptObjsFood(_heroik.GiveObjHands(),2);
-                                        
-                                        TurnOn(secondTimer, out _isCookedSecondResult);
-                                        StartCookingProcessAsync(2);
+                                        ToAcceptObjsFood(_heroik.GiveObjHands(),3);
+                                        TurnOn(thirdTimer, out _isCookedThirdResult);
+                                        StartCookingProcessAsync(3);
                                     }
                                     else
                                     {
                                         Debug.LogWarning("продукт не подходит для сувида");
                                     }
                                 }
-                                else if (_secondResult != null || (_secondResult == null && _isCookedSecondResult))
+                                else if (_thirdResult != null || (_thirdResult == null && _isCookedThirdResult))
                                 {
-                                    if (_thirdResult == null && !_isCookedThirdResult)
-                                    {
-                                        //проверка на подъодит ли предмет
-                                        if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
-                                        {
-                                            ToAcceptObjsFood(_heroik.GiveObjHands(),3);
-                                            TurnOn(thirdTimer, out _isCookedThirdResult);
-                                            StartCookingProcessAsync(3);
-                                        }
-                                        else
-                                        {
-                                            Debug.LogWarning("продукт не подходит для сувида");
-                                        }
-                                    }
-                                    else if (_thirdResult != null || (_thirdResult == null && _isCookedThirdResult))
-                                    {
-                                        Debug.LogWarning("сувид заполнен");
-                                    }
-                                    else
-                                    {
-                                        Debug.LogError("Условие не сработало");
-                                    }
+                                    Debug.LogWarning("сувид заполнен");
                                 }
                                 else
                                 {
@@ -161,39 +164,29 @@ public class Suvide : MonoBehaviour
                                 Debug.LogError("Условие не сработало");
                             }
                         }
-                        else // не работает
+                        else
                         {
-                            if (_firstResult != null)
+                            Debug.LogError("Условие не сработало");
+                        }
+                    }
+                    else // не работает
+                    {
+                        if (_firstResult != null)
+                        {
+                            if (_secondResult != null)
                             {
-                                if (_secondResult != null)
+                                if (_thirdResult != null)
                                 {
-                                    if (_thirdResult != null)
-                                    {
-                                        Debug.LogWarning("Сувид полный заберите готовый продукт");
-                                    }
-                                    else
-                                    {
-                                        //проверка на подъодит ли предмет
-                                        if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
-                                        {
-                                            ToAcceptObjsFood(_heroik.GiveObjHands(),3);
-                                            TurnOn(thirdTimer, out _isCookedThirdResult);
-                                            StartCookingProcessAsync(3);
-                                        }
-                                        else
-                                        {
-                                            Debug.LogWarning("продукт не подходит для сувида");
-                                        }
-                                    }
+                                    Debug.LogWarning("Сувид полный заберите готовый продукт");
                                 }
                                 else
                                 {
                                     //проверка на подъодит ли предмет
                                     if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                     {
-                                        ToAcceptObjsFood(_heroik.GiveObjHands(),2);
-                                        TurnOn(secondTimer, out _isCookedSecondResult);
-                                        StartCookingProcessAsync(2);
+                                        ToAcceptObjsFood(_heroik.GiveObjHands(),3);
+                                        TurnOn(thirdTimer, out _isCookedThirdResult);
+                                        StartCookingProcessAsync(3);
                                     }
                                     else
                                     {
@@ -206,9 +199,9 @@ public class Suvide : MonoBehaviour
                                 //проверка на подъодит ли предмет
                                 if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
                                 {
-                                    ToAcceptObjsFood(_heroik.GiveObjHands(),1);
-                                    TurnOn(firstTimer, out _isCookedFirstResult);
-                                    StartCookingProcessAsync(1);
+                                    ToAcceptObjsFood(_heroik.GiveObjHands(),2);
+                                    TurnOn(secondTimer, out _isCookedSecondResult);
+                                    StartCookingProcessAsync(2);
                                 }
                                 else
                                 {
@@ -216,33 +209,28 @@ public class Suvide : MonoBehaviour
                                 }
                             }
                         }
+                        else
+                        {
+                            //проверка на подъодит ли предмет
+                            if (_heroik._curentTakenObjects.GetComponent<ObjsForSuvide>() && _heroik._curentTakenObjects.GetComponent<Interactable>())
+                            {
+                                ToAcceptObjsFood(_heroik.GiveObjHands(),1);
+                                TurnOn(firstTimer, out _isCookedFirstResult);
+                                StartCookingProcessAsync(1);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("продукт не подходит для сувида");
+                            }
+                        }
                     }
-                    _timeCurrent = 0f;
                 }
-                else
-                {
-                    Debug.LogWarning("Ждите перезарядки кнопки");
-                }
+                _timeCurrent = 0f;
             }
-        }
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _onTrigger = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _onTrigger = false;
+            else
+            {
+                Debug.LogWarning("Ждите перезарядки кнопки");
+            }
         }
     }
     
@@ -321,85 +309,6 @@ public class Suvide : MonoBehaviour
         }
 
     }
-    // private void CreateResult(byte numberObj)
-    // {
-    //     if (numberObj == 1)
-    //     {
-    //         if (_ingedient_1.name == "firstMeat")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "firstBakedMeat")
-    //                 {
-    //                     _firstResult = obj;
-    //                     _firstResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //         if (_ingedient_1.name == "firstFish")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "firstBakedFish")
-    //                 {
-    //                     _firstResult = obj;
-    //                     _firstResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     if (numberObj == 2)
-    //     {
-    //         if (_ingedient_2.name == "secondMeat")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "secondBakedMeat")
-    //                 {
-    //                     _secondResult = obj;
-    //                     _secondResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //         if (_ingedient_2.name == "secondFish")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "secondBakedFish")
-    //                 {
-    //                     _secondResult = obj;
-    //                     _secondResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     if (numberObj == 3)
-    //     {
-    //         if (_ingedient_3.name == "thirdMeat")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "thirdBakedMeat")
-    //                 {
-    //                     _thirdResult = obj;
-    //                     _thirdResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //         if (_ingedient_3.name == "thirdFish")
-    //         {
-    //             foreach (var obj in readyFood)
-    //             {
-    //                 if (obj.name == "thirdBakedFish")
-    //                 {
-    //                     _thirdResult = obj;
-    //                     _thirdResult.SetActive(true);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    // }
     private void TurnOn(Timer_Prefab timer,out bool isCooked)
     {
         _isWork = true;
@@ -608,6 +517,21 @@ public class Suvide : MonoBehaviour
         waterPrefab.SetActive(false);
         switchTemperPrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
         switchTimePrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
+    }
+    
+    public bool IsAllowDestroy()
+    {
+        if (_ingedient_1 == null && _ingedient_2 == null && _ingedient_3 == null && _firstResult == null &&
+            _secondResult == null && _thirdResult == null && !_isWork)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void HeroikIsTrigger()
+    {
+        _heroikIsTrigger = !_heroikIsTrigger;
     }
 
 }
