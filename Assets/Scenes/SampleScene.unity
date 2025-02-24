@@ -1522,7 +1522,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.6466667}
   m_AnchorMax: {x: 1, y: 0.82000005}
-  m_AnchoredPosition: {x: -174.99997, y: 3}
+  m_AnchoredPosition: {x: -174.99994, y: 3}
   m_SizeDelta: {x: -550, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &795998538
@@ -2288,14 +2288,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Heroik_2
       objectReference: {fileID: 0}
-    - target: {fileID: 8953702003796110582, guid: 7ff0b45c96711f04d98d1ba75885576f, type: 3}
-      propertyPath: listEnemy
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8953702003796110582, guid: 7ff0b45c96711f04d98d1ba75885576f, type: 3}
-      propertyPath: lightAttack
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2390,7 +2382,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 49.65
+  m_fontSize: 52.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

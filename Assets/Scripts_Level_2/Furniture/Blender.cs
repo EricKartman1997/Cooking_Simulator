@@ -3,91 +3,115 @@ using UnityEngine;
 
 public class Blender : FurnitureAbstact
 {
-    private Animator _animator;
     
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
-    
-    private Outline _outline;
-    
     [SerializeField] private GameObject[] objectOnTheTable;
     [SerializeField] private GameObject[] readyFoods;
     
-    private GameObject _ingedient1 = null;
-    private GameObject _ingedient2 = null;
-    private GameObject _ingedient3 = null;
+    private Animator _animator;
+    [SerializeField]private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    [SerializeField]private BlenderPoints _blenderPoints;
+    
+    [SerializeField]private GameObject _ingredient1 = null;
+    [SerializeField]private GameObject _ingredient2 = null;
+    [SerializeField]private GameObject _ingredient3 = null;
     private GameObject _result = null;
     private bool _isWork = false;
-    private bool _onTrigger = false;
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
+    private bool _heroikIsTrigger = false;
+    [SerializeField]private Transform _parentFood;
 
-    void Start()
+    // для удаления визуала объекта над блендером
+    [SerializeField]private GameObject _cloneIngridient1; 
+    [SerializeField]private GameObject _cloneIngridient2;
+    [SerializeField]private GameObject _cloneIngridient3;
+    
+    public void Initialize(GameObject timer,Heroik _heroik, Transform timerPoint,Transform timerParent,
+        GameObject[] objectOnTheTable,GameObject[] readyFoods,Animator _animator,BlenderPoints _blenderPoints,Transform _parentFood)
     {
-        _animator = GetComponent<Animator>();
-        //_animator.SetBool("Work", false);
-        _outline = GetComponent<Outline>();
+        this.timer = timer;
+        this._heroik = _heroik;
+        this.timerPoint = timerPoint;
+        this.timerParent = timerParent;
+        this.objectOnTheTable = objectOnTheTable;
+        this.readyFoods = readyFoods;
+        this._animator = _animator;
+        this._blenderPoints = _blenderPoints;
+        this._parentFood = _parentFood;
     }
     private void Update()
     {
         _timeCurrent += Time.deltaTime;
-        if (_onTrigger)
+        if (Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (_timeCurrent >= 0.17f)
             {
-                if (_timeCurrent >= 0.17f)
+                if(!Heroik.IsBusyHands) // руки не заняты
                 {
-                    if(!Heroik.IsBusyHands) // руки не заняты
+                    if (_isWork)
                     {
-                        if (_isWork)
+                        Debug.Log("ждите блэндер готовится");
+                    }
+                    else
+                    {
+                        if (_result == null)
                         {
-                            Debug.Log("ждите блэндер готовится");
-                        }
-                        else
-                        {
-                            if (_result == null)
+                            if (_ingredient1 == null)
                             {
-                                if (_ingedient1 == null)
+                                Debug.Log("Руки пусты ингридиентов нет");
+                            }
+                            else
+                            {
+                                if (_ingredient2 == null)
                                 {
-                                    Debug.Log("Руки пусты ингридиентов нет");
+                                    _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient1,ref _ingredient1));
                                 }
                                 else
                                 {
-                                    if (_ingedient2 == null)
-                                    {
-                                        _heroik.ActiveObjHands(GiveObj(ref _ingedient1));
-                                    }
-                                    else
-                                    {
-                                        _heroik.ActiveObjHands(GiveObj(ref _ingedient2));
-                                    }
+                                    _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient2,ref _ingredient2));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _heroik.ActiveObjHands(GiveObj(ref _result));
+                        }
+                        
+                    }
+                    
+                }
+                else // руки заняты
+                {
+                    if (_isWork)
+                    {
+                        Debug.Log("ждите блэндер готовится");
+                    }
+                    else
+                    {
+                        if (_result == null)
+                        {
+                            if (_ingredient1 == null)
+                            {
+                                if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
+                                {
+                                    AcceptObject(_heroik.GiveObjHands(), 1);
+                                    Debug.Log("Предмет первый положен в блендер");
+                                }
+                                else
+                                {
+                                    Debug.Log("с предметом нельзя взаимодействовать");
                                 }
                             }
                             else
                             {
-                                _heroik.ActiveObjHands(GiveObj(ref _result));
-                            }
-                        
-                        }
-                    
-                    }
-                    else // руки заняты
-                    {
-                        if (_isWork)
-                        {
-                            Debug.Log("ждите блэндер готовится");
-                        }
-                        else
-                        {
-                            if (_result == null)
-                            {
-                                if (_ingedient1 == null)
+                                if (_ingredient2 == null)
                                 {
                                     if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
                                     {
-                                        AcceptObject(_heroik.GiveObjHands(), 1);
-                                        Debug.Log("Предмет первый положен в блендер");
+                                        AcceptObject(_heroik.GiveObjHands(), 2);
+                                        Debug.Log("Предмет второй положен в блендер");
                                     }
                                     else
                                     {
@@ -96,50 +120,35 @@ public class Blender : FurnitureAbstact
                                 }
                                 else
                                 {
-                                    if (_ingedient2 == null)
+                                    if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
                                     {
-                                        if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
-                                        {
-                                            AcceptObject(_heroik.GiveObjHands(), 2);
-                                            Debug.Log("Предмет второй положен в блендер");
-                                        }
-                                        else
-                                        {
-                                            Debug.Log("с предметом нельзя взаимодействовать");
-                                        }
+                                        AcceptObject(_heroik.GiveObjHands(), 3);
+                                        Debug.Log("Предмет третий положен в блендер");
+                                        TurnOn(); 
+                                        var objdish = FindReadyFood(_ingredient1,_ingredient2,_ingredient3);
+                                        StartCookingProcessAsync(objdish);
+                                        //yield return new WaitForSeconds(4f);
+                                        //TurnOff();
+                                        //CreateResult(objdish.name);
                                     }
                                     else
                                     {
-                                        if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<Fruit>())
-                                        {
-                                            AcceptObject(_heroik.GiveObjHands(), 3);
-                                            Debug.Log("Предмет третий положен в блендер");
-                                            TurnOn(); 
-                                            var objdish = FindReadyFood(_ingedient1,_ingedient2,_ingedient3);
-                                            StartCookingProcessAsync(objdish);
-                                            //yield return new WaitForSeconds(4f);
-                                            //TurnOff();
-                                            //CreateResult(objdish.name);
-                                        }
-                                        else
-                                        {
-                                            Debug.Log("с предметом нельзя взаимодействовать");
-                                        }
+                                        Debug.Log("с предметом нельзя взаимодействовать");
                                     }
                                 }
                             }
-                            else
-                            {
-                                Debug.Log("Руки полные уберите предмет");
-                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Руки полные уберите предмет");
                         }
                     }
-                    _timeCurrent = 0f;
                 }
-                else
-                {
-                    Debug.LogWarning("Ждите перезарядки кнопки");
-                }
+                _timeCurrent = 0f;
+            }
+            else
+            {
+                Debug.LogWarning("Ждите перезарядки кнопки");
             }
         }
     }
@@ -150,25 +159,7 @@ public class Blender : FurnitureAbstact
         TurnOff();
         CreateResult(obj.name);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _onTrigger = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<Heroik>())
-        {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _onTrigger = false;
-        }
-    }
+    
     private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
     {
         string Apple = "Apple";
@@ -365,48 +356,86 @@ public class Blender : FurnitureAbstact
     {
         obj.SetActive(false);
         var cObj = obj;
-        obj = null;
+        //obj = null;
+        Destroy(obj);
+        return cObj;
+    }
+    private  GameObject GiveObj(ref GameObject obj, ref GameObject ingredient) // добавить интерфейс на этот метод (SOLID)
+    {
+        obj.SetActive(false);
+        var cObj = obj;
+        ingredient = null;
+        Destroy(obj);
         return cObj;
     }
 
-    protected override void AcceptObject(GameObject acceptObj, byte numberObj)
+    // protected override void AcceptObject(GameObject acceptObj, byte numberObj)
+    // {
+    //     if (numberObj == 1)
+    //     {
+    //         foreach (var obj in objectOnTheTable)
+    //         {
+    //             if (obj.name == acceptObj.name)
+    //             {
+    //                 obj.SetActive(true);
+    //                 _ingredient1 = obj;
+    //             }
+    //         }
+    //     }
+    //     else if (numberObj == 2)
+    //     {
+    //         foreach (var obj in objectOnTheTable)
+    //         {
+    //             if (obj.name == acceptObj.name)
+    //             {
+    //                 obj.SetActive(true);
+    //                 _ingredient2 = obj;
+    //             }
+    //         }
+    //     }
+    //     else if (numberObj == 3)
+    //     {
+    //         foreach (var obj in objectOnTheTable)
+    //         {
+    //             if (obj.name == acceptObj.name)
+    //             {
+    //                 obj.SetActive(true);
+    //                 _ingredient3 = obj;
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("Ошибка");
+    //     }
+    // }
+
+    protected override void AcceptObject(GameObject acceptObj, byte numberObj )
     {
-        if (numberObj == 1)
+        if (_ingredient1 == null)
         {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObj.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient1 = obj;
-                }
-            }
+            _ingredient1 = acceptObj;
+            _cloneIngridient1 = Instantiate(_ingredient1, _blenderPoints.GetFirstPoint(), Quaternion.identity, _parentFood);
+            _cloneIngridient1.name = _cloneIngridient1.name.Replace("(Clone)", "");
+            _cloneIngridient1.SetActive(true);
         }
-        else if (numberObj == 2)
+        else if (_ingredient2 == null)
         {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObj.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient2 = obj;
-                }
-            }
+            _ingredient2 = acceptObj;
+            _cloneIngridient2 = Instantiate(_ingredient2, _blenderPoints.GetSecondPoint(), Quaternion.identity, _parentFood);
+            _cloneIngridient2.name = _cloneIngridient2.name.Replace("(Clone)", "");
+            _cloneIngridient2.SetActive(true);
         }
-        else if (numberObj == 3)
+        else if (_ingredient3 == null)
         {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObj.name)
-                {
-                    obj.SetActive(true);
-                    _ingedient3 = obj;
-                }
-            }
+            _ingredient3 = acceptObj;
+            _cloneIngridient3 = Instantiate(_ingredient3, _blenderPoints.GetThirdPoint(), Quaternion.identity, _parentFood);
+            _cloneIngridient3.name = _cloneIngridient3.name.Replace("(Clone)", "");
+            _cloneIngridient3.SetActive(true);
         }
         else
         {
-            Debug.Log("Ошибка");
+            Debug.LogWarning("В блендере нет места");
         }
     }
 
@@ -425,9 +454,9 @@ public class Blender : FurnitureAbstact
     protected override void TurnOn()
     {
         _isWork = true;
-        _ingedient1.SetActive(false);
-        _ingedient2.SetActive(false);
-        _ingedient3.SetActive(false);
+        Destroy(_cloneIngridient1);
+        Destroy(_cloneIngridient2);
+        Destroy(_cloneIngridient3);
         _animator.SetBool("Work", true);
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
@@ -435,9 +464,23 @@ public class Blender : FurnitureAbstact
     protected override void TurnOff()
     {
         _isWork = false;
-        _ingedient1 = null;
-        _ingedient2 = null;
-        _ingedient3 = null;
+        _ingredient1 = null;
+        _ingredient2 = null;
+        _ingredient3 = null;
         _animator.SetBool("Work", false);
+    }
+    
+    public bool IsAllowDestroy()
+    {
+        if (_ingredient1 == null && _ingredient2 == null && _ingredient3 == null && _result == null && !_isWork)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void HeroikIsTrigger()
+    {
+        _heroikIsTrigger = !_heroikIsTrigger;
     }
 }
