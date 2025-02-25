@@ -496,10 +496,20 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 756335c1bb073cb4a805bcb82971375b, type: 3}
+--- !u!4 &361656338 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8232012358472672264, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+  m_PrefabInstance: {fileID: 1368533209}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &410346459 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8601219333384912799, guid: 756335c1bb073cb4a805bcb82971375b, type: 3}
   m_PrefabInstance: {fileID: 1512381044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &413792824 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4210526363642799896, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+  m_PrefabInstance: {fileID: 1368533209}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &461931968
 PrefabInstance:
@@ -2967,6 +2977,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 788519003}
     m_Modifications:
+    - target: {fileID: 2455496559829892647, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3601711475672373242, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
       propertyPath: m_Name
       value: Blender
@@ -3009,6 +3023,62 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4613631904823658075, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: rubbish
+      value: 
+      objectReference: {fileID: 3151340753539164728, guid: 4046e04bf23c28b4abcb716a138b52b4, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: readyFood
+      value: 
+      objectReference: {fileID: 413792824}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: parentFood
+      value: 
+      objectReference: {fileID: 361656338}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: freshnessCocktail
+      value: 
+      objectReference: {fileID: 9137392620112452922, guid: 0ac338e837fa04c48b1258a5ea0c2f96, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: wildBerryCocktail
+      value: 
+      objectReference: {fileID: 2577928362101365757, guid: 779b6034b65b8c74c8302cfe52b31e37, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredFreshnessCocktail.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredWildBerryCocktail.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredFreshnessCocktail.Array.data[0]
+      value: 
+      objectReference: {fileID: 203067347516692386, guid: 857bd869786247748917a3aa04083310, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredFreshnessCocktail.Array.data[1]
+      value: 
+      objectReference: {fileID: 1061460598140693320, guid: 14c00c00170698b4c8efef43801378fa, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredFreshnessCocktail.Array.data[2]
+      value: 
+      objectReference: {fileID: 7666708302614978920, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredWildBerryCocktail.Array.data[0]
+      value: 
+      objectReference: {fileID: 4085693889228215559, guid: a9137ed3ca4759440a71c9bf001035e5, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredWildBerryCocktail.Array.data[1]
+      value: 
+      objectReference: {fileID: 1979905792865201056, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: requiredWildBerryCocktail.Array.data[2]
+      value: 
+      objectReference: {fileID: 8571235859053291362, guid: c79eea34c8f60a445ae7a55ebb6da37b, type: 3}
+    - target: {fileID: 6003188442630833609, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

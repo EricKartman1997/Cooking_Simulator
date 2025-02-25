@@ -1,27 +1,29 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class Blender : FurnitureAbstact
 {
     
-    [SerializeField] private GameObject timer;
-    [SerializeField] private Transform timerPoint;
-    [SerializeField] private Transform timerParent;
-    [SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject[] readyFoods;
+     private GameObject timer;
+     private Transform timerPoint;
+     private Transform timerParent;
+     private GameObject[] objectOnTheTable;
+     private GameObject[] readyFoods;
     
     private Animator _animator;
-    [SerializeField]private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-    [SerializeField]private BlenderPoints _blenderPoints;
+     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+     private BlenderPoints _blenderPoints;
+     private BlenderRecipes _blenderRecipes;
     
-    [SerializeField]private GameObject _ingredient1 = null;
-    [SerializeField]private GameObject _ingredient2 = null;
-    [SerializeField]private GameObject _ingredient3 = null;
-    private GameObject _result = null;
+    [SerializeField] private GameObject _ingredient1 = null;
+    [SerializeField] private GameObject _ingredient2 = null;
+    [SerializeField] private GameObject _ingredient3 = null;
+    [SerializeField] private GameObject _result = null;
     private bool _isWork = false;
     private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger = false;
-    [SerializeField]private Transform _parentFood;
+    private Transform _parentFood;
 
     // для удаления визуала объекта над блендером
     [SerializeField]private GameObject _cloneIngridient1; 
@@ -29,7 +31,8 @@ public class Blender : FurnitureAbstact
     [SerializeField]private GameObject _cloneIngridient3;
     
     public void Initialize(GameObject timer,Heroik _heroik, Transform timerPoint,Transform timerParent,
-        GameObject[] objectOnTheTable,GameObject[] readyFoods,Animator _animator,BlenderPoints _blenderPoints,Transform _parentFood)
+        GameObject[] objectOnTheTable,GameObject[] readyFoods,Animator _animator,BlenderPoints _blenderPoints,
+        Transform _parentFood,BlenderRecipes _blenderRecipes)
     {
         this.timer = timer;
         this._heroik = _heroik;
@@ -40,6 +43,7 @@ public class Blender : FurnitureAbstact
         this._animator = _animator;
         this._blenderPoints = _blenderPoints;
         this._parentFood = _parentFood;
+        this._blenderRecipes = _blenderRecipes;
     }
     private void Update()
     {
@@ -157,201 +161,201 @@ public class Blender : FurnitureAbstact
     {
         await Task.Delay(4000);
         TurnOff();
-        CreateResult(obj.name);
+        CreateResult(obj);
     }
     
-    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
-    {
-        string Apple = "Apple";
-        string Orange = "Orange";
-        string Cherry = "Cherry";
-        string Strawberry = "Strawberry";
-        string Lime = "Lime";
-        string Blueberry = "Blueberry";
-        
-        if (ingedient1.name == Apple)
-        {
-            if (ingedient2.name == Lime)
-            {
-                if (ingedient3.name == Strawberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Strawberry)
-            {
-                if (ingedient3.name == Lime)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient1.name == Orange)
-        {
-            if (ingedient2.name == Cherry)
-            {
-                if (ingedient3.name == Blueberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Blueberry)
-            {
-                if (ingedient3.name == Cherry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient1.name == Cherry)
-        {
-            if (ingedient2.name == Orange)
-            {
-                if (ingedient3.name == Blueberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Blueberry)
-            {
-                if (ingedient3.name == Orange)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient1.name == Strawberry)
-        {
-            if (ingedient2.name == Lime)
-            {
-                if (ingedient3.name == Apple)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Apple)
-            {
-                if (ingedient3.name == Lime)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient1.name == Lime)
-        {
-            if (ingedient2.name == Strawberry)
-            {
-                if (ingedient3.name == Apple)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Apple)
-            {
-                if (ingedient3.name == Strawberry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "FreshnessCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        else if (ingedient1.name == Blueberry)
-        {
-            if (ingedient2.name == Orange)
-            {
-                if (ingedient3.name == Cherry)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-            if (ingedient2.name == Cherry)
-            {
-                if (ingedient3.name == Orange)
-                {
-                    foreach (var obj in readyFoods)
-                    {
-                        if (obj.name == "WildBerryCocktail")
-                        {
-                            return obj; //свежесть
-                        }
-                    }
-                }
-            }
-        }
-        foreach (var obj in readyFoods)
-        {
-            if (obj.name == "Rubbish")
-            {
-                return obj; 
-            }
-        } 
-        return null;
-    }
+    // private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
+    // {
+    //     string Apple = "Apple";
+    //     string Orange = "Orange";
+    //     string Cherry = "Cherry";
+    //     string Strawberry = "Strawberry";
+    //     string Lime = "Lime";
+    //     string Blueberry = "Blueberry";
+    //     
+    //     if (ingedient1.name == Apple)
+    //     {
+    //         if (ingedient2.name == Lime)
+    //         {
+    //             if (ingedient3.name == Strawberry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Strawberry)
+    //         {
+    //             if (ingedient3.name == Lime)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else if (ingedient1.name == Orange)
+    //     {
+    //         if (ingedient2.name == Cherry)
+    //         {
+    //             if (ingedient3.name == Blueberry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Blueberry)
+    //         {
+    //             if (ingedient3.name == Cherry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else if (ingedient1.name == Cherry)
+    //     {
+    //         if (ingedient2.name == Orange)
+    //         {
+    //             if (ingedient3.name == Blueberry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Blueberry)
+    //         {
+    //             if (ingedient3.name == Orange)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else if (ingedient1.name == Strawberry)
+    //     {
+    //         if (ingedient2.name == Lime)
+    //         {
+    //             if (ingedient3.name == Apple)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Apple)
+    //         {
+    //             if (ingedient3.name == Lime)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else if (ingedient1.name == Lime)
+    //     {
+    //         if (ingedient2.name == Strawberry)
+    //         {
+    //             if (ingedient3.name == Apple)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Apple)
+    //         {
+    //             if (ingedient3.name == Strawberry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "FreshnessCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else if (ingedient1.name == Blueberry)
+    //     {
+    //         if (ingedient2.name == Orange)
+    //         {
+    //             if (ingedient3.name == Cherry)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         if (ingedient2.name == Cherry)
+    //         {
+    //             if (ingedient3.name == Orange)
+    //             {
+    //                 foreach (var obj in readyFoods)
+    //                 {
+    //                     if (obj.name == "WildBerryCocktail")
+    //                     {
+    //                         return obj; //свежесть
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     foreach (var obj in readyFoods)
+    //     {
+    //         if (obj.name == "Rubbish")
+    //         {
+    //             return obj; 
+    //         }
+    //     } 
+    //     return null;
+    // }
     protected override GameObject GiveObj(ref GameObject obj)
     {
         obj.SetActive(false);
@@ -369,48 +373,7 @@ public class Blender : FurnitureAbstact
         return cObj;
     }
 
-    // protected override void AcceptObject(GameObject acceptObj, byte numberObj)
-    // {
-    //     if (numberObj == 1)
-    //     {
-    //         foreach (var obj in objectOnTheTable)
-    //         {
-    //             if (obj.name == acceptObj.name)
-    //             {
-    //                 obj.SetActive(true);
-    //                 _ingredient1 = obj;
-    //             }
-    //         }
-    //     }
-    //     else if (numberObj == 2)
-    //     {
-    //         foreach (var obj in objectOnTheTable)
-    //         {
-    //             if (obj.name == acceptObj.name)
-    //             {
-    //                 obj.SetActive(true);
-    //                 _ingredient2 = obj;
-    //             }
-    //         }
-    //     }
-    //     else if (numberObj == 3)
-    //     {
-    //         foreach (var obj in objectOnTheTable)
-    //         {
-    //             if (obj.name == acceptObj.name)
-    //             {
-    //                 obj.SetActive(true);
-    //                 _ingredient3 = obj;
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("Ошибка");
-    //     }
-    // }
-
-    protected override void AcceptObject(GameObject acceptObj, byte numberObj )
+    protected override void AcceptObject(GameObject acceptObj, byte numberObj ) // переделан
     {
         if (_ingredient1 == null)
         {
@@ -441,14 +404,19 @@ public class Blender : FurnitureAbstact
 
     protected override void CreateResult(string nameBolud)
     {
-        foreach (var obj in readyFoods)
-        {
-            if (obj.name == nameBolud)
-            {
-                obj.SetActive(true);
-                _result = obj; 
-            }
-        }
+        // foreach (var obj in readyFoods)
+        // {
+        //     if (obj.name == nameBolud)
+        //     {
+        //         obj.SetActive(true);
+        //         _result = obj; 
+        //     }
+        // }
+    }
+    private void CreateResult(GameObject obj) // переделанный
+    {
+        obj.SetActive(true);
+        _result = obj;
     }
 
     protected override void TurnOn()
@@ -482,5 +450,44 @@ public class Blender : FurnitureAbstact
     public void HeroikIsTrigger()
     {
         _heroikIsTrigger = !_heroikIsTrigger;
+    }
+
+    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
+    {
+        List<GameObject> currentFruits = new List<GameObject>(){ingedient1,ingedient2,ingedient3};
+        if (SuitableIngredients(currentFruits,_blenderRecipes.GetRequiredFreshnessCocktail()))
+        {
+            return _blenderRecipes.GetFreshnessCocktail();
+        }
+        if(SuitableIngredients(currentFruits,_blenderRecipes.GetRequiredWildBerryCocktail()))
+        {
+            return _blenderRecipes.GetWildBerryCocktail();
+        }
+        else
+        {
+            return _blenderRecipes.GetRubbish();
+        }
+    }
+
+    private bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)
+    {
+        List<string> requiredFruitsNames = new List<string>();
+        List<string> currentFruitNames = new List<string>();
+        foreach (var fruit in currentFruits)
+        {
+            currentFruitNames.Add(fruit.name); // Используем имя объекта
+        }
+        foreach (var fruit in requiredFruits)
+        {
+            requiredFruitsNames.Add(fruit.name); // Используем имя объекта
+        }
+        foreach (string fruit in requiredFruitsNames)
+        {
+            if (!currentFruitNames.Contains(fruit))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
