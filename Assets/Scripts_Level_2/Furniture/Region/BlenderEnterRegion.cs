@@ -55,21 +55,21 @@ public class BlenderEnterRegion : MonoBehaviour
             }
             if (!GetComponent<BlenderRecipes>())
             {
-                // узнаем емсть ли этот обект, если нет то создаем
+                // узнаем есть ли этот объект, если нет то создаем
                 if (wildBerryCocktailCopy == null)
                 {
                     wildBerryCocktailCopy = Instantiate(wildBerryCocktail,_blenderPoints.GetSecondPoint(), Quaternion.identity, readyFood);
                     wildBerryCocktailCopy.SetActive(false);
                     wildBerryCocktailCopy.name = wildBerryCocktailCopy.name.Replace("(Clone)", "");
                 }
-                // узнаем емсть ли этот обект, если нет то создаем
+                // узнаем есть ли этот объект, если нет то создаем
                 if(freshnessCocktailCopy == null)
                 {
                     freshnessCocktailCopy = Instantiate(freshnessCocktail,_blenderPoints.GetSecondPoint(), Quaternion.identity, readyFood);
                     freshnessCocktailCopy.SetActive(false);
                     freshnessCocktailCopy.name = freshnessCocktailCopy.name.Replace("(Clone)", "");
                 } 
-                // узнаем емсть ли этот обект, если нет то создаем
+                // узнаем есть ли этот объект, если нет то создаем
                 if (rubbishCopy == null)
                 {
                     rubbishCopy = Instantiate(rubbish,_blenderPoints.GetSecondPoint(), Quaternion.identity, readyFood);
