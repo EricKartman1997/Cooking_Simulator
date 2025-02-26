@@ -1,71 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class TakingTable : MonoBehaviour
+public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IHeroikIsTrigger
 {
-    [SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject currentObjectOnTable;
+    //[SerializeField] private GameObject[] objectOnTheTable;
+    [SerializeField] private GameObject _currentObjectOnTable;
+    [SerializeField] private Transform _takingTablePoint;
+    [SerializeField] private Transform _parentFood;
+    [SerializeField] private List<GameObject> _unusableObjects;
     
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
-    
-    public void Initialize(GameObject[] objectOnTheTable,Heroik _heroik)
+    [SerializeField] private GameObject _cloneCurrentObjectOnTable;
+    private bool _heroikIsTrigger = false;
+
+    public void Initialize(Heroik heroik,Transform takingTablePoint,Transform parentFood, List<GameObject> unusableObjects)
     {
-        this.objectOnTheTable = objectOnTheTable;
-        this._heroik = _heroik;
+        //_currentObjectOnTable = currentObjectOnTable;
+        _heroik = heroik;
+        _takingTablePoint = takingTablePoint;
+        _parentFood = parentFood;
+        _unusableObjects = unusableObjects;
     }
 
     private void Update()
     {
         _timeCurrent += Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
         {
             if (_timeCurrent >= 0.17f)
             {
                 if(!Heroik.IsBusyHands) // руки не заняты
                 {
-                    if (ActiveObjectOnTheTable()) // ни одного активного объекта
+                    if (_currentObjectOnTable == null) // ни одного активного объекта
                     {
                         Debug.Log("У вас пустые руки и прилавок пуст");
                     }
-                    else // активного объект есть
+                    else // на столе что-то есть
                     {
-                        foreach (var obj in objectOnTheTable)
-                        {
-                            if (!obj.activeInHierarchy)
-                            {
-                                
-                            }
-                            else
-                            {
-                                _heroik.ActiveObjHands(obj);
-                                obj.SetActive(false);
-                                break;
-                            }
-                        }
+                        _heroik.ActiveObjHands(GiveObj(ref _cloneCurrentObjectOnTable));
                     }
                 }
                 else // заняты
                 {
-                    if (ActiveObjectOnTheTable())// ни одного активного объекта
+                    if (_currentObjectOnTable == null)// ни одного активного объекта
                     {
-                        int count = 0;
-                        foreach (var obj in objectOnTheTable)
-                        {
-                            if (_heroik._curentTakenObjects.name == obj.name)
-                            {
-                                GameObject objHeroik = _heroik.GiveObjHands();
-                                obj.SetActive(true); // принять объект
-                                break;
-                            }
-                            else if(_heroik._curentTakenObjects.name != obj.name)
-                            {
-                                count++;
-                                if (count == objectOnTheTable.Length)
-                                {
-                                    Debug.Log($"объекта с именем {_heroik._curentTakenObjects.name} нет в списке");
-                                }
-                            }
-                        }
+                        AcceptObject(_heroik.GiveObjHands());
                     }
                     else// активного объект есть
                     {
@@ -82,24 +64,59 @@ public class TakingTable : MonoBehaviour
         
     }
     
-    private bool ActiveObjectOnTheTable()
+
+    public void AcceptObject(GameObject acceptObj)
     {
-        int count = 0;
-        foreach (var obj in objectOnTheTable)
+        if (CheckAcceptObject(acceptObj))
         {
-            if (!obj.activeInHierarchy)
+            _currentObjectOnTable = acceptObj;
+            _cloneCurrentObjectOnTable = Instantiate(_currentObjectOnTable, _takingTablePoint.position, Quaternion.identity, _parentFood);
+            _cloneCurrentObjectOnTable.name = _cloneCurrentObjectOnTable.name.Replace("(Clone)", "");
+            _cloneCurrentObjectOnTable.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Этот предмет положить нельзя");
+        }
+    }
+    
+    public GameObject GiveObj(ref GameObject obj)
+    {
+        obj.SetActive(false);
+        GameObject cObj = obj;
+        Destroy(obj);
+        _currentObjectOnTable = null;
+        return cObj;
+    }
+
+    private bool CheckAcceptObject(GameObject acceptObj)
+    {
+        List<string> _unusableObjectsNames = new List<string>();
+        foreach (var fruit in _unusableObjects)
+        {
+            _unusableObjectsNames.Add(fruit.name); // Используем имя объекта
+        }
+        foreach (string food in _unusableObjectsNames)
+        {
+            if (_unusableObjectsNames.Contains(acceptObj.name))
             {
-                count++;
-                if(objectOnTheTable.Length == count)
-                {
-                    return true; // ни одного активного оъекта
-                }
-            }
-            else
-            {
-                return false; // один активного оъекта
+                return false;
             }
         }
-        return false; // один активного оъекта - ошибка
+        return true;
+    }
+
+    public bool IsAllowDestroy()
+    {
+        if (_currentObjectOnTable == null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void HeroikIsTrigger()
+    {
+        _heroikIsTrigger = !_heroikIsTrigger;
     }
 }

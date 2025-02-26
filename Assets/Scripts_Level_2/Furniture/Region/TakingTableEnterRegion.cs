@@ -1,20 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TakingTableEnterRegion : MonoBehaviour
 {
-    [SerializeField] private GameObject[] objectOnTheTable;
+    //[SerializeField] private GameObject[] objectOnTheTable;
+    [SerializeField] private Transform _takingTablePoint;
+    [SerializeField] private Transform _parentFood;
+    [SerializeField] private List<GameObject> _unusableObjects;
     
     private Heroik _heroik;
     private Outline _outline;
-    private TakingTable script;
+    private TakingTable _script;
 
     void Start()
     {
         _outline = GetComponent<Outline>();
-        foreach (var obj in objectOnTheTable)
-        {
-            obj.SetActive(false);
-        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -22,8 +22,18 @@ public class TakingTableEnterRegion : MonoBehaviour
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            script = gameObject.AddComponent<TakingTable>();
-            script.Initialize(objectOnTheTable, _heroik);
+            if (!GetComponent<TakingTable>())
+            {
+                _script = gameObject.AddComponent<TakingTable>();
+                _script.HeroikIsTrigger();
+                _script.Initialize(_heroik,_takingTablePoint,_parentFood,_unusableObjects);
+            }
+            else
+            {
+                _script.HeroikIsTrigger();
+                Debug.Log("Новый скрипт создан не был");
+            }
+            
         }
     }
 
@@ -31,9 +41,14 @@ public class TakingTableEnterRegion : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
+            _script.HeroikIsTrigger();
             _heroik = null;
             _outline.OutlineWidth = 0f;
-            Destroy(script);
+            if (_script.IsAllowDestroy())
+            {
+                Destroy(_script);
+                Debug.Log("скрипты был удален");
+            }
         }
     }
 }
