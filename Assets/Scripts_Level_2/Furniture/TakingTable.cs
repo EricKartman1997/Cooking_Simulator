@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class TakingTable : Furniture
+public class TakingTable : MonoBehaviour
 {
     [SerializeField] private GameObject[] objectOnTheTable;
+    [SerializeField] private GameObject currentObjectOnTable;
     
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;

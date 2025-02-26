@@ -7,6 +7,8 @@ public class DonationTableEnterRegion : MonoBehaviour
     private Outline _outline;
     private Heroik _heroik;
     private DonationTable script;
+
+    private GameObject _objectOnTheTableCopy;
     
     void Start()
     {

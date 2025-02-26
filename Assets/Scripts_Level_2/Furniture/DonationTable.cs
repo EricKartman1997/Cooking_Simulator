@@ -1,16 +1,15 @@
 using UnityEngine;
 
-public class DonationTable : Furniture
+public class DonationTable : MonoBehaviour
 {
-    [SerializeField] private GameObject objectOnTheTable;
-    
+    private GameObject _objectOnTheTable;
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
 
-    public void Initialize(GameObject objectOnTheTable,Heroik _heroik)
+    public void Initialize(GameObject objectOnTheTable,Heroik heroik)
     {
-        this.objectOnTheTable = objectOnTheTable;
-        this._heroik = _heroik;
+        _objectOnTheTable = objectOnTheTable;
+        _heroik = heroik;
     }
     
     private void Update()
@@ -22,20 +21,11 @@ public class DonationTable : Furniture
             {
                 if (!Heroik.IsBusyHands) //объект есть на столе, руки незаняты
                 {
-                    _heroik.ActiveObjHands(objectOnTheTable);
+                    _heroik.ActiveObjHands(_objectOnTheTable);
                 }
                 else// объект есть на столе,руки заняты
                 {
-                    if(objectOnTheTable.name != _heroik._curentTakenObjects.name)
-                    {
-                        Debug.Log($"Объект есть на столе: {objectOnTheTable.name}, руки заняты:{Heroik.IsBusyHands}");
-                        Debug.Log($"вы пытаетесь взять объект {objectOnTheTable.name}, когда у вас в руках {_heroik._curentTakenObjects.name}");
-                    }
-                    else
-                    {
-                        Debug.Log($"Объект есть на столе: {objectOnTheTable.name}, руки заняты:{Heroik.IsBusyHands}");
-                        Debug.Log("вы пытаетесь взять один и тот же объект");
-                    }
+                    Debug.Log("объект есть на столе,руки заняты");
                 }
                 _timeCurrent = 0f;
             }
