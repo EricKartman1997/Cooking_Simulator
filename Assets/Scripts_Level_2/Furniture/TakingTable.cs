@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IHeroikIsTrigger
@@ -45,11 +43,18 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
                 }
                 else // заняты
                 {
-                    if (_currentObjectOnTable == null)// ни одного активного объекта
+                    if (_currentObjectOnTable == null) // ни одного активного объекта
                     {
-                        AcceptObject(_heroik.GiveObjHands());
+                        if (_heroik.CheckObjForReturn(_unusableObjects))
+                        {
+                            AcceptObject(_heroik.GiveObjHands());
+                        }
+                        else
+                        {
+                            Debug.Log("Этот предмет положить нельзя");
+                        }
                     }
-                    else// активного объект есть
+                    else // активного объект есть
                     {
                         Debug.Log("У вас полные руки и прилавок полон");
                     }
@@ -67,17 +72,12 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
 
     public void AcceptObject(GameObject acceptObj)
     {
-        if (CheckAcceptObject(acceptObj))
-        {
-            _currentObjectOnTable = acceptObj;
-            _cloneCurrentObjectOnTable = Instantiate(_currentObjectOnTable, _takingTablePoint.position, Quaternion.identity, _parentFood);
-            _cloneCurrentObjectOnTable.name = _cloneCurrentObjectOnTable.name.Replace("(Clone)", "");
-            _cloneCurrentObjectOnTable.SetActive(true);
-        }
-        else
-        {
-            Debug.Log("Этот предмет положить нельзя");
-        }
+        _currentObjectOnTable = acceptObj;
+        _cloneCurrentObjectOnTable = Instantiate(_currentObjectOnTable, _takingTablePoint.position, Quaternion.identity, _parentFood);
+        _cloneCurrentObjectOnTable.name = _cloneCurrentObjectOnTable.name.Replace("(Clone)", "");
+        _cloneCurrentObjectOnTable.SetActive(true);
+        
+        
     }
     
     public GameObject GiveObj(ref GameObject obj)
@@ -96,12 +96,9 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
         {
             _unusableObjectsNames.Add(fruit.name); // Используем имя объекта
         }
-        foreach (string food in _unusableObjectsNames)
+        if (_unusableObjectsNames.Contains(acceptObj.name))
         {
-            if (_unusableObjectsNames.Contains(acceptObj.name))
-            {
-                return false;
-            }
+            return false;
         }
         return true;
     }

@@ -1,4 +1,5 @@
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 public class Heroik : MonoBehaviour
 {
@@ -36,6 +37,22 @@ public class Heroik : MonoBehaviour
         _curentTakenObjects = null;
         return Obj;
     }
+    
+    public bool CheckObjForReturn(List<GameObject> _unusableObjects) // отдать объект из рук с проверкой
+    {
+        List<string> _unusableObjectsNames = new List<string>();
+        foreach (var food in _unusableObjects)
+        {
+            _unusableObjectsNames.Add(food.name); // Используем имя объекта
+        }
+        if (_unusableObjectsNames.Contains(_curentTakenObjects.name))
+        {
+            Debug.Log("Сработал false");
+            return false;
+        }
+        return true;
+    }
+    
     public GameObject GetCurentTakenObjects()
     {
         return _curentTakenObjects;
