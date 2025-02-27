@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DonationTable : MonoBehaviour
+public class DonationTable : MonoBehaviour, IGiveObj
 {
     private GameObject _objectOnTheTable;
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
@@ -21,7 +21,7 @@ public class DonationTable : MonoBehaviour
             {
                 if (!Heroik.IsBusyHands) //объект есть на столе, руки незаняты
                 {
-                    _heroik.ActiveObjHands(_objectOnTheTable);
+                    _heroik.ActiveObjHands(GiveObj(ref _objectOnTheTable));
                 }
                 else// объект есть на столе,руки заняты
                 {
@@ -35,5 +35,9 @@ public class DonationTable : MonoBehaviour
             }
         }
     }
-    
+
+    public GameObject GiveObj(ref GameObject obj)
+    {
+        return obj;
+    }
 }
