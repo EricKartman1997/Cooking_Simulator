@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5665071352588004123}
   - component: {fileID: 3359402235576910072}
+  - component: {fileID: -8309527606841273386}
   m_Layer: 0
   m_Name: BakedMeat
   m_TagString: Untagged
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 45
+--- !u!114 &-8309527606841273386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3379541858834154040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2be9c74d83d6e304c8edfc0b6b44b859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2444844779477708383
 PrefabInstance:
   m_ObjectHideFlags: 0

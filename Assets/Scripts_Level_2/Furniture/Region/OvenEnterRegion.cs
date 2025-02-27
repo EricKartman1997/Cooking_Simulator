@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class OvenEnterRegion : MonoBehaviour
@@ -11,10 +13,22 @@ public class OvenEnterRegion : MonoBehaviour
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
+    private Dictionary<RawFood, FoodReadyOven> _dictionaryProduct;
     
     private Heroik _heroik = null;
     private Outline _outline;
     private Oven script;
+
+    private void Awake()
+    {
+        _dictionaryProduct = new Dictionary<RawFood, FoodReadyOven>
+        {
+            { ObjectsAndRecipes.Meat.GetComponent<RawFood>(), ObjectsAndRecipes.BakedMeat.GetComponent<FoodReadyOven>() },
+            { ObjectsAndRecipes.Fish.GetComponent<RawFood>(), ObjectsAndRecipes.BakedFish.GetComponent<FoodReadyOven>()},
+            { ObjectsAndRecipes.Apple.GetComponent<RawFood>(), ObjectsAndRecipes.BakedApple.GetComponent<FoodReadyOven>() },
+            { ObjectsAndRecipes.Orange.GetComponent<RawFood>(), ObjectsAndRecipes.BakedOrange.GetComponent<FoodReadyOven>() }
+        };
+    }
 
     void Start()
     {
@@ -31,7 +45,7 @@ public class OvenEnterRegion : MonoBehaviour
             {
                 script = gameObject.AddComponent<Oven>();
                 script.HeroikIsTrigger();
-                script.Initialize( glassOn,  glassOff, switchFirst, switchSecond, foodOnTheOver, cookedFoodOnTheOver, timer, timerPoint, timerParent,_heroik);
+                script.Initialize( glassOn,  glassOff, switchFirst, switchSecond, foodOnTheOver, cookedFoodOnTheOver, timer, timerPoint, timerParent,_heroik,_dictionaryProduct);
             }
             else
             {

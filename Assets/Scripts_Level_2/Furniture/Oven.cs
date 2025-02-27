@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Oven : FurnitureAbstact
+public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
     [SerializeField] private GameObject glassOn;
     [SerializeField] private GameObject glassOff;
@@ -12,6 +13,7 @@ public class Oven : FurnitureAbstact
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
+    private Dictionary<RawFood, FoodReadyOven> _dictionaryProduct;
     
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;
@@ -19,7 +21,7 @@ public class Oven : FurnitureAbstact
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
     
-    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject[] foodOnTheOver,GameObject[] cookedFoodOnTheOver,GameObject timer,Transform timerPoint,Transform timerParent,Heroik _heroik)
+    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject[] foodOnTheOver,GameObject[] cookedFoodOnTheOver,GameObject timer,Transform timerPoint,Transform timerParent,Heroik _heroik,Dictionary<RawFood, FoodReadyOven> dictionaryProduct)
     {
         this.glassOn = glassOn;
         this.glassOff = glassOff;
@@ -31,6 +33,7 @@ public class Oven : FurnitureAbstact
         this.timerPoint = timerPoint;
         this.timerParent = timerParent;
         this._heroik = _heroik;
+        _dictionaryProduct = dictionaryProduct;
     }
     
     private void Update()
@@ -78,7 +81,7 @@ public class Oven : FurnitureAbstact
                                 if (_heroik.GetCurentTakenObjects().name == obj.name)
                                 {
                                     TurnOn();
-                                    AcceptObject(_heroik.GiveObjHands(),0);
+                                    AcceptObject(_heroik.GiveObjHands());
                                     StartCookingProcessAsync(obj);
                                     break;
                                 }
@@ -87,7 +90,7 @@ public class Oven : FurnitureAbstact
                                     count++;
                                     if (count == foodOnTheOver.Length)
                                     {
-                                        //Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя пригоовить в духовке");
+                                        //Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя приготовить в духовке");
                                     }
                                 }
                             }
@@ -108,7 +111,7 @@ public class Oven : FurnitureAbstact
     {
         await Task.Delay(5000);
         TurnOff();
-        CreateResult(obj.name);
+        CreateResult(obj);
     }
 
     private GameObject IssuanceOfTheResult(GameObject obj)
@@ -152,7 +155,7 @@ public class Oven : FurnitureAbstact
         return null;
     }
     
-    protected override GameObject GiveObj(ref GameObject obj)
+    public GameObject GiveObj(ref GameObject obj)
     {
         Debug.Log("забираем предмет");
         obj.SetActive(false);
@@ -161,36 +164,36 @@ public class Oven : FurnitureAbstact
         return Cobj;
     }
 
-    protected override void AcceptObject(GameObject obj, byte numberObj)
+    public void AcceptObject(GameObject obj)
     {
 
     }
 
-    protected override void CreateResult(string obj)
-    {
-        if (obj == "Apple")
-        {
-            FindObject("BakedApple");
-        }
-        else if (obj == "Orange")
-        {
-            FindObject("BakedOrange");
-        }
-        else if (obj == "Fish")
-        {
-            FindObject("BakedFish");
-        }
-        else if (obj == "Meat")
-        {
-            FindObject("BakedMeat");
-        }
-        else
-        {
-            Debug.Log($"из этого {obj} продукта ничего не приготовить //Ошибка");
-        }
-    }
-
-    protected override void TurnOn()
+    // public void CreateResult(string obj)
+    // {
+    //     if (obj == "Apple")
+    //     {
+    //         FindObject("BakedApple");
+    //     }
+    //     else if (obj == "Orange")
+    //     {
+    //         FindObject("BakedOrange");
+    //     }
+    //     else if (obj == "Fish")
+    //     {
+    //         FindObject("BakedFish");
+    //     }
+    //     else if (obj == "Meat")
+    //     {
+    //         FindObject("BakedMeat");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log($"из этого {obj} продукта ничего не приготовить //Ошибка");
+    //     }
+    // }
+    
+    public void TurnOn()
     {
         _isWork = true;
         glassOff.SetActive(false);
@@ -200,7 +203,7 @@ public class Oven : FurnitureAbstact
         Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
     }
 
-    protected override void TurnOff()
+    public void TurnOff()
     {
         _isWork = false;
         glassOff.SetActive(true);
@@ -232,5 +235,20 @@ public class Oven : FurnitureAbstact
     public void HeroikIsTrigger()
     {
         _heroikIsTrigger = !_heroikIsTrigger;
+    }
+
+    public void CreateResult(GameObject obj)
+    {
+        RawFood rawFood = obj.GetComponent<RawFood>();
+        if (_dictionaryProduct.TryGetValue(rawFood, out FoodReadyOven bakedObj))
+        {
+            // создать объект визуальный
+            _result = bakedObj.gameObject;
+        }
+        else
+        {
+            Debug.Log("Объект нельзя приготовить");
+        }
+        
     }
 }

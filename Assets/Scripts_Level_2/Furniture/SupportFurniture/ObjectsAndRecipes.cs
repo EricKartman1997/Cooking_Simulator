@@ -1,29 +1,28 @@
 using UnityEngine;
 
-public class ObjectsAndRecipes : MonoBehaviour
+public static class ObjectsAndRecipes
 {
-    [SerializeField] private GameObject apple;
-    [SerializeField] private GameObject orange;
-    [SerializeField] private GameObject lime;
-    [SerializeField] private GameObject blueberry;
-    [SerializeField] private GameObject strawberry;
-    [SerializeField] private GameObject cherry;
+    public static Product Apple;
+    public static Product Orange;
+    public static GameObject Lime;
+    public static GameObject Blueberry;
+    public static GameObject Strawberry;
+    public static GameObject Cherry;
     
-    [SerializeField] private GameObject bakedApple;
-    [SerializeField] private GameObject bakedOrange;
+    public static Product BakedApple;
+    public static Product BakedOrange;
 
-    [SerializeField] private GameObject fruitSalad;
-    [SerializeField] private GameObject mixBakedFruit;
-    [SerializeField] private GameObject wildBerryCocktail;
-    [SerializeField] private GameObject freshnessCocktail;
+    public static GameObject FruitSalad;
+    public static GameObject MixBakedFruit;
+    public static GameObject WildBerryCocktail;
+    public static GameObject FreshnessCocktail;
     
-    [SerializeField] private GameObject meat;
-    [SerializeField] private GameObject fish;
+    public static Product Meat;
+    public static Product Fish;
     
-    [SerializeField] private GameObject bakedMeat;
-    [SerializeField] private GameObject bakedFish;
+    public static Product BakedMeat;
+    public static Product BakedFish;
     
-    [SerializeField] private GameObject rubbish;
-    
+    public static GameObject Rubbish;
     
 }
