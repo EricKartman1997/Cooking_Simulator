@@ -261,6 +261,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8601219333384912799, guid: 756335c1bb073cb4a805bcb82971375b, type: 3}
   m_PrefabInstance: {fileID: 321567547}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &173349866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 173349868}
+  - component: {fileID: 173349867}
+  m_Layer: 0
+  m_Name: ManagerAllProject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &173349867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173349866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d31571329bb7b47b1d8c0cf03c598e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Apple: {fileID: 8715522147032887124, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
+  Orange: {fileID: -4162871558744381035, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
+  Lime: {fileID: 203067347516692386, guid: 857bd869786247748917a3aa04083310, type: 3}
+  Blueberry: {fileID: 4085693889228215559, guid: a9137ed3ca4759440a71c9bf001035e5, type: 3}
+  Strawberry: {fileID: 1061460598140693320, guid: 14c00c00170698b4c8efef43801378fa, type: 3}
+  Cherry: {fileID: 8571235859053291362, guid: c79eea34c8f60a445ae7a55ebb6da37b, type: 3}
+  BakedApple: {fileID: 3743290554724761987, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+  BakedOrange: {fileID: 487277723972722398, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+  FruitSalad: {fileID: 2563921224515311155, guid: 5f215c47b6d49c74f8968417aa145afc, type: 3}
+  MixBakedFruit: {fileID: 42026357886087376, guid: d2dd4196255f58c4ab29e502a90816d0, type: 3}
+  WildBerryCocktail: {fileID: 2577928362101365757, guid: 779b6034b65b8c74c8302cfe52b31e37, type: 3}
+  FreshnessCocktail: {fileID: 9137392620112452922, guid: 0ac338e837fa04c48b1258a5ea0c2f96, type: 3}
+  Meat: {fileID: -5286525763949812143, guid: ef900f3ff220f1742be55c2c57805951, type: 3}
+  Fish: {fileID: 963864914587142401, guid: 59a7d648b288a2a479697e26c170229c, type: 3}
+  BakedMeat: {fileID: 5416545845544936932, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+  BakedFish: {fileID: -7603536809572405736, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+  Rubbish: {fileID: 3151340753539164728, guid: 4046e04bf23c28b4abcb716a138b52b4, type: 3}
+--- !u!4 &173349868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173349866}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &228282519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3413655502055323474, guid: 7647528a51e17a6479f9a85c05987334, type: 3}
@@ -1532,7 +1593,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.6466667}
   m_AnchorMax: {x: 1, y: 0.82000005}
-  m_AnchoredPosition: {x: -174.99994, y: 3}
+  m_AnchoredPosition: {x: -174.99997, y: 3}
   m_SizeDelta: {x: -550, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &795998538
@@ -1785,6 +1846,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7815410371563998012, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
+      propertyPath: objectsAndRecipes
+      value: 
+      objectReference: {fileID: 173349867}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5009,6 +5074,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 173349868}
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 462387522}

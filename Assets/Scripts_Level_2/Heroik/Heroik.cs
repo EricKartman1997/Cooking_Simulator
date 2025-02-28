@@ -38,7 +38,7 @@ public class Heroik : MonoBehaviour
         return Obj;
     }
     
-    public bool CheckObjForReturn(List<GameObject> _unusableObjects) // отдать объект из рук с проверкой
+    public bool CheckObjForReturn(List<GameObject> _unusableObjects) // проверка на отдачу объекта из рук по списку объектов
     {
         List<string> _unusableObjectsNames = new List<string>();
         foreach (var food in _unusableObjects)
@@ -51,6 +51,27 @@ public class Heroik : MonoBehaviour
             return false;
         }
         return true;
+    }
+    
+    public bool CheckObjForReturn(List<Type> _unusableObjects) // проверка на отдачу объекта из рук по компонентам
+    {
+        // Получаем все компоненты на объекте
+        Component[] components = _curentTakenObjects.GetComponents<Component>();
+
+        // Проверяем каждый компонент
+        foreach (Component component in components)
+        {
+            // Если тип компонента содержится в списке _unusableObjects
+            if (_unusableObjects.Contains(component.GetType()))
+            {
+                Debug.Log("На объекте найден компонент: " + component.GetType().Name);
+                return true;
+            }
+        }
+
+        // разрешенных компонентов не найдено
+        Debug.Log("Объект не прошел проверку.");
+        return false;
     }
     
     public GameObject GetCurentTakenObjects()

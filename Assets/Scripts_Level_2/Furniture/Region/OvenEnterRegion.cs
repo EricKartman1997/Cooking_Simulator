@@ -8,31 +8,29 @@ public class OvenEnterRegion : MonoBehaviour
     [SerializeField] private GameObject glassOff;
     [SerializeField] private GameObject switchFirst;
     [SerializeField] private GameObject switchSecond;
-    [SerializeField] private GameObject[] foodOnTheOver;
-    [SerializeField] private GameObject[] cookedFoodOnTheOver;
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
-    private Dictionary<RawFood, FoodReadyOven> _dictionaryProduct;
+    [SerializeField] private Transform positionResult;
+    [SerializeField] private Transform parentResult;
+    private Dictionary<string, FoodReadyOven> _dictionaryProductName;
+    private Heroik _heroik;
     
-    private Heroik _heroik = null;
     private Outline _outline;
     private Oven script;
 
-    private void Awake()
-    {
-        _dictionaryProduct = new Dictionary<RawFood, FoodReadyOven>
-        {
-            { ObjectsAndRecipes.Meat.GetComponent<RawFood>(), ObjectsAndRecipes.BakedMeat.GetComponent<FoodReadyOven>() },
-            { ObjectsAndRecipes.Fish.GetComponent<RawFood>(), ObjectsAndRecipes.BakedFish.GetComponent<FoodReadyOven>()},
-            { ObjectsAndRecipes.Apple.GetComponent<RawFood>(), ObjectsAndRecipes.BakedApple.GetComponent<FoodReadyOven>() },
-            { ObjectsAndRecipes.Orange.GetComponent<RawFood>(), ObjectsAndRecipes.BakedOrange.GetComponent<FoodReadyOven>() }
-        };
-    }
-
+    [SerializeField] private ObjectsAndRecipes objectsAndRecipes;
+    
     void Start()
     {
         _outline = GetComponent<Outline>();
+        _dictionaryProductName = new Dictionary<string, FoodReadyOven>
+        {
+            { objectsAndRecipes.Meat.name, objectsAndRecipes.BakedMeat.GetComponent<FoodReadyOven>() },
+            { objectsAndRecipes.Fish.name, objectsAndRecipes.BakedFish.GetComponent<FoodReadyOven>()},
+            { objectsAndRecipes.Apple.name, objectsAndRecipes.BakedApple.GetComponent<FoodReadyOven>() },
+            { objectsAndRecipes.Orange.name, objectsAndRecipes.BakedOrange.GetComponent<FoodReadyOven>() }
+        };
     }
     
     private void OnTriggerEnter(Collider other)
@@ -45,7 +43,7 @@ public class OvenEnterRegion : MonoBehaviour
             {
                 script = gameObject.AddComponent<Oven>();
                 script.HeroikIsTrigger();
-                script.Initialize( glassOn,  glassOff, switchFirst, switchSecond, foodOnTheOver, cookedFoodOnTheOver, timer, timerPoint, timerParent,_heroik,_dictionaryProduct);
+                script.Initialize( glassOn,  glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent,_heroik,positionResult,parentResult,_dictionaryProductName);
             }
             else
             {

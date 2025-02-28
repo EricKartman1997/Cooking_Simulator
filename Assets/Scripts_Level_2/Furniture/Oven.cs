@@ -1,39 +1,42 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
-    [SerializeField] private GameObject glassOn;
-    [SerializeField] private GameObject glassOff;
-    [SerializeField] private GameObject switchFirst;
-    [SerializeField] private GameObject switchSecond;
-    [SerializeField] private GameObject[] foodOnTheOver;
-    [SerializeField] private GameObject[] cookedFoodOnTheOver;
-    [SerializeField] private GameObject timer;
-    [SerializeField] private Transform timerPoint;
-    [SerializeField] private Transform timerParent;
-    private Dictionary<RawFood, FoodReadyOven> _dictionaryProduct;
+    [SerializeField] private GameObject _glassOn;
+    [SerializeField] private GameObject _glassOff;
+    [SerializeField] private GameObject _switchFirst;
+    [SerializeField] private GameObject _switchSecond;
+    [SerializeField] private GameObject _timer;
+    [SerializeField] private Transform _timerPoint;
+    [SerializeField] private Transform _timerParent;
+    private Dictionary<string, FoodReadyOven> _dictionaryProductName;
+    private Heroik _heroik; // только для объекта героя, а надо и другие...
+    private Transform _positionResult;
+    private Transform _parentResult;
     
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;
-    private GameObject _result;
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
-    
-    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject[] foodOnTheOver,GameObject[] cookedFoodOnTheOver,GameObject timer,Transform timerPoint,Transform timerParent,Heroik _heroik,Dictionary<RawFood, FoodReadyOven> dictionaryProduct)
+    [SerializeField] private GameObject _ingredient;
+    [SerializeField] private GameObject _result;
+    [SerializeField] private GameObject _cloneResult;
+
+    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject timer,Transform timerPoint,Transform timerParent,Heroik heroik,Transform positionResult, Transform perentResult,Dictionary<string, FoodReadyOven> dictionaryProductName)
     {
-        this.glassOn = glassOn;
-        this.glassOff = glassOff;
-        this.switchFirst = switchFirst;
-        this.switchSecond = switchSecond;
-        this.foodOnTheOver = foodOnTheOver;
-        this.cookedFoodOnTheOver = cookedFoodOnTheOver;
-        this.timer = timer;
-        this.timerPoint = timerPoint;
-        this.timerParent = timerParent;
-        this._heroik = _heroik;
-        _dictionaryProduct = dictionaryProduct;
+        _glassOn = glassOn;
+        _glassOff = glassOff;
+        _switchFirst = switchFirst;
+        _switchSecond = switchSecond;
+        _timer = timer;
+        _timerPoint = timerPoint;
+        _timerParent = timerParent;
+        _heroik = heroik;
+        _positionResult = positionResult;
+        _parentResult = perentResult;
+        _dictionaryProductName = dictionaryProductName;
     }
     
     private void Update()
@@ -47,17 +50,17 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 {
                     if (_isWork)
                     {
-                        //Debug.Log("ждите печка работает");
+                        Debug.Log("ждите печка работает");
                     }
                     else
                     {
                         if (_result != null)
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _result));
+                            _heroik.ActiveObjHands(GiveObj(ref _cloneResult));
                         }
                         else
                         {
-                            //Debug.Log("печка пуста руки тоже");
+                            Debug.Log("печка пуста руки тоже");
                         }
                     }
                 }
@@ -65,34 +68,21 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 {
                     if (_isWork)
                     {
-                        //Debug.Log("ждите печка работает");
+                        Debug.Log("ждите печка работает");
                     }
                     else
                     {
                         if (_result != null)
                         {
-                            //Debug.Log("Сначала заберите предмет");
+                            Debug.Log("Сначала заберите предмет");
                         }
                         else
                         {
-                            int count = 0;
-                            foreach (GameObject obj in foodOnTheOver)
+                            if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
                             {
-                                if (_heroik.GetCurentTakenObjects().name == obj.name)
-                                {
-                                    TurnOn();
-                                    AcceptObject(_heroik.GiveObjHands());
-                                    StartCookingProcessAsync(obj);
-                                    break;
-                                }
-                                if(_heroik.GetCurentTakenObjects().name != obj.name)
-                                {
-                                    count++;
-                                    if (count == foodOnTheOver.Length)
-                                    {
-                                        //Debug.LogError($"Из этого объекта {_heroik.GetCurentTakenObjects().name} ничего нельзя приготовить в духовке");
-                                    }
-                                }
+                                AcceptObject(_heroik.GiveObjHands());
+                                TurnOn();
+                                StartCookingProcessAsync(_ingredient);
                             }
                         }
                     }
@@ -113,115 +103,40 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         TurnOff();
         CreateResult(obj);
     }
-
-    private GameObject IssuanceOfTheResult(GameObject obj)
-    {
-        foreach (var cookedFood in cookedFoodOnTheOver)
-        {
-            if (obj.name == "Apple")
-            {
-                if (cookedFood.name == "BakedApple")
-                {
-                    cookedFood.SetActive(true);
-                    return cookedFood;
-                }
-            }
-            else if (obj.name == "Orange")
-            {
-                if (cookedFood.name == "BakedOrange")
-                {
-                    cookedFood.SetActive(true);
-                    return cookedFood;
-                }
-            }
-            else if (obj.name == "Fish")
-            {
-                if (cookedFood.name == "BakedFish")
-                {
-                    cookedFood.SetActive(true);
-                    return cookedFood;
-                }
-            }
-            else if (obj.name == "Meat")
-            {
-                if (cookedFood.name == "BakedMeat")
-                {
-                    cookedFood.SetActive(true);
-                    return cookedFood;
-                }
-            }
-        }
-        Debug.Log($"из этого {obj.name} продукта ничего не приготовить //Ошибка");
-        return null;
-    }
     
-    public GameObject GiveObj(ref GameObject obj)
+    public GameObject GiveObj(ref GameObject cloneResult)
     {
         Debug.Log("забираем предмет");
-        obj.SetActive(false);
-        var Cobj = obj;
-        obj = null;
-        return Cobj;
+        cloneResult.SetActive(false);
+        GameObject cloneResultCopy = cloneResult;
+        Destroy(cloneResult);
+        _result = null;
+        return cloneResultCopy;
     }
 
     public void AcceptObject(GameObject obj)
     {
-
+        _ingredient = obj;
     }
-
-    // public void CreateResult(string obj)
-    // {
-    //     if (obj == "Apple")
-    //     {
-    //         FindObject("BakedApple");
-    //     }
-    //     else if (obj == "Orange")
-    //     {
-    //         FindObject("BakedOrange");
-    //     }
-    //     else if (obj == "Fish")
-    //     {
-    //         FindObject("BakedFish");
-    //     }
-    //     else if (obj == "Meat")
-    //     {
-    //         FindObject("BakedMeat");
-    //     }
-    //     else
-    //     {
-    //         Debug.Log($"из этого {obj} продукта ничего не приготовить //Ошибка");
-    //     }
-    // }
     
     public void TurnOn()
     {
         _isWork = true;
-        glassOff.SetActive(false);
-        glassOn.SetActive(true);
-        switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
-        switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
-        Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
+        _glassOff.SetActive(false);
+        _glassOn.SetActive(true);
+        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
+        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
+        Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
 
     public void TurnOff()
     {
         _isWork = false;
-        glassOff.SetActive(true);
-        glassOn.SetActive(false);
-        switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
-        switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
-    
-    private void FindObject(string obj)
-    {
-        foreach (var cookedFood in cookedFoodOnTheOver)
-        {
-            if (cookedFood.name == obj)
-            {
-                cookedFood.SetActive(true);
-                _result = cookedFood;
-            }
-        }
+        _glassOff.SetActive(true);
+        _glassOn.SetActive(false);
+        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _ingredient = null;
     }
     
     public bool IsAllowDestroy()
@@ -232,6 +147,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         }
         return false;
     }
+    
     public void HeroikIsTrigger()
     {
         _heroikIsTrigger = !_heroikIsTrigger;
@@ -239,16 +155,19 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
 
     public void CreateResult(GameObject obj)
     {
-        RawFood rawFood = obj.GetComponent<RawFood>();
-        if (_dictionaryProduct.TryGetValue(rawFood, out FoodReadyOven bakedObj))
+        try
         {
-            // создать объект визуальный
+            RawFood rawFood = obj.GetComponent<RawFood>();
+            _dictionaryProductName.TryGetValue(rawFood.name, out FoodReadyOven bakedObj);
             _result = bakedObj.gameObject;
+            _cloneResult = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
+            _cloneResult.name = _cloneResult.name.Replace("(Clone)", "");
+            _cloneResult.SetActive(true);
         }
-        else
+        catch (Exception e)
         {
-            Debug.Log("Объект нельзя приготовить");
+            Debug.Log("ошибка приготовления в духовке" + e);
         }
-        
     }
+    
 }

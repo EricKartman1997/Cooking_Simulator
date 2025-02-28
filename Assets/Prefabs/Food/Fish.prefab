@@ -783,9 +783,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3340524579015226122}
+  - component: {fileID: 7720658825598950221}
   - component: {fileID: 1070274329617468488}
   - component: {fileID: 6768314093139510515}
   - component: {fileID: 963864914587142401}
+  - component: {fileID: 3528970855266374215}
+  - component: {fileID: -627006348503312940}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -809,6 +812,18 @@ Transform:
   - {fileID: 1021008654979815357}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7720658825598950221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201087670534661306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d81db1a38e0e29428f1dc6f4984bf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1070274329617468488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,6 +858,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f9b0acaec8d2e343a262eb86cda48db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3528970855266374215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201087670534661306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf99c2a6b305e4469ccef3d39b9377a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-627006348503312940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201087670534661306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36e85284d4231a4880b60d835763a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8912884385639748082
