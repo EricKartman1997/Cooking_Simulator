@@ -14,8 +14,8 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     [SerializeField] private Transform _timerParent;
     private Dictionary<string, FoodReadyOven> _dictionaryProductName;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
-    private Transform _positionResult;
-    private Transform _parentResult;
+    private Transform _positionResult; // сделать отдельный класс
+    private Transform _parentResult;   // сделать отдельный класс
     
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;

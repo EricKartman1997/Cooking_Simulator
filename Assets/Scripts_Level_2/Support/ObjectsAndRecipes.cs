@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectsAndRecipes: MonoBehaviour
@@ -24,5 +25,10 @@ public class ObjectsAndRecipes: MonoBehaviour
     public Product BakedFish;
     
     public GameObject Rubbish;
-    
+
+    public List<GameObject> RequiredFruitSalad;
+
+    public List<GameObject> RequiredMixBakedFruit;
+
+
 }

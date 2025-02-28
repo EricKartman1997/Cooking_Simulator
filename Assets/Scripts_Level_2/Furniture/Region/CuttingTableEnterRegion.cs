@@ -4,15 +4,19 @@ public class CuttingTableEnterRegion : MonoBehaviour
 {
     private Animator _animator;
     private Outline _outline;
-    private Heroik _heroik = null;
-    private CuttingTable script;
+    private Heroik _heroik;
     
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
+    [SerializeField] private Transform positionIngredient1; // сделать отдельный класс
+    [SerializeField] private Transform positionIngredient2; // сделать отдельный класс
+    [SerializeField] private Transform parentIngredient;    // сделать отдельный класс
+    [SerializeField] private Transform positionResult;      // сделать отдельный класс
+    [SerializeField] private Transform parentResult;
+    [SerializeField] private ObjectsAndRecipes objectsAndRecipes;
     
-    [SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject[] readyFoods;
+    private CuttingTable script;
     
     void Start()
     {
@@ -30,7 +34,7 @@ public class CuttingTableEnterRegion : MonoBehaviour
             {
                 script = gameObject.AddComponent<CuttingTable>();
                 script.HeroikIsTrigger();
-                script.Initialize(_animator,_heroik, readyFoods, objectOnTheTable, timer, timerPoint, timerParent);
+                script.Initialize(_animator,_heroik, timer, timerPoint, timerParent,positionIngredient1,positionIngredient2,parentIngredient,positionResult,parentResult,objectsAndRecipes);
             }
             else
             {

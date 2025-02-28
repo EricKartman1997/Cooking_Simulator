@@ -1,34 +1,46 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class CuttingTable : FurnitureAbstact
+public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
+    // Initialize поля
     private Animator _animator;
+    private GameObject _timer;
+    private Transform _timerPoint;
+    private Transform _timerParent;
+    private ObjectsAndRecipes _objectsAndRecipes;
+    private Transform _positionIngredient1; // сделать отдельный класс
+    private Transform _positionIngredient2; // сделать отдельный класс
+    private Transform _parentIngredient;    // сделать отдельный класс
+    private Transform _positionResult;      // сделать отдельный класс
+    private Transform _parentResult;        // сделать отдельный класс
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     
-    [SerializeField] private GameObject timer;
-    [SerializeField] private Transform timerPoint;
-    [SerializeField] private Transform timerParent;
-    [SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject[] readyFoods;
-    
-    private GameObject _firstFood = null;
-    private GameObject _secondFood = null;
-    private GameObject _result = null;
+    // не Initialize поля
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;
     private float _timeCurrent = 0.17f;
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private GameObject _ingredient1 = null;
+    private GameObject _ingredient2 = null;
+    private GameObject _result = null;
+    private GameObject _cloneIngredient1; 
+    private GameObject _cloneIngredient2;
+    private GameObject _cloneResult;
     
-    public void Initialize(Animator _animator,Heroik _heroik, GameObject[] readyFoods,GameObject[] objectOnTheTable,GameObject timer,Transform timerPoint,Transform timerParent)
+    public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ObjectsAndRecipes objectsAndRecipes)
     {
-        this._animator = _animator;
-        this._heroik = _heroik;
-        this.readyFoods = readyFoods;
-        this.objectOnTheTable = objectOnTheTable;
-        this.timer = timer;
-        this.timerPoint = timerPoint;
-        this.timerParent = timerParent;
+        _animator = animator;
+        _heroik = heroik;
+        _timer = timer;
+        _timerPoint = timerPoint;
+        _timerParent = timerParent;
+        _positionIngredient1 = positionIngredient1;
+        _positionIngredient2 = positionIngredient2;
+        _parentIngredient = parentIngredient;
+        _positionResult = positionResult;
+        _parentResult = parentResult;
+        _objectsAndRecipes = objectsAndRecipes;
     }
     private void Update()
     {
@@ -47,21 +59,21 @@ public class CuttingTable : FurnitureAbstact
                     {
                         if (_result == null)
                         {
-                            if (ActiveObjectsOnTheTable() == 1) //один активный объект
-                            {
-                                _heroik.ActiveObjHands(_firstFood);
-                                _firstFood.SetActive(false);
-                                _firstFood = null;
-                            }
-                            else// активного объекта нет
+                            if (_ingredient1 == null)
                             {
                                 Debug.Log("У вас пустые руки и прилавок пуст");
                             }
+                            else //есть первый ингредиент // забираете первый ингредиент 
+                            {
+                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngredient1));
+                                _ingredient1 = null;
+                            }
                         }
-                        else // забрать предмет результат
+                        else //есть результат // забрать результат
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _result));
-                            //Debug.Log("Вы забрали конечный продукт"); 
+                            _heroik.ActiveObjHands(GiveObj(ref _cloneResult));
+                            _result = null;
+                            Debug.Log("Вы забрали конечный продукт"); 
                         }
                     }
                 }
@@ -75,35 +87,36 @@ public class CuttingTable : FurnitureAbstact
                     {
                         if (_result == null)
                         {
-                            if (ActiveObjectsOnTheTable() == 1 )//один активный объект
-                            {
-                                var nameBolud = _firstFood.GetComponent<Interactable>().IsMerge(_heroik._curentTakenObjects.GetComponent<Interactable>()) ;
-                                if (nameBolud != "None")
-                                {
-                                    AcceptObject(_heroik.GiveObjHands(), 2);
-                                    TurnOn();
-                                    StartCookingProcess(nameBolud);
-                                }
-                                else
-                                {
-                                    Debug.Log("Объект не подъходит для слияния");
-                                }
-                            }
-                            else// активного объекта нет
+                            if (_ingredient1 == null)// ингредиентов нет
                             {
                                 if(_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
                                 {
-                                    AcceptObject(_heroik.GiveObjHands(), 1);
+                                    AcceptObject(_heroik.GiveObjHands());
                                 }
                                 else
                                 {
                                     Debug.Log("с предметом нельзя взаимодействовать");
                                 }
                             }
+                            else// есть первый ингредиент
+                            {
+                                if (_heroik._curentTakenObjects.GetComponent<Interactable>() && _heroik._curentTakenObjects.GetComponent<ObjsForCutting>())
+                                {
+                                    AcceptObject(_heroik.GiveObjHands());
+                                    Debug.Log("Предмет второй положен на нарезочный стол");
+                                    TurnOn(); 
+                                    GameObject objdish = FindReadyFood(_ingredient1,_ingredient2);
+                                    StartCookingProcessAsync(objdish);
+                                }
+                                else
+                                {
+                                    Debug.Log("Объект не подходит для слияния");
+                                }
+                            }
                         }
                         else
                         {
-                            Debug.Log("Сначала уберите предемет из рук");
+                            Debug.Log("Сначала уберите предмет из рук");
                         }
                         
                     }
@@ -119,92 +132,73 @@ public class CuttingTable : FurnitureAbstact
         }
     }
 
-    private byte ActiveObjectsOnTheTable()
-    {
-        if (_firstFood == null && _secondFood == null)
-        {
-            return 2;
-        }
-        else if (_firstFood == null && _secondFood != null || _firstFood != null && _secondFood == null)
-        {
-            return 1;
-        }
-        return 0; //  ошибка
-    }
-    
-    protected override GameObject GiveObj(ref GameObject obj)
-    {
-        obj.SetActive(false);
-        GameObject Cobj = obj;
-        obj = null;
-        return Cobj;
-    }
-    protected override void AcceptObject(GameObject acceptObj, byte numberObj)
-    {
-        if (numberObj == 1)
-        {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObj.name)
-                {
-                    obj.SetActive(true);
-                    _firstFood = obj;
-                }
-            }
-        }
-        else if (numberObj == 2)
-        {
-            foreach (var obj in objectOnTheTable)
-            {
-                if (obj.name == acceptObj.name)
-                {
-                    obj.SetActive(true);
-                    _secondFood = obj;
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("Ошибка");
-        }
-    }
-    protected override void CreateResult(string nameBolud)
-    {
-        foreach (var obj in readyFoods)
-        {
-            if (obj.name == nameBolud)
-            {
-                obj.SetActive(true);
-                _result = obj;
-            }
-        }
-    }
-    protected override void TurnOn()
-    {
-        _isWork = true;
-        _firstFood.SetActive(false);
-        _secondFood.SetActive(false);
-        _animator.SetBool("Work", true);
-        Instantiate(timer, timerPoint.position, Quaternion.identity,timerParent);
-    }
-    protected override void TurnOff()
-    {
-        _isWork = false;
-        _firstFood = null;
-        _secondFood = null;
-        _animator.SetBool("Work", false);
-    }
-    
-    private async void StartCookingProcess(string obj)
+    private async void StartCookingProcessAsync(GameObject obj)
     {
         await Task.Delay(3000);
         TurnOff();
         CreateResult(obj);
     }
+    
+    public GameObject GiveObj(ref GameObject obj)
+    {
+        obj.SetActive(false);
+        GameObject Cobj = obj;
+        Destroy(obj);
+        return Cobj;
+    }
+    
+    public void AcceptObject(GameObject acceptObj)
+    {
+        if (_ingredient1 == null)
+        {
+            _ingredient1 = acceptObj;
+            _cloneIngredient1 = Instantiate(_ingredient1, _positionIngredient1.position, Quaternion.identity, _parentIngredient);
+            _cloneIngredient1.name = _cloneIngredient1.name.Replace("(Clone)", "");
+            _cloneIngredient1.SetActive(true);
+        }
+        else if (_ingredient2 == null)
+        {
+            _ingredient2 = acceptObj;
+            _cloneIngredient2 = Instantiate(_ingredient2, _positionIngredient2.position, Quaternion.identity, _parentIngredient);
+            _cloneIngredient2.name = _cloneIngredient2.name.Replace("(Clone)", "");
+            _cloneIngredient2.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("На нарезочном столе нет места");
+        }
+    }
+    
+    public void CreateResult(GameObject obj)
+    {
+        _result = obj;
+        _cloneResult = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
+        _cloneResult.name = _cloneResult.name.Replace("(Clone)", "");
+        _cloneResult.SetActive(true);
+    }
+    
+    public void TurnOn()
+    {
+        _isWork = true;
+        _cloneIngredient1.SetActive(false);
+        _cloneIngredient2.SetActive(false);
+        Destroy(_cloneIngredient1);
+        Destroy(_cloneIngredient2);
+        _animator.SetBool("Work", true);
+        Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+    }
+    
+    public void TurnOff()
+    {
+        _isWork = false;
+        _ingredient1 = null;
+        _ingredient2 = null;
+        _animator.SetBool("Work", false);
+    }
 
     public bool IsAllowDestroy()
     {
-        if (_firstFood == null && _secondFood == null && _result == null && !_isWork)
+        if (_ingredient1 == null && _ingredient2 == null && _result == null && !_isWork)
         {
             return true;
         }
@@ -215,4 +209,44 @@ public class CuttingTable : FurnitureAbstact
     {
         _heroikIsTrigger = !_heroikIsTrigger;
     }
+    
+    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2)
+    {
+        List<GameObject> currentIngredient = new List<GameObject>(){ingedient1,ingedient2};
+        if (SuitableIngredients(currentIngredient,_objectsAndRecipes.RequiredFruitSalad))
+        {
+            return _objectsAndRecipes.FruitSalad;
+        }
+        if(SuitableIngredients(currentIngredient,_objectsAndRecipes.RequiredMixBakedFruit))
+        {
+            return _objectsAndRecipes.MixBakedFruit;
+        }
+        else
+        {
+            return _objectsAndRecipes.Rubbish;
+        }
+    }
+
+    private bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
+    {
+        List<string> requiredFruitsNames = new List<string>();
+        List<string> currentIngredientsNames = new List<string>();
+        foreach (var ingredient in currentIngredients)
+        {
+            currentIngredientsNames.Add(ingredient.name); // Используем имя объекта
+        }
+        foreach (var ingredient in requiredFruits)
+        {
+            requiredFruitsNames.Add(ingredient.name); // Используем имя объекта
+        }
+        foreach (string ingredient in requiredFruitsNames)
+        {
+            if (!currentIngredientsNames.Contains(ingredient))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 }

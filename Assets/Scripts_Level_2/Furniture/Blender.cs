@@ -130,7 +130,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
                                         AcceptObject(_heroik.GiveObjHands());
                                         Debug.Log("Предмет третий положен в блендер");
                                         TurnOn(); 
-                                        var objdish = FindReadyFood(_ingredient1,_ingredient2,_ingredient3);
+                                        GameObject objdish = FindReadyFood(_ingredient1,_ingredient2,_ingredient3);
                                         StartCookingProcessAsync(objdish);
                                         //yield return new WaitForSeconds(4f);
                                         //TurnOff();
