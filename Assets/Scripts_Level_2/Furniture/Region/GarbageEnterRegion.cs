@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GarbageEnterRegion : MonoBehaviour
 {
     private Outline _outline;
-    private Garbage script;
+    private Garbage _script;
     private Heroik _heroik;
     void Start()
     {
@@ -20,13 +18,13 @@ public class GarbageEnterRegion : MonoBehaviour
             _outline.OutlineWidth = 2f;
             if (!GetComponent<CuttingTable>())
             {
-                script = gameObject.AddComponent<Garbage>();
-                script.HeroikIsTrigger();
-                script.Initialize(_heroik);
+                _script = gameObject.AddComponent<Garbage>();
+                _script.HeroikIsTrigger();
+                _script.Initialize(_heroik);
             }
             else
             {
-                script.HeroikIsTrigger();
+                _script.HeroikIsTrigger();
                 Debug.Log("Новый скрипт создан не был");
             }
             
@@ -36,10 +34,10 @@ public class GarbageEnterRegion : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
-            script.HeroikIsTrigger();
+            _script.HeroikIsTrigger();
             _heroik = null;
             _outline.OutlineWidth = 0f;
-            Destroy(script);
+            Destroy(_script);
             Debug.Log("скрипт был удален");
         }
     }

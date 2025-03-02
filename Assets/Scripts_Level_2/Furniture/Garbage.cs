@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
-public class Garbage : MonoBehaviour
+public class Garbage :MonoBehaviour, IAcceptObject
 {
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger;
+    private GameObject _obj;
     
     public void Initialize(Heroik _heroik)
     {
@@ -19,7 +20,7 @@ public class Garbage : MonoBehaviour
             {
                 try
                 { 
-                    _heroik.GiveObjHands();
+                    AcceptObject(_heroik.GiveObjHands());
                 }
                 catch (Exception e)
                 {
@@ -39,4 +40,8 @@ public class Garbage : MonoBehaviour
         _heroikIsTrigger = !_heroikIsTrigger;
     }
 
+    public void AcceptObject(GameObject acceptObj)
+    {
+        _obj = acceptObj;
+    }
 }
