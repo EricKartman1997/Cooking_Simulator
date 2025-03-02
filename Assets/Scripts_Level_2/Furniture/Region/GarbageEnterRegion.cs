@@ -16,7 +16,7 @@ public class GarbageEnterRegion : MonoBehaviour
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            if (!GetComponent<CuttingTable>())
+            if (!GetComponent<Garbage>())
             {
                 _script = gameObject.AddComponent<Garbage>();
                 _script.HeroikIsTrigger();

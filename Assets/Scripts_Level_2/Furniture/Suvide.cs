@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Suvide : MonoBehaviour
+public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
     private Animator _animator;
     private Outline _outline;
@@ -23,17 +23,26 @@ public class Suvide : MonoBehaviour
     private GameObject _secondResult = null;
     private GameObject _thirdResult = null;
     
-    private GameObject _ingedient_1 = null;
-    private GameObject _ingedient_2 = null;
-    private GameObject _ingedient_3 = null;
+    private GameObject _ingredient1 = null;
+    private GameObject _ingredient2 = null;
+    private GameObject _ingredient3 = null;
+
+    private GameObject _cloneIngredient1;
+    private GameObject _cloneIngredient2;
+    private GameObject _cloneIngredient3;
     
     private bool _isCookedFirstResult = false;
     private bool _isCookedSecondResult = false;
     private bool _isCookedThirdResult = false;
     
+    private bool _readyResult1 = false; // для TurnOff ставить после того как сделался результат
+    private bool _readyResult2 = false; // для TurnOff
+    private bool _readyResult3 = false; // для TurnOff
+    
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger = false;
+    private SuvidePoints _suvidePoints;
 
     public void Initialize(Animator _animator,Heroik _heroik, GameObject[] readyFood,GameObject[] food,Timer_Prefab firstTimer,
         Timer_Prefab secondTimer, Timer_Prefab thirdTimer, GameObject switchTemperPrefab,GameObject switchTimePrefab,
@@ -238,6 +247,13 @@ public class Suvide : MonoBehaviour
         TurnOff(number);
     }
     
+    private async void StartCookingProcessAsync(GameObject obj)
+    {
+        await Task.Delay(10000);
+        CreateResult(obj);
+        TurnOff();
+    }
+    
     private void GiveResult(byte numberObj)
     {
         if (numberObj == 1)
@@ -306,6 +322,14 @@ public class Suvide : MonoBehaviour
         }
 
     }
+
+    public GameObject GiveObj(ref GameObject obj) // переделанный
+    {
+        obj.SetActive(false);
+        GameObject Cobj = obj;
+        obj = null;
+        return Cobj;
+    }
     private void TurnOn(Timer_Prefab timer,out bool isCooked)
     {
         _isWork = true;
@@ -313,6 +337,36 @@ public class Suvide : MonoBehaviour
         //_animator.SetBool("Work", true);
         Instantiate(timer.timer, timer.timerPoint.position, Quaternion.identity,timer.timerParent);
     }
+    
+    public void TurnOn() // переделанный 
+    {
+        if (_ingredient1 != null)
+        {
+            _isWork = true;
+            _isCookedFirstResult = true;
+            //_animator.SetBool("Work", true);
+            Instantiate(firstTimer.timer, firstTimer.timerPoint.position, Quaternion.identity,firstTimer.timerParent);
+        }
+        else if (_ingredient2 != null)
+        {
+            _isWork = true;
+            _isCookedSecondResult = true;
+            //_animator.SetBool("Work", true);
+            Instantiate(secondTimer.timer, secondTimer.timerPoint.position, Quaternion.identity,secondTimer.timerParent);
+        }
+        else if (_ingredient3 != null)
+        {
+            _isWork = true;
+            _isCookedThirdResult = true;
+            //_animator.SetBool("Work", true);
+            Instantiate(thirdTimer.timer, thirdTimer.timerPoint.position, Quaternion.identity,thirdTimer.timerParent);
+        }
+        else
+        {
+            Debug.LogError("Ошибка в TurnOn");
+        }
+    }
+    
     private void TurnOff(byte numberObj)
     {
         switch (numberObj)
@@ -320,22 +374,22 @@ public class Suvide : MonoBehaviour
             case 1:
                 _isWork = false;
                 _isCookedFirstResult = false;
-                _ingedient_1.SetActive(false);
-                _ingedient_1 = null;
+                _ingredient1.SetActive(false);
+                _ingredient1 = null;
                 //_animator.SetBool("Work", false);
             break;
             case 2:
                 _isWork = false;
                 _isCookedSecondResult = false;
-                _ingedient_2.SetActive(false);
-                _ingedient_2 = null;
+                _ingredient2.SetActive(false);
+                _ingredient2 = null;
                 //_animator.SetBool("Work", false);
                 break;
             case 3:
                 _isWork = false;
                 _isCookedThirdResult = false;
-                _ingedient_3.SetActive(false);
-                _ingedient_3 = null;
+                _ingredient3.SetActive(false);
+                _ingredient3 = null;
                 //_animator.SetBool("Work", false);
                 break;
             default: Debug.LogError("НЕПРАВИЛЬНЫЙ ИНДЕКС");  break;
@@ -351,7 +405,7 @@ public class Suvide : MonoBehaviour
                 if (obj.name == "first" + acceptObjFood.name )
                 {
                     obj.SetActive(true);
-                    _ingedient_1 = obj;
+                    _ingredient1 = obj;
                 }
             }
         }
@@ -362,7 +416,7 @@ public class Suvide : MonoBehaviour
                 if (obj.name == "second" + acceptObjFood.name)
                 {
                     obj.SetActive(true);
-                    _ingedient_2 = obj;
+                    _ingredient2 = obj;
                 }
             }
         }
@@ -373,13 +427,42 @@ public class Suvide : MonoBehaviour
                 if (obj.name == "third" + acceptObjFood.name)
                 {
                     obj.SetActive(true);
-                    _ingedient_3 = obj;
+                    _ingredient3 = obj;
                 }
             }
         }
         else
         {
             Debug.LogError("Ошибка: неправильное название ингридиента или неправильно выбрана настройка");
+        }
+    }
+
+    public void AcceptObject(GameObject acceptObj) // переделанный
+    {
+        if (_ingredient1 == null)
+        {
+            _ingredient1 = acceptObj;
+            _cloneIngredient1 = Instantiate(_ingredient1, _suvidePoints.GetFirstPointIngredient(), Quaternion.identity, _suvidePoints.GetParentIngredients());
+            _cloneIngredient1.name = _cloneIngredient1.name.Replace("(Clone)", "");
+            _cloneIngredient1.SetActive(true);
+        }
+        else if (_secondResult == null)
+        {
+            _ingredient2 = acceptObj;
+            _cloneIngredient2 = Instantiate(_ingredient2, _suvidePoints.GetSecondPointIngredient(), Quaternion.identity, _suvidePoints.GetParentIngredients());
+            _cloneIngredient2.name = _cloneIngredient2.name.Replace("(Clone)", "");
+            _cloneIngredient2.SetActive(true);
+        }
+        else if (_thirdResult == null)
+        {
+            _ingredient3 = acceptObj;
+            _cloneIngredient3 = Instantiate(_ingredient3, _suvidePoints.GetThirdPointIngredient(), Quaternion.identity, _suvidePoints.GetParentIngredients());
+            _cloneIngredient3.name = _cloneIngredient3.name.Replace("(Clone)", "");
+            _cloneIngredient3.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("место под ингредиенты нет");
         }
     }
     
@@ -411,9 +494,9 @@ public class Suvide : MonoBehaviour
     {
         switch (numberObj)
         {
-            case 1: return _ingedient_1.name;
-            case 2: return _ingedient_2.name;
-            case 3: return _ingedient_3.name;
+            case 1: return _ingredient1.name;
+            case 2: return _ingredient2.name;
+            case 3: return _ingredient3.name;
             default:
                 Debug.LogError($"Invalid numberObj: {numberObj}");
                 return null;
@@ -449,9 +532,9 @@ public class Suvide : MonoBehaviour
 
         switch (numberObj)
         {
-            case 1: ingredientName = _ingedient_1.name; break;
-            case 2: ingredientName = _ingedient_2.name; break;
-            case 3: ingredientName = _ingedient_3.name; break;
+            case 1: ingredientName = _ingredient1.name; break;
+            case 2: ingredientName = _ingredient2.name; break;
+            case 3: ingredientName = _ingredient3.name; break;
             default:
                 Debug.LogError($"Invalid numberObj: {numberObj}");
                 return null;
@@ -518,7 +601,7 @@ public class Suvide : MonoBehaviour
     
     public bool IsAllowDestroy()
     {
-        if (_ingedient_1 == null && _ingedient_2 == null && _ingedient_3 == null && _firstResult == null &&
+        if (_ingredient1 == null && _ingredient2 == null && _ingredient3 == null && _firstResult == null &&
             _secondResult == null && _thirdResult == null && !_isWork)
         {
             return true;
