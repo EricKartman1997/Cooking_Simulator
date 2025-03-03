@@ -1,52 +1,47 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
-    private Animator _animator;
-    private Outline _outline;
-    
+    // Initialize
     [SerializeField] private GameObject waterPrefab;
     [SerializeField] private GameObject switchTimePrefab;
     [SerializeField] private GameObject switchTemperPrefab;
-    
     [SerializeField] private Timer_Prefab firstTimer;
     [SerializeField] private Timer_Prefab secondTimer;
     [SerializeField] private Timer_Prefab thirdTimer;
-    
     [SerializeField] private GameObject[] food;
     [SerializeField] private GameObject[] readyFood;
-    
-    private bool _isWork = false;
+    private SuvidePoints _suvidePoints;
+    private Animator _animator;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private Dictionary<string, ReadyFood> _dictionaryRecipes;
     
     private GameObject _firstResult = null;
     private GameObject _secondResult = null;
     private GameObject _thirdResult = null;
-    
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _ingredient3 = null;
-
     private GameObject _cloneIngredient1;
     private GameObject _cloneIngredient2;
     private GameObject _cloneIngredient3;
-    
     private bool _isCookedFirstResult = false;
     private bool _isCookedSecondResult = false;
     private bool _isCookedThirdResult = false;
+    private bool _readyResult1 = false; 
+    private bool _readyResult2 = false; 
+    private bool _readyResult3 = false; 
     
-    private bool _readyResult1 = false; // для TurnOff ставить после того как сделался результат
-    private bool _readyResult2 = false; // для TurnOff
-    private bool _readyResult3 = false; // для TurnOff
-    
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private bool _isWork = false;
     private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger = false;
-    private SuvidePoints _suvidePoints;
 
     public void Initialize(Animator _animator,Heroik _heroik, GameObject[] readyFood,GameObject[] food,Timer_Prefab firstTimer,
         Timer_Prefab secondTimer, Timer_Prefab thirdTimer, GameObject switchTemperPrefab,GameObject switchTimePrefab,
-        GameObject waterPrefab)
+        GameObject waterPrefab,SuvidePoints suvidePoints,Dictionary<string, ReadyFood> recipes)
     {
         this._animator = _animator;
         this._heroik = _heroik;
@@ -58,6 +53,8 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         this.switchTemperPrefab = switchTemperPrefab;
         this.switchTimePrefab = switchTimePrefab;
         this.waterPrefab = waterPrefab;
+        _suvidePoints = suvidePoints;
+        _dictionaryRecipes = recipes;
     }
     
     private void Update()
@@ -396,6 +393,41 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         }
 
     }
+
+    public void TurnOff() // переделанный
+    {
+        if (_readyResult1)
+        {
+            _isWork = false;
+            _isCookedFirstResult = false;
+            _ingredient1.SetActive(false);
+            _ingredient1 = null;
+            //_animator.SetBool("Work", false);
+            
+        }
+        else if (_readyResult2)
+        {
+            _isWork = false;
+            _isCookedSecondResult = false;
+            _ingredient2.SetActive(false);
+            _ingredient2 = null;
+            //_animator.SetBool("Work", false);
+            _readyResult2 = false;
+        }
+        else if (_readyResult3)
+        {
+            _isWork = false;
+            _isCookedThirdResult = false;
+            _ingredient3.SetActive(false);
+            _ingredient3 = null;
+            //_animator.SetBool("Work", false);
+            _readyResult3 = false;
+        }
+        else
+        {
+            Debug.LogError("Ошибка в TurnOff");
+        }
+    }
     private void ToAcceptObjsFood(GameObject acceptObjFood, byte numberObj)
     {
         if (numberObj == 1)
@@ -467,29 +499,70 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
     }
     
     private void CreateResult(byte numberObj)
-{
-    string ingredientName = GetIngredientName(numberObj);
-    string bakedName = GetBakedName(numberObj);
-
-
-    if (string.IsNullOrEmpty(ingredientName) || string.IsNullOrEmpty(bakedName))
     {
-        Debug.LogError($"Missing ingredient or baked name for number {numberObj}");
-        return;
+        string ingredientName = GetIngredientName(numberObj);
+        string bakedName = GetBakedName(numberObj);
+        
+        if (string.IsNullOrEmpty(ingredientName) || string.IsNullOrEmpty(bakedName))
+        {
+            Debug.LogError($"Missing ingredient or baked name for number {numberObj}");
+            return;
+        }
+
+        GameObject result = FindResultObject(readyFood, bakedName);
+
+        if (result != null)
+        {
+            AssignResult(numberObj, result);
+            result.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning($"Could not find {bakedName} in readyFood list.");
+        }
     }
 
-    GameObject result = FindResultObject(readyFood, bakedName);
-
-    if (result != null)
+    public void CreateResult(GameObject obj)
     {
-        AssignResult(numberObj, result);
-        result.SetActive(true);
+        try
+        {
+            if (_readyResult1)
+            {
+                _dictionaryRecipes.TryGetValue(obj.name, out ReadyFood readyObj);
+                _firstResult = readyObj.gameObject;
+                _cloneIngredient1 = Instantiate(_firstResult, _suvidePoints.GetFirstPointResult() , Quaternion.identity, _suvidePoints.GetParentResults());
+                _cloneIngredient1.name = _cloneIngredient1.name.Replace("(Clone)", "");
+                _cloneIngredient1.SetActive(true);
+                _readyResult1 = false;
+            }
+            else if (_readyResult2)
+            {
+                _dictionaryRecipes.TryGetValue(obj.name, out ReadyFood readyObj);
+                _secondResult = readyObj.gameObject;
+                _cloneIngredient2 = Instantiate(_secondResult, _suvidePoints.GetSecondPointResult() , Quaternion.identity, _suvidePoints.GetParentResults());
+                _cloneIngredient2.name = _cloneIngredient2.name.Replace("(Clone)", "");
+                _cloneIngredient2.SetActive(true);
+                _readyResult2 = false;
+            }
+            else if (_readyResult3)
+            {
+                _dictionaryRecipes.TryGetValue(obj.name, out ReadyFood readyObj);
+                _thirdResult = readyObj.gameObject;
+                _cloneIngredient3 = Instantiate(_thirdResult, _suvidePoints.GetThirdPointResult() , Quaternion.identity, _suvidePoints.GetParentResults());
+                _cloneIngredient3.name = _cloneIngredient3.name.Replace("(Clone)", "");
+                _cloneIngredient3.SetActive(true);
+                _readyResult3 = false;
+            }
+            else
+            {
+                Debug.LogError("Ошибка в CreateResult");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("ошибка приготовления в духовке" + e);
+        }
     }
-    else
-    {
-        Debug.LogWarning($"Could not find {bakedName} in readyFood list.");
-    }
-}
     private string GetIngredientName(byte numberObj) 
     {
         switch (numberObj)
