@@ -16,8 +16,6 @@ public class SuvideEnterRegion : MonoBehaviour
     [SerializeField] private Timer_Prefab firstTimer;
     [SerializeField] private Timer_Prefab secondTimer;
     [SerializeField] private Timer_Prefab thirdTimer;
-    [SerializeField] private GameObject[] food;
-    [SerializeField] private GameObject[] readyFood;
     private SuvidePoints _suvidePoints;
     private Heroik _heroik;
     private Dictionary<string, ReadyFood> _recipes;
@@ -62,7 +60,7 @@ public class SuvideEnterRegion : MonoBehaviour
             if (!GetComponent<Suvide>())
             {
                 _script = gameObject.AddComponent<Suvide>();
-                _script.Initialize( _animator, _heroik,  readyFood, food, firstTimer, secondTimer, thirdTimer,  switchTemperPrefab, switchTimePrefab, waterPrefab,_suvidePoints,_recipes);
+                _script.Initialize( _animator, _heroik, firstTimer, secondTimer, thirdTimer,  switchTemperPrefab, switchTimePrefab, waterPrefab,_suvidePoints,_recipes);
             }
             else
             {

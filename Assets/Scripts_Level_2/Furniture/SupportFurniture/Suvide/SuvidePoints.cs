@@ -12,8 +12,8 @@ public class SuvidePoints : MonoBehaviour
     private Transform _secondPointResult;
     private Transform _thirdPointResult;
 
-    private Transform _parentIngredients;
-    private Transform _parentResults;
+    //private Transform _parentIngredients;
+    //private Transform _parentResults;
 
     public void Initialize(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform firstPointResult,Transform secondPointResult,Transform thirdPointResult,Transform parentIngredients,Transform parentResults)
     {
@@ -23,40 +23,40 @@ public class SuvidePoints : MonoBehaviour
         _firstPointResult = firstPointResult;
         _secondPointResult = secondPointResult;
         _thirdPointResult = thirdPointResult;
-        _parentIngredients = parentIngredients;
-        _parentResults = parentResults;
+        //_parentIngredients = parentIngredients;
+        //_parentResults = parentResults;
     }
 
-    public Vector3 GetFirstPointIngredient()
+    public Transform GetFirstPointIngredient()
     {
-        return _firstPointIngredient.transform.position;
+        return _firstPointIngredient.transform;
     }
-    public Vector3 GetSecondPointIngredient()
+    public Transform GetSecondPointIngredient()
     {
-        return _secondPointIngredient.transform.position;
+        return _secondPointIngredient.transform;
     }
-    public Vector3 GetThirdPointIngredient()
+    public Transform GetThirdPointIngredient()
     {
-        return _thirdPointIngredient.transform.position;
+        return _thirdPointIngredient.transform;
     }
-    public Vector3 GetFirstPointResult()
+    public Transform GetFirstPointResult()
     {
-        return _thirdPointResult.transform.position;
+        return _firstPointResult.transform;
     }
-    public Vector3 GetSecondPointResult()
+    public Transform GetSecondPointResult()
     {
-        return _secondPointResult.transform.position;
+        return _secondPointResult.transform;
     }
-    public Vector3 GetThirdPointResult()
+    public Transform GetThirdPointResult()
     {
-        return _firstPointResult.transform.position;
+        return _thirdPointResult.transform;
     }
-    public Transform GetParentIngredients()
-    {
-        return _parentIngredients;
-    }
-    public Transform GetParentResults()
-    {
-        return _parentResults;
-    }
+    // public Transform GetParentIngredients()
+    // {
+    //     return _parentIngredients;
+    // }
+    // public Transform GetParentResults()
+    // {
+    //     return _parentResults;
+    // }
 }
