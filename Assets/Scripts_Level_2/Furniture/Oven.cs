@@ -22,7 +22,6 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     private float _timeCurrent = 0.17f;
     [SerializeField] private GameObject _ingredient;
     [SerializeField] private GameObject _result;
-    [SerializeField] private GameObject _cloneResult;
 
     public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject timer,Transform timerPoint,Transform timerParent,Heroik heroik,Transform positionResult, Transform perentResult,Dictionary<string, FoodReadyOven> dictionaryProductName)
     {
@@ -56,7 +55,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
                     {
                         if (_result != null)
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _cloneResult));
+                            _heroik.ActiveObjHands(GiveObj(ref _result));
                         }
                         else
                         {
@@ -159,9 +158,9 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         {
             _dictionaryProductName.TryGetValue(obj.name, out FoodReadyOven bakedObj);
             _result = bakedObj.gameObject;
-            _cloneResult = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
-            _cloneResult.name = _cloneResult.name.Replace("(Clone)", "");
-            _cloneResult.SetActive(true);
+            _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
+            _result.name = _result.name.Replace("(Clone)", "");
+            _result.SetActive(true);
         }
         catch (Exception e)
         {
