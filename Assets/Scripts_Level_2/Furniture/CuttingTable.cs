@@ -24,9 +24,9 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
-    private GameObject _cloneIngredient1; 
-    private GameObject _cloneIngredient2;
-    private GameObject _cloneResult;
+    // private GameObject _cloneIngredient1; 
+    // private GameObject _cloneIngredient2;
+    // private GameObject _cloneResult;
     
     public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ObjectsAndRecipes objectsAndRecipes)
     {
@@ -65,13 +65,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                             }
                             else //есть первый ингредиент // забираете первый ингредиент 
                             {
-                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngredient1));
+                                _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
                                 _ingredient1 = null;
                             }
                         }
                         else //есть результат // забрать результат
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _cloneResult));
+                            _heroik.ActiveObjHands(GiveObj(ref _result));
                             _result = null;
                             Debug.Log("Вы забрали конечный продукт"); 
                         }
@@ -152,16 +152,16 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         if (_ingredient1 == null)
         {
             _ingredient1 = acceptObj;
-            _cloneIngredient1 = Instantiate(_ingredient1, _positionIngredient1.position, Quaternion.identity, _parentIngredient);
-            _cloneIngredient1.name = _cloneIngredient1.name.Replace("(Clone)", "");
-            _cloneIngredient1.SetActive(true);
+            _ingredient1 = Instantiate(_ingredient1, _positionIngredient1.position, Quaternion.identity, _parentIngredient);
+            _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
+            _ingredient1.SetActive(true);
         }
         else if (_ingredient2 == null)
         {
             _ingredient2 = acceptObj;
-            _cloneIngredient2 = Instantiate(_ingredient2, _positionIngredient2.position, Quaternion.identity, _parentIngredient);
-            _cloneIngredient2.name = _cloneIngredient2.name.Replace("(Clone)", "");
-            _cloneIngredient2.SetActive(true);
+            _ingredient2 = Instantiate(_ingredient2, _positionIngredient2.position, Quaternion.identity, _parentIngredient);
+            _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
+            _ingredient2.SetActive(true);
         }
         else
         {
@@ -172,18 +172,18 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     public void CreateResult(GameObject obj)
     {
         _result = obj;
-        _cloneResult = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
-        _cloneResult.name = _cloneResult.name.Replace("(Clone)", "");
-        _cloneResult.SetActive(true);
+        _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
+        _result.name = _result.name.Replace("(Clone)", "");
+        _result.SetActive(true);
     }
     
     public void TurnOn()
     {
         _isWork = true;
-        _cloneIngredient1.SetActive(false);
-        _cloneIngredient2.SetActive(false);
-        Destroy(_cloneIngredient1);
-        Destroy(_cloneIngredient2);
+        _ingredient1.SetActive(false);
+        _ingredient2.SetActive(false);
+        Destroy(_ingredient1);
+        Destroy(_ingredient2);
         _animator.SetBool("Work", true);
         Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }

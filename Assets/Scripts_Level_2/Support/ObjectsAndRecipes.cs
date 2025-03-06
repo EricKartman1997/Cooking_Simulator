@@ -26,9 +26,9 @@ public class ObjectsAndRecipes: MonoBehaviour
     
     public GameObject Rubbish;
 
-    public List<GameObject> RequiredFruitSalad;
+    public List<GameObject> RequiredFruitSalad; // рецепт на салат
 
-    public List<GameObject> RequiredMixBakedFruit;
+    public List<GameObject> RequiredMixBakedFruit; // рецепт на салат
 
 
 }
