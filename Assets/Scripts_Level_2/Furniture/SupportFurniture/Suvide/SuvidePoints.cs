@@ -11,11 +11,9 @@ public class SuvidePoints : MonoBehaviour
     private Transform _firstPointResult;
     private Transform _secondPointResult;
     private Transform _thirdPointResult;
+    
 
-    //private Transform _parentIngredients;
-    //private Transform _parentResults;
-
-    public void Initialize(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform firstPointResult,Transform secondPointResult,Transform thirdPointResult,Transform parentIngredients,Transform parentResults)
+    public void Initialize(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform firstPointResult,Transform secondPointResult,Transform thirdPointResult)
     {
         _firstPointIngredient = firstPoint;
         _secondPointIngredient = secondPoint;
@@ -23,8 +21,6 @@ public class SuvidePoints : MonoBehaviour
         _firstPointResult = firstPointResult;
         _secondPointResult = secondPointResult;
         _thirdPointResult = thirdPointResult;
-        //_parentIngredients = parentIngredients;
-        //_parentResults = parentResults;
     }
 
     public Transform GetFirstPointIngredient()

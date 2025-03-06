@@ -157,8 +157,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     {
         try
         {
-            RawFood rawFood = obj.GetComponent<RawFood>();
-            _dictionaryProductName.TryGetValue(rawFood.name, out FoodReadyOven bakedObj);
+            _dictionaryProductName.TryGetValue(obj.name, out FoodReadyOven bakedObj);
             _result = bakedObj.gameObject;
             _cloneResult = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
             _cloneResult.name = _cloneResult.name.Replace("(Clone)", "");

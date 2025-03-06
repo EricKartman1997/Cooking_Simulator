@@ -27,8 +27,6 @@ public class SuvideEnterRegion : MonoBehaviour
     [SerializeField] private Transform firstPointResult;
     [SerializeField] private Transform secondPointResult;
     [SerializeField] private Transform thirdPointResult;
-    [SerializeField] private Transform parentIngredients;
-    [SerializeField] private Transform parentResults;
 
     private void Awake()
     {
@@ -55,7 +53,7 @@ public class SuvideEnterRegion : MonoBehaviour
             if (!GetComponent<SuvidePoints>())
             {
                 _suvidePoints = gameObject.AddComponent<SuvidePoints>();
-                _suvidePoints.Initialize(firstPointIngredient, secondPointIngredient, thirdPointIngredient, firstPointResult, secondPointResult, thirdPointResult, parentIngredients, parentResults);
+                _suvidePoints.Initialize(firstPointIngredient, secondPointIngredient, thirdPointIngredient, firstPointResult, secondPointResult, thirdPointResult);
             }
             if (!GetComponent<Suvide>())
             {
