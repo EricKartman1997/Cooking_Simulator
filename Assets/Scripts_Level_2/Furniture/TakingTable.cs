@@ -3,22 +3,20 @@ using UnityEngine;
 
 public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IHeroikIsTrigger
 {
-    //[SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject _currentObjectOnTable;
-    [SerializeField] private Transform _takingTablePoint;
+    [SerializeField] private GameObject _ingredient;
+    [SerializeField] private Transform _ingredientPoint;
     [SerializeField] private Transform _parentFood;
     [SerializeField] private List<GameObject> _unusableObjects;
     
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private float _timeCurrent = 0.17f;
-    [SerializeField] private GameObject _cloneCurrentObjectOnTable;
     private bool _heroikIsTrigger = false;
 
     public void Initialize(Heroik heroik,Transform takingTablePoint,Transform parentFood, List<GameObject> unusableObjects)
     {
-        //_currentObjectOnTable = currentObjectOnTable;
+        //_ingredient = currentObjectOnTable;
         _heroik = heroik;
-        _takingTablePoint = takingTablePoint;
+        _ingredientPoint = takingTablePoint;
         _parentFood = parentFood;
         _unusableObjects = unusableObjects;
     }
@@ -32,18 +30,18 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
             {
                 if(!Heroik.IsBusyHands) // руки не заняты
                 {
-                    if (_currentObjectOnTable == null) // ни одного активного объекта
+                    if (_ingredient == null) // ни одного активного объекта
                     {
                         Debug.Log("У вас пустые руки и прилавок пуст");
                     }
                     else // на столе что-то есть
                     {
-                        _heroik.ActiveObjHands(GiveObj(ref _cloneCurrentObjectOnTable));
+                        _heroik.ActiveObjHands(GiveObj(ref _ingredient));
                     }
                 }
                 else // заняты
                 {
-                    if (_currentObjectOnTable == null) // ни одного активного объекта
+                    if (_ingredient == null) // ни одного активного объекта
                     {
                         if (_heroik.CheckObjForReturn(_unusableObjects))
                         {
@@ -72,12 +70,10 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _currentObjectOnTable = acceptObj;
-        _cloneCurrentObjectOnTable = Instantiate(_currentObjectOnTable, _takingTablePoint.position, Quaternion.identity, _parentFood);
-        _cloneCurrentObjectOnTable.name = _cloneCurrentObjectOnTable.name.Replace("(Clone)", "");
-        _cloneCurrentObjectOnTable.SetActive(true);
-        
-        
+        _ingredient = acceptObj;
+        _ingredient = Instantiate(_ingredient, _ingredientPoint.position, Quaternion.identity, _parentFood);
+        _ingredient.name = _ingredient.name.Replace("(Clone)", "");
+        _ingredient.SetActive(true);
     }
     
     public GameObject GiveObj(ref GameObject obj)
@@ -85,7 +81,7 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
         obj.SetActive(false);
         GameObject cObj = obj;
         Destroy(obj);
-        _currentObjectOnTable = null;
+        _ingredient = null;
         return cObj;
     }
 
@@ -105,7 +101,7 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
 
     public bool IsAllowDestroy()
     {
-        if (_currentObjectOnTable == null)
+        if (_ingredient == null)
         {
             return true;
         }
