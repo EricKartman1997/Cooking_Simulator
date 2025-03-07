@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
+public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
 {
     // Initialize поля
     private Animator _animator;
@@ -105,7 +105,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                                     AcceptObject(_heroik.GiveObjHands());
                                     Debug.Log("Предмет второй положен на нарезочный стол");
                                     TurnOn(); 
-                                    GameObject objdish = FindReadyFood(_ingredient1,_ingredient2);
+                                    GameObject objdish = FindReadyFood();
                                     StartCookingProcessAsync(objdish);
                                 }
                                 else
@@ -209,10 +209,10 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     {
         _heroikIsTrigger = !_heroikIsTrigger;
     }
-    
-    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2)
+
+    public GameObject FindReadyFood()
     {
-        List<GameObject> currentIngredient = new List<GameObject>(){ingedient1,ingedient2};
+        List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
         if (SuitableIngredients(currentIngredient,_objectsAndRecipes.RequiredFruitSalad))
         {
             return _objectsAndRecipes.FruitSalad;
@@ -227,7 +227,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         }
     }
 
-    private bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
+    public bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
     {
         List<string> requiredFruitsNames = new List<string>();
         List<string> currentIngredientsNames = new List<string>();

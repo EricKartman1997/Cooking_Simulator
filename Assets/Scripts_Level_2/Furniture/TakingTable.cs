@@ -67,7 +67,6 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
         
     }
     
-
     public void AcceptObject(GameObject acceptObj)
     {
         _ingredient = acceptObj;
@@ -83,20 +82,6 @@ public class TakingTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,
         Destroy(obj);
         _ingredient = null;
         return cObj;
-    }
-
-    private bool CheckAcceptObject(GameObject acceptObj)
-    {
-        List<string> _unusableObjectsNames = new List<string>();
-        foreach (var fruit in _unusableObjects)
-        {
-            _unusableObjectsNames.Add(fruit.name); // Используем имя объекта
-        }
-        if (_unusableObjectsNames.Contains(acceptObj.name))
-        {
-            return false;
-        }
-        return true;
     }
 
     public bool IsAllowDestroy()

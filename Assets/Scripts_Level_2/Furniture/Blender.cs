@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
+public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
 {
      private GameObject _timer;
      private Transform _timerPoint;
@@ -130,7 +130,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
                                         AcceptObject(_heroik.GiveObjHands());
                                         Debug.Log("Предмет третий положен в блендер");
                                         TurnOn(); 
-                                        GameObject objdish = FindReadyFood(_ingredient1,_ingredient2,_ingredient3);
+                                        GameObject objdish = FindReadyFood();
                                         StartCookingProcessAsync(objdish);
                                         //yield return new WaitForSeconds(4f);
                                         //TurnOff();
@@ -241,9 +241,9 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         _heroikIsTrigger = !_heroikIsTrigger;
     }
 
-    private GameObject FindReadyFood(GameObject ingedient1, GameObject ingedient2, GameObject ingedient3)
+    public GameObject FindReadyFood()
     {
-        List<GameObject> currentFruits = new List<GameObject>(){ingedient1,ingedient2,ingedient3};
+        List<GameObject> currentFruits = new List<GameObject>(){_ingredient1,_ingredient2,_ingredient3};
         if (SuitableIngredients(currentFruits,_blenderRecipes.GetRequiredFreshnessCocktail()))
         {
             return _blenderRecipes.GetFreshnessCocktail();
@@ -258,7 +258,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         }
     }
 
-    private bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)
+    public bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)
     {
         List<string> requiredFruitsNames = new List<string>();
         List<string> currentFruitNames = new List<string>();

@@ -118,6 +118,32 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         _ingredient = obj;
     }
     
+    public void CreateResult(GameObject obj)
+    {
+        try
+        {
+            _dictionaryProductName.TryGetValue(obj.name, out FoodReadyOven bakedObj);
+            if (bakedObj != null)
+            {
+                _result = bakedObj.gameObject;
+                _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _positionResult);
+                _result.transform.localPosition = Vector3.zero;
+                _result.transform.localRotation = Quaternion.identity;
+                _result.name = _result.name.Replace("(Clone)", "");
+                _result.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+            }
+            
+        }
+        catch (Exception e)
+        {
+            Debug.Log("ошибка приготовления в духовке" + e);
+        }
+    }
+    
     public void TurnOn()
     {
         _isWork = true;
@@ -152,20 +178,6 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         _heroikIsTrigger = !_heroikIsTrigger;
     }
 
-    public void CreateResult(GameObject obj)
-    {
-        try
-        {
-            _dictionaryProductName.TryGetValue(obj.name, out FoodReadyOven bakedObj);
-            _result = bakedObj.gameObject;
-            _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
-            _result.name = _result.name.Replace("(Clone)", "");
-            _result.SetActive(true);
-        }
-        catch (Exception e)
-        {
-            Debug.Log("ошибка приготовления в духовке" + e);
-        }
-    }
+    
     
 }
