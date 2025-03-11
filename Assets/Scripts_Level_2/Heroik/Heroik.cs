@@ -5,7 +5,6 @@ public class Heroik : MonoBehaviour
 {
     public GameObject _curentTakenObjects = null;// переделать
     public static bool IsBusyHands = false; // руки не заняты
-    public static byte MakeOrders = 0;
     public GameObject[] TakenObjects;
     [SerializeField] private bool _interactionFurniture = false;
    

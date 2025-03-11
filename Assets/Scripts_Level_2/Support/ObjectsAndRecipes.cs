@@ -26,6 +26,13 @@ public class ObjectsAndRecipes: MonoBehaviour
     
     public GameObject Rubbish;
 
+    public InfoAboutCheck CheckBakedMeat;
+    public InfoAboutCheck CheckBakedFish;
+    public InfoAboutCheck CheckFreshnessCocktail;
+    public InfoAboutCheck CheckWildBerryCocktail;
+    public InfoAboutCheck CheckFruitSalad;
+    public InfoAboutCheck CheckMixBakedFruit;
+
     public List<GameObject> RequiredFruitSalad; // рецепт на салат
 
     public List<GameObject> RequiredMixBakedFruit; // рецепт на салат

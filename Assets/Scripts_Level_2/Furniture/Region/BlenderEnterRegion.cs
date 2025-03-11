@@ -55,6 +55,7 @@ public class BlenderEnterRegion : MonoBehaviour
             }
             if (!GetComponent<BlenderRecipes>())
             {
+                // переделать
                 // узнаем есть ли этот объект, если нет то создаем
                 if (wildBerryCocktailCopy == null)
                 {
