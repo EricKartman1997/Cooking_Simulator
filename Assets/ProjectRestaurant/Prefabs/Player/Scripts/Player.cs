@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GameObject body;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private HeroikConfig heroikConfig;
 
@@ -13,12 +14,12 @@ public class Player : MonoBehaviour
 
         float moveDistance = heroikConfig.MoveConfig.MoveSpeed * Time.deltaTime;
         
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDir,moveDistance);    
+        bool canMove = !Physics.CapsuleCast(body.transform.position, body.transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDir,moveDistance);    
         
         if (canMove == false)
         {
             Vector3 moveDirX = new Vector3(moveDir.x,0f, 0f).normalized;
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDirX,moveDistance); 
+            canMove = !Physics.CapsuleCast(body.transform.position, body.transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDirX,moveDistance); 
             if (canMove)
             {
                 moveDir = moveDirX;
@@ -26,7 +27,7 @@ public class Player : MonoBehaviour
             else
             {
                 Vector3 moveDirZ = new Vector3(0f,0f, moveDir.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDirZ,moveDistance);
+                canMove = !Physics.CapsuleCast(body.transform.position, body.transform.position + Vector3.up * heroikConfig.MoveConfig.Height, heroikConfig.MoveConfig.Radius, moveDirZ,moveDistance);
                 if (canMove)
                 {
                     moveDir = moveDirZ;
