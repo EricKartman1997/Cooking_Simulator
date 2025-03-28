@@ -9,7 +9,24 @@ public class GameInput : MonoBehaviour
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Player.Enable();
     }
-
+    
+    private void OnEnable()
+    {
+        _playerInputActions.Player.InteractionWithObjects.performed += OnPressE;
+        
+    }
+    
+    private void OnDisable()
+    {
+        _playerInputActions.Player.InteractionWithObjects.performed -= OnPressE;
+    }
+    
+    private void OnPressE(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Нажата буква Е. Новая система ввода");
+        EventBus.PressE?.Invoke();
+    }
+    
     public Vector2 GetMovementVectorNormalized()
     {
         
@@ -18,22 +35,6 @@ public class GameInput : MonoBehaviour
         inputVector = inputVector.normalized;
         
         return inputVector;
-    }
-
-    private void OnEnable()
-    {
-        _playerInputActions.Player.InteractionWithObjects.performed += OnInteractablePeformed;
-        
-    }
-    
-    private void OnDisable()
-    {
-        _playerInputActions.Player.InteractionWithObjects.performed -= OnInteractablePeformed;
-    }
-    
-    private void OnInteractablePeformed(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Нажата буква Е. Новая система ввода");
     }
 }
 

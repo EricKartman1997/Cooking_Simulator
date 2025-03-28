@@ -7,4 +7,5 @@ public class EventBus : MonoBehaviour
     public static Action AddOrder;
     public static Action<int,float> AddScore;
     public static Action UpdateOrder;
+    public static Action PressE;
 }

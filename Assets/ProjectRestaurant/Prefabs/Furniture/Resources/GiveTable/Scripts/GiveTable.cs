@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,62 +10,107 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     [SerializeField] private List<GameObject> _unusableObjects;
     
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-    private float _timeCurrent = 0.17f;
+    //private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger = false;
 
     public void Initialize(Heroik heroik,Transform takingTablePoint,Transform parentFood, List<GameObject> unusableObjects)
     {
-        //_ingredient = currentObjectOnTable;
         _heroik = heroik;
         _ingredientPoint = takingTablePoint;
         _parentFood = parentFood;
         _unusableObjects = unusableObjects;
     }
 
-    private void Update()
+    // private void Update()
+    // {
+    //     _timeCurrent += Time.deltaTime;
+    //     if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
+    //     {
+    //         if (_timeCurrent >= 0.17f)
+    //         {
+    //             if(!Heroik.IsBusyHands) // руки не заняты
+    //             {
+    //                 if (_ingredient == null) // ни одного активного объекта
+    //                 {
+    //                     Debug.Log("У вас пустые руки и прилавок пуст");
+    //                 }
+    //                 else // на столе что-то есть
+    //                 {
+    //                     _heroik.ActiveObjHands(GiveObj(ref _ingredient));
+    //                 }
+    //             }
+    //             else // заняты
+    //             {
+    //                 if (_ingredient == null) // ни одного активного объекта
+    //                 {
+    //                     if (_heroik.CheckObjForReturn(_unusableObjects))
+    //                     {
+    //                         AcceptObject(_heroik.GiveObjHands());
+    //                     }
+    //                     else
+    //                     {
+    //                         Debug.Log("Этот предмет положить нельзя");
+    //                     }
+    //                 }
+    //                 else // активного объект есть
+    //                 {
+    //                     Debug.Log("У вас полные руки и прилавок полон");
+    //                 }
+    //             }
+    //             _timeCurrent = 0f;
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning("Ждите перезарядки кнопки");
+    //         }
+    //     }
+    //     
+    // }
+    
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
+        EventBus.PressE += PressE;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.PressE -= PressE;
+    }
+    
+    private void PressE()
+    {
+        if(_heroikIsTrigger)
         {
-            if (_timeCurrent >= 0.17f)
+            if(!Heroik.IsBusyHands) // руки не заняты
             {
-                if(!Heroik.IsBusyHands) // руки не заняты
+                if (_ingredient == null) // ни одного активного объекта
                 {
-                    if (_ingredient == null) // ни одного активного объекта
-                    {
-                        Debug.Log("У вас пустые руки и прилавок пуст");
-                    }
-                    else // на столе что-то есть
-                    {
-                        _heroik.ActiveObjHands(GiveObj(ref _ingredient));
-                    }
+                    Debug.Log("У вас пустые руки и прилавок пуст");
                 }
-                else // заняты
+                else // на столе что-то есть
                 {
-                    if (_ingredient == null) // ни одного активного объекта
-                    {
-                        if (_heroik.CheckObjForReturn(_unusableObjects))
-                        {
-                            AcceptObject(_heroik.GiveObjHands());
-                        }
-                        else
-                        {
-                            Debug.Log("Этот предмет положить нельзя");
-                        }
-                    }
-                    else // активного объект есть
-                    {
-                        Debug.Log("У вас полные руки и прилавок полон");
-                    }
+                    _heroik.ActiveObjHands(GiveObj(ref _ingredient));
                 }
-                _timeCurrent = 0f;
             }
-            else
+            else // заняты
             {
-                Debug.LogWarning("Ждите перезарядки кнопки");
+                if (_ingredient == null) // ни одного активного объекта
+                {
+                    if (_heroik.CheckObjForReturn(_unusableObjects))
+                    {
+                        AcceptObject(_heroik.GiveObjHands());
+                    }
+                    else
+                    {
+                        Debug.Log("Этот предмет положить нельзя");
+                    }
+                }
+                else // активного объект есть
+                {
+                    Debug.Log("У вас полные руки и прилавок полон");
+                }
             }
         }
-        
     }
     
     public void AcceptObject(GameObject acceptObj)
@@ -97,4 +143,5 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     {
         _heroikIsTrigger = !_heroikIsTrigger;
     }
+    
 }
