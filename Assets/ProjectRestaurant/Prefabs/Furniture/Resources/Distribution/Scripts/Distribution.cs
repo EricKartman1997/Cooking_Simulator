@@ -14,7 +14,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     [SerializeField] private GameObject _currentDish = null;
     [SerializeField] private Checks _checks;
     
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
     
     public void Initialize(Heroik heroik,Transform pointDish,Animator animator,Checks checks)
     {
@@ -66,12 +66,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
 
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
     
     private void CookingProcess()
     {
-        if(_heroikIsTrigger == true)
+        if(_isHeroikTrigger == true)
         {
             if(!Heroik.IsBusyHands) // руки не заняты
             {

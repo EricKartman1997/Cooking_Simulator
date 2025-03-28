@@ -20,7 +20,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     
     // не Initialize поля
     private bool _isWork = false;
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
@@ -118,7 +118,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
 
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
 
     public GameObject FindReadyFood()
@@ -162,7 +162,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     
     private void CookingProcess()
     {
-        if(_heroikIsTrigger == true )
+        if(_isHeroikTrigger == true )
         {
             if(!Heroik.IsBusyHands) // руки не заняты
             {

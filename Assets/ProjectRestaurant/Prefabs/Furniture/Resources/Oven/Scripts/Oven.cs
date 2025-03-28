@@ -18,7 +18,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     private Transform _parentResult;   // сделать отдельный класс
     
     private bool _isWork = false;
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
     [SerializeField] private GameObject _ingredient;
     [SerializeField] private GameObject _result;
 
@@ -119,12 +119,12 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
     
     private void CookingProcess()
     {
-        if(_heroikIsTrigger == true)
+        if(_isHeroikTrigger == true)
         {
             if (!Heroik.IsBusyHands) // руки не заняты
             {

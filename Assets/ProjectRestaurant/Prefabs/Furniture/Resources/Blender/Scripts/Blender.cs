@@ -8,8 +8,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
      private GameObject _timer;
      private Transform _timerPoint;
      private Transform _timerParent;
-
-    
+     
      private Animator _animator;
      private Heroik _heroik = null; // только для объекта героя, а надо и другие...
      private BlenderPoints _blenderPoints;
@@ -20,14 +19,9 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     [SerializeField] private GameObject _ingredient3 = null;
     [SerializeField] private GameObject _result = null;
     private bool _isWork = false;
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
     private Transform _parentFood;
-
-    // для удаления визуала объекта над блендером
-    [SerializeField]private GameObject _cloneIngridient1; 
-    [SerializeField]private GameObject _cloneIngridient2;
-    [SerializeField]private GameObject _cloneIngridient3;
-
+    
     public void Initialize(GameObject _timer,Heroik _heroik, Transform _timerPoint,Transform _timerParent,
         Animator _animator,BlenderPoints _blenderPoints,
         Transform _parentFood,BlenderRecipes _blenderRecipes)
@@ -65,23 +59,23 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         if (_ingredient1 == null)
         {
             _ingredient1 = acceptObj;
-            _cloneIngridient1 = Instantiate(_ingredient1, _blenderPoints.GetFirstPoint(), Quaternion.identity, _parentFood);
-            _cloneIngridient1.name = _cloneIngridient1.name.Replace("(Clone)", "");
-            _cloneIngridient1.SetActive(true);
+            _ingredient1 = Instantiate(_ingredient1, _blenderPoints.GetFirstPoint(), Quaternion.identity, _parentFood);
+            _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
+            _ingredient1.SetActive(true);
         }
         else if (_ingredient2 == null)
         {
             _ingredient2 = acceptObj;
-            _cloneIngridient2 = Instantiate(_ingredient2, _blenderPoints.GetSecondPoint(), Quaternion.identity, _parentFood);
-            _cloneIngridient2.name = _cloneIngridient2.name.Replace("(Clone)", "");
-            _cloneIngridient2.SetActive(true);
+            _ingredient2 = Instantiate(_ingredient2, _blenderPoints.GetSecondPoint(), Quaternion.identity, _parentFood);
+            _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
+            _ingredient2.SetActive(true);
         }
         else if (_ingredient3 == null)
         {
             _ingredient3 = acceptObj;
-            _cloneIngridient3 = Instantiate(_ingredient3, _blenderPoints.GetThirdPoint(), Quaternion.identity, _parentFood);
-            _cloneIngridient3.name = _cloneIngridient3.name.Replace("(Clone)", "");
-            _cloneIngridient3.SetActive(true);
+            _ingredient3 = Instantiate(_ingredient3, _blenderPoints.GetThirdPoint(), Quaternion.identity, _parentFood);
+            _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
+            _ingredient3.SetActive(true);
         }
         else
         {
@@ -98,9 +92,9 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     public void TurnOn()
     {
         _isWork = true;
-        Destroy(_cloneIngridient1);
-        Destroy(_cloneIngridient2);
-        Destroy(_cloneIngridient3);
+        Destroy(_ingredient1);
+        Destroy(_ingredient2);
+        Destroy(_ingredient3);
         _animator.SetBool("Work", true);
         Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
@@ -125,7 +119,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
 
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
 
     public GameObject FindReadyFood()
@@ -175,13 +169,13 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     }
     private void CookingProcess()
     {
-        if (_heroikIsTrigger == true)
+        if (_isHeroikTrigger == true)
         {
             if(!Heroik.IsBusyHands) // руки не заняты
             {
                 if (_isWork)
                 {
-                    Debug.Log("ждите блэндер готовится");
+                    Debug.Log("ждите блендер готовится");
                 }
                 else
                 {
@@ -189,18 +183,18 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
                     {
                         if (_ingredient1 == null)
                         {
-                            Debug.Log("Руки пусты ингридиентов нет");
+                            Debug.Log("Руки пусты ингредиентов нет");
                         }
                         else
                         {
                             if (_ingredient2 == null)
                             {
-                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient1));
+                                _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
                                 _ingredient1 = null;
                             }
                             else
                             {
-                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient2));
+                                _heroik.ActiveObjHands(GiveObj(ref _ingredient2));
                                 _ingredient2 = null;
                             }
                         }

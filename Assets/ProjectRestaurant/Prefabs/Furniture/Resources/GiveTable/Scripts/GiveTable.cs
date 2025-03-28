@@ -9,7 +9,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     [SerializeField] private List<GameObject> _unusableObjects;
     
     private Heroik _heroik;
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
 
     public void Initialize(Heroik heroik,Transform takingTablePoint,Transform parentFood, List<GameObject> unusableObjects)
     {
@@ -31,7 +31,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     
     private void CookingProcess()
     {
-        if(_heroikIsTrigger)
+        if(_isHeroikTrigger)
         {
             if(!Heroik.IsBusyHands) // руки не заняты
             {
@@ -93,7 +93,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
 
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
     
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Garbage :MonoBehaviour, IAcceptObject
 {
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-    private bool _heroikIsTrigger;
+    private bool _isHeroikTrigger;
     private GameObject _obj;
     
     public void Initialize(Heroik _heroik)
@@ -23,7 +23,7 @@ public class Garbage :MonoBehaviour, IAcceptObject
     
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
 
     public void AcceptObject(GameObject acceptObj)
@@ -33,7 +33,7 @@ public class Garbage :MonoBehaviour, IAcceptObject
     
     private void CookingProcess()
     {
-        if (_heroikIsTrigger == true)
+        if (_isHeroikTrigger == true)
         {
             try
             { 

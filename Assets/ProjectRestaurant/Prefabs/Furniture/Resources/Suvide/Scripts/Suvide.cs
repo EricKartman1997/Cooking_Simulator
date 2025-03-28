@@ -31,7 +31,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
     [SerializeField]private bool _isReadyResult3 = false; 
     
     private bool _isWork = false;
-    private bool _heroikIsTrigger = false;
+    private bool _isHeroikTrigger = false;
 
     public void Initialize(Animator animator,Heroik heroik,HelperTimer firstTimer,
         HelperTimer secondTimer, HelperTimer thirdTimer, GameObject switchTemperPrefab,GameObject switchTimePrefab,
@@ -259,7 +259,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
 
     public void HeroikIsTrigger()
     {
-        _heroikIsTrigger = !_heroikIsTrigger;
+        _isHeroikTrigger = !_isHeroikTrigger;
     }
     
     private void WorkingSuvide()
@@ -289,7 +289,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             NotWorkingSuvide();
         }
         
-        if (_heroikIsTrigger == true)
+        if (_isHeroikTrigger == true)
         {
             if(!Heroik.IsBusyHands) // руки не заняты
             {
