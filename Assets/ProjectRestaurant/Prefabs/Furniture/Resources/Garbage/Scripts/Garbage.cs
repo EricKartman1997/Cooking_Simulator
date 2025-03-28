@@ -3,7 +3,6 @@ using UnityEngine;
 public class Garbage :MonoBehaviour, IAcceptObject
 {
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-    private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger;
     private GameObject _obj;
     
@@ -11,28 +10,15 @@ public class Garbage :MonoBehaviour, IAcceptObject
     {
         this._heroik = _heroik;
     }
-    private void Update()
+    
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
-        {
-            if(_timeCurrent >= 0.17f)
-            {
-                try
-                { 
-                    AcceptObject(_heroik.GiveObjHands());
-                }
-                catch (Exception e)
-                {
-                    Debug.Log("Вам нечего выкидывать" + e);
-                }
-                _timeCurrent = 0f;
-            }
-            else
-            {
-                Debug.LogWarning("Ждите перезарядки кнопки");
-            }
-        }
+        EventBus.PressE += CookingProcess;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.PressE -= CookingProcess;
     }
     
     public void HeroikIsTrigger()
@@ -43,5 +29,20 @@ public class Garbage :MonoBehaviour, IAcceptObject
     public void AcceptObject(GameObject acceptObj)
     {
         _obj = acceptObj;
+    }
+    
+    private void CookingProcess()
+    {
+        if (_heroikIsTrigger == true)
+        {
+            try
+            { 
+                AcceptObject(_heroik.GiveObjHands());
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Вам нечего выкидывать" + e);
+            }
+        }
     }
 }

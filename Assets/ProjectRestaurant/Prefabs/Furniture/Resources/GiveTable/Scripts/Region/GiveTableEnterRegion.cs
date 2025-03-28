@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GiveTableEnterRegion : MonoBehaviour
 {
-    //[SerializeField] private GameObject[] objectOnTheTable;
     [SerializeField] private Transform _takingTablePoint;
     [SerializeField] private Transform _parentFood;
     [SerializeField] private List<GameObject> _unusableObjects;

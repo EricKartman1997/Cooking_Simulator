@@ -8,8 +8,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
      private GameObject _timer;
      private Transform _timerPoint;
      private Transform _timerParent;
-     private GameObject[] objectOnTheTable;
-     private GameObject[] readyFoods;
+
     
      private Animator _animator;
      private Heroik _heroik = null; // только для объекта героя, а надо и другие...
@@ -21,7 +20,6 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     [SerializeField] private GameObject _ingredient3 = null;
     [SerializeField] private GameObject _result = null;
     private bool _isWork = false;
-    private float _timeCurrent = 0.17f;
     private bool _heroikIsTrigger = false;
     private Transform _parentFood;
 
@@ -31,139 +29,27 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     [SerializeField]private GameObject _cloneIngridient3;
 
     public void Initialize(GameObject _timer,Heroik _heroik, Transform _timerPoint,Transform _timerParent,
-        GameObject[] objectOnTheTable,GameObject[] readyFoods,Animator _animator,BlenderPoints _blenderPoints,
+        Animator _animator,BlenderPoints _blenderPoints,
         Transform _parentFood,BlenderRecipes _blenderRecipes)
     {
         this._timer = _timer;
         this._heroik = _heroik;
         this._timerPoint = _timerPoint;
         this._timerParent = _timerParent;
-        this.objectOnTheTable = objectOnTheTable;
-        this.readyFoods = readyFoods;
         this._animator = _animator;
         this._blenderPoints = _blenderPoints;
         this._parentFood = _parentFood;
         this._blenderRecipes = _blenderRecipes;
     }
-    private void Update()
+    
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
-        {
-            if (_timeCurrent >= 0.17f)
-            {
-                if(!Heroik.IsBusyHands) // руки не заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блэндер готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (_ingredient1 == null)
-                            {
-                                Debug.Log("Руки пусты ингридиентов нет");
-                            }
-                            else
-                            {
-                                if (_ingredient2 == null)
-                                {
-                                    _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient1));
-                                    _ingredient1 = null;
-                                }
-                                else
-                                {
-                                    _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient2));
-                                    _ingredient2 = null;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            _heroik.ActiveObjHands(GiveObj(ref _result));
-                        }
-                        
-                    }
-                    
-                }
-                else // руки заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блэндер готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (_ingredient1 == null)
-                            {
-                                if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
-                                {
-                                    AcceptObject(_heroik.GiveObjHands());
-                                    Debug.Log("Предмет первый положен в блендер");
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
-                                }
-                            }
-                            else
-                            {
-                                if (_ingredient2 == null)
-                                {
-                                    if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
-                                    {
-                                        AcceptObject(_heroik.GiveObjHands());
-                                        Debug.Log("Предмет второй положен в блендер");
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("с предметом нельзя взаимодействовать");
-                                    }
-                                }
-                                else
-                                {
-                                    if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
-                                    {
-                                        AcceptObject(_heroik.GiveObjHands());
-                                        Debug.Log("Предмет третий положен в блендер");
-                                        TurnOn(); 
-                                        GameObject objdish = FindReadyFood();
-                                        StartCookingProcessAsync(objdish);
-                                        //yield return new WaitForSeconds(4f);
-                                        //TurnOff();
-                                        //CreateResult(objdish.name);
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("с предметом нельзя взаимодействовать");
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log("Руки полные уберите предмет");
-                        }
-                    }
-                }
-                _timeCurrent = 0f;
-            }
-            else
-            {
-                Debug.LogWarning("Ждите перезарядки кнопки");
-            }
-        }
+        EventBus.PressE += CookingProcess;
     }
 
-    private async void StartCookingProcessAsync(GameObject obj)
+    private void OnDisable()
     {
-        await Task.Delay(4000);
-        TurnOff();
-        CreateResult(obj);
+        EventBus.PressE -= CookingProcess;
     }
     
     public GameObject GiveObj(ref GameObject obj) 
@@ -279,6 +165,114 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
             }
         }
         return true;
+    }
+    
+    private async void StartCookingProcessAsync(GameObject obj)
+    {
+        await Task.Delay(4000);
+        TurnOff();
+        CreateResult(obj);
+    }
+    private void CookingProcess()
+    {
+        if (_heroikIsTrigger == true)
+        {
+            if(!Heroik.IsBusyHands) // руки не заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите блэндер готовится");
+                }
+                else
+                {
+                    if (_result == null)
+                    {
+                        if (_ingredient1 == null)
+                        {
+                            Debug.Log("Руки пусты ингридиентов нет");
+                        }
+                        else
+                        {
+                            if (_ingredient2 == null)
+                            {
+                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient1));
+                                _ingredient1 = null;
+                            }
+                            else
+                            {
+                                _heroik.ActiveObjHands(GiveObj(ref _cloneIngridient2));
+                                _ingredient2 = null;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _heroik.ActiveObjHands(GiveObj(ref _result));
+                    }
+                        
+                }
+                    
+            }
+            else // руки заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите блэндер готовится");
+                }
+                else
+                {
+                    if (_result == null)
+                    {
+                        if (_ingredient1 == null)
+                        {
+                            if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                            {
+                                AcceptObject(_heroik.GiveObjHands());
+                                Debug.Log("Предмет первый положен в блендер");
+                            }
+                            else
+                            {
+                                Debug.Log("с предметом нельзя взаимодействовать");
+                            }
+                        }
+                        else
+                        {
+                            if (_ingredient2 == null)
+                            {
+                                if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                                {
+                                    AcceptObject(_heroik.GiveObjHands());
+                                    Debug.Log("Предмет второй положен в блендер");
+                                }
+                                else
+                                {
+                                    Debug.Log("с предметом нельзя взаимодействовать");
+                                }
+                            }
+                            else
+                            {
+                                if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                                {
+                                    AcceptObject(_heroik.GiveObjHands());
+                                    Debug.Log("Предмет третий положен в блендер");
+                                    TurnOn(); 
+                                    GameObject objdish = FindReadyFood();
+                                    StartCookingProcessAsync(objdish);
+                                }
+                                else
+                                {
+                                    Debug.Log("с предметом нельзя взаимодействовать");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Руки полные уберите предмет");
+                    }
+                }
+            }
+        }
     }
     
 }

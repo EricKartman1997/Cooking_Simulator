@@ -21,13 +21,9 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     // не Initialize поля
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;
-    private float _timeCurrent = 0.17f;
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
-    // private GameObject _cloneIngredient1; 
-    // private GameObject _cloneIngredient2;
-    // private GameObject _cloneResult;
     
     public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ObjectsAndRecipes objectsAndRecipes)
     {
@@ -43,101 +39,15 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         _parentResult = parentResult;
         _objectsAndRecipes = objectsAndRecipes;
     }
-    private void Update()
+    
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger )
-        {
-            if (_timeCurrent >= 0.17f)
-            {
-                if(!Heroik.IsBusyHands) // руки не заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блюдо готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (_ingredient1 == null)
-                            {
-                                Debug.Log("У вас пустые руки и прилавок пуст");
-                            }
-                            else //есть первый ингредиент // забираете первый ингредиент 
-                            {
-                                _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
-                                _ingredient1 = null;
-                            }
-                        }
-                        else //есть результат // забрать результат
-                        {
-                            _heroik.ActiveObjHands(GiveObj(ref _result));
-                            _result = null;
-                            Debug.Log("Вы забрали конечный продукт"); 
-                        }
-                    }
-                }
-                else // заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите блюдо готовится");
-                    }
-                    else
-                    {
-                        if (_result == null)
-                        {
-                            if (_ingredient1 == null)// ингредиентов нет
-                            {
-                                if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
-                                {
-                                    AcceptObject(_heroik.GiveObjHands());
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
-                                }
-                            }
-                            else// есть первый ингредиент
-                            {
-                                if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
-                                {
-                                    AcceptObject(_heroik.GiveObjHands());
-                                    Debug.Log("Предмет второй положен на нарезочный стол");
-                                    TurnOn(); 
-                                    GameObject objdish = FindReadyFood();
-                                    StartCookingProcessAsync(objdish);
-                                }
-                                else
-                                {
-                                    Debug.Log("Объект не подходит для слияния");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log("Сначала уберите предмет из рук");
-                        }
-                        
-                    }
-                    
-                }
-                _timeCurrent = 0f;
-            }
-            else
-            {
-                Debug.LogWarning("Ждите перезарядки кнопки");
-            }
-                
-        }
+        EventBus.PressE += CookingProcess;
     }
 
-    private async void StartCookingProcessAsync(GameObject obj)
+    private void OnDisable()
     {
-        await Task.Delay(3000);
-        TurnOff();
-        CreateResult(obj);
+        EventBus.PressE -= CookingProcess;
     }
     
     public GameObject GiveObj(ref GameObject obj)
@@ -248,6 +158,94 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
             }
         }
         return true;
+    }
+    
+    private void CookingProcess()
+    {
+        if(_heroikIsTrigger == true )
+        {
+            if(!Heroik.IsBusyHands) // руки не заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите блюдо готовится");
+                }
+                else
+                {
+                    if (_result == null)
+                    {
+                        if (_ingredient1 == null)
+                        {
+                            Debug.Log("У вас пустые руки и прилавок пуст");
+                        }
+                        else //есть первый ингредиент // забираете первый ингредиент 
+                        {
+                            _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
+                            _ingredient1 = null;
+                        }
+                    }
+                    else //есть результат // забрать результат
+                    {
+                        _heroik.ActiveObjHands(GiveObj(ref _result));
+                        _result = null;
+                        Debug.Log("Вы забрали конечный продукт"); 
+                    }
+                }
+            }
+            else // заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите блюдо готовится");
+                }
+                else
+                {
+                    if (_result == null)
+                    {
+                        if (_ingredient1 == null)// ингредиентов нет
+                        {
+                            if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                            {
+                                AcceptObject(_heroik.GiveObjHands());
+                            }
+                            else
+                            {
+                                Debug.Log("с предметом нельзя взаимодействовать");
+                            }
+                        }
+                        else// есть первый ингредиент
+                        {
+                            if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                            {
+                                AcceptObject(_heroik.GiveObjHands());
+                                Debug.Log("Предмет второй положен на нарезочный стол");
+                                TurnOn(); 
+                                GameObject objdish = FindReadyFood();
+                                StartCookingProcessAsync(objdish);
+                            }
+                            else
+                            {
+                                Debug.Log("Объект не подходит для слияния");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Сначала уберите предмет из рук");
+                    }
+                        
+                }
+                    
+            }
+                
+        }
+    }
+    
+    private async void StartCookingProcessAsync(GameObject obj)
+    {
+        await Task.Delay(3000);
+        TurnOff();
+        CreateResult(obj);
     }
     
 }

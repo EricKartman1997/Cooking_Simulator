@@ -15,7 +15,6 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     [SerializeField] private Checks _checks;
     
     private bool _heroikIsTrigger = false;
-    private float _timeCurrent = 0.17f;
     
     public void Initialize(Heroik heroik,Transform pointDish,Animator animator,Checks checks)
     {
@@ -25,67 +24,14 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
         _checks = checks;
     }
     
-    private void Update()
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger)
-        {
-            if (_timeCurrent >= 0.17f)
-            {
-                if(!Heroik.IsBusyHands) // руки не заняты
-                {
-                    Debug.Log("У вас пустые руки");
-                }
-                else// руки заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("Ждите блюдо еще не забрали");
-                    }
-                    else
-                    {
-                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
-                        {
-                            if (_checks.CheckTheCheck(_heroik.GetCurentTakenObjects()))
-                            {
-                                Debug.Log("Это блюдо есть в чеках");
-                                AcceptObject(_heroik.GiveObjHands());
-                                TurnOn();
-                                StartCookingProcessAsync();
-                            }
-                            else
-                            {
-                                Debug.Log("Этого блюдо нет в чеках");
-                            }
-                        }
-                        else 
-                        {
-                             Debug.Log("Это блюдо нельзя подавать гостям");
-                        }
-                        
-                    }
-                }
-                _timeCurrent = 0f;
-            }
-            else
-            {
-                Debug.LogWarning("Ждите перезарядки кнопки");
-            }
-        }
+        EventBus.PressE += CookingProcess;
     }
-    
-    private async void StartCookingProcessAsync()
+
+    private void OnDisable()
     {
-        await Task.Delay(1850);
-        TakeToTheHall();
-    }
-    
-    private void TakeToTheHall()
-    {
-        _currentDish.SetActive(false);
-        _checks.DeleteCheck(_currentDish);
-        Destroy(_currentDish);
-        TurnOff();
+        EventBus.PressE -= CookingProcess;
     }
 
     public void AcceptObject(GameObject acceptObj)
@@ -121,6 +67,60 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     public void HeroikIsTrigger()
     {
         _heroikIsTrigger = !_heroikIsTrigger;
+    }
+    
+    private void CookingProcess()
+    {
+        if(_heroikIsTrigger == true)
+        {
+            if(!Heroik.IsBusyHands) // руки не заняты
+            {
+                Debug.Log("У вас пустые руки");
+            }
+            else// руки заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("Ждите блюдо еще не забрали");
+                }
+                else
+                {
+                    if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
+                    {
+                        if (_checks.CheckTheCheck(_heroik.GetCurentTakenObjects()))
+                        {
+                            Debug.Log("Это блюдо есть в чеках");
+                            AcceptObject(_heroik.GiveObjHands());
+                            TurnOn();
+                            StartCookingProcessAsync();
+                        }
+                        else
+                        {
+                            Debug.Log("Этого блюдо нет в чеках");
+                        }
+                    }
+                    else 
+                    {
+                        Debug.Log("Это блюдо нельзя подавать гостям");
+                    }
+                        
+                }
+            }
+        }
+    }
+    
+    private async void StartCookingProcessAsync()
+    {
+        await Task.Delay(1850);
+        TakeToTheHall();
+    }
+    
+    private void TakeToTheHall()
+    {
+        _currentDish.SetActive(false);
+        _checks.DeleteCheck(_currentDish);
+        Destroy(_currentDish);
+        TurnOff();
     }
     
 }

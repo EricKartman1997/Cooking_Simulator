@@ -19,7 +19,6 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     
     private bool _isWork = false;
     private bool _heroikIsTrigger = false;
-    private float _timeCurrent = 0.17f;
     [SerializeField] private GameObject _ingredient;
     [SerializeField] private GameObject _result;
 
@@ -38,69 +37,14 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         _dictionaryProductName = dictionaryProductName;
     }
     
-    private void Update()
+    private void OnEnable()
     {
-        _timeCurrent += Time.deltaTime;
-        if(Input.GetKeyDown(KeyCode.E) && _heroikIsTrigger )
-        {
-            if (_timeCurrent >= 0.17f)
-            {
-                if (!Heroik.IsBusyHands) // руки не заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите печка работает");
-                    }
-                    else
-                    {
-                        if (_result != null)
-                        {
-                            _heroik.ActiveObjHands(GiveObj(ref _result));
-                        }
-                        else
-                        {
-                            Debug.Log("печка пуста руки тоже");
-                        }
-                    }
-                }
-                else // заняты
-                {
-                    if (_isWork)
-                    {
-                        Debug.Log("ждите печка работает");
-                    }
-                    else
-                    {
-                        if (_result != null)
-                        {
-                            Debug.Log("Сначала заберите предмет");
-                        }
-                        else
-                        {
-                            if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
-                            {
-                                AcceptObject(_heroik.GiveObjHands());
-                                TurnOn();
-                                StartCookingProcessAsync(_ingredient);
-                            }
-                        }
-                    }
-                }
-                    
-                _timeCurrent = 0f;
-            }
-            else
-            {
-                Debug.LogWarning("Ждите перезарядки кнопки");
-            }
-        }
+        EventBus.PressE += CookingProcess;
     }
-    
-    private async void StartCookingProcessAsync(GameObject obj)
+
+    private void OnDisable()
     {
-        await Task.Delay(5000);
-        TurnOff();
-        CreateResult(obj);
+        EventBus.PressE -= CookingProcess;
     }
     
     public GameObject GiveObj(ref GameObject cloneResult)
@@ -177,7 +121,59 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     {
         _heroikIsTrigger = !_heroikIsTrigger;
     }
-
     
+    private void CookingProcess()
+    {
+        if(_heroikIsTrigger == true)
+        {
+            if (!Heroik.IsBusyHands) // руки не заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите печка работает");
+                }
+                else
+                {
+                    if (_result != null)
+                    {
+                        _heroik.ActiveObjHands(GiveObj(ref _result));
+                    }
+                    else
+                    {
+                        Debug.Log("печка пуста руки тоже");
+                    }
+                }
+            }
+            else // заняты
+            {
+                if (_isWork)
+                {
+                    Debug.Log("ждите печка работает");
+                }
+                else
+                {
+                    if (_result != null)
+                    {
+                        Debug.Log("Сначала заберите предмет");
+                    }
+                    else
+                    {
+                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
+                        {
+                            AcceptObject(_heroik.GiveObjHands());
+                            TurnOn();
+                            StartCookingProcessAsync(_ingredient);
+                        }
+                    }
+                }
+            }
+        }
+    }
     
+    private async void StartCookingProcessAsync(GameObject obj)
+    {
+        await Task.Delay(5000);
+        TurnOff();
+        CreateResult(obj);
+    }
 }

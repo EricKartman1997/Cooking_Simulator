@@ -23,7 +23,6 @@ public class GameInput : MonoBehaviour
     
     private void OnPressE(InputAction.CallbackContext obj)
     {
-        Debug.Log("Нажата буква Е. Новая система ввода");
         EventBus.PressE?.Invoke();
     }
     

@@ -19,8 +19,6 @@ public class BlenderEnterRegion : MonoBehaviour
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
-    [SerializeField] private GameObject[] objectOnTheTable;
-    [SerializeField] private GameObject[] readyFoods;
     [SerializeField] private Transform parentFood;
     [SerializeField] private Transform readyFood;
     
@@ -86,7 +84,7 @@ public class BlenderEnterRegion : MonoBehaviour
             {
                 _script = gameObject.AddComponent<Blender>();
                 _script.HeroikIsTrigger();
-                _script.Initialize(timer, _heroik,  timerPoint, timerParent, objectOnTheTable, readyFoods,
+                _script.Initialize(timer, _heroik,  timerPoint, timerParent,
                     _animator, _blenderPoints, parentFood,_blenderRecipes);
             }
             else
