@@ -12,6 +12,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     [SerializeField] private GameObject _timer;
     [SerializeField] private Transform _timerPoint;
     [SerializeField] private Transform _timerParent;
+    
     private Dictionary<string, FromOven> _dictionaryProductName;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private Transform _positionResult; // сделать отдельный класс
@@ -70,7 +71,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
             if (bakedObj != null)
             {
                 _result = bakedObj.gameObject;
-                _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _positionResult);
+                _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
                 _result.transform.localPosition = Vector3.zero;
                 _result.transform.localRotation = Quaternion.identity;
                 _result.name = _result.name.Replace("(Clone)", "");
