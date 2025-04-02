@@ -10,7 +10,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private GameObject _timer;
     private Transform _timerPoint;
     private Transform _timerParent;
-    private ObjectsAndRecipes _objectsAndRecipes;
+    private ProductsContainer _objectsAndRecipes;
     private Transform _positionIngredient1; // сделать отдельный класс
     private Transform _positionIngredient2; // сделать отдельный класс
     private Transform _parentIngredient;    // сделать отдельный класс
@@ -25,7 +25,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
     
-    public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ObjectsAndRecipes objectsAndRecipes)
+    public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ProductsContainer objectsAndRecipes)
     {
         _animator = animator;
         _heroik = heroik;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SuvideEnterRegion : MonoBehaviour
 {
-    [SerializeField] private ObjectsAndRecipes objectsAndRecipes;
+    [SerializeField] private ProductsContainer productsContainer;
     private Animator _animator;
     private Outline _outline;
     private Suvide _script;
@@ -32,8 +32,8 @@ public class SuvideEnterRegion : MonoBehaviour
     {
         _recipes = new Dictionary<string, ObjsForDistribution>()
         {
-            { objectsAndRecipes.Meat.name, objectsAndRecipes.BakedMeat.GetComponent<ObjsForDistribution>() },
-            { objectsAndRecipes.Fish.name, objectsAndRecipes.BakedFish.GetComponent<ObjsForDistribution>()}
+            { productsContainer.Meat.name, productsContainer.BakedMeat.GetComponent<ObjsForDistribution>() },
+            { productsContainer.Fish.name, productsContainer.BakedFish.GetComponent<ObjsForDistribution>()}
         };
     }
 

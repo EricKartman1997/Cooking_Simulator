@@ -19,17 +19,17 @@ public class OvenEnterRegion : MonoBehaviour
     private Outline _outline;
     private Oven script;
 
-    [SerializeField] private ObjectsAndRecipes objectsAndRecipes;
+    [SerializeField] private ProductsContainer productsContainer;
     
     void Start()
     {
         _outline = GetComponent<Outline>();
         _dictionaryProductName = new Dictionary<string, FromOven>
         {
-            { objectsAndRecipes.Meat.name, objectsAndRecipes.BakedMeat.GetComponent<FromOven>() },
-            { objectsAndRecipes.Fish.name, objectsAndRecipes.BakedFish.GetComponent<FromOven>()},
-            { objectsAndRecipes.Apple.name, objectsAndRecipes.BakedApple.GetComponent<FromOven>() },
-            { objectsAndRecipes.Orange.name, objectsAndRecipes.BakedOrange.GetComponent<FromOven>() }
+            { productsContainer.Meat.name, productsContainer.BakedMeat.GetComponent<FromOven>() },
+            { productsContainer.Fish.name, productsContainer.BakedFish.GetComponent<FromOven>()},
+            { productsContainer.Apple.name, productsContainer.BakedApple.GetComponent<FromOven>() },
+            { productsContainer.Orange.name, productsContainer.BakedOrange.GetComponent<FromOven>() }
         };
     }
     

@@ -7,12 +7,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
 { 
     //Initialize
     private Animator _animator;
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private Heroik _heroik; // только для объекта героя, а надо и другие...
     private Transform _pointDish;
+    private Checks _checks;
     
     private bool _isWork = false;
-    [SerializeField] private GameObject _currentDish = null;
-    [SerializeField] private Checks _checks;
+    private GameObject _currentDish;
     
     private bool _isHeroikTrigger = false;
     

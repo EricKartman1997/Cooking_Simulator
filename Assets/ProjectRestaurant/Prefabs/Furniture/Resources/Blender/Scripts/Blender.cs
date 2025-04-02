@@ -12,7 +12,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
      private Animator _animator;
      private Heroik _heroik = null; // только для объекта героя, а надо и другие...
      private BlenderPoints _blenderPoints;
-     private BlenderRecipes _blenderRecipes;
+     private ProductsContainer _productsContainer;
     
     [SerializeField] private GameObject _ingredient1 = null;
     [SerializeField] private GameObject _ingredient2 = null;
@@ -20,20 +20,18 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     [SerializeField] private GameObject _result = null;
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
-    private Transform _parentFood;
     
-    public void Initialize(GameObject _timer,Heroik _heroik, Transform _timerPoint,Transform _timerParent,
-        Animator _animator,BlenderPoints _blenderPoints,
-        Transform _parentFood,BlenderRecipes _blenderRecipes)
+    
+    public void Initialize(GameObject timer,Heroik heroik, Transform timerPoint,Transform timerParent,
+        Animator animator,BlenderPoints blenderPoints, ProductsContainer productsContainer)
     {
-        this._timer = _timer;
-        this._heroik = _heroik;
-        this._timerPoint = _timerPoint;
-        this._timerParent = _timerParent;
-        this._animator = _animator;
-        this._blenderPoints = _blenderPoints;
-        this._parentFood = _parentFood;
-        this._blenderRecipes = _blenderRecipes;
+        _timer = timer;
+        _heroik = heroik;
+        _timerPoint = timerPoint;
+        _timerParent = timerParent;
+        _animator = animator;
+        _blenderPoints = blenderPoints;
+        _productsContainer = productsContainer;
     }
     
     private void OnEnable()
@@ -59,21 +57,21 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         if (_ingredient1 == null)
         {
             _ingredient1 = acceptObj;
-            _ingredient1 = Instantiate(_ingredient1, _blenderPoints.GetFirstPoint(), Quaternion.identity, _parentFood);
+            _ingredient1 = Instantiate(_ingredient1, _blenderPoints.FirstPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
             _ingredient1.SetActive(true);
         }
         else if (_ingredient2 == null)
         {
             _ingredient2 = acceptObj;
-            _ingredient2 = Instantiate(_ingredient2, _blenderPoints.GetSecondPoint(), Quaternion.identity, _parentFood);
+            _ingredient2 = Instantiate(_ingredient2, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
             _ingredient2.SetActive(true);
         }
         else if (_ingredient3 == null)
         {
             _ingredient3 = acceptObj;
-            _ingredient3 = Instantiate(_ingredient3, _blenderPoints.GetThirdPoint(), Quaternion.identity, _parentFood);
+            _ingredient3 = Instantiate(_ingredient3, _blenderPoints.ThirdPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
             _ingredient3.SetActive(true);
         }
@@ -85,8 +83,9 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     
     public void CreateResult(GameObject obj)
     {
-        obj.SetActive(true);
-        _result = obj;
+        _result = Instantiate(obj, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentReadyFood);
+        _result.name = _result.name.Replace("(Clone)", "");
+        _result.SetActive(true);
     }
 
     public void TurnOn()
@@ -125,17 +124,17 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     public GameObject FindReadyFood()
     {
         List<GameObject> currentFruits = new List<GameObject>(){_ingredient1,_ingredient2,_ingredient3};
-        if (SuitableIngredients(currentFruits,_blenderRecipes.GetRequiredFreshnessCocktail()))
+        if (SuitableIngredients(currentFruits,_productsContainer.RequiredFreshnessCocktail))
         {
-            return _blenderRecipes.GetFreshnessCocktail();
+            return _productsContainer.FreshnessCocktail;
         }
-        if(SuitableIngredients(currentFruits,_blenderRecipes.GetRequiredWildBerryCocktail()))
+        if(SuitableIngredients(currentFruits,_productsContainer.RequiredWildBerryCocktail))
         {
-            return _blenderRecipes.GetWildBerryCocktail();
+            return _productsContainer.WildBerryCocktail;
         }
         else
         {
-            return _blenderRecipes.GetRubbish();
+            return _productsContainer.Rubbish;
         }
     }
 
@@ -211,7 +210,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
             {
                 if (_isWork)
                 {
-                    Debug.Log("ждите блэндер готовится");
+                    Debug.Log("ждите блендер готовится");
                 }
                 else
                 {

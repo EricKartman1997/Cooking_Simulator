@@ -245,6 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 173349868}
   - component: {fileID: 173349867}
+  - component: {fileID: 173349876}
   - component: {fileID: 173349873}
   - component: {fileID: 173349872}
   - component: {fileID: 173349871}
@@ -271,35 +272,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d31571329bb7b47b1d8c0cf03c598e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Apple: {fileID: 8715522147032887124, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
-  Orange: {fileID: -4162871558744381035, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
-  Lime: {fileID: 203067347516692386, guid: 857bd869786247748917a3aa04083310, type: 3}
-  Blueberry: {fileID: 4085693889228215559, guid: a9137ed3ca4759440a71c9bf001035e5, type: 3}
-  Strawberry: {fileID: 1061460598140693320, guid: 14c00c00170698b4c8efef43801378fa, type: 3}
-  Cherry: {fileID: 8571235859053291362, guid: c79eea34c8f60a445ae7a55ebb6da37b, type: 3}
-  BakedApple: {fileID: 3743290554724761987, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
-  BakedOrange: {fileID: 487277723972722398, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
-  FruitSalad: {fileID: 2563921224515311155, guid: 5f215c47b6d49c74f8968417aa145afc, type: 3}
-  MixBakedFruit: {fileID: 42026357886087376, guid: d2dd4196255f58c4ab29e502a90816d0, type: 3}
-  WildBerryCocktail: {fileID: 2577928362101365757, guid: 779b6034b65b8c74c8302cfe52b31e37, type: 3}
-  FreshnessCocktail: {fileID: 9137392620112452922, guid: 0ac338e837fa04c48b1258a5ea0c2f96, type: 3}
-  Meat: {fileID: -5286525763949812143, guid: ef900f3ff220f1742be55c2c57805951, type: 3}
-  Fish: {fileID: 963864914587142401, guid: 59a7d648b288a2a479697e26c170229c, type: 3}
-  BakedMeat: {fileID: 5416545845544936932, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
-  BakedFish: {fileID: -7603536809572405736, guid: 71d37b6d97508354fa22d22805011333, type: 3}
-  Rubbish: {fileID: 3151340753539164728, guid: 4046e04bf23c28b4abcb716a138b52b4, type: 3}
-  CheckBakedMeat: {fileID: 3898275563621489168, guid: 848f9ffc33f82b44ea8dca659ac8d1b7, type: 3}
-  CheckBakedFish: {fileID: -8021655383428209387, guid: 35d7f72346ebdeb4d88053f232416605, type: 3}
-  CheckFreshnessCocktail: {fileID: -4808978716094141893, guid: 30b36bd2134ad2d45bfb9bcf42718260, type: 3}
-  CheckWildBerryCocktail: {fileID: -8610741907119065538, guid: 9644910e1eadf4947862bc28f9939602, type: 3}
-  CheckFruitSalad: {fileID: -7882162955462773919, guid: 264a8fb7f86330f429f4659535212f59, type: 3}
-  CheckMixBakedFruit: {fileID: -2335996857524683929, guid: 76c11a846760ac548a6d4b478fe4b4c5, type: 3}
-  RequiredFruitSalad:
+  apple: {fileID: -4074986667776715474, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
+  orange: {fileID: 7069986180590450740, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
+  lime: {fileID: 203067347516692386, guid: 857bd869786247748917a3aa04083310, type: 3}
+  blueberry: {fileID: 4085693889228215559, guid: a9137ed3ca4759440a71c9bf001035e5, type: 3}
+  strawberry: {fileID: 1061460598140693320, guid: 14c00c00170698b4c8efef43801378fa, type: 3}
+  cherry: {fileID: 8571235859053291362, guid: c79eea34c8f60a445ae7a55ebb6da37b, type: 3}
+  bakedApple: {fileID: 3743290554724761987, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+  bakedOrange: {fileID: 487277723972722398, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+  fruitSalad: {fileID: 2563921224515311155, guid: 5f215c47b6d49c74f8968417aa145afc, type: 3}
+  mixBakedFruit: {fileID: 42026357886087376, guid: d2dd4196255f58c4ab29e502a90816d0, type: 3}
+  wildBerryCocktail: {fileID: 2577928362101365757, guid: 779b6034b65b8c74c8302cfe52b31e37, type: 3}
+  freshnessCocktail: {fileID: 9137392620112452922, guid: 0ac338e837fa04c48b1258a5ea0c2f96, type: 3}
+  meat: {fileID: -5858211644194205252, guid: ef900f3ff220f1742be55c2c57805951, type: 3}
+  fish: {fileID: 7720658825598950221, guid: 59a7d648b288a2a479697e26c170229c, type: 3}
+  bakedMeat: {fileID: 5416545845544936932, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+  bakedFish: {fileID: -7603536809572405736, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+  rubbish: {fileID: 3151340753539164728, guid: 4046e04bf23c28b4abcb716a138b52b4, type: 3}
+  requiredFruitSalad:
   - {fileID: 7666708302614978920, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
   - {fileID: 1979905792865201056, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
-  RequiredMixBakedFruit:
-  - {fileID: 7396978974936619731, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+  requiredMixBakedFruit:
   - {fileID: 2185580969283660182, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+  - {fileID: 7396978974936619731, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+  requiredFreshnessCocktail:
+  - {fileID: 7666708302614978920, guid: 2186d709190c7e542bb41b786766ef31, type: 3}
+  - {fileID: 203067347516692386, guid: 857bd869786247748917a3aa04083310, type: 3}
+  - {fileID: 1061460598140693320, guid: 14c00c00170698b4c8efef43801378fa, type: 3}
+  requiredWildBerryCocktail:
+  - {fileID: 4085693889228215559, guid: a9137ed3ca4759440a71c9bf001035e5, type: 3}
+  - {fileID: 1979905792865201056, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
+  - {fileID: 8571235859053291362, guid: c79eea34c8f60a445ae7a55ebb6da37b, type: 3}
 --- !u!4 &173349868
 Transform:
   m_ObjectHideFlags: 0
@@ -370,13 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c86a3f35246cf4dac0c6621d4992c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _allPrefChecks:
-  - {fileID: -8021655383428209387, guid: 35d7f72346ebdeb4d88053f232416605, type: 3}
-  - {fileID: 3898275563621489168, guid: 848f9ffc33f82b44ea8dca659ac8d1b7, type: 3}
-  - {fileID: -4808978716094141893, guid: 30b36bd2134ad2d45bfb9bcf42718260, type: 3}
-  - {fileID: -7882162955462773919, guid: 264a8fb7f86330f429f4659535212f59, type: 3}
-  - {fileID: -2335996857524683929, guid: 76c11a846760ac548a6d4b478fe4b4c5, type: 3}
-  - {fileID: -8610741907119065538, guid: 9644910e1eadf4947862bc28f9939602, type: 3}
+  _checkContainer: {fileID: 173349876}
   _content: {fileID: 613288324}
   _check1: {fileID: 0}
   _check2: {fileID: 0}
@@ -423,6 +420,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484257f6cd4a0a2448d38a42dd0c7496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &173349876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173349866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36d2febf1a123a4abd3b5ac272d6c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkBakedMeat: {fileID: 3898275563621489168, guid: 848f9ffc33f82b44ea8dca659ac8d1b7, type: 3}
+  checkBakedFish: {fileID: -8021655383428209387, guid: 35d7f72346ebdeb4d88053f232416605, type: 3}
+  checkFreshnessCocktail: {fileID: -4808978716094141893, guid: 30b36bd2134ad2d45bfb9bcf42718260, type: 3}
+  checkWildBerryCocktail: {fileID: -8610741907119065538, guid: 9644910e1eadf4947862bc28f9939602, type: 3}
+  checkFruitSalad: {fileID: -7882162955462773919, guid: 264a8fb7f86330f429f4659535212f59, type: 3}
+  checkMixBakedFruit: {fileID: -2335996857524683929, guid: 76c11a846760ac548a6d4b478fe4b4c5, type: 3}
+  allPrefChecks:
+  - {fileID: -8021655383428209387, guid: 35d7f72346ebdeb4d88053f232416605, type: 3}
+  - {fileID: 3898275563621489168, guid: 848f9ffc33f82b44ea8dca659ac8d1b7, type: 3}
+  - {fileID: -4808978716094141893, guid: 30b36bd2134ad2d45bfb9bcf42718260, type: 3}
+  - {fileID: -7882162955462773919, guid: 264a8fb7f86330f429f4659535212f59, type: 3}
+  - {fileID: -2335996857524683929, guid: 76c11a846760ac548a6d4b478fe4b4c5, type: 3}
+  - {fileID: -8610741907119065538, guid: 9644910e1eadf4947862bc28f9939602, type: 3}
 --- !u!4 &180575644 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7532463159427489478, guid: b8da76dc332fb424cbc7b105cae4296a, type: 3}
@@ -1848,6 +1870,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7815410371563998012, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
       propertyPath: objectsAndRecipes
+      value: 
+      objectReference: {fileID: 173349867}
+    - target: {fileID: 7815410371563998012, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
+      propertyPath: productsContainer
       value: 
       objectReference: {fileID: 173349867}
     m_RemovedComponents: []
@@ -3356,9 +3382,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 361656338}
     - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: parentReadyFood
+      value: 
+      objectReference: {fileID: 413792824}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
       propertyPath: freshnessCocktail
       value: 
       objectReference: {fileID: 9137392620112452922, guid: 0ac338e837fa04c48b1258a5ea0c2f96, type: 3}
+    - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+      propertyPath: productsContainer
+      value: 
+      objectReference: {fileID: 173349867}
     - target: {fileID: 5621693031845170934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
       propertyPath: wildBerryCocktail
       value: 
@@ -3404,7 +3438,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1057625847002816586, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 6003188442630833609, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 6822362858652637047, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 2455496559829892647, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 2605653369727040634, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 8443937859744365923, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 8308065993192291934, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 7510002802260893467, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
+    - {fileID: 9102093646393119477, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 104d0be8208eab3459d85533462e46ea, type: 3}
@@ -3479,6 +3522,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 388920364388981955, guid: 7647528a51e17a6479f9a85c05987334, type: 3}
       propertyPath: objectsAndRecipes
+      value: 
+      objectReference: {fileID: 173349867}
+    - target: {fileID: 388920364388981955, guid: 7647528a51e17a6479f9a85c05987334, type: 3}
+      propertyPath: productsContainer
       value: 
       objectReference: {fileID: 173349867}
     - target: {fileID: 3413655502055323474, guid: 7647528a51e17a6479f9a85c05987334, type: 3}

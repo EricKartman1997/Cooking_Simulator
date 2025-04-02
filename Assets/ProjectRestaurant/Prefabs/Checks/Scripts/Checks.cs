@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class Checks : MonoBehaviour
 {
     //Initialized
-    [SerializeField] private List<InfoAboutCheck> _allPrefChecks;
+    [SerializeField] private CheckContainer _checkContainer;
     [SerializeField] private GameObject _content;
     
     [SerializeField] private InfoAboutCheck _check1 = null;
@@ -15,15 +15,15 @@ public class Checks : MonoBehaviour
     [SerializeField] private GameObject _cloneCheck2 = null;
     [SerializeField] private GameObject _cloneCheck3 = null;
     
-    public void Initialized(List<InfoAboutCheck> allPrefChecks,GameObject content)
+    public void Initialized(CheckContainer checkContainer,GameObject content)
     {
-        _allPrefChecks = allPrefChecks;
+        _checkContainer = checkContainer;
         _content = content;
     }
 
     public void AddCheck() // добавление чека
     {
-        InfoAboutCheck curentCheck = _allPrefChecks[Random.Range(0, _allPrefChecks.Count)];
+        InfoAboutCheck curentCheck = _checkContainer.AllPrefChecks[Random.Range(0, _checkContainer.AllPrefChecks.Count)];
         if (_check1 == null)
         {
             _check1 = curentCheck;

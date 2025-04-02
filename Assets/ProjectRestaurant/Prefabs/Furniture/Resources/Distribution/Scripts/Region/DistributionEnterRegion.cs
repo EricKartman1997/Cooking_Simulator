@@ -32,8 +32,6 @@ public class DistributionEnterRegion : MonoBehaviour
                 //Debug.Log("Новый скрипт создан не был");
             }
             _script.HeroikIsTrigger();
-
-
         }
     }
     private void OnTriggerExit(Collider other)
