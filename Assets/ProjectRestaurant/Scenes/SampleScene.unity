@@ -1869,6 +1869,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7815410371563998012, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
+      propertyPath: positionResult
+      value: 
+      objectReference: {fileID: 1951338832}
+    - target: {fileID: 7815410371563998012, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
       propertyPath: objectsAndRecipes
       value: 
       objectReference: {fileID: 173349867}
@@ -4957,6 +4961,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &1951338832 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1403363898897794632, guid: 861e6010c02b9d841b0215ab259e1b15, type: 3}
+  m_PrefabInstance: {fileID: 893751275}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955004983 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5488567824925991151, guid: 756335c1bb073cb4a805bcb82971375b, type: 3}

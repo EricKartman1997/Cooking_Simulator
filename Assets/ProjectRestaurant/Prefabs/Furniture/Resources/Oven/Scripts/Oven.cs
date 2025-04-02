@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
+public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
-    [SerializeField] private GameObject _glassOn;
-    [SerializeField] private GameObject _glassOff;
-    [SerializeField] private GameObject _switchFirst;
-    [SerializeField] private GameObject _switchSecond;
-    [SerializeField] private GameObject _timer;
-    [SerializeField] private Transform _timerPoint;
-    [SerializeField] private Transform _timerParent;
+    private GameObject _glassOn;
+    private GameObject _glassOff;
+    private GameObject _switchFirst;
+    private GameObject _switchSecond;
+    private GameObject _timer;
+    private Transform _timerPoint;
+    private Transform _timerParent;
     
     private Dictionary<string, FromOven> _dictionaryProductName;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
@@ -20,10 +21,10 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
-    [SerializeField] private GameObject _ingredient;
-    [SerializeField] private GameObject _result;
+    private GameObject _ingredient;
+    private GameObject _result;
 
-    public void Initialize(GameObject glassOn, GameObject glassOff,GameObject switchFirst,GameObject switchSecond,GameObject timer,Transform timerPoint,Transform timerParent,Heroik heroik,Transform positionResult, Transform perentResult,Dictionary<string, FromOven> dictionaryProductName)
+    public Oven(GameObject glassOn, GameObject glassOff, GameObject switchFirst, GameObject switchSecond, GameObject timer, Transform timerPoint, Transform timerParent, Dictionary<string, FromOven> dictionaryProductName, Heroik heroik, Transform positionResult, Transform parentResult)
     {
         _glassOn = glassOn;
         _glassOff = glassOff;
@@ -32,28 +33,26 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         _timer = timer;
         _timerPoint = timerPoint;
         _timerParent = timerParent;
+        _dictionaryProductName = dictionaryProductName;
         _heroik = heroik;
         _positionResult = positionResult;
-        _parentResult = perentResult;
-        _dictionaryProductName = dictionaryProductName;
+        _parentResult = parentResult;
+        
+        EventBus.PressE += CookingProcess;
+        Debug.Log("Создать объект: Oven");
     }
     
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
+    public void Dispose()
     {
         EventBus.PressE -= CookingProcess;
+        Debug.Log("У объекта вызван Dispose : Oven");
     }
-    
     public GameObject GiveObj(ref GameObject cloneResult)
     {
-        Debug.Log("забираем предмет");
+        //Debug.Log("забираем предмет");
         cloneResult.SetActive(false);
         GameObject cloneResultCopy = cloneResult;
-        Destroy(cloneResult);
+        Object.Destroy(cloneResult);
         _result = null;
         return cloneResultCopy;
     }
@@ -71,9 +70,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
             if (bakedObj != null)
             {
                 _result = bakedObj.gameObject;
-                _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
-                _result.transform.localPosition = Vector3.zero;
-                _result.transform.localRotation = Quaternion.identity;
+                _result = Object.Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
                 _result.name = _result.name.Replace("(Clone)", "");
                 _result.SetActive(true);
             }
@@ -96,7 +93,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         _glassOn.SetActive(true);
         _switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
         _switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
-        Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+        Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
 
     public void TurnOff()
@@ -177,4 +174,6 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
         TurnOff();
         CreateResult(obj);
     }
+
+
 }

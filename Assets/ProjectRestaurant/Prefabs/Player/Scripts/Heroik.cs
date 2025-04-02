@@ -67,14 +67,14 @@ public class Heroik : MonoBehaviour
                 count++;
                 if (count == _unusableObjects.Count)
                 {
-                    Debug.Log("На объекте найдены все компоненты");
+                    //Debug.Log("На объекте найдены все компоненты");
                     return true;
                 }
             }
         }
 
         // разрешенных компонентов не найдено
-        Debug.Log("Объект не прошел проверку.");
+        Debug.Log("Продукт нельзя передать.");
         return false;
     }
     

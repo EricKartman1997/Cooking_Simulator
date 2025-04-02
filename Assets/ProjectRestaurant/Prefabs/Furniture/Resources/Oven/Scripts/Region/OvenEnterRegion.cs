@@ -17,6 +17,7 @@ public class OvenEnterRegion : MonoBehaviour
     
     private Outline _outline;
     private Oven script;
+    private bool isCreateOven = false;
 
     [SerializeField] private ProductsContainer productsContainer;
     
@@ -38,11 +39,12 @@ public class OvenEnterRegion : MonoBehaviour
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            if (!GetComponent<Oven>())
+            if (isCreateOven == false)
             {
-                script = gameObject.AddComponent<Oven>();
+                // в будущем сделать в фабрике
+                script = new Oven(glassOn,  glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent,_dictionaryProductName,_heroik,positionResult,parentResult);
                 script.HeroikIsTrigger();
-                script.Initialize( glassOn,  glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent,_heroik,positionResult,parentResult,_dictionaryProductName);
+                isCreateOven = true;
             }
             else
             {
@@ -59,8 +61,10 @@ public class OvenEnterRegion : MonoBehaviour
         _outline.OutlineWidth = 0f;
         if (script.IsAllowDestroy())
         {
-            Destroy(script);
-            Debug.Log("скрипт был удален");
+            script.Dispose();
+            script = null;
+            isCreateOven = false;
+            //Debug.Log("скрипт был удален");
         }
     }
 }
