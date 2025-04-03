@@ -40,6 +40,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
         _currentDish = Instantiate(_currentDish, _pointDish.position, Quaternion.identity, _pointDish);
         _currentDish.name = _currentDish.name.Replace("(Clone)", "");
         _currentDish.SetActive(true);
+        Destroy(acceptObj);
     }
 
     public void TurnOff()
@@ -73,7 +74,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     {
         if(_isHeroikTrigger == true)
         {
-            if(!Heroik.IsBusyHands) // руки не заняты
+            if(_heroik.IsBusyHands == false) // руки не заняты
             {
                 Debug.Log("У вас пустые руки");
             }
@@ -87,7 +88,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
                 {
                     if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
                     {
-                        if (_checks.CheckTheCheck(_heroik.GetCurentTakenObjects()))
+                        if (_checks.CheckTheCheck(_heroik.CurrentTakenObjects))
                         {
                             Debug.Log("Это блюдо есть в чеках");
                             AcceptObject(_heroik.GiveObjHands());
@@ -113,6 +114,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     {
         await Task.Delay(1850);
         TakeToTheHall();
+        TurnOff();
     }
     
     private void TakeToTheHall()
@@ -120,7 +122,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
         _currentDish.SetActive(false);
         _checks.DeleteCheck(_currentDish);
         Destroy(_currentDish);
-        TurnOff();
+        _currentDish = null;
     }
     
 }

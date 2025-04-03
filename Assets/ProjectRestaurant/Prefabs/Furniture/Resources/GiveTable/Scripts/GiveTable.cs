@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     {
         if(_isHeroikTrigger)
         {
-            if(!Heroik.IsBusyHands) // руки не заняты
+            if(_heroik.IsBusyHands == false) // руки не заняты
             {
                 if (_ingredient == null) // ни одного активного объекта
                 {
@@ -71,15 +72,16 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
         _ingredient = Instantiate(_ingredient, _ingredientPoint.position, Quaternion.identity, _parentFood);
         _ingredient.name = _ingredient.name.Replace("(Clone)", "");
         _ingredient.SetActive(true);
+        Destroy(acceptObj);
     }
     
-    public GameObject GiveObj(ref GameObject obj)
+    public GameObject GiveObj(ref GameObject giveObj)
     {
-        obj.SetActive(false);
-        GameObject cObj = obj;
-        Destroy(obj);
-        _ingredient = null;
-        return cObj;
+        GameObject giveObjCopy = Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        DeleteObj(giveObj);
+        return giveObjCopy;
     }
 
     public bool IsAllowDestroy()
@@ -94,6 +96,13 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     public void HeroikIsTrigger()
     {
         _isHeroikTrigger = !_isHeroikTrigger;
+    }
+
+    private void DeleteObj(GameObject obj)
+    {
+        obj.SetActive(false);
+        Destroy(obj);
+        obj = null;
     }
     
 }

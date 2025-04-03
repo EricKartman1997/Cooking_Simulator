@@ -21,14 +21,17 @@ public class GetTable : MonoBehaviour, IGiveObj
         EventBus.PressE -= CookingProcess;
     }
 
-    public GameObject GiveObj(ref GameObject obj)
+    public GameObject GiveObj(ref GameObject giveObj)
     {
-        return obj;
+        GameObject giveObjCopy = Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        return giveObjCopy;
     }
     
     private void CookingProcess()
     {
-        if (!Heroik.IsBusyHands) //объект есть на столе, руки незаняты
+        if (_heroik.IsBusyHands == false) //объект есть на столе, руки незаняты
         {
             _heroik.ActiveObjHands(GiveObj(ref _objectOnTheTable));
         }
@@ -37,4 +40,5 @@ public class GetTable : MonoBehaviour, IGiveObj
             Debug.Log("объект есть на столе,руки заняты");
         }
     }
+    
 }

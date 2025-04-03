@@ -59,13 +59,13 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         EventBus.PressE -= CookingProcess;
     }
     
-    public GameObject GiveObj(ref GameObject obj) 
+    public GameObject GiveObj(ref GameObject giveObj) 
     {
-        obj.SetActive(false);
-        GameObject cobj = obj;
-        Destroy(obj);
-        obj = null;
-        return cobj;
+        GameObject giveObjCopy = Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        DeleteObj(giveObj);
+        return giveObjCopy;
     }
     
     public void AcceptObject(GameObject acceptObj) 
@@ -102,6 +102,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             Debug.Log("место под ингредиенты нет");
         }
+        Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
@@ -291,7 +292,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         
         if (_isHeroikTrigger == true)
         {
-            if(!Heroik.IsBusyHands) // руки не заняты
+            if(_heroik.IsBusyHands == false) // руки не заняты
             {
                 if (_result1 != null)
                 {
@@ -391,6 +392,13 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         await Task.Delay(10000);
         CreateResult(obj);
         TurnOff();
+    }
+    
+    private void DeleteObj(GameObject obj)
+    {
+        obj.SetActive(false);
+        Destroy(obj);
+        obj = null;
     }
 
 }

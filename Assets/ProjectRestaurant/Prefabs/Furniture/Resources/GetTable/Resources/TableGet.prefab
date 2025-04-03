@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1536738300870812482}
   m_Layer: 0
-  m_Name: Meat
+  m_Name: MeatView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7380065308407528964}
   m_Layer: 0
-  m_Name: Strawberry
+  m_Name: StrawberryView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2299b179d8463f549823d218115d3593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectOnTheTable: {fileID: 7426791181419643646}
+  objectOnTheTableView: {fileID: 8725374999876298632}
+  objectOnTheTable: {fileID: 1979905792865201056, guid: 5f7e333355cb5e54098aecd0a75a5ba5, type: 3}
 --- !u!1 &4839165376973456363
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,7 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5367861060908799284}
   m_Layer: 0
-  m_Name: Lime
+  m_Name: LimeView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -546,7 +547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6475574488601617601}
   m_Layer: 0
-  m_Name: Cherry
+  m_Name: CherryView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -596,7 +597,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6394688405654350317}
   m_Layer: 0
-  m_Name: Fish
+  m_Name: FishView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2237966564587101387}
   m_Layer: 0
-  m_Name: Apple
+  m_Name: AppleView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -668,7 +669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1942240237548612059}
   m_Layer: 0
-  m_Name: Blueberry
+  m_Name: BlueberryView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -720,12 +721,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4549258820714459351}
   m_Layer: 0
-  m_Name: Orange
+  m_Name: OrangeView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4549258820714459351
 Transform:
   m_ObjectHideFlags: 0

@@ -2,18 +2,17 @@ using UnityEngine;
 
 public class GetTableEnterRegion : MonoBehaviour
 {
+    [SerializeField] private GameObject objectOnTheTableView;
     [SerializeField] private GameObject objectOnTheTable;
     
     private Outline _outline;
     private Heroik _heroik;
     private GetTable script;
-
-    private GameObject _objectOnTheTableCopy;
     
     void Start()
     {
         _outline = GetComponent<Outline>();
-        objectOnTheTable.SetActive(true);
+        objectOnTheTableView.SetActive(true);
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -66,10 +66,11 @@ public class OvenEnterRegion : MonoBehaviour
         {
             _ovenView.Dispose();
             _ovenView = null;
+            
             _oven.Dispose();
             _oven = null;
+            
             _isCreateOven = false;
-            //Debug.Log("скрипт был удален");
         }
     }
 }

@@ -34,19 +34,22 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
         EventBus.PressE -= CookingProcess;
         Debug.Log("У объекта вызван Dispose : Oven");
     }
-    public GameObject GiveObj(ref GameObject cloneResult)
+    public GameObject GiveObj(ref GameObject giveObj)
     {
-        //Debug.Log("забираем предмет");
-        cloneResult.SetActive(false);
-        GameObject cloneResultCopy = cloneResult;
-        Object.Destroy(cloneResult);
-        _result = null;
-        return cloneResultCopy;
+        GameObject giveObjCopy = Object.Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        DeleteObj(giveObj);
+        return giveObjCopy;
     }
 
     public void AcceptObject(GameObject obj)
     {
         _ingredient = obj;
+        _ingredient = Object.Instantiate(_ingredient);
+        _ingredient.name = _ingredient.name.Replace("(Clone)", "");
+        _ingredient.SetActive(false);
+        Object.Destroy(obj);
     }
     
     public void CreateResult(GameObject obj)
@@ -83,6 +86,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     {
         _isWork = false;
         _ovenView.TurnOff();
+        Object.Destroy(_ingredient);
         _ingredient = null;
     }
     
@@ -104,7 +108,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     {
         if(_isHeroikTrigger == true)
         {
-            if (!Heroik.IsBusyHands) // руки не заняты
+            if (_heroik.IsBusyHands == false) // руки не заняты
             {
                 if (_isWork)
                 {
@@ -153,6 +157,13 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
         await Task.Delay(5000);
         TurnOff();
         CreateResult(obj);
+    }
+    
+    private void DeleteObj(GameObject obj)
+    {
+        obj.SetActive(false);
+        Object.Destroy(obj);
+        obj = null;
     }
     
 }

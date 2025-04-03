@@ -10,7 +10,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private GameObject _timer;
     private Transform _timerPoint;
     private Transform _timerParent;
-    private ProductsContainer _objectsAndRecipes;
+    private ProductsContainer _productsContainer;
     private Transform _positionIngredient1; // сделать отдельный класс
     private Transform _positionIngredient2; // сделать отдельный класс
     private Transform _parentIngredient;    // сделать отдельный класс
@@ -37,7 +37,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         _parentIngredient = parentIngredient;
         _positionResult = positionResult;
         _parentResult = parentResult;
-        _objectsAndRecipes = objectsAndRecipes;
+        _productsContainer = objectsAndRecipes;
     }
     
     private void OnEnable()
@@ -50,12 +50,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         EventBus.PressE -= CookingProcess;
     }
     
-    public GameObject GiveObj(ref GameObject obj)
+    public GameObject GiveObj(ref GameObject giveObj)
     {
-        obj.SetActive(false);
-        GameObject Cobj = obj;
-        Destroy(obj);
-        return Cobj;
+        GameObject giveObjCopy = Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        DeleteObj(giveObj);
+        return giveObjCopy;
     }
     
     public void AcceptObject(GameObject acceptObj)
@@ -78,6 +79,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         {
             Debug.LogWarning("На нарезочном столе нет места");
         }
+        Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
@@ -93,8 +95,6 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         _isWork = true;
         _ingredient1.SetActive(false);
         _ingredient2.SetActive(false);
-        Destroy(_ingredient1);
-        Destroy(_ingredient2);
         _animator.SetBool("Work", true);
         Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
@@ -102,6 +102,8 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     public void TurnOff()
     {
         _isWork = false;
+        Destroy(_ingredient1);
+        Destroy(_ingredient2);
         _ingredient1 = null;
         _ingredient2 = null;
         _animator.SetBool("Work", false);
@@ -124,17 +126,17 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     public GameObject FindReadyFood()
     {
         List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
-        if (SuitableIngredients(currentIngredient,_objectsAndRecipes.RequiredFruitSalad))
+        if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
         {
-            return _objectsAndRecipes.FruitSalad;
+            return _productsContainer.FruitSalad;
         }
-        if(SuitableIngredients(currentIngredient,_objectsAndRecipes.RequiredMixBakedFruit))
+        if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
         {
-            return _objectsAndRecipes.MixBakedFruit;
+            return _productsContainer.MixBakedFruit;
         }
         else
         {
-            return _objectsAndRecipes.Rubbish;
+            return _productsContainer.Rubbish;
         }
     }
 
@@ -164,7 +166,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     {
         if(_isHeroikTrigger == true )
         {
-            if(!Heroik.IsBusyHands) // руки не заняты
+            if(_heroik.IsBusyHands == false) // руки не заняты
             {
                 if (_isWork)
                 {
@@ -218,7 +220,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                             if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
                             {
                                 AcceptObject(_heroik.GiveObjHands());
-                                Debug.Log("Предмет второй положен на нарезочный стол");
+                                //Debug.Log("Предмет второй положен на нарезочный стол");
                                 TurnOn(); 
                                 GameObject objdish = FindReadyFood();
                                 StartCookingProcessAsync(objdish);
@@ -246,6 +248,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         await Task.Delay(3000);
         TurnOff();
         CreateResult(obj);
+    }
+    
+    private void DeleteObj(GameObject obj)
+    {
+        obj.SetActive(false);
+        Destroy(obj);
+        obj = null;
     }
     
 }

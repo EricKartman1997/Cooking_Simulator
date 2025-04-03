@@ -29,6 +29,7 @@ public class Garbage :MonoBehaviour, IAcceptObject
     public void AcceptObject(GameObject acceptObj)
     {
         _obj = acceptObj;
+        Destroy(acceptObj);
     }
     
     private void CookingProcess()
@@ -38,11 +39,19 @@ public class Garbage :MonoBehaviour, IAcceptObject
             try
             { 
                 AcceptObject(_heroik.GiveObjHands());
+                DeleteObj();
             }
             catch (Exception e)
             {
                 Debug.Log("Вам нечего выкидывать" + e);
             }
         }
+    }
+
+    private void DeleteObj()
+    {
+        _obj.SetActive(false);
+        Destroy(_obj);
+        _obj = null;
     }
 }

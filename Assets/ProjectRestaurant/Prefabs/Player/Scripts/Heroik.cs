@@ -3,38 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Heroik : MonoBehaviour
 {
-    public GameObject _curentTakenObjects = null;// переделать
-    public static bool IsBusyHands = false; // руки не заняты
-    public GameObject[] TakenObjects;
-    [SerializeField] private bool _interactionFurniture = false;
-   
+    [SerializeField] private Transform positionObj;
+    [SerializeField] private Transform parentObj;
+    
+    [SerializeField] private GameObject _currentTakenObjects;
+    [SerializeField] private bool _isBusyHands = false; // руки не заняты
+    
+    public GameObject CurrentTakenObjects => _currentTakenObjects;
+    
+    public bool IsBusyHands => _isBusyHands;
 
     private void Start()
     {
-        foreach (var Obj in TakenObjects)
-        {
-            Obj.SetActive(false);
-        }
+        CreateObj();
     }
     public void ActiveObjHands(GameObject objTable) // взять объект в руки
     {
-        foreach (var Obj in TakenObjects)
-        {
-            if (Obj.name == objTable.name)
-            {
-                Obj.SetActive(true);
-                _curentTakenObjects = Obj;
-                IsBusyHands = true;
-            }
-        }
+        _currentTakenObjects = objTable;
+        CreateObj();
+        Destroy(objTable); // надо переделать
     }
+    
     public GameObject GiveObjHands() // отдать объект из рук
     {
-        _curentTakenObjects.SetActive(false);
-        IsBusyHands = false;
-        var Obj = _curentTakenObjects;
-        _curentTakenObjects = null;
-        return Obj;
+        GameObject currentTakenObjectsCopy = Instantiate(_currentTakenObjects);
+        currentTakenObjectsCopy.SetActive(false);
+        currentTakenObjectsCopy.name = currentTakenObjectsCopy.name.Replace("(Clone)", "");
+        DeleteObj();
+        return currentTakenObjectsCopy;
     }
     
     public bool CheckObjForReturn(List<GameObject> _unusableObjects) // проверка на отдачу объекта из рук по списку объектов
@@ -44,7 +40,7 @@ public class Heroik : MonoBehaviour
         {
             _unusableObjectsNames.Add(food.name); // Используем имя объекта
         }
-        if (_unusableObjectsNames.Contains(_curentTakenObjects.name))
+        if (_unusableObjectsNames.Contains(_currentTakenObjects.name))
         {
             Debug.Log("Сработал false");
             return false;
@@ -55,7 +51,7 @@ public class Heroik : MonoBehaviour
     public bool CheckObjForReturn(List<Type> _unusableObjects) // проверка на отдачу объекта из рук по компонентам
     {
         // Получаем все компоненты на объекте
-        Component[] components = _curentTakenObjects.GetComponents<Component>();
+        Component[] components = _currentTakenObjects.GetComponents<Component>();
         byte count = 0;
 
         // Проверяем каждый компонент
@@ -77,35 +73,26 @@ public class Heroik : MonoBehaviour
         Debug.Log("Продукт нельзя передать.");
         return false;
     }
-    
-    public GameObject GetCurentTakenObjects()
-    {
-        return _curentTakenObjects;
-    }
-    // public void SetInteractionFurnitureTrue()
-    // {
-    //     _interactionFurniture = true;
-    // }
-    // public void SetInteractionFurnitureFalse()
-    // {
-    //     _interactionFurniture = false;
-    // }
 
-    public bool GetInteractionFurniture()
+    private void CreateObj()
     {
-        return _interactionFurniture;
+        if (_currentTakenObjects == null)
+            return;
+        
+        _currentTakenObjects = Instantiate(_currentTakenObjects,positionObj.position, Quaternion.identity,parentObj);
+        _currentTakenObjects.name = _currentTakenObjects.name.Replace("(Clone)", "");
+        _currentTakenObjects.SetActive(true);
+        _isBusyHands = true;
     }
 
-    // private void OnEnable()
-    // {
-    //     EventBus.NotPressE += SetInteractionFurnitureFalse;
-    //     EventBus.PressE += SetInteractionFurnitureTrue;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.NotPressE -= SetInteractionFurnitureFalse;
-    //     EventBus.PressE -= SetInteractionFurnitureTrue;
-    // }
-    
+    private void DeleteObj()
+    {
+        if (_currentTakenObjects == null)
+            return;
+        
+        _currentTakenObjects.SetActive(false);
+        Destroy(_currentTakenObjects);
+        _currentTakenObjects = null;
+        _isBusyHands = false;
+    }
 }

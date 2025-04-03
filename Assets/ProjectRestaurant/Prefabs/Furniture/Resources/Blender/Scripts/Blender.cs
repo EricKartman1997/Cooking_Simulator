@@ -44,12 +44,13 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         EventBus.PressE -= CookingProcess;
     }
     
-    public GameObject GiveObj(ref GameObject obj) 
+    public GameObject GiveObj(ref GameObject giveObj) 
     {
-        obj.SetActive(false);
-        var cObj = obj;
-        Destroy(obj);
-        return cObj;
+        GameObject giveObjCopy = Instantiate(giveObj);
+        giveObjCopy.SetActive(false);
+        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
+        DeleteObj(giveObj);
+        return giveObjCopy;
     }
 
     public void AcceptObject(GameObject acceptObj)
@@ -79,6 +80,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         {
             Debug.LogWarning("В блендере нет места");
         }
+        Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
@@ -90,10 +92,10 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
 
     public void TurnOn()
     {
+        _ingredient1.SetActive(false);
+        _ingredient2.SetActive(false);
+        _ingredient3.SetActive(false);
         _isWork = true;
-        Destroy(_ingredient1);
-        Destroy(_ingredient2);
-        Destroy(_ingredient3);
         _animator.SetBool("Work", true);
         Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
@@ -101,6 +103,9 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     public void TurnOff()
     {
         _isWork = false;
+        Destroy(_ingredient1);
+        Destroy(_ingredient2);
+        Destroy(_ingredient3);
         _ingredient1 = null;
         _ingredient2 = null;
         _ingredient3 = null;
@@ -170,7 +175,7 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     {
         if (_isHeroikTrigger == true)
         {
-            if(!Heroik.IsBusyHands) // руки не заняты
+            if(_heroik.IsBusyHands == false) // руки не заняты
             {
                 if (_isWork)
                 {
@@ -268,4 +273,10 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         }
     }
     
+    private void DeleteObj(GameObject obj)
+    {
+        obj.SetActive(false);
+        Destroy(obj);
+        obj = null;
+    }
 }
