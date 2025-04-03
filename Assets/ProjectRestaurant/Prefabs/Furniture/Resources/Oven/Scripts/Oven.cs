@@ -6,37 +6,24 @@ using Object = UnityEngine.Object;
 
 public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
-    private GameObject _glassOn;
-    private GameObject _glassOff;
-    private GameObject _switchFirst;
-    private GameObject _switchSecond;
-    private GameObject _timer;
-    private Transform _timerPoint;
-    private Transform _timerParent;
-    
     private Dictionary<string, FromOven> _dictionaryProductName;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private Transform _positionResult; // сделать отдельный класс
     private Transform _parentResult;   // сделать отдельный класс
+    private OvenView _ovenView;
     
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
     private GameObject _ingredient;
     private GameObject _result;
 
-    public Oven(GameObject glassOn, GameObject glassOff, GameObject switchFirst, GameObject switchSecond, GameObject timer, Transform timerPoint, Transform timerParent, Dictionary<string, FromOven> dictionaryProductName, Heroik heroik, Transform positionResult, Transform parentResult)
+    public Oven(Dictionary<string, FromOven> dictionaryProductName, Heroik heroik, Transform positionResult, Transform parentResult,OvenView ovenView)
     {
-        _glassOn = glassOn;
-        _glassOff = glassOff;
-        _switchFirst = switchFirst;
-        _switchSecond = switchSecond;
-        _timer = timer;
-        _timerPoint = timerPoint;
-        _timerParent = timerParent;
         _dictionaryProductName = dictionaryProductName;
         _heroik = heroik;
         _positionResult = positionResult;
         _parentResult = parentResult;
+        _ovenView = ovenView;
         
         EventBus.PressE += CookingProcess;
         Debug.Log("Создать объект: Oven");
@@ -89,20 +76,13 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     public void TurnOn()
     {
         _isWork = true;
-        _glassOff.SetActive(false);
-        _glassOn.SetActive(true);
-        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
-        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
-        Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+        _ovenView.TurnOn();
     }
 
     public void TurnOff()
     {
         _isWork = false;
-        _glassOff.SetActive(true);
-        _glassOn.SetActive(false);
-        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
-        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _ovenView.TurnOff();
         _ingredient = null;
     }
     
@@ -174,6 +154,5 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
         TurnOff();
         CreateResult(obj);
     }
-
-
+    
 }

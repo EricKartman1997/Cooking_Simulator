@@ -10,14 +10,16 @@ public class OvenEnterRegion : MonoBehaviour
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
+    
     [SerializeField] private Transform positionResult;
     [SerializeField] private Transform parentResult;
     private Dictionary<string, FromOven> _dictionaryProductName;
     private Heroik _heroik;
     
     private Outline _outline;
-    private Oven script;
-    private bool isCreateOven = false;
+    private Oven _oven;
+    private OvenView _ovenView;
+    private bool _isCreateOven = false;
 
     [SerializeField] private ProductsContainer productsContainer;
     
@@ -39,16 +41,17 @@ public class OvenEnterRegion : MonoBehaviour
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            if (isCreateOven == false)
+            if (_isCreateOven == false)
             {
                 // в будущем сделать в фабрике
-                script = new Oven(glassOn,  glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent,_dictionaryProductName,_heroik,positionResult,parentResult);
-                script.HeroikIsTrigger();
-                isCreateOven = true;
+                _ovenView = new OvenView(glassOn, glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent);
+                _oven = new Oven(_dictionaryProductName,_heroik,positionResult,parentResult,_ovenView);
+                _oven.HeroikIsTrigger();
+                _isCreateOven = true;
             }
             else
             {
-                script.HeroikIsTrigger();
+                _oven.HeroikIsTrigger();
                 Debug.Log("Новый скрипт создан не был");
             }
             
@@ -56,14 +59,16 @@ public class OvenEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        script.HeroikIsTrigger();
+        _oven.HeroikIsTrigger();
         _heroik = null;
         _outline.OutlineWidth = 0f;
-        if (script.IsAllowDestroy())
+        if (_oven.IsAllowDestroy())
         {
-            script.Dispose();
-            script = null;
-            isCreateOven = false;
+            _ovenView.Dispose();
+            _ovenView = null;
+            _oven.Dispose();
+            _oven = null;
+            _isCreateOven = false;
             //Debug.Log("скрипт был удален");
         }
     }
