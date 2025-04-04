@@ -1,24 +1,29 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SuvideEnterRegion : MonoBehaviour
 {
-    [SerializeField] private ProductsContainer productsContainer;
-    private Animator _animator;
+    private float _timer = 0f;
+    private float _updateInterval = 0.1f;
     private Outline _outline;
-    private Suvide _script;
+    private Suvide _suvide;
+    private bool _isCreateSuvide = false;
     
-    // Initialize Suvide
+    // Initialize SuvideView
+    private Animator _animator;
     [SerializeField] private GameObject waterPrefab;
     [SerializeField] private GameObject switchTimePrefab;
     [SerializeField] private GameObject switchTemperPrefab;
     [SerializeField] private HelperTimer firstTimer;
     [SerializeField] private HelperTimer secondTimer;
     [SerializeField] private HelperTimer thirdTimer;
+    
+    // Initialize Suvide
+    
+    [SerializeField] private ProductsContainer productsContainer;
     private SuvidePoints _suvidePoints;
+    private SuvideView _suvideView;
     private Heroik _heroik;
-    private Dictionary<string, ObjsForDistribution> _recipes;
     
     // Initialize SuvidePoints
     [SerializeField] private Transform firstPointIngredient;
@@ -28,57 +33,68 @@ public class SuvideEnterRegion : MonoBehaviour
     [SerializeField] private Transform secondPointResult;
     [SerializeField] private Transform thirdPointResult;
 
-    private void Awake()
-    {
-        _recipes = new Dictionary<string, ObjsForDistribution>()
-        {
-            { productsContainer.Meat.name, productsContainer.BakedMeat.GetComponent<ObjsForDistribution>() },
-            { productsContainer.Fish.name, productsContainer.BakedFish.GetComponent<ObjsForDistribution>()}
-        };
-    }
-
     private void Start()
     {
         _animator = GetComponent<Animator>();
         //_animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
     }
+
+    private void Update()
+    {
+        _timer += Time.deltaTime;
     
+        if (_timer >= _updateInterval)
+        {
+            if (_suvide == null)
+                return;
+            
+            _timer = 0f;
+            _suvide.Update();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            if (!GetComponent<SuvidePoints>())
+            if (_isCreateSuvide == false)
             {
-                _suvidePoints = gameObject.AddComponent<SuvidePoints>();
-                _suvidePoints.Initialize(firstPointIngredient, secondPointIngredient, thirdPointIngredient, firstPointResult, secondPointResult, thirdPointResult);
-            }
-            if (!GetComponent<Suvide>())
-            {
-                _script = gameObject.AddComponent<Suvide>();
-                _script.Initialize( _animator, _heroik, firstTimer, secondTimer, thirdTimer,  switchTemperPrefab, switchTimePrefab, waterPrefab,_suvidePoints,_recipes);
+                _suvidePoints = new SuvidePoints(firstPointIngredient, secondPointIngredient, thirdPointIngredient,
+                    firstPointResult, secondPointResult, thirdPointResult);
+                _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, firstTimer, secondTimer,
+                    thirdTimer, _animator);
+                _suvide = new Suvide(_suvideView, _suvidePoints, _heroik, productsContainer);
+                _isCreateSuvide = true;
             }
             else
             {
                 Debug.Log("Новый скрипт создан не был");
             }
-            _script.HeroikIsTrigger();
+            _suvide.HeroikIsTrigger();
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<Heroik>())
         {
-            _script.HeroikIsTrigger();
+            _suvide.HeroikIsTrigger();
             _heroik = null;
             _outline.OutlineWidth = 0f;
-            if (_script.IsAllowDestroy())
+            if (_suvide.IsAllowDestroy())
             {
-                Destroy(_script);
-                Destroy(_suvidePoints);
-                Debug.Log("скрипт был удален");
+                _suvide.Dispose();
+                _suvide = null;
+            
+                _suvidePoints.Dispose();
+                _suvidePoints = null;
+            
+                _suvideView.Dispose();
+                _suvideView = null;
+                
+                _isCreateSuvide = false;
             }
         }
     }

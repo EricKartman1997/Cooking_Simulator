@@ -2,66 +2,57 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
+public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
     // Initialize
-    [SerializeField] private GameObject _waterPrefab;
-    [SerializeField] private GameObject _switchTimePrefab;
-    [SerializeField] private GameObject _switchTemperPrefab;
-    [SerializeField] private HelperTimer _firstTimer;
-    [SerializeField] private HelperTimer _secondTimer;
-    [SerializeField] private HelperTimer _thirdTimer;
-    [SerializeField]private SuvidePoints _suvidePoints;
-    [SerializeField]private Animator _animator; // добавить анимацию
-    [SerializeField]private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-    private Dictionary<string, ObjsForDistribution> _dictionaryRecipes;
+    private SuvideView _suvideView;
+    private SuvidePoints _suvidePoints;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private ProductsContainer _productsContainer;
     
-    [SerializeField]private GameObject _result1 = null;
-    [SerializeField]private GameObject _result2 = null;
-    [SerializeField]private GameObject _result3 = null;
-    [SerializeField]private GameObject _ingredient1 = null;
-    [SerializeField]private GameObject _ingredient2 = null;
-    [SerializeField]private GameObject _ingredient3 = null;
-    [SerializeField]private bool _isCookedResult1 = false;
-    [SerializeField]private bool _isCookedResult2 = false;
-    [SerializeField]private bool _isCookedResult3 = false;
-    [SerializeField]private bool _isReadyResult1 = false; 
-    [SerializeField]private bool _isReadyResult2 = false; 
-    [SerializeField]private bool _isReadyResult3 = false; 
+    private GameObject _result1 = null;
+    private GameObject _result2 = null;
+    private GameObject _result3 = null;
+    private GameObject _ingredient1 = null;
+    private GameObject _ingredient2 = null;
+    private GameObject _ingredient3 = null;
+    private bool _isCookedResult1 = false;
+    private bool _isCookedResult2 = false;
+    private bool _isCookedResult3 = false;
+    private bool _isReadyResult1 = false; 
+    private bool _isReadyResult2 = false; 
+    private bool _isReadyResult3 = false; 
     
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
-
-    public void Initialize(Animator animator,Heroik heroik,HelperTimer firstTimer,
-        HelperTimer secondTimer, HelperTimer thirdTimer, GameObject switchTemperPrefab,GameObject switchTimePrefab,
-        GameObject waterPrefab,SuvidePoints suvidePoints,Dictionary<string, ObjsForDistribution> recipes)
-    {
-        _animator = animator;
-        _heroik = heroik;
-        _firstTimer = firstTimer;
-        _secondTimer = secondTimer;
-        _thirdTimer = thirdTimer;
-        _switchTemperPrefab = switchTemperPrefab;
-        _switchTimePrefab = switchTimePrefab;
-        _waterPrefab = waterPrefab;
-        _suvidePoints = suvidePoints;
-        _dictionaryRecipes = recipes;
-    }
     
-    private void OnEnable()
+    public Suvide(SuvideView suvideView, SuvidePoints suvidePoints, Heroik heroik, ProductsContainer productsContainer)
     {
+        _suvideView = suvideView;
+        _suvidePoints = suvidePoints;
+        _heroik = heroik;
+        _productsContainer = productsContainer;
+        
         EventBus.PressE += CookingProcess;
+        Debug.Log("Создал объект: Suvide");
     }
 
-    private void OnDisable()
+    public void Dispose()
     {
         EventBus.PressE -= CookingProcess;
+        Debug.Log("У объекта вызван Dispose : SuvideView");
+    }
+
+    public void Update()
+    {
+        ChangeView();
     }
     
     public GameObject GiveObj(ref GameObject giveObj) 
     {
-        GameObject giveObjCopy = Instantiate(giveObj);
+        GameObject giveObjCopy = Object.Instantiate(giveObj);
         giveObjCopy.SetActive(false);
         giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
         DeleteObj(giveObj);
@@ -74,7 +65,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         {
 
             _ingredient1 = acceptObj;
-            _ingredient1 = Instantiate(_ingredient1, _suvidePoints.GetFirstPointIngredient().position, Quaternion.identity, _suvidePoints.GetFirstPointIngredient());
+            _ingredient1 = Object.Instantiate(_ingredient1, _suvidePoints.FirstPointIngredient.position, Quaternion.identity, _suvidePoints.FirstPointIngredient);
             _ingredient1.transform.localPosition = Vector3.zero;
             _ingredient1.transform.localRotation = Quaternion.identity;
             _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
@@ -83,7 +74,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         else if (_ingredient2 == null && _result2 == null)
         {
             _ingredient2 = acceptObj;
-            _ingredient2 = Instantiate(_ingredient2, _suvidePoints.GetSecondPointIngredient().position, Quaternion.identity, _suvidePoints.GetSecondPointIngredient());
+            _ingredient2 = Object.Instantiate(_ingredient2, _suvidePoints.SecondPointIngredient.position, Quaternion.identity, _suvidePoints.SecondPointIngredient);
             _ingredient2.transform.localPosition = Vector3.zero;
             _ingredient2.transform.localRotation = Quaternion.identity;
             _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
@@ -92,7 +83,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         else if (_ingredient3== null && _result3 == null)
         {
             _ingredient3 = acceptObj;
-            _ingredient3 = Instantiate(_ingredient3, _suvidePoints.GetThirdPointIngredient().position, Quaternion.identity, _suvidePoints.GetThirdPointIngredient());
+            _ingredient3 = Object.Instantiate(_ingredient3, _suvidePoints.ThirdPointIngredient.position, Quaternion.identity, _suvidePoints.ThirdPointIngredient);
             _ingredient3.transform.localPosition = Vector3.zero;
             _ingredient3.transform.localRotation = Quaternion.identity;
             _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
@@ -102,7 +93,7 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             Debug.Log("место под ингредиенты нет");
         }
-        Destroy(acceptObj);
+        Object.Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
@@ -111,11 +102,11 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             if (_isReadyResult1)
             {
-                _dictionaryRecipes.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     _result1 = readyObj.gameObject;
-                    _result1 = Instantiate(_result1, _suvidePoints.GetFirstPointResult().position , Quaternion.identity, _suvidePoints.GetFirstPointResult());
+                    _result1 = Object.Instantiate(_result1, _suvidePoints.FirstPointResult.position , Quaternion.identity, _suvidePoints.FirstPointResult);
                     _result1.transform.localPosition = Vector3.zero;
                     _result1.transform.localRotation = Quaternion.identity;
                     _result1.name = _result1.name.Replace("(Clone)", "");
@@ -130,11 +121,11 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             }
             else if (_isReadyResult2)
             {
-                _dictionaryRecipes.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     _result2 = readyObj.gameObject;
-                    _result2 = Instantiate(_result2, _suvidePoints.GetSecondPointResult().position , Quaternion.identity, _suvidePoints.GetSecondPointResult());
+                    _result2 = Object.Instantiate(_result2, _suvidePoints.SecondPointResult.position , Quaternion.identity, _suvidePoints.SecondPointResult);
                     _result2.transform.localPosition = Vector3.zero;
                     _result2.transform.localRotation = Quaternion.identity;
                     _result2.name = _result2.name.Replace("(Clone)", "");
@@ -149,11 +140,11 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             }
             else if (_isReadyResult3)
             {
-                _dictionaryRecipes.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     _result3 = readyObj.gameObject;
-                    _result3 = Instantiate(_result3, _suvidePoints.GetThirdPointResult().position , Quaternion.identity, _suvidePoints.GetThirdPointResult());
+                    _result3 = Object.Instantiate(_result3, _suvidePoints.ThirdPointResult.position , Quaternion.identity, _suvidePoints.ThirdPointResult);
                     _result3.transform.localPosition = Vector3.zero;
                     _result3.transform.localRotation = Quaternion.identity;
                     _result3.name = _result3.name.Replace("(Clone)", "");
@@ -183,24 +174,21 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             //_isWork = true;
             _isCookedResult1 = true;
-            //_animator.SetBool("Work", true);
-            Instantiate(_firstTimer.timer, _firstTimer.timerPoint.position, Quaternion.identity,_firstTimer.timerParent);
+            _suvideView.TurnOnFirstTimer();
             _isReadyResult1 = true;
         }
         else if (_ingredient2 != null && !_isCookedResult2)
         {
             _isWork = true;
             _isCookedResult2 = true;
-            //_animator.SetBool("Work", true);
-            Instantiate(_secondTimer.timer, _secondTimer.timerPoint.position, Quaternion.identity,_secondTimer.timerParent);
+            _suvideView.TurnOnSecondTimer();
             _isReadyResult2 = true;
         }
         else if (_ingredient3 != null && !_isCookedResult3)
         {
             _isWork = true;
             _isCookedResult3 = true;
-            //_animator.SetBool("Work", true);
-            Instantiate(_thirdTimer.timer, _thirdTimer.timerPoint.position, Quaternion.identity,_thirdTimer.timerParent);
+            _suvideView.TurnOnThirdTimer();
             _isReadyResult3 = true;
         }
         else
@@ -217,8 +205,8 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             _isCookedResult1 = false;
             _ingredient1.SetActive(false);
             _ingredient1 = null;
-            Destroy(_ingredient1);
-            //_animator.SetBool("Work", false);
+            Object.Destroy(_ingredient1);
+            _suvideView.TurnOff();
             _isReadyResult1 = false;
             
         }
@@ -228,8 +216,8 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             _isCookedResult2 = false;
             _ingredient2.SetActive(false);
             _ingredient2 = null;
-            Destroy(_ingredient2);
-            //_animator.SetBool("Work", false);
+            Object.Destroy(_ingredient2);
+            _suvideView.TurnOff();
             _isReadyResult2 = false;
         }
         else if (_isReadyResult3)
@@ -238,8 +226,8 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             _isCookedResult3 = false;
             _ingredient3.SetActive(false);
             _ingredient3 = null;
-            Destroy(_ingredient3);
-            //_animator.SetBool("Work", false);
+            Object.Destroy(_ingredient3);
+            _suvideView.TurnOff();
             _isReadyResult3 = false;
         }
         else
@@ -265,20 +253,15 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
     
     private void WorkingSuvide()
     {
-        _waterPrefab.SetActive(true);
-        _switchTemperPrefab.transform.rotation = Quaternion.Euler(45, -90, -90);
-        _switchTimePrefab.transform.rotation = Quaternion.Euler(175, -90, -90);
+        _suvideView.WorkingSuvide();
     }
     private void NotWorkingSuvide()
     {
-        _waterPrefab.SetActive(false);
-        _switchTemperPrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
-        _switchTimePrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
+        _suvideView.NotWorkingSuvide();
     }
-    
-    private void CookingProcess()
+
+    private void ChangeView()
     {
-        // переделать в отдельный метод
         if (_isCookedResult1 || _isCookedResult2 || _isCookedResult3)
         {
             _isWork = true;
@@ -289,6 +272,12 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
             _isWork = false;
             NotWorkingSuvide();
         }
+    }
+    
+    private void CookingProcess()
+    {
+        // переделать в отдельный метод
+
         
         if (_isHeroikTrigger == true)
         {
@@ -397,8 +386,8 @@ public class Suvide : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITu
     private void DeleteObj(GameObject obj)
     {
         obj.SetActive(false);
-        Destroy(obj);
+        Object.Destroy(obj);
         obj = null;
     }
-
+    
 }

@@ -13,7 +13,7 @@ public class OvenEnterRegion : MonoBehaviour
     
     [SerializeField] private Transform positionResult;
     [SerializeField] private Transform parentResult;
-    private Dictionary<string, FromOven> _dictionaryProductName;
+    [SerializeField] private ProductsContainer productsContainer;
     private Heroik _heroik;
     
     private Outline _outline;
@@ -21,18 +21,11 @@ public class OvenEnterRegion : MonoBehaviour
     private OvenView _ovenView;
     private bool _isCreateOven = false;
 
-    [SerializeField] private ProductsContainer productsContainer;
+
     
     void Start()
     {
         _outline = GetComponent<Outline>();
-        _dictionaryProductName = new Dictionary<string, FromOven>
-        {
-            { productsContainer.Meat.name, productsContainer.BakedMeat.GetComponent<FromOven>() },
-            { productsContainer.Fish.name, productsContainer.BakedFish.GetComponent<FromOven>()},
-            { productsContainer.Apple.name, productsContainer.BakedApple.GetComponent<FromOven>() },
-            { productsContainer.Orange.name, productsContainer.BakedOrange.GetComponent<FromOven>() }
-        };
     }
     
     private void OnTriggerEnter(Collider other)
@@ -45,7 +38,7 @@ public class OvenEnterRegion : MonoBehaviour
             {
                 // в будущем сделать в фабрике
                 _ovenView = new OvenView(glassOn, glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent);
-                _oven = new Oven(_dictionaryProductName,_heroik,positionResult,parentResult,_ovenView);
+                _oven = new Oven(productsContainer,_heroik,positionResult,parentResult,_ovenView);
                 _oven.HeroikIsTrigger();
                 _isCreateOven = true;
             }

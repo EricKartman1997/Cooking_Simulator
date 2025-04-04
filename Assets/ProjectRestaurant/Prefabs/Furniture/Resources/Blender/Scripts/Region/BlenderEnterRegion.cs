@@ -24,7 +24,7 @@ public class BlenderEnterRegion : MonoBehaviour
     [SerializeField] private Transform parentFood;
     [SerializeField] private Transform parentReadyFood;
 
-    private bool _createBlender = false;
+    private bool _isCreateBlender = false;
 
     void Start()
     {
@@ -40,12 +40,12 @@ public class BlenderEnterRegion : MonoBehaviour
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             
-            if (_createBlender == false)
+            if (_isCreateBlender == false)
             {
                 _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, parentFood, parentReadyFood);
                 _blenderView = new BlenderView(timer, timerPoint, timerParent, _animator);
                 _blender = new (_heroik, _blenderPoints, _blenderView, productsContainer);
-                _createBlender = true;
+                _isCreateBlender = true;
             }
             else
             {
@@ -73,7 +73,7 @@ public class BlenderEnterRegion : MonoBehaviour
                 _blenderView.Dispose();
                 _blenderView = null;
                 
-                _createBlender = false;
+                _isCreateBlender = false;
             }
         }
     }

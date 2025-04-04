@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
 {
-    private Dictionary<string, FromOven> _dictionaryProductName;
+    private ProductsContainer _productsContainer;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private Transform _positionResult; // сделать отдельный класс
     private Transform _parentResult;   // сделать отдельный класс
@@ -17,9 +17,9 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     private GameObject _ingredient;
     private GameObject _result;
 
-    public Oven(Dictionary<string, FromOven> dictionaryProductName, Heroik heroik, Transform positionResult, Transform parentResult,OvenView ovenView)
+    public Oven(ProductsContainer productsContainer, Heroik heroik, Transform positionResult, Transform parentResult,OvenView ovenView)
     {
-        _dictionaryProductName = dictionaryProductName;
+        _productsContainer = productsContainer;
         _heroik = heroik;
         _positionResult = positionResult;
         _parentResult = parentResult;
@@ -56,7 +56,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     {
         try
         {
-            _dictionaryProductName.TryGetValue(obj.name, out FromOven bakedObj);
+            _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
             if (bakedObj != null)
             {
                 _result = bakedObj.gameObject;

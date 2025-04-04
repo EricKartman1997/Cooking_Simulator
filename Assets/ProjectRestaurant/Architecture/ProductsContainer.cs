@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ProductsContainer: MonoBehaviour
 {
+    private void Awake()
+    {
+        InitializeDictionaries();
+    }
+
     [SerializeField] private Product apple;
     [SerializeField] private Product orange;
     [SerializeField] private GameObject lime;
@@ -31,8 +37,9 @@ public class ProductsContainer: MonoBehaviour
     [SerializeField] private List<GameObject> requiredFreshnessCocktail;
     [SerializeField] private List<GameObject> requiredWildBerryCocktail;
 
-
-
+    private Dictionary<string, ObjsForDistribution> _recipesForSuvide;
+    private Dictionary<string, FromOven> _recipesForOven;
+    
     // Свойства с публичным геттером и приватным сеттером
     public Product Apple => apple;
     public Product Orange => orange;
@@ -61,6 +68,27 @@ public class ProductsContainer: MonoBehaviour
     public List<GameObject> RequiredMixBakedFruit => requiredMixBakedFruit;
     public List<GameObject> RequiredFreshnessCocktail => requiredFreshnessCocktail;
     public List<GameObject> RequiredWildBerryCocktail => requiredWildBerryCocktail;
+    
+    public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
+
+    public Dictionary<string, FromOven> RecipesForOven => _recipesForOven;
+
+    private void InitializeDictionaries()
+    {
+        _recipesForSuvide = new Dictionary<string, ObjsForDistribution>()
+        {
+            { meat.name, bakedMeat.GetComponent<ObjsForDistribution>() },
+            { fish.name, bakedFish.GetComponent<ObjsForDistribution>()}
+        };
+        
+        _recipesForOven = new Dictionary<string, FromOven>()
+        {
+            { meat.name, bakedMeat.GetComponent<FromOven>() },
+            { fish.name, bakedFish.GetComponent<FromOven>() },
+            { apple.name, bakedApple.GetComponent<FromOven>() },
+            { orange.name, bakedOrange.GetComponent<FromOven>() }
+        };
+    }
 
 
 }
