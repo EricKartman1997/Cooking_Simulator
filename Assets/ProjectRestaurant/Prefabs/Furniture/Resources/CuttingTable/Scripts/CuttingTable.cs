@@ -2,20 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
+public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
 {
     // Initialize поля
-    private Animator _animator;
-    private GameObject _timer;
-    private Transform _timerPoint;
-    private Transform _timerParent;
+    private CuttingTablePoints _cuttingTablePoints;
+    private CuttingTableView _cuttingTableView;
     private ProductsContainer _productsContainer;
-    private Transform _positionIngredient1; // сделать отдельный класс
-    private Transform _positionIngredient2; // сделать отдельный класс
-    private Transform _parentIngredient;    // сделать отдельный класс
-    private Transform _positionResult;      // сделать отдельный класс
-    private Transform _parentResult;        // сделать отдельный класс
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     
     // не Initialize поля
@@ -24,35 +18,27 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
-    
-    public void Initialize(Animator animator,Heroik heroik,GameObject timer,Transform timerPoint,Transform timerParent,Transform positionIngredient1,Transform positionIngredient2,Transform parentIngredient,Transform positionResult,Transform parentResult,ProductsContainer objectsAndRecipes)
+
+    public CuttingTable(CuttingTablePoints cuttingTablePoints, CuttingTableView cuttingTableView, ProductsContainer productsContainer, Heroik heroik)
     {
-        _animator = animator;
+        _cuttingTablePoints = cuttingTablePoints;
+        _cuttingTableView = cuttingTableView;
+        _productsContainer = productsContainer;
         _heroik = heroik;
-        _timer = timer;
-        _timerPoint = timerPoint;
-        _timerParent = timerParent;
-        _positionIngredient1 = positionIngredient1;
-        _positionIngredient2 = positionIngredient2;
-        _parentIngredient = parentIngredient;
-        _positionResult = positionResult;
-        _parentResult = parentResult;
-        _productsContainer = objectsAndRecipes;
-    }
-    
-    private void OnEnable()
-    {
+        
         EventBus.PressE += CookingProcess;
+        Debug.Log("Создать объект: CuttingTable");
     }
 
-    private void OnDisable()
+    public void Dispose()
     {
         EventBus.PressE -= CookingProcess;
+        Debug.Log("У объекта вызван Dispose : CuttingTable");
     }
     
     public GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = Instantiate(giveObj);
+        GameObject giveObjCopy = Object.Instantiate(giveObj);
         giveObjCopy.SetActive(false);
         giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
         DeleteObj(giveObj);
@@ -64,14 +50,14 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         if (_ingredient1 == null)
         {
             _ingredient1 = acceptObj;
-            _ingredient1 = Instantiate(_ingredient1, _positionIngredient1.position, Quaternion.identity, _parentIngredient);
+            _ingredient1 = Object.Instantiate(_ingredient1, _cuttingTablePoints.PositionIngredient1.position, Quaternion.identity, _cuttingTablePoints.ParentIngredient);
             _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
             _ingredient1.SetActive(true);
         }
         else if (_ingredient2 == null)
         {
             _ingredient2 = acceptObj;
-            _ingredient2 = Instantiate(_ingredient2, _positionIngredient2.position, Quaternion.identity, _parentIngredient);
+            _ingredient2 = Object.Instantiate(_ingredient2, _cuttingTablePoints.PositionIngredient2.position, Quaternion.identity, _cuttingTablePoints.ParentIngredient);
             _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
             _ingredient2.SetActive(true);
         }
@@ -79,13 +65,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         {
             Debug.LogWarning("На нарезочном столе нет места");
         }
-        Destroy(acceptObj);
+        Object.Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
     {
         _result = obj;
-        _result = Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
+        _result = Object.Instantiate(_result, _cuttingTablePoints.PositionResult.position, Quaternion.identity, _cuttingTablePoints.ParentResult);
         _result.name = _result.name.Replace("(Clone)", "");
         _result.SetActive(true);
     }
@@ -95,18 +81,17 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
         _isWork = true;
         _ingredient1.SetActive(false);
         _ingredient2.SetActive(false);
-        _animator.SetBool("Work", true);
-        Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+        _cuttingTableView.TurnOn();
     }
     
     public void TurnOff()
     {
         _isWork = false;
-        Destroy(_ingredient1);
-        Destroy(_ingredient2);
+        Object.Destroy(_ingredient1);
+        Object.Destroy(_ingredient2);
         _ingredient1 = null;
         _ingredient2 = null;
-        _animator.SetBool("Work", false);
+        _cuttingTableView.TurnOff();
     }
 
     public bool IsAllowDestroy()
@@ -253,8 +238,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private void DeleteObj(GameObject obj)
     {
         obj.SetActive(false);
-        Destroy(obj);
+        Object.Destroy(obj);
         obj = null;
     }
-    
 }

@@ -6,8 +6,8 @@ public class Heroik : MonoBehaviour
     [SerializeField] private Transform positionObj;
     [SerializeField] private Transform parentObj;
     
-    [SerializeField] private GameObject _currentTakenObjects;
-    [SerializeField] private bool _isBusyHands = false; // руки не заняты
+    private GameObject _currentTakenObjects;
+    private bool _isBusyHands = false; // руки не заняты
     
     public GameObject CurrentTakenObjects => _currentTakenObjects;
     
