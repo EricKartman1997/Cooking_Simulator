@@ -2,51 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
+public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
 {
-     private GameObject _timer;
-     private Transform _timerPoint;
-     private Transform _timerParent;
-     
-     private Animator _animator;
+
      private Heroik _heroik = null; // только для объекта героя, а надо и другие...
      private BlenderPoints _blenderPoints;
+     private BlenderView _blenderView;
      private ProductsContainer _productsContainer;
     
-    [SerializeField] private GameObject _ingredient1 = null;
-    [SerializeField] private GameObject _ingredient2 = null;
-    [SerializeField] private GameObject _ingredient3 = null;
-    [SerializeField] private GameObject _result = null;
+    private GameObject _ingredient1 = null;
+    private GameObject _ingredient2 = null;
+    private GameObject _ingredient3 = null;
+    private GameObject _result = null;
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
     
-    
-    public void Initialize(GameObject timer,Heroik heroik, Transform timerPoint,Transform timerParent,
-        Animator animator,BlenderPoints blenderPoints, ProductsContainer productsContainer)
+    public Blender(Heroik heroik, BlenderPoints blenderPoints, BlenderView blenderView, ProductsContainer productsContainer)
     {
-        _timer = timer;
         _heroik = heroik;
-        _timerPoint = timerPoint;
-        _timerParent = timerParent;
-        _animator = animator;
         _blenderPoints = blenderPoints;
+        _blenderView = blenderView;
         _productsContainer = productsContainer;
+        
+        EventBus.PressE += CookingProcess;
+        Debug.Log("Создал объект: Blender");
     }
     
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
+    public void Dispose()
     {
         EventBus.PressE -= CookingProcess;
+        Debug.Log("У объекта вызван Dispose : Blender");
     }
     
     public GameObject GiveObj(ref GameObject giveObj) 
     {
-        GameObject giveObjCopy = Instantiate(giveObj);
+        GameObject giveObjCopy = Object.Instantiate(giveObj);
         giveObjCopy.SetActive(false);
         giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
         DeleteObj(giveObj);
@@ -58,21 +50,21 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         if (_ingredient1 == null)
         {
             _ingredient1 = acceptObj;
-            _ingredient1 = Instantiate(_ingredient1, _blenderPoints.FirstPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
+            _ingredient1 = Object.Instantiate(_ingredient1, _blenderPoints.FirstPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
             _ingredient1.SetActive(true);
         }
         else if (_ingredient2 == null)
         {
             _ingredient2 = acceptObj;
-            _ingredient2 = Instantiate(_ingredient2, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
+            _ingredient2 = Object.Instantiate(_ingredient2, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
             _ingredient2.SetActive(true);
         }
         else if (_ingredient3 == null)
         {
             _ingredient3 = acceptObj;
-            _ingredient3 = Instantiate(_ingredient3, _blenderPoints.ThirdPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
+            _ingredient3 = Object.Instantiate(_ingredient3, _blenderPoints.ThirdPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
             _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
             _ingredient3.SetActive(true);
         }
@@ -80,12 +72,12 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         {
             Debug.LogWarning("В блендере нет места");
         }
-        Destroy(acceptObj);
+        Object.Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
     {
-        _result = Instantiate(obj, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentReadyFood);
+        _result = Object.Instantiate(obj, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentReadyFood);
         _result.name = _result.name.Replace("(Clone)", "");
         _result.SetActive(true);
     }
@@ -96,20 +88,19 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
         _ingredient2.SetActive(false);
         _ingredient3.SetActive(false);
         _isWork = true;
-        _animator.SetBool("Work", true);
-        Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+        _blenderView.TurnOn();
     }
 
     public void TurnOff()
     {
         _isWork = false;
-        Destroy(_ingredient1);
-        Destroy(_ingredient2);
-        Destroy(_ingredient3);
+        Object.Destroy(_ingredient1);
+        Object.Destroy(_ingredient2);
+        Object.Destroy(_ingredient3);
         _ingredient1 = null;
         _ingredient2 = null;
         _ingredient3 = null;
-        _animator.SetBool("Work", false);
+        _blenderView.TurnOff();
     }
     
     public bool IsAllowDestroy()
@@ -276,7 +267,8 @@ public class Blender : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, IT
     private void DeleteObj(GameObject obj)
     {
         obj.SetActive(false);
-        Destroy(obj);
+        Object.Destroy(obj);
         obj = null;
     }
+    
 }

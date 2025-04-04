@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class BlenderPoints
+public class BlenderPoints : IDisposable
 {
     private readonly Transform _firstPoint;
     private readonly Transform _secondPoint;
@@ -15,6 +16,13 @@ public class BlenderPoints
         _thirdPoint = thirdPoint;
         _parentFood = parentFood;
         _parentReadyFood = parentReadyFood;
+        
+        Debug.Log("Создал объект: BlenderPoints");
+    }
+    
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : BlenderPoints");
     }
 
     public Transform FirstPoint => _firstPoint;
@@ -22,6 +30,5 @@ public class BlenderPoints
     public Transform ThirdPoint => _thirdPoint;
     public Transform ParentFood => _parentFood;
     public Transform ParentReadyFood => _parentReadyFood;
-
-
+    
 }

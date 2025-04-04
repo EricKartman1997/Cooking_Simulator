@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class BlenderEnterRegion : MonoBehaviour
 {
-    private Blender _script;
+    private Blender _blender;
     private Outline _outline;
     
     // для Blender
-    private Animator _animator;
     private Heroik _heroik = null;
     private BlenderPoints _blenderPoints;
+    private BlenderView _blenderView;
+    [SerializeField] private ProductsContainer productsContainer;
     
-    // для Blender
+    // для BlenderView
+    private Animator _animator;
     [SerializeField] private GameObject timer;
     [SerializeField] private Transform timerPoint;
     [SerializeField] private Transform timerParent;
-    [SerializeField] private ProductsContainer productsContainer;
     
     // для BlenderPoints
     [SerializeField] private Transform firstPoint;
@@ -23,7 +24,7 @@ public class BlenderEnterRegion : MonoBehaviour
     [SerializeField] private Transform parentFood;
     [SerializeField] private Transform parentReadyFood;
 
-    private bool _initBlenderPoints = false;
+    private bool _createBlender = false;
 
     void Start()
     {
@@ -39,23 +40,18 @@ public class BlenderEnterRegion : MonoBehaviour
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             
-            if (!GetComponent<Blender>())
+            if (_createBlender == false)
             {
-                if (_initBlenderPoints == false)
-                {
-                    _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, parentFood, parentReadyFood);
-                    _initBlenderPoints = true;
-                }
-                
-                _script = gameObject.AddComponent<Blender>();
-                _script.HeroikIsTrigger();
-                _script.Initialize(timer, _heroik,  timerPoint, timerParent, _animator, _blenderPoints,productsContainer);
+                _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, parentFood, parentReadyFood);
+                _blenderView = new BlenderView(timer, timerPoint, timerParent, _animator);
+                _blender = new (_heroik, _blenderPoints, _blenderView, productsContainer);
+                _createBlender = true;
             }
             else
             {
-                _script.HeroikIsTrigger();
                 Debug.Log("Новый скрипт создан не был");
             }
+            _blender.HeroikIsTrigger();
             
         }
     }
@@ -63,13 +59,21 @@ public class BlenderEnterRegion : MonoBehaviour
     {
         if (other.GetComponent<Heroik>())
         {
-            _script.HeroikIsTrigger();
+            _blender.HeroikIsTrigger();
             _heroik = null;
             _outline.OutlineWidth = 0f;
-            if (_script.IsAllowDestroy())
+            if (_blender.IsAllowDestroy())
             {
-                Destroy(_script);
-                Debug.Log("скрипты был удален");
+                _blender.Dispose();
+                _blender = null;
+            
+                _blenderPoints.Dispose();
+                _blenderPoints = null;
+            
+                _blenderView.Dispose();
+                _blenderView = null;
+                
+                _createBlender = false;
             }
         }
     }

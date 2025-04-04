@@ -37,6 +37,7 @@ public class CuttingTableEnterRegion : MonoBehaviour
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
+            
             if (_isCreateCuttingTable == false)
             {
                 _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,parentIngredient,positionResult,parentResult);
