@@ -36,19 +36,12 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     }
     public GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = Object.Instantiate(giveObj);
-        giveObjCopy.SetActive(false);
-        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
-        DeleteObj(giveObj);
-        return giveObjCopy;
+        return giveObj;
     }
 
     public void AcceptObject(GameObject obj)
     {
-        _ingredient = obj;
-        _ingredient = Object.Instantiate(_ingredient);
-        _ingredient.name = _ingredient.name.Replace("(Clone)", "");
-        _ingredient.SetActive(false);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, false);
         Object.Destroy(obj);
     }
     
@@ -59,10 +52,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
             _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
             if (bakedObj != null)
             {
-                _result = bakedObj.gameObject;
-                _result = Object.Instantiate(_result, _positionResult.position, Quaternion.identity, _parentResult);
-                _result.name = _result.name.Replace("(Clone)", "");
-                _result.SetActive(true);
+                _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,_positionResult, _parentResult );
             }
             else
             {
@@ -157,13 +147,6 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
         await Task.Delay(5000);
         TurnOff();
         CreateResult(obj);
-    }
-    
-    private void DeleteObj(GameObject obj)
-    {
-        obj.SetActive(false);
-        Object.Destroy(obj);
-        obj = null;
     }
     
 }

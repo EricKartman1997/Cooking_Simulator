@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-public class Garbage :MonoBehaviour, IAcceptObject
+public class Garbage : MonoBehaviour, IAcceptObject
 {
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;

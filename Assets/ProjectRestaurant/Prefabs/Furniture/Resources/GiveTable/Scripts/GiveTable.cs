@@ -67,20 +67,13 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = acceptObj;
-        _ingredient = Instantiate(_ingredient, _ingredientPoint.position, Quaternion.identity, _parentFood);
-        _ingredient.name = _ingredient.name.Replace("(Clone)", "");
-        _ingredient.SetActive(true);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood);
         Destroy(acceptObj);
     }
     
     public GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = Instantiate(giveObj);
-        giveObjCopy.SetActive(false);
-        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
-        DeleteObj(giveObj);
-        return giveObjCopy;
+        return giveObj;
     }
 
     public bool IsAllowDestroy()
@@ -95,13 +88,6 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     public void HeroikIsTrigger()
     {
         _isHeroikTrigger = !_isHeroikTrigger;
-    }
-
-    private void DeleteObj(GameObject obj)
-    {
-        obj.SetActive(false);
-        Destroy(obj);
-        obj = null;
     }
     
 }

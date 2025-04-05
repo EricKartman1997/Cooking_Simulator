@@ -26,11 +26,8 @@ public class Heroik : MonoBehaviour
     
     public GameObject GiveObjHands() // отдать объект из рук
     {
-        GameObject currentTakenObjectsCopy = Instantiate(_currentTakenObjects);
-        currentTakenObjectsCopy.SetActive(false);
-        currentTakenObjectsCopy.name = currentTakenObjectsCopy.name.Replace("(Clone)", "");
-        DeleteObj();
-        return currentTakenObjectsCopy;
+        _isBusyHands = false;
+        return _currentTakenObjects;
     }
     
     public bool CheckObjForReturn(List<GameObject> _unusableObjects) // проверка на отдачу объекта из рук по списку объектов
@@ -79,20 +76,7 @@ public class Heroik : MonoBehaviour
         if (_currentTakenObjects == null)
             return;
         
-        _currentTakenObjects = Instantiate(_currentTakenObjects,positionObj.position, Quaternion.identity,parentObj);
-        _currentTakenObjects.name = _currentTakenObjects.name.Replace("(Clone)", "");
-        _currentTakenObjects.SetActive(true);
+        _currentTakenObjects = StaticManagerWithoutZenject.ProductsFactory.GetProduct(_currentTakenObjects, positionObj, parentObj);
         _isBusyHands = true;
-    }
-
-    private void DeleteObj()
-    {
-        if (_currentTakenObjects == null)
-            return;
-        
-        _currentTakenObjects.SetActive(false);
-        Destroy(_currentTakenObjects);
-        _currentTakenObjects = null;
-        _isBusyHands = false;
     }
 }

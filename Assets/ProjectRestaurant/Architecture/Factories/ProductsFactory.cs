@@ -26,9 +26,24 @@ public class ProductsFactory
     
      private GameObject _rubbish;
 
+     public GameObject GetProduct(GameObject pref,Transform transform,Transform parent, bool setActive = true)
+     {
+         GameObject obj = Object.Instantiate(pref, transform.position, Quaternion.identity,parent);
+         obj.name = pref.name;
+         obj.SetActive(setActive);
+         return obj;
+     }
+     
+     public GameObject GetProduct(GameObject pref, bool setActive = true)
+     {
+         GameObject obj = Object.Instantiate(pref);
+         obj.name = pref.name;
+         obj.SetActive(setActive);
+         return obj;
+     }
     public GameObject GetApple(Transform transform,Transform parent)
     {
-        return Object.Instantiate(_apple.gameObject, transform.position, Quaternion.identity,parent);
+       return Object.Instantiate(_apple.gameObject, transform.position, Quaternion.identity,parent);
     }
     
     public GameObject GetOrange(Transform transform,Transform parent)

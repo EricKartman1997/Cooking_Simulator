@@ -6,11 +6,10 @@ using Object = UnityEngine.Object;
 
 public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
 {
-
-     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
-     private BlenderPoints _blenderPoints;
-     private BlenderView _blenderView;
-     private ProductsContainer _productsContainer;
+    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private BlenderPoints _blenderPoints;
+    private BlenderView _blenderView;
+    private ProductsContainer _productsContainer;
     
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
@@ -38,35 +37,22 @@ public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITur
     
     public GameObject GiveObj(ref GameObject giveObj) 
     {
-        GameObject giveObjCopy = Object.Instantiate(giveObj);
-        giveObjCopy.SetActive(false);
-        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
-        DeleteObj(giveObj);
-        return giveObjCopy;
+        return giveObj;
     }
 
     public void AcceptObject(GameObject acceptObj)
     {
         if (_ingredient1 == null)
         {
-            _ingredient1 = acceptObj;
-            _ingredient1 = Object.Instantiate(_ingredient1, _blenderPoints.FirstPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
-            _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
-            _ingredient1.SetActive(true);
+            _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood);
         }
         else if (_ingredient2 == null)
         {
-            _ingredient2 = acceptObj;
-            _ingredient2 = Object.Instantiate(_ingredient2, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
-            _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
-            _ingredient2.SetActive(true);
+            _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood);
         }
         else if (_ingredient3 == null)
         {
-            _ingredient3 = acceptObj;
-            _ingredient3 = Object.Instantiate(_ingredient3, _blenderPoints.ThirdPoint.transform.position, Quaternion.identity, _blenderPoints.ParentFood);
-            _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
-            _ingredient3.SetActive(true);
+            _ingredient3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood);
         }
         else
         {
@@ -77,9 +63,7 @@ public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITur
     
     public void CreateResult(GameObject obj)
     {
-        _result = Object.Instantiate(obj, _blenderPoints.SecondPoint.transform.position, Quaternion.identity, _blenderPoints.ParentReadyFood);
-        _result.name = _result.name.Replace("(Clone)", "");
-        _result.SetActive(true);
+        _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood);
     }
 
     public void TurnOn()
@@ -128,10 +112,7 @@ public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITur
         {
             return _productsContainer.WildBerryCocktail;
         }
-        else
-        {
-            return _productsContainer.Rubbish;
-        }
+        return _productsContainer.Rubbish;
     }
 
     public bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)
