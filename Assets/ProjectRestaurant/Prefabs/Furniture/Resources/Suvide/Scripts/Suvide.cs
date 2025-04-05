@@ -250,35 +250,23 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
     {
         _isHeroikTrigger = !_isHeroikTrigger;
     }
-    
-    private void WorkingSuvide()
-    {
-        _suvideView.WorkingSuvide();
-    }
-    private void NotWorkingSuvide()
-    {
-        _suvideView.NotWorkingSuvide();
-    }
 
     private void ChangeView()
     {
         if (_isCookedResult1 || _isCookedResult2 || _isCookedResult3)
         {
             _isWork = true;
-            WorkingSuvide();
+            _suvideView.WorkingSuvide();
         }
         else
         {
             _isWork = false;
-            NotWorkingSuvide();
+            _suvideView.NotWorkingSuvide();
         }
     }
     
     private void CookingProcess()
     {
-        // переделать в отдельный метод
-
-        
         if (_isHeroikTrigger == true)
         {
             if(_heroik.IsBusyHands == false) // руки не заняты
