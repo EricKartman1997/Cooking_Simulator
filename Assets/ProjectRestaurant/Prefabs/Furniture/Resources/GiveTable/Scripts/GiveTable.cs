@@ -67,7 +67,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood,true);
         Destroy(acceptObj);
     }
     

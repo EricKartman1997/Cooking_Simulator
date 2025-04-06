@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ public class ProductsContainer: MonoBehaviour
     private void Awake()
     {
         InitializeDictionaries();
+        StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);
+        StaticManagerWithoutZenject.ProductsFactory = new ProductsFactory(this);
     }
 
     [SerializeField] private Product apple;
@@ -40,6 +41,19 @@ public class ProductsContainer: MonoBehaviour
     private Dictionary<string, ObjsForDistribution> _recipesForSuvide;
     private Dictionary<string, FromOven> _recipesForOven;
     
+    [SerializeField] private GameObject appleDish;
+    [SerializeField] private GameObject orangeDish;
+    [SerializeField] private GameObject limeDish;
+    [SerializeField] private GameObject blueberryDish;
+    [SerializeField] private GameObject strawberryDish;
+    [SerializeField] private GameObject cherryDish;
+    
+    [SerializeField] private GameObject meatDish;
+    [SerializeField] private GameObject fishDish;
+    
+    [SerializeField] private GameObject defaultView;
+    [SerializeField] private GameObject otherView;
+    
     // Свойства с публичным геттером и приватным сеттером
     public Product Apple => apple;
     public Product Orange => orange;
@@ -72,6 +86,26 @@ public class ProductsContainer: MonoBehaviour
     public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
 
     public Dictionary<string, FromOven> RecipesForOven => _recipesForOven;
+    
+    public GameObject AppleDish => appleDish;
+
+    public GameObject OrangeDish => orangeDish;
+
+    public GameObject LimeDish => limeDish;
+
+    public GameObject BlueberryDish => blueberryDish;
+
+    public GameObject StrawberryDish => strawberryDish;
+
+    public GameObject CherryDish => cherryDish;
+
+    public GameObject MeatDish => meatDish;
+
+    public GameObject FishDish => fishDish;
+
+    public GameObject DefaultView => defaultView;
+
+    public GameObject OtherView => otherView;
 
     private void InitializeDictionaries()
     {

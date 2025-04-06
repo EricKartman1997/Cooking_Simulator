@@ -38,28 +38,20 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
     
     public GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = Object.Instantiate(giveObj);
-        giveObjCopy.SetActive(false);
-        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
-        DeleteObj(giveObj);
-        return giveObjCopy;
+        return giveObj;
     }
     
     public void AcceptObject(GameObject acceptObj)
     {
         if (_ingredient1 == null)
         {
-            _ingredient1 = acceptObj;
-            _ingredient1 = Object.Instantiate(_ingredient1, _cuttingTablePoints.PositionIngredient1.position, Quaternion.identity, _cuttingTablePoints.ParentIngredient);
-            _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
-            _ingredient1.SetActive(true);
+            _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
+                _cuttingTablePoints.ParentIngredient,true);
         }
         else if (_ingredient2 == null)
         {
-            _ingredient2 = acceptObj;
-            _ingredient2 = Object.Instantiate(_ingredient2, _cuttingTablePoints.PositionIngredient2.position, Quaternion.identity, _cuttingTablePoints.ParentIngredient);
-            _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
-            _ingredient2.SetActive(true);
+             _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
+                _cuttingTablePoints.ParentIngredient,true);
         }
         else
         {
@@ -70,10 +62,8 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
     
     public void CreateResult(GameObject obj)
     {
-        _result = obj;
-        _result = Object.Instantiate(_result, _cuttingTablePoints.PositionResult.position, Quaternion.identity, _cuttingTablePoints.ParentResult);
-        _result.name = _result.name.Replace("(Clone)", "");
-        _result.SetActive(true);
+        _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _cuttingTablePoints.PositionResult,
+            _cuttingTablePoints.ParentResult,true);
     }
     
     public void TurnOn()
@@ -119,10 +109,7 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
         {
             return _productsContainer.MixBakedFruit;
         }
-        else
-        {
-            return _productsContainer.Rubbish;
-        }
+        return _productsContainer.Rubbish;
     }
 
     public bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
@@ -233,12 +220,5 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
         await Task.Delay(3000);
         TurnOff();
         CreateResult(obj);
-    }
-    
-    private void DeleteObj(GameObject obj)
-    {
-        obj.SetActive(false);
-        Object.Destroy(obj);
-        obj = null;
     }
 }

@@ -52,7 +52,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
             _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
             if (bakedObj != null)
             {
-                _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,_positionResult, _parentResult );
+                _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,_positionResult, _parentResult,true );
             }
             else
             {

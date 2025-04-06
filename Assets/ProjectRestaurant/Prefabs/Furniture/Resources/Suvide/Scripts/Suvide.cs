@@ -52,42 +52,25 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
     
     public GameObject GiveObj(ref GameObject giveObj) 
     {
-        GameObject giveObjCopy = Object.Instantiate(giveObj);
-        giveObjCopy.SetActive(false);
-        giveObjCopy.name = giveObjCopy.name.Replace("(Clone)", "");
-        DeleteObj(giveObj);
-        return giveObjCopy;
+        return giveObj;
     }
     
     public void AcceptObject(GameObject acceptObj) 
     {
         if (_ingredient1 == null && _result1 == null)
         {
-
-            _ingredient1 = acceptObj;
-            _ingredient1 = Object.Instantiate(_ingredient1, _suvidePoints.FirstPointIngredient.position, Quaternion.identity, _suvidePoints.FirstPointIngredient);
-            _ingredient1.transform.localPosition = Vector3.zero;
-            _ingredient1.transform.localRotation = Quaternion.identity;
-            _ingredient1.name = _ingredient1.name.Replace("(Clone)", "");
-            _ingredient1.SetActive(true);
+            _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.FirstPointIngredient,
+                _suvidePoints.FirstPointIngredient, true,true);
         }
         else if (_ingredient2 == null && _result2 == null)
         {
-            _ingredient2 = acceptObj;
-            _ingredient2 = Object.Instantiate(_ingredient2, _suvidePoints.SecondPointIngredient.position, Quaternion.identity, _suvidePoints.SecondPointIngredient);
-            _ingredient2.transform.localPosition = Vector3.zero;
-            _ingredient2.transform.localRotation = Quaternion.identity;
-            _ingredient2.name = _ingredient2.name.Replace("(Clone)", "");
-            _ingredient2.SetActive(true);
+            _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.SecondPointIngredient,
+                _suvidePoints.SecondPointIngredient, true,true);
         }
         else if (_ingredient3== null && _result3 == null)
         {
-            _ingredient3 = acceptObj;
-            _ingredient3 = Object.Instantiate(_ingredient3, _suvidePoints.ThirdPointIngredient.position, Quaternion.identity, _suvidePoints.ThirdPointIngredient);
-            _ingredient3.transform.localPosition = Vector3.zero;
-            _ingredient3.transform.localRotation = Quaternion.identity;
-            _ingredient3.name = _ingredient3.name.Replace("(Clone)", "");
-            _ingredient3.SetActive(true);
+            _ingredient3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.ThirdPointIngredient,
+                _suvidePoints.ThirdPointIngredient, true,true);
         }
         else
         {
@@ -105,13 +88,8 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
-                    _result1 = readyObj.gameObject;
-                    _result1 = Object.Instantiate(_result1, _suvidePoints.FirstPointResult.position , Quaternion.identity, _suvidePoints.FirstPointResult);
-                    _result1.transform.localPosition = Vector3.zero;
-                    _result1.transform.localRotation = Quaternion.identity;
-                    _result1.name = _result1.name.Replace("(Clone)", "");
-                    _result1.SetActive(true);
-                    //_isReadyResult1 = false;
+                    _result1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.FirstPointResult,
+                        _suvidePoints.FirstPointResult, true,true);
                 }
                 else
                 {
@@ -124,13 +102,8 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
-                    _result2 = readyObj.gameObject;
-                    _result2 = Object.Instantiate(_result2, _suvidePoints.SecondPointResult.position , Quaternion.identity, _suvidePoints.SecondPointResult);
-                    _result2.transform.localPosition = Vector3.zero;
-                    _result2.transform.localRotation = Quaternion.identity;
-                    _result2.name = _result2.name.Replace("(Clone)", "");
-                    _result2.SetActive(true);
-                    //_isReadyResult2 = false;
+                    _result2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.SecondPointResult,
+                        _suvidePoints.SecondPointResult, true,true);
                 }
                 else
                 {
@@ -143,13 +116,8 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
-                    _result3 = readyObj.gameObject;
-                    _result3 = Object.Instantiate(_result3, _suvidePoints.ThirdPointResult.position , Quaternion.identity, _suvidePoints.ThirdPointResult);
-                    _result3.transform.localPosition = Vector3.zero;
-                    _result3.transform.localRotation = Quaternion.identity;
-                    _result3.name = _result3.name.Replace("(Clone)", "");
-                    _result3.SetActive(true);
-                    //_isReadyResult3 = false;
+                    _result3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.ThirdPointResult,
+                        _suvidePoints.ThirdPointResult, true,true);
                 }
                 else
                 {
@@ -369,13 +337,6 @@ public class Suvide : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITurn
         await Task.Delay(10000);
         CreateResult(obj);
         TurnOff();
-    }
-    
-    private void DeleteObj(GameObject obj)
-    {
-        obj.SetActive(false);
-        Object.Destroy(obj);
-        obj = null;
     }
     
 }

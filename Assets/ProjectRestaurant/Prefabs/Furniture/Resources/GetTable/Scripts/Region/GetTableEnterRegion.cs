@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class GetTableEnterRegion : MonoBehaviour
 {
-    [SerializeField] private GameObject objectOnTheTableView;
-    [SerializeField] private GameObject objectOnTheTable;
+    [SerializeField] private GetTableConfig getTableConfig;
+    [SerializeField] private Transform parentViewDish;
+    [SerializeField] private Transform parentViewTable;
     
     private Outline _outline;
     private Heroik _heroik;
@@ -12,7 +13,8 @@ public class GetTableEnterRegion : MonoBehaviour
     void Start()
     {
         _outline = GetComponent<Outline>();
-        objectOnTheTableView.SetActive(true);
+        StaticManagerWithoutZenject.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
+        StaticManagerWithoutZenject.ViewFactory.GetViewTable(getTableConfig.ViewTable,parentViewTable);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -21,7 +23,7 @@ public class GetTableEnterRegion : MonoBehaviour
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
             script = gameObject.AddComponent<GetTable>();
-            script.Initialize(objectOnTheTable, _heroik);
+            script.Initialize(_heroik,getTableConfig);
         }
     }
 

@@ -2,5 +2,6 @@
 // при внедрении Zenject изменить!!!
 public static class StaticManagerWithoutZenject
 {
-    public static ProductsFactory ProductsFactory = new ProductsFactory();
+    public static ProductsFactory ProductsFactory;
+    public static ViewFactory ViewFactory;
 }

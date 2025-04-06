@@ -36,10 +36,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _currentDish = acceptObj;
-        _currentDish = Instantiate(_currentDish, _pointDish.position, Quaternion.identity, _pointDish);
-        _currentDish.name = _currentDish.name.Replace("(Clone)", "");
-        _currentDish.SetActive(true);
+        _currentDish = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _pointDish, _pointDish,true);
         Destroy(acceptObj);
     }
 

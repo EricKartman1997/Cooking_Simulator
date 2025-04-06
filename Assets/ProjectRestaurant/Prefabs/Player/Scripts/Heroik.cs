@@ -76,7 +76,7 @@ public class Heroik : MonoBehaviour
         if (_currentTakenObjects == null)
             return;
         
-        _currentTakenObjects = StaticManagerWithoutZenject.ProductsFactory.GetProduct(_currentTakenObjects, positionObj, parentObj);
+        _currentTakenObjects = StaticManagerWithoutZenject.ProductsFactory.GetProduct(_currentTakenObjects, positionObj, parentObj, true);
         _isBusyHands = true;
     }
 }

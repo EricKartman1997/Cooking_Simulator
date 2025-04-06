@@ -4,4 +4,5 @@ using UnityEngine;
 public class HeroikConfig : ScriptableObject
 {
     [field: SerializeField] public MoveConfig MoveConfig { get; private set; }
+    
 }

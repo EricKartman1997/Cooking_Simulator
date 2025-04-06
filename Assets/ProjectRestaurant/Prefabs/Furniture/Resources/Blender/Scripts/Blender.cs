@@ -44,15 +44,15 @@ public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITur
     {
         if (_ingredient1 == null)
         {
-            _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood);
+            _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
         }
         else if (_ingredient2 == null)
         {
-            _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood);
+            _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
         }
         else if (_ingredient3 == null)
         {
-            _ingredient3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood);
+            _ingredient3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
         }
         else
         {
@@ -63,7 +63,7 @@ public class Blender : IDisposable, IGiveObj, IAcceptObject, ICreateResult, ITur
     
     public void CreateResult(GameObject obj)
     {
-        _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood);
+        _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
     }
 
     public void TurnOn()
