@@ -10,6 +10,8 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private List<AssetReference> rawFoodList;
     [SerializeField] private List<AssetReference> cookedFoodList;
     [SerializeField] private List<AssetReference> otherFoodList;
+    [SerializeField] private List<AssetReference> viewDish;
+    [SerializeField] private List<AssetReference> castomsObjects;
     [SerializeField] private Slider progressSlider;
     
     private AssetReferencesDisposer _assetReferencesDisposer;
@@ -18,7 +20,7 @@ public class Bootstrap : MonoBehaviour
     
     private void Awake()
     {
-        _totalAssetsToLoad = rawFoodList.Count + cookedFoodList.Count + otherFoodList.Count;
+        _totalAssetsToLoad = rawFoodList.Count + cookedFoodList.Count + otherFoodList.Count + viewDish.Count + castomsObjects.Count;
         _loadedAssetsCount = 0;
         
         if (progressSlider != null)
@@ -28,7 +30,7 @@ public class Bootstrap : MonoBehaviour
             progressSlider.value = 0;
         }
         
-        _assetReferencesDisposer = new AssetReferencesDisposer(rawFoodList, cookedFoodList, otherFoodList);
+        _assetReferencesDisposer = new AssetReferencesDisposer(rawFoodList, cookedFoodList, otherFoodList,viewDish,castomsObjects);
         StartCoroutine(LoadAssetsWithProgress());
     }
     
