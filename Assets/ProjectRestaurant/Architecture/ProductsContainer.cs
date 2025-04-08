@@ -8,6 +8,7 @@ public class ProductsContainer: MonoBehaviour
         InitializeDictionaries();
         StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);
         StaticManagerWithoutZenject.ProductsFactory = new ProductsFactory(this);
+        StaticManagerWithoutZenject.HelperScriptFactory = new HelperScriptFactory();
     }
 
     [SerializeField] private Product apple;

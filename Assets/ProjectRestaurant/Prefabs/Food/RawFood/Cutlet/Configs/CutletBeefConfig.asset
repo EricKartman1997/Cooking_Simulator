@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1f58704a8aad14facbe89b3cbdca79, type: 3}
+  m_Name: CutletBeefConfig
+  m_EditorClassIdentifier: 
+  <CurrentStateRoasting>k__BackingField: 0
+  <RawStateSettings>k__BackingField:
+    <RawTimeCooking>k__BackingField: 4
+    <RawTimeRemaining>k__BackingField: 0
+    <RawMaterial>k__BackingField: {fileID: 4874126678125670354, guid: 2fbd1e344117334459242a58b7dbd4d7, type: 3}
+  <MediumStateSettings>k__BackingField:
+    <MediumTimeCooking>k__BackingField: 5
+    <MediumTimeRemaining>k__BackingField: 0
+    <MediumMaterial>k__BackingField: {fileID: 7349505248350475205, guid: eacb9e7da8cc37d40a767a4222417989, type: 3}
+  <BurnStateSettings>k__BackingField:
+    <BurnTimeCooking>k__BackingField: 6
+    <BurnTimeRemaining>k__BackingField: 0
+    <BurnMaterial>k__BackingField: {fileID: 2095746033256026009, guid: 86dd60f739189304ea1c9492b459f1d2, type: 3}

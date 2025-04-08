@@ -10,7 +10,6 @@ public class GetTable : MonoBehaviour, IGiveObj
     {
         _getTableConfig = getTableConfig;
         _heroik = heroik;
-
         
         _objectOnTheTable = StaticManagerWithoutZenject.ProductsFactory.GetProductRef(_getTableConfig.GiveFood);
     }
