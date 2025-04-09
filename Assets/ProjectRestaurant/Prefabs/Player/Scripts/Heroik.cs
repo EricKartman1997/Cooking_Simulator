@@ -19,6 +19,12 @@ public class Heroik : MonoBehaviour
     }
     public void ActiveObjHands(GameObject objTable) // взять объект в руки
     {
+        if (_isBusyHands == true)
+        {
+            Debug.LogWarning("Руки заняты");
+            return;
+        }
+        
         _currentTakenObjects = objTable;
         CreateObj();
         Destroy(objTable); // надо переделать
@@ -26,6 +32,12 @@ public class Heroik : MonoBehaviour
     
     public GameObject GiveObjHands() // отдать объект из рук
     {
+        if (_isBusyHands == true)
+        {
+            Debug.LogWarning("Руки пустые");
+            return null;
+        }
+        
         _isBusyHands = false;
         return _currentTakenObjects;
     }
