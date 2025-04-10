@@ -20,8 +20,6 @@ public class OvenEnterRegion : MonoBehaviour
     private Oven _oven;
     private OvenView _ovenView;
     private bool _isCreateOven = false;
-
-
     
     void Start()
     {
@@ -52,18 +50,21 @@ public class OvenEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        _oven.HeroikIsTrigger();
-        _heroik = null;
-        _outline.OutlineWidth = 0f;
-        if (_oven.IsAllowDestroy())
+        if (other.GetComponent<Heroik>())
         {
-            _ovenView.Dispose();
-            _ovenView = null;
+            _oven.HeroikIsTrigger();
+            _heroik = null;
+            _outline.OutlineWidth = 0f;
+            if (_oven.IsAllowDestroy())
+            {
+                _ovenView.Dispose();
+                _ovenView = null;
             
-            _oven.Dispose();
-            _oven = null;
+                _oven.Dispose();
+                _oven = null;
             
-            _isCreateOven = false;
+                _isCreateOven = false;
+            }
         }
     }
 }

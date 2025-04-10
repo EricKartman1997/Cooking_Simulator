@@ -9,9 +9,11 @@ public class MediumState : StateRosting
     public override void Enter()
     {
         base.Enter();
+        if(Cutlet.IsNewCutlet == true)
+            Cutlet.TimeRemaining = Cutlet.Config.MediumStateSettings.MediumTimeRemaining;
+        
         Cutlet.Roasting = EnumRoasting.Medium;
         Cutlet.TimeCooking = Cutlet.Config.MediumStateSettings.MediumTimeCooking;
-        Cutlet.TimeRemaining = Cutlet.Config.MediumStateSettings.MediumTimeRemaining;
         Cutlet.Material = Cutlet.Config.MediumStateSettings.MediumMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
     }

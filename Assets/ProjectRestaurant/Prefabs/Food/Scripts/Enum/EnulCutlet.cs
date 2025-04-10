@@ -3,7 +3,7 @@ public enum EnumRoasting
     Uncertain,
     Raw,
     Medium,
-    Burnt,
+    Burn,
     Fire
 
 }

@@ -9,7 +9,7 @@ public class BurningState : StateRosting
     public override void Enter()
     {
         base.Enter();
-        Cutlet.Roasting = EnumRoasting.Burnt;
+        Cutlet.Roasting = EnumRoasting.Burn;
         Cutlet.TimeCooking = Cutlet.Config.BurnStateSettings.BurnTimeCooking;
         Cutlet.TimeRemaining = Cutlet.Config.BurnStateSettings.BurnTimeRemaining;
         Cutlet.Material = Cutlet.Config.BurnStateSettings.BurnMaterial;

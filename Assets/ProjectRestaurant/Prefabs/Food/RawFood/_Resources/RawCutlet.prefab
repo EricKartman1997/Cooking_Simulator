@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5222669078267679045}
   - component: {fileID: 860117563720048914}
   - component: {fileID: 283514743505053260}
+  - component: {fileID: 2737531745871302357}
   m_Layer: 0
   m_Name: RawCutlet
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 119433140233496020}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.986, y: 0.5793, z: 0.016}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -96,4 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8efb2d9eb71b54d87c62458b73371e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cutletConfigs: {fileID: 11400000, guid: 41cd1f9bb2debc4498ed256530ad469e, type: 2}
+  cutletConfig: {fileID: 11400000, guid: 41cd1f9bb2debc4498ed256530ad469e, type: 2}
+  _roasting: 0
+  _timeCooking: 0
+  _timeRemaining: 0
+  _isOnStove: 0
+--- !u!114 &2737531745871302357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119433140233496020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702d6185ade1f2f4e85f24d43fe71565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

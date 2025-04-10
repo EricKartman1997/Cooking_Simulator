@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1299876639713050148}
   - component: {fileID: 6137002386206086583}
   - component: {fileID: 731968416830012630}
+  - component: {fileID: -6540455362392714311}
   m_Layer: 0
   m_Name: BurnCutlet
   m_TagString: Untagged
@@ -27,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6390352251767685104}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.7005088, y: -0.00000023841858, z: -2.1201153}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -96,9 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8efb2d9eb71b54d87c62458b73371e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutletConfig: {fileID: 0}
+  cutletConfig: {fileID: 11400000, guid: 75901e47f691b874fad7d117ab8163fc, type: 2}
   _roasting: 0
   _timeCooking: 0
   _timeRemaining: 0
   _isOnStove: 0
-  _isFire: 0
+--- !u!114 &-6540455362392714311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6390352251767685104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702d6185ade1f2f4e85f24d43fe71565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

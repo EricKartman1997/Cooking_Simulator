@@ -6,7 +6,7 @@ public class Heroik : MonoBehaviour
     [SerializeField] private Transform positionObj;
     [SerializeField] private Transform parentObj;
     
-    private GameObject _currentTakenObjects;
+    [SerializeField] private GameObject _currentTakenObjects;
     private bool _isBusyHands = false; // руки не заняты
     
     public GameObject CurrentTakenObjects => _currentTakenObjects;
@@ -25,14 +25,42 @@ public class Heroik : MonoBehaviour
             return;
         }
         
+        if (objTable == null)
+        {
+            Debug.LogWarning("Принимаемый объект пуст");
+            return;
+        }
+        
         _currentTakenObjects = objTable;
         CreateObj();
         Destroy(objTable); // надо переделать
     }
     
-    public GameObject GiveObjHands() // отдать объект из рук
+    public void AcceptProductWithTimeRemaining(GameObject objTable) 
     {
         if (_isBusyHands == true)
+        {
+            Debug.LogWarning("Руки заняты");
+            return;
+        }
+
+        if (objTable == null)
+        {
+            Debug.LogWarning("Принимаемый объект пуст");
+            return;
+        }
+
+        BufferCutlet bufferCutlet = new BufferCutlet(objTable.GetComponent<IForStove>().TimeRemaining);
+        
+        _currentTakenObjects = StaticManagerWithoutZenject.ProductsFactory.GetProduct(objTable, positionObj, parentObj, true);// переделать
+        _currentTakenObjects.GetComponent<Cutlet>().UpdateTime(bufferCutlet.TimeRemaining);
+        _isBusyHands = true;
+        Destroy(objTable); // надо переделать
+    }
+    
+    public GameObject GiveObjHands() // отдать объект из рук
+    {
+        if (_isBusyHands == false)
         {
             Debug.LogWarning("Руки пустые");
             return null;
@@ -42,14 +70,14 @@ public class Heroik : MonoBehaviour
         return _currentTakenObjects;
     }
     
-    public bool CheckObjForReturn(List<GameObject> _unusableObjects) // проверка на отдачу объекта из рук по списку объектов
+    public bool CheckObjForReturn(List<GameObject> unusableObjects) // проверка на отдачу объекта из рук по списку объектов
     {
-        List<string> _unusableObjectsNames = new List<string>();
-        foreach (var food in _unusableObjects)
+        List<string> unusableObjectsNames = new List<string>();
+        foreach (var food in unusableObjects)
         {
-            _unusableObjectsNames.Add(food.name); // Используем имя объекта
+            unusableObjectsNames.Add(food.name); // Используем имя объекта
         }
-        if (_unusableObjectsNames.Contains(_currentTakenObjects.name))
+        if (unusableObjectsNames.Contains(_currentTakenObjects.name))
         {
             Debug.Log("Сработал false");
             return false;
@@ -57,7 +85,7 @@ public class Heroik : MonoBehaviour
         return true;
     }
     
-    public bool CheckObjForReturn(List<Type> _unusableObjects) // проверка на отдачу объекта из рук по компонентам
+    public bool CheckObjForReturn(List<Type> unusableObjects) // проверка на отдачу объекта из рук по компонентам
     {
         // Получаем все компоненты на объекте
         Component[] components = _currentTakenObjects.GetComponents<Component>();
@@ -67,10 +95,10 @@ public class Heroik : MonoBehaviour
         foreach (Component component in components)
         {
             // Если тип компонента содержится в списке _unusableObjects
-            if (_unusableObjects.Contains(component.GetType()))
+            if (unusableObjects.Contains(component.GetType()))
             {
                 count++;
-                if (count == _unusableObjects.Count)
+                if (count == unusableObjects.Count)
                 {
                     //Debug.Log("На объекте найдены все компоненты");
                     return true;

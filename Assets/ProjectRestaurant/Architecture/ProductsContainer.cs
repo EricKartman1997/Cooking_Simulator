@@ -28,9 +28,12 @@ public class ProductsContainer: MonoBehaviour
     
     [SerializeField] private Product meat;
     [SerializeField] private Product fish;
+    [SerializeField] private Cutlet rawCutlet;
     
     [SerializeField] private Product bakedMeat;
     [SerializeField] private Product bakedFish;
+    [SerializeField] private Cutlet mediumCutlet;
+    [SerializeField] private Cutlet burnCutlet;
     
     [SerializeField] private GameObject rubbish;
 
@@ -73,9 +76,12 @@ public class ProductsContainer: MonoBehaviour
     
     public Product Meat => meat;
     public Product Fish => fish;
+    public Cutlet RawCutlet => rawCutlet;
     
     public Product BakedMeat => bakedMeat;
     public Product BakedFish => bakedFish;
+    public Cutlet BurnCutlet => burnCutlet;
+    public Cutlet MediumCutlet => mediumCutlet;
     
     public GameObject Rubbish => rubbish;
 

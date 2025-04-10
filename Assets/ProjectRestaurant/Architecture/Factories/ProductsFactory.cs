@@ -10,6 +10,23 @@ public class ProductsFactory
         _productsContainer = productsContainer;
     }
 
+    public GameObject GetCutlet(EnumRoasting roasting,Transform transform,Transform parent)
+    {
+        switch (roasting)
+        {
+            case EnumRoasting.Raw:
+                return GetRawCutlet(transform, parent);
+            
+            case EnumRoasting.Medium:
+                return GetMediumCutlet(transform, parent);
+            
+            case EnumRoasting.Burn:
+                return GetBurnCutlet(transform, parent);
+        }
+
+        return null;
+    }
+    
     public GameObject GetProduct(GameObject pref,Transform transform,Transform parent, bool setActive = true)
      {
          GameObject obj = Object.Instantiate(pref, transform.position, Quaternion.identity,parent);
@@ -175,4 +192,16 @@ public class ProductsFactory
     // {
     //     return Object.Instantiate(_rubbish, transform.position, Quaternion.identity, parent);
     // }
+    public GameObject GetRawCutlet(Transform transform, Transform parent)
+    {
+        return Object.Instantiate(_productsContainer.RawCutlet, transform.position, Quaternion.identity, parent).gameObject;
+    }
+    public GameObject GetMediumCutlet(Transform transform, Transform parent)
+    {
+        return Object.Instantiate(_productsContainer.MediumCutlet, transform.position, Quaternion.identity, parent).gameObject;
+    }
+    public GameObject GetBurnCutlet(Transform transform, Transform parent)
+    {
+        return Object.Instantiate(_productsContainer.BurnCutlet, transform.position, Quaternion.identity, parent).gameObject;
+    }
 }

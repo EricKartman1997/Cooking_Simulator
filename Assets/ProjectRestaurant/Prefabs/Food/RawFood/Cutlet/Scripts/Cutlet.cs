@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Cutlet : MonoBehaviour
+public class Cutlet : MonoBehaviour,IForStove
 {
     private CutletStateMachine _cutletStateMachine;
     
@@ -11,8 +11,9 @@ public class Cutlet : MonoBehaviour
     [SerializeField]private EnumRoasting _roasting;
     [SerializeField]private float _timeCooking;
     [SerializeField]private float _timeRemaining;
-    [SerializeField]private bool _isOnStove = false;
+    [SerializeField]private bool _isOnStove;
     private bool _isFire;
+    [SerializeField]private bool _isNewCutlet = true;
     
     public Material Material
     {
@@ -54,11 +55,22 @@ public class Cutlet : MonoBehaviour
         get => _isFire;
         set => _isFire = value;
     }
+    
+    public bool IsNewCutlet
+    {
+        get => _isNewCutlet;
+        set => _isNewCutlet = value;
+    }
 
     public void Delete()
     {
         Destroy(gameObject);
         Debug.Log("котлета сгорела");
+    }
+    
+    public void UpdateTime(float timeRemaining)
+    {
+        _timeRemaining = timeRemaining;
     }
 
     private void Awake()

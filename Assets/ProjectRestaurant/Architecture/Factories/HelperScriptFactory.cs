@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HelperScriptFactory
 {
     // Stove
-    public StovePoints GetStovePoint()
+    public StovePoints GetStovePoint(Transform positionRawFood, Transform parentRawFood, Transform positionReadyFood, Transform parentReadyFood)
     {
-        StovePoints stovePoints = new StovePoints();
+        StovePoints stovePoints = new StovePoints(positionRawFood, parentRawFood, positionReadyFood, parentReadyFood);
         return stovePoints;
     }
     

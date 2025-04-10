@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5920404539644508296}
   - component: {fileID: 7344814128472170029}
   - component: {fileID: 9171163328990671768}
+  - component: {fileID: -3801322021321389285}
   m_Layer: 0
   m_Name: MediumCutlet
   m_TagString: Untagged
@@ -96,9 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8efb2d9eb71b54d87c62458b73371e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutletConfig: {fileID: 0}
+  cutletConfig: {fileID: 11400000, guid: 39b9d7d0a7ec5d048bc590ab18bcf58a, type: 2}
   _roasting: 0
   _timeCooking: 0
   _timeRemaining: 0
   _isOnStove: 0
-  _isFire: 0
+--- !u!114 &-3801322021321389285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763755698100520813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702d6185ade1f2f4e85f24d43fe71565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
