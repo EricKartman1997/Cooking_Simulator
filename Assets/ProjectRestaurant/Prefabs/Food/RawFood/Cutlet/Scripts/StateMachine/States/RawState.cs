@@ -15,7 +15,6 @@ public class RawState : StateRosting
         Cutlet.TimeRemaining = Cutlet.Config.RawStateSettings.RawTimeRemaining;
         Cutlet.Roasting = EnumRoasting.Raw;
         Cutlet.TimeCooking = Cutlet.Config.RawStateSettings.RawTimeCooking;
-        Cutlet.TimePref.TimeLife = Cutlet.TimeCooking;
         Cutlet.Material = Cutlet.Config.RawStateSettings.RawMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
     }

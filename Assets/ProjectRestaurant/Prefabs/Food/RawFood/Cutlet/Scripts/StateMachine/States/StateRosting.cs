@@ -6,8 +6,6 @@ public abstract class StateRosting : IStateCutlet
     protected readonly IStateSwitcherCutlet StateSwitcher;
     protected readonly Cutlet Cutlet;
 
-    //private bool _isCreateTimer;
-
     protected StateRosting(IStateSwitcherCutlet stateSwitcher,  Cutlet cutlet)
     {
         StateSwitcher = stateSwitcher;
@@ -16,12 +14,11 @@ public abstract class StateRosting : IStateCutlet
 
     public virtual void Enter()
     {
-        Debug.Log(GetType());
+        //Debug.Log(GetType());
     }
 
     public virtual void Exit()
     {
-        Cutlet.TimePref.CurrentTime = 0;
         Cutlet.TimeRemaining = 0;
         Cutlet.Roasting = EnumRoasting.Uncertain;
     }
@@ -30,12 +27,12 @@ public abstract class StateRosting : IStateCutlet
     {
         if (Cutlet.IsOnStove == false)
         {
-            Cutlet.TimePref.gameObject.SetActive(false);
-            return ;
+            Cutlet.Timer.SetActive(false);
+            return;
         }
         
+        Cutlet.Timer.SetActive(true);
         Cutlet.TimeRemaining += Time.deltaTime;
-
-        Cutlet.TimePref.gameObject.SetActive(true);
+        Cutlet.ComponentTimer.UpdateArrowRotation(Cutlet.TimeRemaining, Cutlet.TimeCooking);
     }
 }

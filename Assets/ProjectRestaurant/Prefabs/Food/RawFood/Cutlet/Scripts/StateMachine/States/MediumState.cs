@@ -13,7 +13,6 @@ public class MediumState : StateRosting
         Cutlet.TimeRemaining = Cutlet.Config.MediumStateSettings.MediumTimeRemaining;
         Cutlet.Roasting = EnumRoasting.Medium;
         Cutlet.TimeCooking = Cutlet.Config.MediumStateSettings.MediumTimeCooking;
-        Cutlet.TimePref.TimeLife = Cutlet.Config.MediumStateSettings.MediumTimeCooking;
         Cutlet.Material = Cutlet.Config.MediumStateSettings.MediumMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
     }

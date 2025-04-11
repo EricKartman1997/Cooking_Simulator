@@ -7,12 +7,14 @@ public class Cutlet : MonoBehaviour,IForStove
     
     private Renderer _renderer;
     [SerializeField] private CutletConfigs cutletConfig;
-    [SerializeField] private Timer2 timePref;
-    [SerializeField]private EnumRoasting _roasting; //Debug
-    [SerializeField]private float _timeCooking;     //Debug
-    [SerializeField]private float _timeRemaining;   //Debug
-    [SerializeField]private bool _isOnStove;        //Debug
+    [SerializeField] private GameObject timePref;
+    [SerializeField] private EnumRoasting _roasting; //Debug
+    [SerializeField] private float _timeCooking;     //Debug
+    [SerializeField] private float _timeRemaining;   //Debug
+    [SerializeField] private bool _isOnStove;        //Debug
     private bool _isFire;
+
+    private Timer2 _componentTimer2;
 
     
     public Material Material
@@ -26,10 +28,14 @@ public class Cutlet : MonoBehaviour,IForStove
         get => cutletConfig;
     }
     
-    public Timer2 TimePref
+    public Timer2 ComponentTimer
+    {
+        get => _componentTimer2;
+    }
+    
+    public GameObject Timer
     {
         get => timePref;
-        set => timePref = value;
     }
     
     public EnumRoasting Roasting
@@ -67,6 +73,7 @@ public class Cutlet : MonoBehaviour,IForStove
         _stateRoasting = Config.CurrentStateRoasting;
         _renderer = GetComponent<Renderer>();
         _cutletStateMachine = new CutletStateMachine(this,_stateRoasting);
+        _componentTimer2 = timePref.GetComponent<Timer2>();
     }
 
     private void Update()
@@ -80,7 +87,7 @@ public class Cutlet : MonoBehaviour,IForStove
         Debug.Log("котлета сгорела");
     }
     
-    public void UpdateTime(float timeRemaining)
+    public void UpdateTime(float timeRemaining) // переделать
     {
         _timeRemaining = timeRemaining;
     }

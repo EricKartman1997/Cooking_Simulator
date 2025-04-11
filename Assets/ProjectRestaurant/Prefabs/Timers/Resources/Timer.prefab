@@ -180,11 +180,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f16a0545956c9c4eada2c91d638645c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 90ecfd22293201341aa4758ef94f72e8, type: 2}
   arrowImage: {fileID: 5837433658964205072}
   circleImage: {fileID: 4340038424945598712}
-  currentTime: 0
-  _isActiveTimer: 0
 --- !u!1 &5103532191364143517
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +218,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 1.5, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1033138788943366439
 CanvasRenderer:
@@ -295,7 +293,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0.5}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0.75, y: 0.75}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &5400422729183981564
 CanvasRenderer:
