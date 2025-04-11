@@ -11,8 +11,7 @@ public class RawState : StateRosting
     public override void Enter()
     {
         base.Enter();
-
-        Cutlet.TimeRemaining = Cutlet.Config.RawStateSettings.RawTimeRemaining;
+        
         Cutlet.Roasting = EnumRoasting.Raw;
         Cutlet.TimeCooking = Cutlet.Config.RawStateSettings.RawTimeCooking;
         Cutlet.Material = Cutlet.Config.RawStateSettings.RawMaterial;

@@ -24,7 +24,7 @@ public class CutletConfigs : ScriptableObject
 public class RawStateSettings
 {
     [field: SerializeField,Range(0,6)] public float RawTimeCooking { get; private set; }
-    [field: SerializeField,Range(0,6)] public float RawTimeRemaining { get; private set; }
+    //[field: SerializeField,Range(0,6)] public float RawTimeRemaining { get; private set; }
     [field: SerializeField] public Material RawMaterial { get; private set; }
 }
 
@@ -32,7 +32,7 @@ public class RawStateSettings
 public class MediumStateSettings
 {
     [field: SerializeField,Range(0,6)] public float MediumTimeCooking { get; private set; }
-    [field: SerializeField,Range(0,6)] public float MediumTimeRemaining { get; private set; }
+    //[field: SerializeField,Range(0,6)] public float MediumTimeRemaining { get; private set; }
     [field: SerializeField] public Material MediumMaterial { get; private set; }
 }
 
@@ -40,6 +40,6 @@ public class MediumStateSettings
 public class BurnStateSettings
 {
     [field: SerializeField,Range(0,6)] public float BurnTimeCooking { get; private set; }
-    [field: SerializeField,Range(0,6)] public float BurnTimeRemaining { get; private set; }
+    //[field: SerializeField,Range(0,6)] public float BurnTimeRemaining { get; private set; }
     [field: SerializeField] public Material BurnMaterial { get; private set; }
 }

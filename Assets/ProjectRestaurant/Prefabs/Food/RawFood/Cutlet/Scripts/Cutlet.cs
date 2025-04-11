@@ -13,9 +13,7 @@ public class Cutlet : MonoBehaviour,IForStove
     [SerializeField] private float _timeRemaining;   //Debug
     [SerializeField] private bool _isOnStove;        //Debug
     private bool _isFire;
-
     private Timer2 _componentTimer2;
-
     
     public Material Material
     {
@@ -87,7 +85,7 @@ public class Cutlet : MonoBehaviour,IForStove
         Debug.Log("котлета сгорела");
     }
     
-    public void UpdateTime(float timeRemaining) // переделать
+    public void UpdateTime(float timeRemaining) 
     {
         _timeRemaining = timeRemaining;
     }

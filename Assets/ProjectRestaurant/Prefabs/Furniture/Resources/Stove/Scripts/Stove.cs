@@ -105,7 +105,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
                 if (_ingredient != null)
                 {
                     CreateResult(_ingredient);
-                    _heroik.AcceptProductWithTimeRemaining(GiveObj(ref _result));
+                    _heroik.ActiveObjHands(GiveObj(ref _result));
                 }
                 else
                 {
@@ -123,14 +123,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     public void AcceptObject(GameObject acceptObj)
     {
-        BufferCutlet bufferCutlet = new BufferCutlet(acceptObj.GetComponent<IForStove>().TimeRemaining);
         _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.ParentRawFood, true);
         _componentForStove = _ingredient.GetComponent<IForStove>();
-        _ingredient.GetComponent<Cutlet>().UpdateTime(bufferCutlet.TimeRemaining);
         Destroy(acceptObj);
     }
 
-    public void CreateResult(GameObject obj) // переделать буфер
+    public void CreateResult(GameObject obj) 
     {
         _componentForStove.IsOnStove = false;
         _result = StaticManagerWithoutZenject.ProductsFactory.GetCutlet(_componentForStove.Roasting);

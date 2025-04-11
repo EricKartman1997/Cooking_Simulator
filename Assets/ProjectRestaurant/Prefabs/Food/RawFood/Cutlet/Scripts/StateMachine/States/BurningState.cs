@@ -9,8 +9,8 @@ public class BurningState : StateRosting
     public override void Enter()
     {
         base.Enter();
+        
         Cutlet.Roasting = EnumRoasting.Burn;
-        Cutlet.TimeRemaining = Cutlet.Config.BurnStateSettings.BurnTimeRemaining;
         Cutlet.TimeCooking = Cutlet.Config.BurnStateSettings.BurnTimeCooking;
         Cutlet.Material = Cutlet.Config.BurnStateSettings.BurnMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
