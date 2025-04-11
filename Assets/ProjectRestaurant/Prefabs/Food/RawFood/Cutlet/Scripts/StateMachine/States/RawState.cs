@@ -16,6 +16,7 @@ public class RawState : StateRosting
         Cutlet.TimeCooking = Cutlet.Config.RawStateSettings.RawTimeCooking;
         Cutlet.Material = Cutlet.Config.RawStateSettings.RawMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
+        
     }
 
     public override void Exit()

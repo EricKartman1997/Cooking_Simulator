@@ -31,8 +31,7 @@ public class Timer2 : MonoBehaviour
 
     private void Awake()
     {
-        arrowImage.sprite = config.ArrowPref;
-        circleImage.sprite = config.CirclePref;
+        UpdateTimeView();
         _arrowRect = arrowImage.GetComponent<RectTransform>();
     }
     
@@ -49,6 +48,12 @@ public class Timer2 : MonoBehaviour
             // Применяем вращение (с учетом Z-оси для 2D)
             _arrowRect.localEulerAngles = new Vector3(0, 0, -angle);
         }
+    }
+
+    public void UpdateTimeView()
+    {
+        arrowImage.sprite = config.ArrowPref;
+        circleImage.sprite = config.CirclePref;
     }
     
 

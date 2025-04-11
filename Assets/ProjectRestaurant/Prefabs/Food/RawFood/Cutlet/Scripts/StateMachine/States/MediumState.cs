@@ -14,6 +14,7 @@ public class MediumState : StateRosting
         Cutlet.TimeCooking = Cutlet.Config.MediumStateSettings.MediumTimeCooking;
         Cutlet.Material = Cutlet.Config.MediumStateSettings.MediumMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
+
     }
 
     public override void Exit()

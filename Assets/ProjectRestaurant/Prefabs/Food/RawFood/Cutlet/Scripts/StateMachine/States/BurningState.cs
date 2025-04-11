@@ -14,6 +14,7 @@ public class BurningState : StateRosting
         Cutlet.TimeCooking = Cutlet.Config.BurnStateSettings.BurnTimeCooking;
         Cutlet.Material = Cutlet.Config.BurnStateSettings.BurnMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
+
     }
 
     public override void Exit()
