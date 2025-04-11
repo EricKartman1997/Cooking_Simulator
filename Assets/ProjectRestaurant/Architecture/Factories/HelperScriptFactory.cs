@@ -3,9 +3,9 @@ using UnityEngine;
 public class HelperScriptFactory
 {
     // Stove
-    public StovePoints GetStovePoint(Transform positionRawFood, Transform parentRawFood, Transform positionReadyFood, Transform parentReadyFood)
+    public StovePoints GetStovePoint(Transform positionRawFood, Transform parentRawFood)
     {
-        StovePoints stovePoints = new StovePoints(positionRawFood, parentRawFood, positionReadyFood, parentReadyFood);
+        StovePoints stovePoints = new StovePoints(positionRawFood, parentRawFood);
         return stovePoints;
     }
     

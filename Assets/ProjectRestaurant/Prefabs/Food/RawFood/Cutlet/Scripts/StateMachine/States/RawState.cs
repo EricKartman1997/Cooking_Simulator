@@ -11,11 +11,11 @@ public class RawState : StateRosting
     public override void Enter()
     {
         base.Enter();
-        if(Cutlet.IsNewCutlet == true)
-            Cutlet.TimeRemaining = Cutlet.Config.RawStateSettings.RawTimeRemaining;
-            
+
+        Cutlet.TimeRemaining = Cutlet.Config.RawStateSettings.RawTimeRemaining;
         Cutlet.Roasting = EnumRoasting.Raw;
         Cutlet.TimeCooking = Cutlet.Config.RawStateSettings.RawTimeCooking;
+        Cutlet.TimePref.TimeLife = Cutlet.TimeCooking;
         Cutlet.Material = Cutlet.Config.RawStateSettings.RawMaterial;
         Cutlet.gameObject.name = NAMECUTLET;
     }

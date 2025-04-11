@@ -1,40 +1,38 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Timer : MonoBehaviour
-{
-    [SerializeField] private Image timerObject;
-    [SerializeField] private float time;
-    private float _timer = 0f;
-    void Update()
-    {
-        if (time >= _timer) 
-        { 
-            _timer += Time.deltaTime;
-            timerObject.fillAmount = _timer / time;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-}
-
-public class Timer1 : MonoBehaviour
+public class Timer2 : MonoBehaviour
 {
     [SerializeField] private ConfigTimer config;
     [SerializeField] private Image arrowImage;
     [SerializeField] private Image circleImage;
-    [SerializeField] private float currentTime;
+    [SerializeField] private float currentTime; // Debug
     private float _timeLife;
-    
+    private bool _isPossibleDelete;
     private RectTransform _arrowRect;
+
+    public float CurrentTime
+    {
+        get => currentTime;
+        set => currentTime = value;
+    }
+
+    public bool IsPossibleDelete
+    {
+        get => _isPossibleDelete;
+        set => _isPossibleDelete = value;
+    }
+
+    public float TimeLife
+    {
+        get => _timeLife;
+        set => _timeLife = value;
+    }
 
     private void Start()
     {
         arrowImage.sprite = config.ArrowPref;
-        circleImage.sprite = config.ArrowPref;
+        circleImage.sprite = config.CirclePref;
         _timeLife = config.LifeTime;
         
         _arrowRect = arrowImage.GetComponent<RectTransform>();
@@ -50,7 +48,10 @@ public class Timer1 : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            if (_isPossibleDelete == true)
+            {
+                Destroy(gameObject);
+            }
         }
     }
     
@@ -66,5 +67,3 @@ public class Timer1 : MonoBehaviour
         _arrowRect.localEulerAngles = new Vector3(0, 0, -angle);
     }
 }
-
-

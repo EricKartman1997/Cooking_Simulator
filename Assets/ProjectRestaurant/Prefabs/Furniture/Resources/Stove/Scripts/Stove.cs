@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +6,6 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 {
     [SerializeField] private Transform positionRawFood;
     [SerializeField] private Transform parentRawFood;
-    [SerializeField] private Transform positionReadyFood;
-    [SerializeField] private Transform parentReadyFood;
     
     private List<Type> _unusableObjects;
     private Animator _animator;
@@ -41,7 +38,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
             _outline.OutlineWidth = 2f;
             if (_isDeleteHelperScripts == true)
             {
-                _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoint(positionRawFood, parentRawFood, positionReadyFood, parentReadyFood);
+                _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoint(positionRawFood, parentRawFood);
                 _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
 
                 _isDeleteHelperScripts = false;
@@ -105,8 +102,16 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
             }
             else
             {
-                CreateResult(_ingredient);
-                _heroik.AcceptProductWithTimeRemaining(GiveObj(ref _result));
+                if (_ingredient != null)
+                {
+                    CreateResult(_ingredient);
+                    _heroik.AcceptProductWithTimeRemaining(GiveObj(ref _result));
+                }
+                else
+                {
+                    Debug.LogWarning("Забирать нечего");
+                }
+
             }
         }
     }
@@ -128,7 +133,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     public void CreateResult(GameObject obj) // переделать буфер
     {
         _componentForStove.IsOnStove = false;
-        _result = StaticManagerWithoutZenject.ProductsFactory.GetCutlet(_componentForStove.Roasting,_stovePoints.PositionReadyFood,_stovePoints.ParentReadyFood);
+        _result = StaticManagerWithoutZenject.ProductsFactory.GetCutlet(_componentForStove.Roasting);
         _result.GetComponent<Cutlet>().UpdateTime(_componentForStove.TimeRemaining); 
         Destroy(_ingredient);
         _ingredient = null;

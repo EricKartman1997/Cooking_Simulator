@@ -3,17 +3,17 @@ using UnityEngine;
 public class Cutlet : MonoBehaviour,IForStove
 {
     private CutletStateMachine _cutletStateMachine;
-    
     private EnumStateRoasting _stateRoasting;
     
     private Renderer _renderer;
     [SerializeField] private CutletConfigs cutletConfig;
-    [SerializeField]private EnumRoasting _roasting;
-    [SerializeField]private float _timeCooking;
-    [SerializeField]private float _timeRemaining;
-    [SerializeField]private bool _isOnStove;
+    [SerializeField] private Timer2 timePref;
+    [SerializeField]private EnumRoasting _roasting; //Debug
+    [SerializeField]private float _timeCooking;     //Debug
+    [SerializeField]private float _timeRemaining;   //Debug
+    [SerializeField]private bool _isOnStove;        //Debug
     private bool _isFire;
-    [SerializeField]private bool _isNewCutlet = true;
+
     
     public Material Material
     {
@@ -24,6 +24,12 @@ public class Cutlet : MonoBehaviour,IForStove
     public CutletConfigs Config
     {
         get => cutletConfig;
+    }
+    
+    public Timer2 TimePref
+    {
+        get => timePref;
+        set => timePref = value;
     }
     
     public EnumRoasting Roasting
@@ -55,23 +61,6 @@ public class Cutlet : MonoBehaviour,IForStove
         get => _isFire;
         set => _isFire = value;
     }
-    
-    public bool IsNewCutlet
-    {
-        get => _isNewCutlet;
-        set => _isNewCutlet = value;
-    }
-
-    public void Delete()
-    {
-        Destroy(gameObject);
-        Debug.Log("котлета сгорела");
-    }
-    
-    public void UpdateTime(float timeRemaining)
-    {
-        _timeRemaining = timeRemaining;
-    }
 
     private void Awake()
     {
@@ -83,5 +72,16 @@ public class Cutlet : MonoBehaviour,IForStove
     private void Update()
     {
         _cutletStateMachine.Update();
+    }
+    
+    public void Delete()
+    {
+        Destroy(gameObject);
+        Debug.Log("котлета сгорела");
+    }
+    
+    public void UpdateTime(float timeRemaining)
+    {
+        _timeRemaining = timeRemaining;
     }
 }
