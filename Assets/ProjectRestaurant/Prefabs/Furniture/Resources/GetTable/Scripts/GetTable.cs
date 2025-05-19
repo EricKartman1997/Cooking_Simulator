@@ -36,7 +36,7 @@ public class GetTable : MonoBehaviour, IGiveObj
         {
             _heroik.ActiveObjHands(GiveObj(ref _objectOnTheTable));
         }
-        else// объект есть на столе,руки заняты
+        else// объект есть на столе, руки заняты
         {
             Debug.Log("объект есть на столе,руки заняты");
         }

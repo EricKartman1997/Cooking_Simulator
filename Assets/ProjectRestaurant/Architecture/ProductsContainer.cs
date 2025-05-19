@@ -54,9 +54,12 @@ public class ProductsContainer: MonoBehaviour
     
     [SerializeField] private GameObject meatDish;
     [SerializeField] private GameObject fishDish;
+    [SerializeField] private GameObject rawCutletDish;
     
     [SerializeField] private GameObject defaultView;
-    [SerializeField] private GameObject otherView;
+    [SerializeField] private GameObject crossView;
+    [SerializeField] private GameObject crockView;
+    [SerializeField] private GameObject newYearView;
     
     // Свойства с публичным геттером и приватным сеттером
     public Product Apple => apple;
@@ -91,28 +94,22 @@ public class ProductsContainer: MonoBehaviour
     public List<GameObject> RequiredWildBerryCocktail => requiredWildBerryCocktail;
     
     public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
-
     public Dictionary<string, FromOven> RecipesForOven => _recipesForOven;
     
     public GameObject AppleDish => appleDish;
-
     public GameObject OrangeDish => orangeDish;
-
     public GameObject LimeDish => limeDish;
-
     public GameObject BlueberryDish => blueberryDish;
-
     public GameObject StrawberryDish => strawberryDish;
-
     public GameObject CherryDish => cherryDish;
-
     public GameObject MeatDish => meatDish;
-
     public GameObject FishDish => fishDish;
+    public GameObject RawCutletDish => rawCutletDish;
 
     public GameObject DefaultView => defaultView;
-
-    public GameObject OtherView => otherView;
+    public GameObject CrossView => crossView;
+    public GameObject CrockView => crockView;
+    public GameObject NewYearView => newYearView;
 
     private void InitializeDictionaries()
     {

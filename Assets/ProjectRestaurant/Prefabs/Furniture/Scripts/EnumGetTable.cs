@@ -1,10 +1,15 @@
 
-public enum EnumView
+public enum EnumDecorationTableTop
 {
     Default,
-    Other,
-    Crock,
+    TurnOff,
     NewYear
+}
+
+public enum EnumDecorationLowerSurface
+{
+    Default,
+    Crock
 }
 
 public enum EnumGiveFood
@@ -17,7 +22,7 @@ public enum EnumGiveFood
     Strawberry,
     Fish,
     Meat,
-    Cutlet
+    RawCutlet
 }
 
 public enum EnumViewFood
@@ -30,5 +35,5 @@ public enum EnumViewFood
     Strawberry,
     Fish,
     Meat,
-    Cutlet
+    RawCutlet
 }

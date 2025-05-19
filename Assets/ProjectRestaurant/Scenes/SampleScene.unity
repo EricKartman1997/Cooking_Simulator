@@ -242,8 +242,11 @@ MonoBehaviour:
   cherryDish: {fileID: 6552860552589939614, guid: 273a8ed69643a7c4eb75b05c80dd5477, type: 3}
   meatDish: {fileID: 1555600063088347992, guid: dfea82b480542f64b8e5741dbad67f05, type: 3}
   fishDish: {fileID: 2721737143990085078, guid: e1599955d7f645a47900b4d20817911b, type: 3}
+  rawCutletDish: {fileID: 2531579272906609740, guid: 4f2bc6599b2664e49b489ffcfcf986de, type: 3}
   defaultView: {fileID: 4977045782416053890, guid: b451df988a6aef749bd90b1262e861ce, type: 3}
-  otherView: {fileID: 7623294015933942800, guid: 5111567bddc12c24ca9241c099d8482e, type: 3}
+  crossView: {fileID: 1093937486032317312, guid: 32d8ea1cf3678f14e9f195512afb1222, type: 3}
+  crockView: {fileID: 4259501759338128058, guid: a83a551a0ee57d14db9b592ca11fcad0, type: 3}
+  newYearView: {fileID: 4675563391416908470, guid: ae3a0691935d8164aa82cc7b1b5b486e, type: 3}
 --- !u!4 &173349868
 Transform:
   m_ObjectHideFlags: 0
@@ -430,6 +433,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2144441243703541694, guid: 1cfcf0b9368d86e459be371a9333ae8c, type: 3}
+      propertyPath: getTableConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 8dae922e9241d9a4c9e43c6befdf3ab6, type: 2}
     - target: {fileID: 2712468947881911811, guid: 1cfcf0b9368d86e459be371a9333ae8c, type: 3}
       propertyPath: m_Name
       value: GetTable (8)
@@ -2648,7 +2655,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.7
+  m_fontSize: 49.9
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -102,6 +102,8 @@ public class ProductsFactory
                  return _productsContainer.Fish.gameObject;
              case EnumGiveFood.Meat:
                  return _productsContainer.Meat.gameObject;
+             case EnumGiveFood.RawCutlet:
+                 return _productsContainer.RawCutlet.gameObject;
              default:
                  Debug.LogWarning($"Unknown product type: {enumGiveFood}");
                  return null;
