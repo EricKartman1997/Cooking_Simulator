@@ -2,7 +2,9 @@
 public enum EnumView
 {
     Default,
-    Other
+    Other,
+    Crock,
+    NewYear
 }
 
 public enum EnumGiveFood
@@ -14,7 +16,8 @@ public enum EnumGiveFood
     Blueberry,
     Strawberry,
     Fish,
-    Meat
+    Meat,
+    Cutlet
 }
 
 public enum EnumViewFood
@@ -26,5 +29,6 @@ public enum EnumViewFood
     Blueberry,
     Strawberry,
     Fish,
-    Meat
+    Meat,
+    Cutlet
 }

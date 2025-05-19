@@ -9,7 +9,8 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     private ProductsContainer _productsContainer;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private Transform _positionResult; // сделать отдельный класс
-    private Transform _parentResult;   // сделать отдельный класс
+    private Transform _parentResult; // сделать отдельный класс
+    private Transform _positionIngredient;
     private OvenView _ovenView;
     
     private bool _isWork = false;
@@ -17,12 +18,13 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     private GameObject _ingredient;
     private GameObject _result;
 
-    public Oven(ProductsContainer productsContainer, Heroik heroik, Transform positionResult, Transform parentResult,OvenView ovenView)
+    public Oven(ProductsContainer productsContainer, Heroik heroik, Transform positionResult, Transform parentResult, Transform positionIngredient, OvenView ovenView)
     {
         _productsContainer = productsContainer;
         _heroik = heroik;
         _positionResult = positionResult;
         _parentResult = parentResult;
+        _positionIngredient = positionIngredient;
         _ovenView = ovenView;
         
         EventBus.PressE += CookingProcess;
@@ -41,7 +43,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
 
     public void AcceptObject(GameObject obj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, false);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj,_positionIngredient,_positionIngredient, true);
         Object.Destroy(obj);
     }
     

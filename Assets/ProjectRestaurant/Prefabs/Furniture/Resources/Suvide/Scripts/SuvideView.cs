@@ -56,13 +56,13 @@ public class SuvideView : IDisposable
     public void WorkingSuvide()
     {
         _waterPrefab.SetActive(true);
-        _switchTemperPrefab.transform.rotation = Quaternion.Euler(45, -90, -90);
-        _switchTimePrefab.transform.rotation = Quaternion.Euler(175, -90, -90);
+        _switchTemperPrefab.transform.localRotation = Quaternion.Euler(-135, 0, 0);
+        _switchTimePrefab.transform.localRotation = Quaternion.Euler(-60, 0, 0);
     }
     public void NotWorkingSuvide()
     {
         _waterPrefab.SetActive(false);
-        _switchTemperPrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
-        _switchTimePrefab.transform.rotation = Quaternion.Euler(90, -90, -90);
+        _switchTemperPrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        _switchTimePrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 }

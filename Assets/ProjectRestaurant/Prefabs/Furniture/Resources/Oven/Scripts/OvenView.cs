@@ -4,25 +4,29 @@ using Object = UnityEngine.Object;
 
 public class OvenView : IDisposable
 {
-     private GameObject _glassOn;
-     private GameObject _glassOff;
+    private const string ANIMATIONCLOSE = "Close";
+    private const string ANIMATIONOPEN = "Open";
+    
      private GameObject _switchFirst;
      private GameObject _switchSecond;
      private GameObject _timer;
      private Transform _timerPoint;
      private Transform _timerParent;
+     private Animator _animator;
 
-     public OvenView(GameObject glassOn, GameObject glassOff, GameObject switchFirst, GameObject switchSecond, GameObject timer, Transform timerPoint, Transform timerParent)
+     public OvenView(GameObject switchFirst, GameObject switchSecond, GameObject timer, Transform timerPoint, Transform timerParent,Animator animator)
      {
-         _glassOn = glassOn;
-         _glassOff = glassOff;
          _switchFirst = switchFirst;
          _switchSecond = switchSecond;
          _timer = timer;
          _timerPoint = timerPoint;
          _timerParent = timerParent;
+         _animator = animator;
          
-         Debug.Log("Создать объект: OvenView");
+         _animator.SetBool(ANIMATIONCLOSE,false);
+         _animator.SetBool(ANIMATIONOPEN,true);
+         
+         Debug.Log("Создан объект: OvenView");
      }
 
      public void Dispose()
@@ -43,17 +47,17 @@ public class OvenView : IDisposable
 
     private void ActiveView()
     {
-        _glassOff.SetActive(false);
-        _glassOn.SetActive(true);
-        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, -90);
-        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, -135);
+        _animator.SetBool(ANIMATIONCLOSE,true);
+        _animator.SetBool(ANIMATIONOPEN,false);
+        _switchFirst.transform.localRotation = Quaternion.Euler(55, 0, 0);
+        _switchSecond.transform.localRotation = Quaternion.Euler(-85, 0, 0);
     }
     
     private void PassiveView()
     {
-        _glassOff.SetActive(true);
-        _glassOn.SetActive(false);
-        _switchFirst.transform.rotation = Quaternion.Euler(0, 0, 0);
-        _switchSecond.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _animator.SetBool(ANIMATIONCLOSE,false);
+        _animator.SetBool(ANIMATIONOPEN,true);
+        _switchFirst.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        _switchSecond.transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 }

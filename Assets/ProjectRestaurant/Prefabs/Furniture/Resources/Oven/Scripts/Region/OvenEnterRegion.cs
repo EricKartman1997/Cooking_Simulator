@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OvenEnterRegion : MonoBehaviour
 {
-    [SerializeField] private GameObject glassOn;
-    [SerializeField] private GameObject glassOff;
     [SerializeField] private GameObject switchFirst;
     [SerializeField] private GameObject switchSecond;
     [SerializeField] private GameObject timer;
@@ -13,17 +10,25 @@ public class OvenEnterRegion : MonoBehaviour
     
     [SerializeField] private Transform positionResult;
     [SerializeField] private Transform parentResult;
+    [SerializeField] private Transform positionIngredient;
     [SerializeField] private ProductsContainer productsContainer;
     private Heroik _heroik;
     
     private Outline _outline;
     private Oven _oven;
     private OvenView _ovenView;
+    private Animator _animator;
     private bool _isCreateOven = false;
+    private const string ANIMATIONCLOSE = "Close";
+    private const string ANIMATIONOPEN = "Open";
     
     void Start()
     {
         _outline = GetComponent<Outline>();
+        _animator = GetComponent<Animator>();
+        
+        _animator.SetBool(ANIMATIONCLOSE,false);
+        _animator.SetBool(ANIMATIONOPEN,true);
     }
     
     private void OnTriggerEnter(Collider other)
@@ -35,8 +40,8 @@ public class OvenEnterRegion : MonoBehaviour
             if (_isCreateOven == false)
             {
                 // в будущем сделать в фабрике
-                _ovenView = new OvenView(glassOn, glassOff, switchFirst, switchSecond, timer, timerPoint, timerParent);
-                _oven = new Oven(productsContainer,_heroik,positionResult,parentResult,_ovenView);
+                _ovenView = new OvenView(switchFirst, switchSecond, timer, timerPoint, timerParent,_animator);
+                _oven = new Oven(productsContainer,_heroik,positionResult,parentResult,positionIngredient,_ovenView);
                 _oven.HeroikIsTrigger();
                 _isCreateOven = true;
             }
