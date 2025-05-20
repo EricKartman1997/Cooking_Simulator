@@ -4,10 +4,6 @@ public class GetTableEnterRegion : MonoBehaviour
 {
     [SerializeField] private GetTableConfig getTableConfig;
     [SerializeField] private Transform parentViewDish;
-    [SerializeField] private Transform parentViewTableTop;
-    [SerializeField] private Transform parentViewLowerSurface;
-
-
     
     private Outline _outline;
     private Heroik _heroik;
@@ -17,9 +13,6 @@ public class GetTableEnterRegion : MonoBehaviour
     {
         _outline = GetComponent<Outline>();
         StaticManagerWithoutZenject.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
-        
-        StaticManagerWithoutZenject.ViewFactory.GetDecorationLowerSurface(getTableConfig.DecorationLowerSurface,parentViewLowerSurface);
-        StaticManagerWithoutZenject.ViewFactory.GetDecorationTableTop(getTableConfig.DecorationTableTop,parentViewTableTop);
     }
     private void OnTriggerEnter(Collider other)
     {

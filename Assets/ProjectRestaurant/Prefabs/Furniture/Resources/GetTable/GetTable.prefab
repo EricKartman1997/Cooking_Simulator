@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 4811900830209658730}
   - component: {fileID: 3846558985277610539}
   - component: {fileID: 2144441243703541694}
+  - component: {fileID: 3356636307287121132}
   m_Layer: 0
   m_Name: GetTable
   m_TagString: Untagged
@@ -151,10 +152,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2299b179d8463f549823d218115d3593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  getTableConfig: {fileID: 11400000, guid: 8abcefcc04f1f1548b5de10667aa7a78, type: 2}
+  getTableConfig: {fileID: 11400000, guid: 8dae922e9241d9a4c9e43c6befdf3ab6, type: 2}
   parentViewDish: {fileID: 4496788815673442778}
-  parentViewTableTop: {fileID: 3774099797667329736}
-  parentViewLowerSurface: {fileID: 9131276671774995693}
+--- !u!114 &3356636307287121132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2712468947881911811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a927f6850e8457d4d82847d3676a4056, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
+  positionViewTableTop: {fileID: 3774099797667329736}
+  positionViewLowerSurface: {fileID: 9131276671774995693}
 --- !u!1 &3797746936509350984
 GameObject:
   m_ObjectHideFlags: 0
