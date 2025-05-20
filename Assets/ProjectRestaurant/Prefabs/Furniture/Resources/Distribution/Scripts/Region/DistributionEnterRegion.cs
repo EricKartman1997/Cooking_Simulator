@@ -4,6 +4,7 @@ public class DistributionEnterRegion : MonoBehaviour
 {
     private Distribution _script;
     private Outline _outline;
+    private DecorationFurniture _decorationFurniture;
     
     // Initialize Distribution
     [SerializeField] private Checks _checks;
@@ -14,10 +15,16 @@ public class DistributionEnterRegion : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
     
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -36,6 +43,11 @@ public class DistributionEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _script.HeroikIsTrigger();

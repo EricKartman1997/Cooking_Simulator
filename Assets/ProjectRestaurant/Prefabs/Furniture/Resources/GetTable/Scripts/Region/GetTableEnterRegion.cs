@@ -5,6 +5,7 @@ public class GetTableEnterRegion : MonoBehaviour
     [SerializeField] private GetTableConfig getTableConfig;
     [SerializeField] private Transform parentViewDish;
     
+    private DecorationFurniture _decorationFurniture;
     private Outline _outline;
     private Heroik _heroik;
     private GetTable script;
@@ -12,10 +13,16 @@ public class GetTableEnterRegion : MonoBehaviour
     void Start()
     {
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
         StaticManagerWithoutZenject.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -27,6 +34,11 @@ public class GetTableEnterRegion : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = null;

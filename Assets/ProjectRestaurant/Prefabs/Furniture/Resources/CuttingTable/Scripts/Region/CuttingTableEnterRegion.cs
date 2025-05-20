@@ -21,6 +21,7 @@ public class CuttingTableEnterRegion : MonoBehaviour
     [SerializeField] private ProductsContainer productsContainer;
     private Heroik _heroik;
     
+    private DecorationFurniture _decorationFurniture;
     private Outline _outline;
     private CuttingTable _cuttingTable;
     private bool _isCreateCuttingTable = false;
@@ -30,9 +31,15 @@ public class CuttingTableEnterRegion : MonoBehaviour
         _animator = GetComponent<Animator>();
         _animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -55,6 +62,11 @@ public class CuttingTableEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _cuttingTable.HeroikIsTrigger();

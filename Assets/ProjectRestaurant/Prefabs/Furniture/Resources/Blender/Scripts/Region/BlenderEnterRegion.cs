@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlenderEnterRegion : MonoBehaviour
 {
     private Blender _blender;
     private Outline _outline;
+    private DecorationFurniture _decorationFurniture;
     
     // для Blender
     private Heroik _heroik = null;
@@ -31,10 +33,16 @@ public class BlenderEnterRegion : MonoBehaviour
         _animator = GetComponent<Animator>();
         //_animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -57,6 +65,11 @@ public class BlenderEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _blender.HeroikIsTrigger();

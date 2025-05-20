@@ -5,13 +5,20 @@ public class GarbageEnterRegion : MonoBehaviour
     private Outline _outline;
     private Garbage _script;
     private Heroik _heroik;
+    private DecorationFurniture _decorationFurniture;
     void Start()
     {
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -32,6 +39,11 @@ public class GarbageEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _script.HeroikIsTrigger();

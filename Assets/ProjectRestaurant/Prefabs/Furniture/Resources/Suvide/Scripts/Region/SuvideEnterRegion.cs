@@ -5,9 +5,10 @@ public class SuvideEnterRegion : MonoBehaviour
 {
     private float _timer = 0f;
     private float _updateInterval = 0.1f;
+    private bool _isCreateSuvide = false;
     private Outline _outline;
     private Suvide _suvide;
-    private bool _isCreateSuvide = false;
+    private DecorationFurniture _decorationFurniture;
     
     // Initialize SuvideView
     private Animator _animator;
@@ -38,6 +39,7 @@ public class SuvideEnterRegion : MonoBehaviour
         _animator = GetComponent<Animator>();
         //_animator.SetBool("Work", false);
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
     private void Update()
@@ -56,6 +58,11 @@ public class SuvideEnterRegion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -78,6 +85,11 @@ public class SuvideEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _suvide.HeroikIsTrigger();

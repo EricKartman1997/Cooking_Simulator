@@ -12,6 +12,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private Outline _outline;
     private StovePoints _stovePoints;
     private StoveView _stoveView;
+    private DecorationFurniture _decorationFurniture;
     
     private bool _isHeroikTrigger = false;
     private bool _isDeleteHelperScripts = true;
@@ -23,6 +24,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     {
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
         _unusableObjects = new List<Type>()
         {
             typeof(ObjsForStove)
@@ -32,6 +34,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 2f;
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -55,6 +63,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 0f;
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = null;
@@ -85,6 +99,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     private void CookingProcess()
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Плита не работает");
+            return;
+        }
+        
         if (_isHeroikTrigger == true)
         {
             if (_heroik.IsBusyHands == true)

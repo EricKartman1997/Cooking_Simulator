@@ -8,6 +8,8 @@ public class DecorationFurniture : MonoBehaviour
 
     private GameObject _decorationTableTop;
     private GameObject _decorationLowerSurface;
+    
+    public DecorationTableConfig Config => config;
 
     private void Start()
     {

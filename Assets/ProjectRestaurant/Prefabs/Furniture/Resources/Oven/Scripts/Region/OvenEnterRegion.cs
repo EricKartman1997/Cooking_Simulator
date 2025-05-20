@@ -14,6 +14,7 @@ public class OvenEnterRegion : MonoBehaviour
     [SerializeField] private ProductsContainer productsContainer;
     private Heroik _heroik;
     
+    private DecorationFurniture _decorationFurniture;
     private Outline _outline;
     private Oven _oven;
     private OvenView _ovenView;
@@ -26,6 +27,7 @@ public class OvenEnterRegion : MonoBehaviour
     {
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
         
         _animator.SetBool(ANIMATIONCLOSE,false);
         _animator.SetBool(ANIMATIONOPEN,true);
@@ -33,6 +35,11 @@ public class OvenEnterRegion : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -55,6 +62,11 @@ public class OvenEnterRegion : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _oven.HeroikIsTrigger();

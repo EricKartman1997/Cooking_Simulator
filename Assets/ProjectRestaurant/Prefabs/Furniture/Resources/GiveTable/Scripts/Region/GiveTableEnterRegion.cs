@@ -10,13 +10,20 @@ public class GiveTableEnterRegion : MonoBehaviour
     private Heroik _heroik;
     private Outline _outline;
     private GiveTable _script;
+    private DecorationFurniture _decorationFurniture;
 
     void Start()
     {
         _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
@@ -38,6 +45,11 @@ public class GiveTableEnterRegion : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            return;
+        }
+        
         if (other.GetComponent<Heroik>())
         {
             _script.HeroikIsTrigger();
