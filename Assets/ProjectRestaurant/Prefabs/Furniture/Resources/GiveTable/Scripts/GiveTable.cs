@@ -1,22 +1,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IHeroikIsTrigger
+public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
 {
     [SerializeField] private GameObject _ingredient;
     [SerializeField] private Transform _ingredientPoint;
     [SerializeField] private Transform _parentFood;
     [SerializeField] private List<GameObject> _unusableObjects;
     
+    private bool _isHeroikTrigger;
     private Heroik _heroik;
-    private bool _isHeroikTrigger = false;
-
-    public void Initialize(Heroik heroik,Transform takingTablePoint,Transform parentFood, List<GameObject> unusableObjects)
+    private Outline _outline;
+    private DecorationFurniture _decorationFurniture;
+    
+    void Start()
     {
-        _heroik = heroik;
-        _ingredientPoint = takingTablePoint;
-        _parentFood = parentFood;
-        _unusableObjects = unusableObjects;
+        _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = null;
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
     }
     
     private void OnEnable()
@@ -31,36 +64,44 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     
     private void CookingProcess()
     {
-        if(_isHeroikTrigger)
+        if(_isHeroikTrigger == false)
         {
-            if(_heroik.IsBusyHands == false) // руки не заняты
+            return;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Стол не работает");
+            return;
+        }
+        
+        if(_heroik.IsBusyHands == false) // руки не заняты
+        {
+            if (_ingredient == null) // ни одного активного объекта
             {
-                if (_ingredient == null) // ни одного активного объекта
+                Debug.Log("У вас пустые руки и прилавок пуст");
+            }
+            else // на столе что-то есть
+            {
+                _heroik.ActiveObjHands(GiveObj(ref _ingredient));
+            }
+        }
+        else // заняты
+        {
+            if (_ingredient == null) // ни одного активного объекта
+            {
+                if (_heroik.CheckObjForReturn(_unusableObjects))
                 {
-                    Debug.Log("У вас пустые руки и прилавок пуст");
+                    AcceptObject(_heroik.GiveObjHands());
                 }
-                else // на столе что-то есть
+                else
                 {
-                    _heroik.ActiveObjHands(GiveObj(ref _ingredient));
+                    Debug.Log("Этот предмет положить нельзя");
                 }
             }
-            else // заняты
+            else // активного объект есть
             {
-                if (_ingredient == null) // ни одного активного объекта
-                {
-                    if (_heroik.CheckObjForReturn(_unusableObjects))
-                    {
-                        AcceptObject(_heroik.GiveObjHands());
-                    }
-                    else
-                    {
-                        Debug.Log("Этот предмет положить нельзя");
-                    }
-                }
-                else // активного объект есть
-                {
-                    Debug.Log("У вас полные руки и прилавок полон");
-                }
+                Debug.Log("У вас полные руки и прилавок полон");
             }
         }
     }
@@ -74,20 +115,6 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj,IIsAllowDestroy,IH
     public GameObject GiveObj(ref GameObject giveObj)
     {
         return giveObj;
-    }
-
-    public bool IsAllowDestroy()
-    {
-        if (_ingredient == null)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void HeroikIsTrigger()
-    {
-        _isHeroikTrigger = !_isHeroikTrigger;
     }
     
 }

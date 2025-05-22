@@ -385,8 +385,8 @@ GameObject:
   - component: {fileID: 74512577009533975}
   - component: {fileID: 7117554050456093208}
   - component: {fileID: 801136959074376665}
-  - component: {fileID: 111599987550825843}
   - component: {fileID: 2496240705018507931}
+  - component: {fileID: 8850216655049906198}
   m_Layer: 0
   m_Name: CuttingTable
   m_TagString: Untagged
@@ -474,27 +474,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.55, z: 2.6}
   m_Center: {x: 0.003, y: 2.55, z: 1.1}
---- !u!114 &111599987550825843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7644323090181395880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96b6e2443f059f64f9f32c015636ce2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 9042140380267599083, guid: 28edc08054981a64aa67195688ad9fa2, type: 3}
-  timerPoint: {fileID: 1112657998730502790}
-  timerParent: {fileID: 1112657998730502790}
-  positionIngredient1: {fileID: 4679477401383007732}
-  positionIngredient2: {fileID: 319952076356304536}
-  parentIngredient: {fileID: 4679477401383007732}
-  positionResult: {fileID: 1112657998730502790}
-  parentResult: {fileID: 1112657998730502790}
-  productsContainer: {fileID: 0}
 --- !u!114 &2496240705018507931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +489,24 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
   positionViewTableTop: {fileID: 838920721826351475}
   positionViewLowerSurface: {fileID: 7819056045747712301}
+--- !u!114 &8850216655049906198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7644323090181395880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798ddda2cf4104f43ab3b00d4f5b17ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: {fileID: 9042140380267599083, guid: 28edc08054981a64aa67195688ad9fa2, type: 3}
+  timerPoint: {fileID: 1112657998730502790}
+  positionIngredient1: {fileID: 4679477401383007732}
+  positionIngredient2: {fileID: 319952076356304536}
+  positionResult: {fileID: 1112657998730502790}
+  productsContainer: {fileID: 0}
 --- !u!1 &7652722433623967831
 GameObject:
   m_ObjectHideFlags: 0

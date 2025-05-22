@@ -14,7 +14,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private StoveView _stoveView;
     private DecorationFurniture _decorationFurniture;
     
-    private bool _isHeroikTrigger = false;
+    private bool _isHeroikTrigger;
     private bool _isDeleteHelperScripts = true;
     private Heroik _heroik;
     private GameObject _ingredient;

@@ -4,36 +4,90 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger,IFindReadyFood
+public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IFindReadyFood
 {
-    // Initialize поля
-    private CuttingTablePoints _cuttingTablePoints;
-    private CuttingTableView _cuttingTableView;
-    private ProductsContainer _productsContainer;
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+
+    [SerializeField] private GameObject timer;
+    [SerializeField] private Transform timerPoint;
     
-    // не Initialize поля
+    [SerializeField] private Transform positionIngredient1; 
+    [SerializeField] private Transform positionIngredient2; 
+    [SerializeField] private Transform positionResult;      
+
+    [SerializeField] private ProductsContainer productsContainer;
+    
+
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _result = null;
+    
+    private Heroik _heroik = null;
+    private DecorationFurniture _decorationFurniture;
+    private Outline _outline;
+    private Animator _animator;
+    private CuttingTablePoints _cuttingTablePoints;
+    private CuttingTableView _cuttingTableView;
 
-    public CuttingTable(CuttingTablePoints cuttingTablePoints, CuttingTableView cuttingTableView, ProductsContainer productsContainer, Heroik heroik)
+    private void Awake()
     {
-        _cuttingTablePoints = cuttingTablePoints;
-        _cuttingTableView = cuttingTableView;
-        _productsContainer = productsContainer;
-        _heroik = heroik;
-        
-        EventBus.PressE += CookingProcess;
-        Debug.Log("Создать объект: CuttingTable");
+        _animator = GetComponent<Animator>();
+        _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
+        _cuttingTableView = new CuttingTableView(_animator,timer,timerPoint);
+        // StaticManagerWithoutZenject.HelperScriptFactory;
     }
 
-    public void Dispose()
+    void Start()
+    {
+        _animator.SetBool("Work", false);
+        _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = null;
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+            
+        }
+    }
+    
+    private void OnEnable()
+    {
+        EventBus.PressE += CookingProcess;
+    }
+
+    private void OnDisable()
     {
         EventBus.PressE -= CookingProcess;
-        Debug.Log("У объекта вызван Dispose : CuttingTable");
     }
     
     public GameObject GiveObj(ref GameObject giveObj)
@@ -46,12 +100,12 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
         if (_ingredient1 == null)
         {
             _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
-                _cuttingTablePoints.ParentIngredient,true);
+                _cuttingTablePoints.PositionIngredient1,true);
         }
         else if (_ingredient2 == null)
         {
              _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
-                _cuttingTablePoints.ParentIngredient,true);
+                _cuttingTablePoints.PositionIngredient2,true);
         }
         else
         {
@@ -63,7 +117,7 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
     public void CreateResult(GameObject obj)
     {
         _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _cuttingTablePoints.PositionResult,
-            _cuttingTablePoints.ParentResult,true);
+            _cuttingTablePoints.PositionResult,true);
     }
     
     public void TurnOn()
@@ -83,33 +137,19 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
         _ingredient2 = null;
         _cuttingTableView.TurnOff();
     }
-
-    public bool IsAllowDestroy()
-    {
-        if (_ingredient1 == null && _ingredient2 == null && _result == null && !_isWork)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void HeroikIsTrigger()
-    {
-        _isHeroikTrigger = !_isHeroikTrigger;
-    }
-
+    
     public GameObject FindReadyFood()
     {
         List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
-        if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
+        if (SuitableIngredients(currentIngredient,productsContainer.RequiredFruitSalad))
         {
-            return _productsContainer.FruitSalad;
+            return productsContainer.FruitSalad;
         }
-        if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
+        if(SuitableIngredients(currentIngredient,productsContainer.RequiredMixBakedFruit))
         {
-            return _productsContainer.MixBakedFruit;
+            return productsContainer.MixBakedFruit;
         }
-        return _productsContainer.Rubbish;
+        return productsContainer.Rubbish;
     }
 
     public bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
@@ -136,82 +176,89 @@ public class CuttingTable : IDisposable,IGiveObj,IAcceptObject,ICreateResult,ITu
     
     private void CookingProcess()
     {
-        if(_isHeroikTrigger == true )
+        if(_isHeroikTrigger == false)
         {
-            if(_heroik.IsBusyHands == false) // руки не заняты
+            return;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Стол не работает");
+            return;
+        }
+        
+        if(_heroik.IsBusyHands == false) // руки не заняты
+        {
+            if (_isWork)
             {
-                if (_isWork)
+                Debug.Log("ждите блюдо готовится");
+            }
+            else
+            {
+                if (_result == null)
                 {
-                    Debug.Log("ждите блюдо готовится");
+                    if (_ingredient1 == null)
+                    {
+                        Debug.Log("У вас пустые руки и прилавок пуст");
+                    }
+                    else //есть первый ингредиент // забираете первый ингредиент 
+                    {
+                        _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
+                        _ingredient1 = null;
+                    }
                 }
-                else
+                else //есть результат // забрать результат
                 {
-                    if (_result == null)
-                    {
-                        if (_ingredient1 == null)
-                        {
-                            Debug.Log("У вас пустые руки и прилавок пуст");
-                        }
-                        else //есть первый ингредиент // забираете первый ингредиент 
-                        {
-                            _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
-                            _ingredient1 = null;
-                        }
-                    }
-                    else //есть результат // забрать результат
-                    {
-                        _heroik.ActiveObjHands(GiveObj(ref _result));
-                        _result = null;
-                        Debug.Log("Вы забрали конечный продукт"); 
-                    }
+                    _heroik.ActiveObjHands(GiveObj(ref _result));
+                    _result = null;
+                    Debug.Log("Вы забрали конечный продукт"); 
                 }
             }
-            else // заняты
+        }
+        else // заняты
+        {
+            if (_isWork)
             {
-                if (_isWork)
+                Debug.Log("ждите блюдо готовится");
+            }
+            else
+            {
+                if (_result == null)
                 {
-                    Debug.Log("ждите блюдо готовится");
+                    if (_ingredient1 == null)// ингредиентов нет
+                    {
+                        if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                        {
+                            AcceptObject(_heroik.GiveObjHands());
+                        }
+                        else
+                        {
+                            Debug.Log("с предметом нельзя взаимодействовать");
+                        }
+                    }
+                    else// есть первый ингредиент
+                    {
+                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                        {
+                            AcceptObject(_heroik.GiveObjHands());
+                            //Debug.Log("Предмет второй положен на нарезочный стол");
+                            TurnOn(); 
+                            GameObject objdish = FindReadyFood();
+                            StartCookingProcessAsync(objdish);
+                        }
+                        else
+                        {
+                            Debug.Log("Объект не подходит для слияния");
+                        }
+                    }
                 }
                 else
                 {
-                    if (_result == null)
-                    {
-                        if (_ingredient1 == null)// ингредиентов нет
-                        {
-                            if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
-                            {
-                                AcceptObject(_heroik.GiveObjHands());
-                            }
-                            else
-                            {
-                                Debug.Log("с предметом нельзя взаимодействовать");
-                            }
-                        }
-                        else// есть первый ингредиент
-                        {
-                            if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
-                            {
-                                AcceptObject(_heroik.GiveObjHands());
-                                //Debug.Log("Предмет второй положен на нарезочный стол");
-                                TurnOn(); 
-                                GameObject objdish = FindReadyFood();
-                                StartCookingProcessAsync(objdish);
-                            }
-                            else
-                            {
-                                Debug.Log("Объект не подходит для слияния");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Сначала уберите предмет из рук");
-                    }
+                    Debug.Log("Сначала уберите предмет из рук");
+                }
                         
-                }
-                    
             }
-                
+                    
         }
     }
     
