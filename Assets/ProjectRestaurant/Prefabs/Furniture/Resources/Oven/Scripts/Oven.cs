@@ -4,37 +4,85 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy,IHeroikIsTrigger
+public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn
 {
-    private ProductsContainer _productsContainer;
+    [SerializeField] private GameObject switchFirst;
+    [SerializeField] private GameObject switchSecond;
+    [SerializeField] private GameObject timer;
+
+    [SerializeField] private Transform pointUp;
+    [SerializeField] private Transform positionIngredient;
+    [SerializeField] private ProductsContainer productsContainer;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
-    private Transform _positionResult; // сделать отдельный класс
-    private Transform _parentResult; // сделать отдельный класс
-    private Transform _positionIngredient;
-    private OvenView _ovenView;
     
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
     private GameObject _ingredient;
     private GameObject _result;
+    
+    private const string ANIMATIONCLOSE = "Close";
+    private const string ANIMATIONOPEN = "Open";
+    private OvenView _ovenView;
+    private Animator _animator;
+    private DecorationFurniture _decorationFurniture;
+    private Outline _outline;
 
-    public Oven(ProductsContainer productsContainer, Heroik heroik, Transform positionResult, Transform parentResult, Transform positionIngredient, OvenView ovenView)
+    private void Awake()
     {
-        _productsContainer = productsContainer;
-        _heroik = heroik;
-        _positionResult = positionResult;
-        _parentResult = parentResult;
-        _positionIngredient = positionIngredient;
-        _ovenView = ovenView;
-        
-        EventBus.PressE += CookingProcess;
-        Debug.Log("Создать объект: Oven");
+        _outline = GetComponent<Outline>();
+        _animator = GetComponent<Animator>();
+        _ovenView = new OvenView(switchFirst, switchSecond, timer, pointUp, pointUp,_animator);
+    }
+
+    void Start()
+    {
+        _decorationFurniture = GetComponent<DecorationFurniture>();
+        _animator.SetBool(ANIMATIONCLOSE,false);
+        _animator.SetBool(ANIMATIONOPEN,true);
     }
     
-    public void Dispose()
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = null;
+            _isHeroikTrigger = false;
+            _outline.OutlineWidth = 0f;
+        }
+    }
+    
+    private void OnEnable()
+    {
+        EventBus.PressE += CookingProcess;
+    }
+
+    private void OnDisable()
     {
         EventBus.PressE -= CookingProcess;
-        Debug.Log("У объекта вызван Dispose : Oven");
     }
     public GameObject GiveObj(ref GameObject giveObj)
     {
@@ -43,7 +91,7 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
 
     public void AcceptObject(GameObject obj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj,_positionIngredient,_positionIngredient, true);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj,positionIngredient,positionIngredient, true);
         Object.Destroy(obj);
     }
     
@@ -51,10 +99,10 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
     {
         try
         {
-            _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
+            productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
             if (bakedObj != null)
             {
-                _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,_positionResult, _parentResult,true );
+                _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,pointUp, pointUp,true );
             }
             else
             {
@@ -82,62 +130,56 @@ public class Oven : IDisposable,  IGiveObj, IAcceptObject, ICreateResult, ITurnO
         _ingredient = null;
     }
     
-    public bool IsAllowDestroy()
-    {
-        if (!_isWork && _result == null)
-        {
-            return true;
-        }
-        return false;
-    }
-    
-    public void HeroikIsTrigger()
-    {
-        _isHeroikTrigger = !_isHeroikTrigger;
-    }
-    
     private void CookingProcess()
     {
-        if(_isHeroikTrigger == true)
+        if(_isHeroikTrigger == false)
         {
-            if (_heroik.IsBusyHands == false) // руки не заняты
+            return;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Печка не работает");
+            return;
+        }
+        
+        if (_heroik.IsBusyHands == false) // руки не заняты
+        {
+            if (_isWork)
             {
-                if (_isWork)
+                Debug.Log("ждите печка работает");
+            }
+            else
+            {
+                if (_result != null)
                 {
-                    Debug.Log("ждите печка работает");
+                    _heroik.ActiveObjHands(GiveObj(ref _result));
                 }
                 else
                 {
-                    if (_result != null)
-                    {
-                        _heroik.ActiveObjHands(GiveObj(ref _result));
-                    }
-                    else
-                    {
-                        Debug.Log("печка пуста руки тоже");
-                    }
+                    Debug.Log("печка пуста руки тоже");
                 }
             }
-            else // заняты
+        }
+        else // заняты
+        {
+            if (_isWork)
             {
-                if (_isWork)
+                Debug.Log("ждите печка работает");
+            }
+            else
+            {
+                if (_result != null)
                 {
-                    Debug.Log("ждите печка работает");
+                    Debug.Log("Сначала заберите предмет");
                 }
                 else
                 {
-                    if (_result != null)
+                    if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
                     {
-                        Debug.Log("Сначала заберите предмет");
-                    }
-                    else
-                    {
-                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
-                        {
-                            AcceptObject(_heroik.GiveObjHands());
-                            TurnOn();
-                            StartCookingProcessAsync(_ingredient);
-                        }
+                        AcceptObject(_heroik.GiveObjHands());
+                        TurnOn();
+                        StartCookingProcessAsync(_ingredient);
                     }
                 }
             }

@@ -1419,9 +1419,9 @@ GameObject:
   - component: {fileID: 2635636891125355626}
   - component: {fileID: 5979172097799761710}
   - component: {fileID: 3831457792430608900}
-  - component: {fileID: 8145522861482100146}
   - component: {fileID: 7095670534917586400}
   - component: {fileID: 566445219739310496}
+  - component: {fileID: 4212486630260703151}
   m_Layer: 0
   m_Name: Oven
   m_TagString: Untagged
@@ -1487,27 +1487,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &8145522861482100146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7736825090635847737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1ede4a64d5316446b80d9cda2c12362, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  switchFirst: {fileID: 4755754510666364741}
-  switchSecond: {fileID: 8437588466424790160}
-  timer: {fileID: 9042140380267599083, guid: 249e019d565eac74faf7c0c7c17c949f, type: 3}
-  timerPoint: {fileID: 3406373182670018399}
-  timerParent: {fileID: 3406373182670018399}
-  positionResult: {fileID: 3406373182670018399}
-  parentResult: {fileID: 3406373182670018399}
-  positionIngredient: {fileID: 5658948161613669823}
-  productsContainer: {fileID: 0}
 --- !u!95 &7095670534917586400
 Animator:
   serializedVersion: 5
@@ -1544,6 +1523,24 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
   positionViewTableTop: {fileID: 6681466913455071341}
   positionViewLowerSurface: {fileID: 5221340822446168160}
+--- !u!114 &4212486630260703151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736825090635847737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 506635eae6490b94ead16de2bb00b775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchFirst: {fileID: 4755754510666364741}
+  switchSecond: {fileID: 8437588466424790160}
+  timer: {fileID: 9042140380267599083, guid: 249e019d565eac74faf7c0c7c17c949f, type: 3}
+  pointUp: {fileID: 3406373182670018399}
+  positionIngredient: {fileID: 5658948161613669823}
+  productsContainer: {fileID: 0}
 --- !u!1 &8437588466424790160
 GameObject:
   m_ObjectHideFlags: 0
