@@ -731,8 +731,8 @@ GameObject:
   - component: {fileID: 6807812370206414303}
   - component: {fileID: 5233147906315482038}
   - component: {fileID: 5970890383202385282}
-  - component: {fileID: 3222566343247172577}
   - component: {fileID: 8248662877115084337}
+  - component: {fileID: 1744326738047333259}
   m_Layer: 0
   m_Name: Blender
   m_TagString: Untagged
@@ -817,27 +817,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3222566343247172577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7296713711015147945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a493afeda728a34daf2800baa6ec7ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  productsContainer: {fileID: 0}
-  timer: {fileID: 9042140380267599083, guid: c29190d851909c54f94d38644e50dee9, type: 3}
-  timerPoint: {fileID: 3441149810256805265}
-  timerParent: {fileID: 7464919386746246956}
-  firstPoint: {fileID: 5709205898383119608}
-  secondPoint: {fileID: 3441149810256805265}
-  thirdPoint: {fileID: 2616763785852408610}
-  parentFood: {fileID: 7464919386746246956}
-  parentReadyFood: {fileID: 7464919386746246956}
 --- !u!114 &8248662877115084337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,6 +832,25 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
   positionViewTableTop: {fileID: 1892623922271939737}
   positionViewLowerSurface: {fileID: 6203933716194635010}
+--- !u!114 &1744326738047333259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7296713711015147945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded56216635ee1b45a62b6516cb4ed4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productsContainer: {fileID: 0}
+  timer: {fileID: 9042140380267599083, guid: c29190d851909c54f94d38644e50dee9, type: 3}
+  pointUp: {fileID: 3441149810256805265}
+  timerParent: {fileID: 7464919386746246956}
+  firstPoint: {fileID: 5709205898383119608}
+  secondPoint: {fileID: 3441149810256805265}
+  thirdPoint: {fileID: 2616763785852408610}
 --- !u!1 &7785370817573785855
 GameObject:
   m_ObjectHideFlags: 0

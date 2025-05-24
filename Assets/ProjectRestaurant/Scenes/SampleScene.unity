@@ -4875,7 +4875,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3222566343247172577, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
+    - target: {fileID: 1744326738047333259, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
       propertyPath: productsContainer
       value: 
       objectReference: {fileID: 173349867}
@@ -4883,10 +4883,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blender
       objectReference: {fileID: 0}
-    - target: {fileID: 8248662877115084337, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
-      propertyPath: config
-      value: 
-      objectReference: {fileID: 11400000, guid: 52a7f3d4c0113cf48a08d0375ff95edf, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4900,6 +4896,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4033659309161835673, guid: 41d8ff46b8722d74ea172e4d9f0483dc, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
     - target: {fileID: 5677662894983689909, guid: 41d8ff46b8722d74ea172e4d9f0483dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.63
