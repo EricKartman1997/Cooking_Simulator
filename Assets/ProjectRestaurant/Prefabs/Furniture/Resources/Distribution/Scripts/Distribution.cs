@@ -3,25 +3,59 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowDestroy, IHeroikIsTrigger
+public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 { 
-    //Initialize
+    
+    [SerializeField] private Transform pointDish;
+    [SerializeField] private Checks checks;
+    
     private Animator _animator;
-    private Heroik _heroik; // только для объекта героя, а надо и другие...
-    private Transform _pointDish;
-    private Checks _checks;
+    private Outline _outline;
+    private DecorationFurniture _decorationFurniture;
+    private Heroik _heroik;
     
     private bool _isWork = false;
     private GameObject _currentDish;
-    
     private bool _isHeroikTrigger = false;
     
-    public void Initialize(Heroik heroik,Transform pointDish,Animator animator,Checks checks)
+    void Start()
     {
-        _heroik = heroik;
-        _pointDish = pointDish;
-        _animator = animator;
-        _checks = checks;
+        _animator = GetComponent<Animator>();
+        _outline = GetComponent<Outline>();
+        _decorationFurniture = GetComponent<DecorationFurniture>();
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = other.GetComponent<Heroik>();
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+            return;
+        }
+        
+        if (other.GetComponent<Heroik>())
+        {
+            _heroik = null;
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
     }
     
     private void OnEnable()
@@ -36,7 +70,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _currentDish = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _pointDish, _pointDish,true);
+        _currentDish = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
         Destroy(acceptObj);
     }
 
@@ -51,58 +85,51 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
         _animator.Play("Distribution");
         _isWork = true;
     }
-
-    public bool IsAllowDestroy()
-    {
-        if (_currentDish == null)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void HeroikIsTrigger()
-    {
-        _isHeroikTrigger = !_isHeroikTrigger;
-    }
     
     private void CookingProcess()
     {
-        if(_isHeroikTrigger == true)
+        if(_isHeroikTrigger == false)
         {
-            if(_heroik.IsBusyHands == false) // руки не заняты
+            return;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Раздача не работает");
+            return;
+        }
+        
+        if(_heroik.IsBusyHands == false) // руки не заняты
+        {
+            Debug.Log("У вас пустые руки");
+        }
+        else// руки заняты
+        {
+            if (_isWork)
             {
-                Debug.Log("У вас пустые руки");
+                Debug.Log("Ждите блюдо еще не забрали");
             }
-            else// руки заняты
+            else
             {
-                if (_isWork)
+                if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
                 {
-                    Debug.Log("Ждите блюдо еще не забрали");
+                    if (checks.CheckTheCheck(_heroik.CurrentTakenObjects))
+                    {
+                        Debug.Log("Это блюдо есть в чеках");
+                        AcceptObject(_heroik.GiveObjHands());
+                        TurnOn();
+                        StartCookingProcessAsync();
+                    }
+                    else
+                    {
+                        Debug.Log("Этого блюдо нет в чеках");
+                    }
                 }
-                else
+                else 
                 {
-                    if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
-                    {
-                        if (_checks.CheckTheCheck(_heroik.CurrentTakenObjects))
-                        {
-                            Debug.Log("Это блюдо есть в чеках");
-                            AcceptObject(_heroik.GiveObjHands());
-                            TurnOn();
-                            StartCookingProcessAsync();
-                        }
-                        else
-                        {
-                            Debug.Log("Этого блюдо нет в чеках");
-                        }
-                    }
-                    else 
-                    {
-                        Debug.Log("Это блюдо нельзя подавать гостям");
-                    }
+                    Debug.Log("Это блюдо нельзя подавать гостям");
+                }
                         
-                }
             }
         }
     }
@@ -117,7 +144,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn, IIsAllowD
     private void TakeToTheHall()
     {
         _currentDish.SetActive(false);
-        _checks.DeleteCheck(_currentDish);
+        checks.DeleteCheck(_currentDish);
         Destroy(_currentDish);
         _currentDish = null;
     }
