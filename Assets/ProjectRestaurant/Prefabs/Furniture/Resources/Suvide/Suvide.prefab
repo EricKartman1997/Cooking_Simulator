@@ -413,8 +413,8 @@ GameObject:
   - component: {fileID: 6503092573277811024}
   - component: {fileID: 2458815630657886399}
   - component: {fileID: 5626108620994065816}
-  - component: {fileID: 2874885002667462542}
   - component: {fileID: 790722727578032923}
+  - component: {fileID: 9121653074195704815}
   m_Layer: 0
   m_Name: Suvide
   m_TagString: Untagged
@@ -500,31 +500,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2874885002667462542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373573824368281778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7ffa9d89a6c9fe498cb0eb520184aa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waterPrefab: {fileID: 5909514516430006565}
-  switchTimePrefab: {fileID: 2030716835822248688}
-  switchTemperPrefab: {fileID: 3341416824622601963}
-  firstTimer: {fileID: 8159777391361687252}
-  secondTimer: {fileID: 5470439335329809443}
-  thirdTimer: {fileID: 1676016274958347979}
-  productsContainer: {fileID: 0}
-  firstPointIngredient: {fileID: 6195005542573055563}
-  secondPointIngredient: {fileID: 4960105802297593317}
-  thirdPointIngredient: {fileID: 1938840400872239567}
-  firstPointResult: {fileID: 6737498286776020036}
-  secondPointResult: {fileID: 2252374701873504571}
-  thirdPointResult: {fileID: 3428920264636510944}
 --- !u!114 &790722727578032923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,6 +515,28 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
   positionViewTableTop: {fileID: 1813022108389080479}
   positionViewLowerSurface: {fileID: 879507536036458835}
+--- !u!114 &9121653074195704815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373573824368281778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e455daea6046c4fb26af53d3a18629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productsContainer: {fileID: 0}
+  waterPrefab: {fileID: 5909514516430006565}
+  switchTimePrefab: {fileID: 2030716835822248688}
+  switchTemperPrefab: {fileID: 3341416824622601963}
+  firstTimer: {fileID: 8159777391361687252}
+  secondTimer: {fileID: 5470439335329809443}
+  thirdTimer: {fileID: 1676016274958347979}
+  firstPointIngredient: {fileID: 6195005542573055563}
+  secondPointIngredient: {fileID: 4960105802297593317}
+  thirdPointIngredient: {fileID: 1938840400872239567}
 --- !u!1 &3643738007920391247
 GameObject:
   m_ObjectHideFlags: 0
