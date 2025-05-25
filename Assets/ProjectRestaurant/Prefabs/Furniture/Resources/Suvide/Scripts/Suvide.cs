@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -26,17 +27,17 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private Animator _animator;
     
-    private GameObject _result1 = null;
-    private GameObject _result2 = null;
-    private GameObject _result3 = null;
+    [SerializeField] private GameObject _result1 = null;
+    [SerializeField] private GameObject _result2 = null;
+    [SerializeField] private GameObject _result3 = null;
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _ingredient3 = null;
-    private float _timer = 0f;
-    private float _updateInterval = 0.1f;
-    private bool _isCookedResult1 = false;
-    private bool _isCookedResult2 = false;
-    private bool _isCookedResult3 = false;
+    // private float _timer = 0f;
+    // private float _updateInterval = 0.1f;
+    [SerializeField] private bool _isCookedResult1 = false;
+    [SerializeField] private bool _isCookedResult2 = false;
+    [SerializeField] private bool _isCookedResult3 = false;
     private bool _isReadyResult1 = false; 
     private bool _isReadyResult2 = false; 
     private bool _isReadyResult3 = false; 
@@ -56,16 +57,16 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
     
-    public void Update() // изменить
-    {
-        _timer += Time.deltaTime;
-    
-        if (_timer >= _updateInterval)
-        {
-            _timer = 0f;
-            ChangeView(); 
-        }
-    }
+    // public void Update() // изменить
+    // {
+    //     _timer += Time.deltaTime;
+    //
+    //     if (_timer >= _updateInterval)
+    //     {
+    //         _timer = 0f;
+    //         ChangeView(); 
+    //     }
+    // }
     
     private void OnTriggerEnter(Collider other)
     {
@@ -111,9 +112,11 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
         EventBus.PressE -= CookingProcess;
     }
     
-    public GameObject GiveObj(ref GameObject giveObj) 
+    public GameObject GiveObj(ref GameObject giveObj)
     {
-        return giveObj;
+        GameObject copy = giveObj;
+        giveObj = null;
+        return copy;
     }
     
     public void AcceptObject(GameObject acceptObj) 
@@ -205,6 +208,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult1 = true;
             _suvideView.TurnOnFirstTimer();
             _isReadyResult1 = true;
+            ChangeView(); 
         }
         else if (_ingredient2 != null && !_isCookedResult2)
         {
@@ -212,6 +216,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult2 = true;
             _suvideView.TurnOnSecondTimer();
             _isReadyResult2 = true;
+            ChangeView(); 
         }
         else if (_ingredient3 != null && !_isCookedResult3)
         {
@@ -219,6 +224,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult3 = true;
             _suvideView.TurnOnThirdTimer();
             _isReadyResult3 = true;
+            ChangeView(); 
         }
         else
         {
@@ -267,7 +273,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
 
     private void ChangeView()
     {
-        if (_isCookedResult1 || _isCookedResult2 || _isCookedResult3)
+        if (_isCookedResult1 || _isCookedResult2 || _isCookedResult3|| _result1 !=null|| _result2!=null || _result3!=null )
         {
             _isWork = true;
             _suvideView.WorkingSuvide();
@@ -297,22 +303,26 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             if (_result1 != null)
             {
                 _heroik.ActiveObjHands(GiveObj(ref _result1));
+                ChangeView();
             }
             else
             {
                 if (_result2 != null)
                 {
                     _heroik.ActiveObjHands(GiveObj(ref _result2));
+                    ChangeView(); 
                 }
                 else
                 {
                     if (_result3 != null)
                     {
                         _heroik.ActiveObjHands(GiveObj(ref _result3));
+                        ChangeView(); 
                     }
                     else
                     {
                         Debug.Log("Сувид пуст руки тоже");
+                        ChangeView(); 
                     }
                 }
             }
@@ -326,7 +336,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
                 {
                     AcceptObject(_heroik.GiveObjHands());
                     TurnOn();
-                    StartCookingProcessAsync(_ingredient1);
+                    StartCoroutine(StartCookingProcessAsync(_ingredient1));
                 }
                 else
                 {
@@ -342,7 +352,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
                     {
                         AcceptObject(_heroik.GiveObjHands());
                         TurnOn();
-                        StartCookingProcessAsync(_ingredient2);
+                        StartCoroutine(StartCookingProcessAsync(_ingredient2));
                     }
                     else
                     {
@@ -358,7 +368,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
                         {
                             AcceptObject(_heroik.GiveObjHands());
                             TurnOn();
-                            StartCookingProcessAsync(_ingredient3);
+                            StartCoroutine(StartCookingProcessAsync(_ingredient3));
                         }
                         else
                         {
@@ -386,11 +396,12 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
         }
     }
     
-    private async void StartCookingProcessAsync(GameObject obj)
+    private IEnumerator StartCookingProcessAsync(GameObject obj)
     {
-        await Task.Delay(10000);
+        yield return new WaitForSeconds(10f);
         CreateResult(obj);
         TurnOff();
+        ChangeView();
     }
     
 }
