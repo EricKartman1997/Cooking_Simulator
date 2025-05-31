@@ -4,16 +4,11 @@ using UnityEngine;
 public class StovePoints: IDisposable
 {
     private Transform _positionRawFood;
-    private Transform _parentRawFood;
-    
-    public Transform ParentRawFood => _parentRawFood;
-
     public Transform PositionRawFood => _positionRawFood;
     
-    public StovePoints(Transform positionRawFood, Transform parentRawFood)
+    public StovePoints(Transform positionRawFood)
     {
         _positionRawFood = positionRawFood;
-        _parentRawFood = parentRawFood;
         
         Debug.Log("Создал объект: StovePoints");
     }

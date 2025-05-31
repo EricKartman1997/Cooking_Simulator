@@ -31,11 +31,11 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     {
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
-        _ovenView = new OvenView(switchFirst, switchSecond, timer, pointUp, pointUp,_animator);
     }
 
     void Start()
     {
+        _ovenView = StaticManagerWithoutZenject.HelperScriptFactory.GetOvenView(switchFirst, switchSecond, timer, pointUp, pointUp,_animator);
         _decorationFurniture = GetComponent<DecorationFurniture>();
         _animator.SetBool(ANIMATIONCLOSE,false);
         _animator.SetBool(ANIMATIONOPEN,true);

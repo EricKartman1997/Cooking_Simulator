@@ -35,13 +35,13 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
-        _blenderView = new BlenderView(timer, pointUp, timerParent, _animator);
     }
 
     void Start()
     {
         //_animator.SetBool("Work", false);
+        _blenderPoints = StaticManagerWithoutZenject.HelperScriptFactory.GetBlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
+        _blenderView = StaticManagerWithoutZenject.HelperScriptFactory.GetBlenderView(timer, pointUp, timerParent, _animator);
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }

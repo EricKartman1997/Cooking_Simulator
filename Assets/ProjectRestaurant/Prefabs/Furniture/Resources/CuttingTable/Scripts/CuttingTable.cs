@@ -33,14 +33,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
-        _cuttingTableView = new CuttingTableView(_animator,timer,timerPoint);
-        // StaticManagerWithoutZenject.HelperScriptFactory;
     }
 
     void Start()
     {
         _animator.SetBool("Work", false);
+        _cuttingTablePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetCuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
+        _cuttingTableView = StaticManagerWithoutZenject.HelperScriptFactory.GetCuttingTableView(_animator,timer,timerPoint);
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }

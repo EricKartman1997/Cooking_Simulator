@@ -5,7 +5,6 @@ using UnityEngine;
 public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy
 {
     [SerializeField] private Transform positionRawFood;
-    [SerializeField] private Transform parentRawFood;
     
     private List<Type> _unusableObjects;
     private Animator _animator;
@@ -15,13 +14,22 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private DecorationFurniture _decorationFurniture;
     
     private bool _isHeroikTrigger;
-    private bool _isDeleteHelperScripts = true;
     private Heroik _heroik;
     private GameObject _ingredient;
     private IForStove _componentForStove;
     private GameObject _result;
+
+    // private void Awake()
+    // {
+    //     _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoint(positionRawFood);
+    //     _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
+    // }
+
     void Start()
     {
+        _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoints(positionRawFood);
+        _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
+        
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
@@ -36,6 +44,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     {
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
+            _isHeroikTrigger = true;
             _outline.OutlineWidth = 2f;
             return;
         }
@@ -44,20 +53,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             _heroik = other.GetComponent<Heroik>();
             _outline.OutlineWidth = 2f;
-            if (_isDeleteHelperScripts == true)
-            {
-                _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoint(positionRawFood, parentRawFood);
-                _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
-
-                _isDeleteHelperScripts = false;
-            }
-            else
-            {
-                Debug.Log("Новый скрипт создан не был");
-            }
             _isHeroikTrigger = true;
-
-            
         }
     }
     
@@ -65,6 +61,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     {
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
+            _isHeroikTrigger = false;
             _outline.OutlineWidth = 0f;
             return;
         }
@@ -73,16 +70,6 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             _heroik = null;
             _outline.OutlineWidth = 0f;
-            if (IsAllowDestroy())
-            {
-                _stovePoints.Dispose();
-                _stovePoints = null;
-            
-                _stoveView.Dispose();
-                _stoveView = null;
-            
-                _isDeleteHelperScripts = true;
-            }
             _isHeroikTrigger = false;
         }
     }
@@ -99,40 +86,42 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     private void CookingProcess()
     {
+        if(_isHeroikTrigger == false)
+        {
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             Debug.LogWarning("Плита не работает");
             return;
         }
         
-        if (_isHeroikTrigger == true)
+        if (_heroik.IsBusyHands == true)
         {
-            if (_heroik.IsBusyHands == true)
+            if (_heroik.CheckObjForReturn(_unusableObjects))
             {
-                if (_heroik.CheckObjForReturn(_unusableObjects))
-                {
-                    AcceptObject(_heroik.GiveObjHands());
+                AcceptObject(_heroik.GiveObjHands());
                     
-                    _componentForStove.IsOnStove = true;
-                }
-                else
-                {
-                    Debug.LogWarning("На объекте нет нужного компонента, объект нельзя положить");
-                }
+                _componentForStove.IsOnStove = true;
             }
             else
             {
-                if (_ingredient != null)
-                {
-                    CreateResult(_ingredient);
-                    _heroik.ActiveObjHands(GiveObj(ref _result));
-                }
-                else
-                {
-                    Debug.LogWarning("Забирать нечего");
-                }
-
+                Debug.LogWarning("На объекте нет нужного компонента, объект нельзя положить");
             }
+        }
+        else
+        {
+            if (_ingredient != null)
+            {
+                CreateResult(_ingredient);
+                _heroik.ActiveObjHands(GiveObj(ref _result));
+            }
+            else
+            {
+                Debug.LogWarning("Забирать нечего");
+            }
+
         }
     }
 
@@ -143,7 +132,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.ParentRawFood, true);
+        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _componentForStove = _ingredient.GetComponent<IForStove>();
         Destroy(acceptObj);
     }

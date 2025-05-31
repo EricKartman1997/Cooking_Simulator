@@ -27,17 +27,15 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private Animator _animator;
     
-    [SerializeField] private GameObject _result1 = null;
-    [SerializeField] private GameObject _result2 = null;
-    [SerializeField] private GameObject _result3 = null;
+    private GameObject _result1 = null;
+    private GameObject _result2 = null;
+    private GameObject _result3 = null;
     private GameObject _ingredient1 = null;
     private GameObject _ingredient2 = null;
     private GameObject _ingredient3 = null;
-    // private float _timer = 0f;
-    // private float _updateInterval = 0.1f;
-    [SerializeField] private bool _isCookedResult1 = false;
-    [SerializeField] private bool _isCookedResult2 = false;
-    [SerializeField] private bool _isCookedResult3 = false;
+    private bool _isCookedResult1 = false;
+    private bool _isCookedResult2 = false;
+    private bool _isCookedResult3 = false;
     private bool _isReadyResult1 = false; 
     private bool _isReadyResult2 = false; 
     private bool _isReadyResult3 = false; 
@@ -47,26 +45,15 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _suvidePoints = new SuvidePoints(firstPointIngredient, secondPointIngredient, thirdPointIngredient, firstPointIngredient, secondPointIngredient, thirdPointIngredient);
-        _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, firstTimer, secondTimer, thirdTimer, _animator);
     }
 
     private void Start()
     {
+        _suvidePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetSuvidePoints(firstPointIngredient, secondPointIngredient, thirdPointIngredient, firstPointIngredient, secondPointIngredient, thirdPointIngredient);
+        _suvideView = StaticManagerWithoutZenject.HelperScriptFactory.GetSuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, firstTimer, secondTimer, thirdTimer, _animator);
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
-    
-    // public void Update() // изменить
-    // {
-    //     _timer += Time.deltaTime;
-    //
-    //     if (_timer >= _updateInterval)
-    //     {
-    //         _timer = 0f;
-    //         ChangeView(); 
-    //     }
-    // }
     
     private void OnTriggerEnter(Collider other)
     {
