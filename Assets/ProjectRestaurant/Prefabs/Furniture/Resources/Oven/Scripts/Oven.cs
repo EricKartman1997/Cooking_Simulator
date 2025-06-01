@@ -153,7 +153,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
             {
                 if (_result != null)
                 {
-                    _heroik.ActiveObjHands(GiveObj(ref _result));
+                    _heroik.TryPickUp(GiveObj(ref _result));
                 }
                 else
                 {
@@ -175,9 +175,9 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
                 }
                 else
                 {
-                    if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForOven)}))
+                    if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForOven)}))
                     {
-                        AcceptObject(_heroik.GiveObjHands());
+                        AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
                         StartCookingProcessAsync(_ingredient);
                     }

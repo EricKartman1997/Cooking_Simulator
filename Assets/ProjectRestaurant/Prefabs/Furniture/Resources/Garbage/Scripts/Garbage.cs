@@ -80,7 +80,7 @@ public class Garbage : MonoBehaviour, IAcceptObject
         
         try
         { 
-            AcceptObject(_heroik.GiveObjHands());
+            AcceptObject(_heroik.TryGiveIngredient());
             DeleteObj();
         }
         catch (Exception e)

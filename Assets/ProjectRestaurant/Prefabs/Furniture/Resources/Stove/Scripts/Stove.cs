@@ -99,9 +99,9 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         
         if (_heroik.IsBusyHands == true)
         {
-            if (_heroik.CheckObjForReturn(_unusableObjects))
+            if (_heroik.CanGiveIngredient(_unusableObjects))
             {
-                AcceptObject(_heroik.GiveObjHands());
+                AcceptObject(_heroik.TryGiveIngredient());
                     
                 _componentForStove.IsOnStove = true;
             }
@@ -115,7 +115,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
             if (_ingredient != null)
             {
                 CreateResult(_ingredient);
-                _heroik.ActiveObjHands(GiveObj(ref _result));
+                _heroik.TryPickUp(GiveObj(ref _result));
             }
             else
             {

@@ -111,12 +111,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
             }
             else
             {
-                if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForDistribution)}))
+                if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForDistribution)}))
                 {
                     if (checks.CheckTheCheck(_heroik.CurrentTakenObjects))
                     {
                         Debug.Log("Это блюдо есть в чеках");
-                        AcceptObject(_heroik.GiveObjHands());
+                        AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
                         StartCookingProcessAsync();
                     }

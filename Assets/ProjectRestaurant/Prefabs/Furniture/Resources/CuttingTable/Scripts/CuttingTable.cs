@@ -202,13 +202,13 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                     }
                     else //есть первый ингредиент // забираете первый ингредиент 
                     {
-                        _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
+                        _heroik.TryPickUp(GiveObj(ref _ingredient1));
                         _ingredient1 = null;
                     }
                 }
                 else //есть результат // забрать результат
                 {
-                    _heroik.ActiveObjHands(GiveObj(ref _result));
+                    _heroik.TryPickUp(GiveObj(ref _result));
                     _result = null;
                     Debug.Log("Вы забрали конечный продукт"); 
                 }
@@ -226,9 +226,9 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                 {
                     if (_ingredient1 == null)// ингредиентов нет
                     {
-                        if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                        if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForCutting)}))
                         {
-                            AcceptObject(_heroik.GiveObjHands());
+                            AcceptObject(_heroik.TryGiveIngredient());
                         }
                         else
                         {
@@ -237,9 +237,9 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
                     }
                     else// есть первый ингредиент
                     {
-                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForCutting)}))
+                        if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForCutting)}))
                         {
-                            AcceptObject(_heroik.GiveObjHands());
+                            AcceptObject(_heroik.TryGiveIngredient());
                             //Debug.Log("Предмет второй положен на нарезочный стол");
                             TurnOn(); 
                             GameObject objdish = FindReadyFood();

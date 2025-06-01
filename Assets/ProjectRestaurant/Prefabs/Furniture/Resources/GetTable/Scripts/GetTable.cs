@@ -85,7 +85,7 @@ public class GetTable : MonoBehaviour, IGiveObj
 
         if (_heroik.IsBusyHands == false) //объект есть на столе, руки незаняты
         {
-            _heroik.ActiveObjHands(GiveObj(ref _objectOnTheTable));
+            _heroik.TryPickUp(GiveObj(ref _objectOnTheTable));
         }
         else// объект есть на столе, руки заняты
         {

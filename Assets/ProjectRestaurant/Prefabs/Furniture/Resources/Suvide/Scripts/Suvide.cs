@@ -289,21 +289,21 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
         {
             if (_result1 != null)
             {
-                _heroik.ActiveObjHands(GiveObj(ref _result1));
+                _heroik.TryPickUp(GiveObj(ref _result1));
                 ChangeView();
             }
             else
             {
                 if (_result2 != null)
                 {
-                    _heroik.ActiveObjHands(GiveObj(ref _result2));
+                    _heroik.TryPickUp(GiveObj(ref _result2));
                     ChangeView(); 
                 }
                 else
                 {
                     if (_result3 != null)
                     {
-                        _heroik.ActiveObjHands(GiveObj(ref _result3));
+                        _heroik.TryPickUp(GiveObj(ref _result3));
                         ChangeView(); 
                     }
                     else
@@ -319,9 +319,9 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             if (_result1 == null && !_isCookedResult1)
             {
                 //проверка на подъодит ли предмет
-                if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForSuvide)}))
+                if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForSuvide)}))
                 {
-                    AcceptObject(_heroik.GiveObjHands());
+                    AcceptObject(_heroik.TryGiveIngredient());
                     TurnOn();
                     StartCoroutine(StartCookingProcessAsync(_ingredient1));
                 }
@@ -335,9 +335,9 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
                 if (_result2 == null && !_isCookedResult2)
                 {
                     //проверка на подъодит ли предмет
-                    if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForSuvide)}))
+                    if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForSuvide)}))
                     {
-                        AcceptObject(_heroik.GiveObjHands());
+                        AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
                         StartCoroutine(StartCookingProcessAsync(_ingredient2));
                     }
@@ -351,9 +351,9 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
                     if (_result3 == null && !_isCookedResult3)
                     {
                         //проверка на подъодит ли предмет
-                        if (_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForSuvide)}))
+                        if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForSuvide)}))
                         {
-                            AcceptObject(_heroik.GiveObjHands());
+                            AcceptObject(_heroik.TryGiveIngredient());
                             TurnOn();
                             StartCoroutine(StartCookingProcessAsync(_ingredient3));
                         }

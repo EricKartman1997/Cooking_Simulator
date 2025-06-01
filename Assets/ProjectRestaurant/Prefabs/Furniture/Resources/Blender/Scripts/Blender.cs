@@ -214,19 +214,19 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
                     {
                         if (_ingredient2 == null)
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _ingredient1));
+                            _heroik.TryPickUp(GiveObj(ref _ingredient1));
                             _ingredient1 = null;
                         }
                         else
                         {
-                            _heroik.ActiveObjHands(GiveObj(ref _ingredient2));
+                            _heroik.TryPickUp(GiveObj(ref _ingredient2));
                             _ingredient2 = null;
                         }
                     }
                 }
                 else
                 {
-                    _heroik.ActiveObjHands(GiveObj(ref _result));
+                    _heroik.TryPickUp(GiveObj(ref _result));
                 }
                         
             }
@@ -244,9 +244,9 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
                 {
                     if (_ingredient1 == null)
                     {
-                        if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                        if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
                         {
-                            AcceptObject(_heroik.GiveObjHands());
+                            AcceptObject(_heroik.TryGiveIngredient());
                             Debug.Log("Предмет первый положен в блендер");
                         }
                         else
@@ -258,9 +258,9 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
                     {
                         if (_ingredient2 == null)
                         {
-                            if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                            if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
                             {
-                                AcceptObject(_heroik.GiveObjHands());
+                                AcceptObject(_heroik.TryGiveIngredient());
                                 Debug.Log("Предмет второй положен в блендер");
                             }
                             else
@@ -270,9 +270,9 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
                         }
                         else
                         {
-                            if(_heroik.CheckObjForReturn(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                            if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
                             {
-                                AcceptObject(_heroik.GiveObjHands());
+                                AcceptObject(_heroik.TryGiveIngredient());
                                 Debug.Log("Предмет третий положен в блендер");
                                 TurnOn(); 
                                 GameObject objdish = FindReadyFood();

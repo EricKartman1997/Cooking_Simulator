@@ -83,16 +83,16 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
             }
             else // на столе что-то есть
             {
-                _heroik.ActiveObjHands(GiveObj(ref _ingredient));
+                _heroik.TryPickUp(GiveObj(ref _ingredient));
             }
         }
         else // заняты
         {
             if (_ingredient == null) // ни одного активного объекта
             {
-                if (_heroik.CheckObjForReturn(_unusableObjects))
+                if (_heroik.CanGiveIngredient(_unusableObjects))
                 {
-                    AcceptObject(_heroik.GiveObjHands());
+                    AcceptObject(_heroik.TryGiveIngredient());
                 }
                 else
                 {
