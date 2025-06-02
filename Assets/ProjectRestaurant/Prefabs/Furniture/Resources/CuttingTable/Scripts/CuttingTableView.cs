@@ -5,14 +5,12 @@ using Object = UnityEngine.Object;
 public class CuttingTableView : IDisposable
 {
     private Animator _animator;
-    private GameObject _timer;
-    private Transform _timerPoint;
-
-    public CuttingTableView(Animator animator, GameObject timer, Transform timerPoint)
+    private NewTimer _timer;
+    
+    public CuttingTableView(Animator animator, NewTimer timer)
     {
         _animator = animator;
         _timer = timer;
-        _timerPoint = timerPoint;
         
         Debug.Log("Создать объект: CuttingTableView");
     }
@@ -25,7 +23,8 @@ public class CuttingTableView : IDisposable
     public void TurnOn()
     {
         _animator.SetBool("Work", true);
-        Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerPoint);
+        _timer.gameObject.SetActive(true);
+        //Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerPoint);
     }
     
     public void TurnOff()

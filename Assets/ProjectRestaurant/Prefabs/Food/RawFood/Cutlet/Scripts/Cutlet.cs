@@ -13,7 +13,7 @@ public class Cutlet : MonoBehaviour,IForStove
     [SerializeField] private float _timeRemaining;   //Debug
     [SerializeField] private bool _isOnStove;        //Debug
     private bool _isFire;
-    private Timer2 _componentTimer2;
+    private TimerCutlet _componentTimerCutlet;
     
     public Material Material
     {
@@ -26,9 +26,9 @@ public class Cutlet : MonoBehaviour,IForStove
         get => cutletConfig;
     }
     
-    public Timer2 ComponentTimer
+    public TimerCutlet ComponentTimer
     {
-        get => _componentTimer2;
+        get => _componentTimerCutlet;
     }
     
     public GameObject Timer
@@ -71,7 +71,7 @@ public class Cutlet : MonoBehaviour,IForStove
         _stateRoasting = Config.CurrentStateRoasting;
         _renderer = GetComponent<Renderer>();
         _cutletStateMachine = new CutletStateMachine(this,_stateRoasting);
-        _componentTimer2 = timePref.GetComponent<Timer2>();
+        _componentTimerCutlet = timePref.GetComponent<TimerCutlet>();
     }
 
     private void Update()

@@ -12,9 +12,9 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
     [SerializeField] private GameObject waterPrefab;
     [SerializeField] private GameObject switchTimePrefab;
     [SerializeField] private GameObject switchTemperPrefab;
-    [SerializeField] private HelperTimer firstTimer;
-    [SerializeField] private HelperTimer secondTimer;
-    [SerializeField] private HelperTimer thirdTimer;
+    [SerializeField] private NewTimer firstTimer;
+    [SerializeField] private NewTimer secondTimer;
+    [SerializeField] private NewTimer thirdTimer;
     
     [SerializeField] private Transform firstPointIngredient;
     [SerializeField] private Transform secondPointIngredient;
@@ -127,7 +127,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
         {
             Debug.Log("место под ингредиенты нет");
         }
-        Object.Destroy(acceptObj);
+        Destroy(acceptObj);
     }
     
     public void CreateResult(GameObject obj)
@@ -227,7 +227,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult1 = false;
             _ingredient1.SetActive(false);
             _ingredient1 = null;
-            Object.Destroy(_ingredient1);
+            Destroy(_ingredient1);
             _suvideView.TurnOff();
             _isReadyResult1 = false;
             
@@ -238,7 +238,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult2 = false;
             _ingredient2.SetActive(false);
             _ingredient2 = null;
-            Object.Destroy(_ingredient2);
+            Destroy(_ingredient2);
             _suvideView.TurnOff();
             _isReadyResult2 = false;
         }
@@ -248,7 +248,7 @@ public class Suvide :MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurn
             _isCookedResult3 = false;
             _ingredient3.SetActive(false);
             _ingredient3 = null;
-            Object.Destroy(_ingredient3);
+            Destroy(_ingredient3);
             _suvideView.TurnOff();
             _isReadyResult3 = false;
         }

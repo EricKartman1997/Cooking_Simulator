@@ -7,12 +7,13 @@ public class SuvideView : IDisposable
     private GameObject _waterPrefab;
     private GameObject _switchTimePrefab;
     private GameObject _switchTemperPrefab;
-    private HelperTimer _firstTimer;
-    private HelperTimer _secondTimer;
-    private HelperTimer _thirdTimer;
+    private NewTimer _firstTimer;
+    private NewTimer _secondTimer;
+    private NewTimer _thirdTimer;
     private Animator _animator; // добавить анимацию
 
-    public SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab, HelperTimer firstTimer, HelperTimer secondTimer, HelperTimer thirdTimer, Animator animator)
+    public SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab,
+        NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
     {
         _waterPrefab = waterPrefab;
         _switchTimePrefab = switchTimePrefab;
@@ -33,19 +34,22 @@ public class SuvideView : IDisposable
     public void TurnOnFirstTimer() 
     {
         //_animator.SetBool("Work", true);
-        Object.Instantiate(_firstTimer.timer, _firstTimer.timerPoint.position, Quaternion.identity,_firstTimer.timerParent);
+        //Object.Instantiate(_firstTimer.timer, _firstTimer.timerPoint.position, Quaternion.identity,_firstTimer.timerParent);
+        _firstTimer.gameObject.SetActive(true);
     }
     
     public void TurnOnSecondTimer() 
     {
         //_animator.SetBool("Work", true);
-        Object.Instantiate(_secondTimer.timer, _secondTimer.timerPoint.position, Quaternion.identity,_secondTimer.timerParent);
+        //Object.Instantiate(_secondTimer.timer, _secondTimer.timerPoint.position, Quaternion.identity,_secondTimer.timerParent);
+        _secondTimer.gameObject.SetActive(true);
     }
     
     public void TurnOnThirdTimer() 
     {
         //_animator.SetBool("Work", true);
-        Object.Instantiate(_thirdTimer.timer, _thirdTimer.timerPoint.position, Quaternion.identity,_thirdTimer.timerParent);
+        //Object.Instantiate(_thirdTimer.timer, _thirdTimer.timerPoint.position, Quaternion.identity,_thirdTimer.timerParent);
+        _thirdTimer.gameObject.SetActive(true);
     }
 
     public void TurnOff() 

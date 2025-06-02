@@ -22,9 +22,9 @@ public class HelperScriptFactory
         return cuttingTablePoints;
     }
     
-    public CuttingTableView GetCuttingTableView(Animator animator, GameObject timer, Transform timerPoint)
+    public CuttingTableView GetCuttingTableView(Animator animator, NewTimer timer)
     {
-        CuttingTableView cuttingTableView = new CuttingTableView(animator, timer, timerPoint);
+        CuttingTableView cuttingTableView = new CuttingTableView(animator, timer);
         return cuttingTableView;
     }
     
@@ -55,7 +55,7 @@ public class HelperScriptFactory
         return cuttingTablePoints;
     }
     
-    public SuvideView GetSuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab, HelperTimer firstTimer, HelperTimer secondTimer, HelperTimer thirdTimer, Animator animator)
+    public SuvideView GetSuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab, NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
     {
         SuvideView suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab,firstTimer,secondTimer,thirdTimer,animator);
         return suvideView;

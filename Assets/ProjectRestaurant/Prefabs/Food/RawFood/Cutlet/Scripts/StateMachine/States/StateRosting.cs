@@ -14,7 +14,6 @@ public abstract class StateRosting : IStateCutlet
 
     public virtual void Enter()
     {
-        
         //Debug.Log(GetType());
     }
 

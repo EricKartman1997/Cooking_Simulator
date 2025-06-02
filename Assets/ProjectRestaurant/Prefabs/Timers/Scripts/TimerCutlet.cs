@@ -1,34 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Timer2 : MonoBehaviour
+public class TimerCutlet : MonoBehaviour
 {
     [SerializeField] private ConfigTimer config;
     [SerializeField] private Image arrowImage;
     [SerializeField] private Image circleImage;
-    //[SerializeField] private float currentTime; // Debug
-    //private float _timeLife;
-    //private bool _isPossibleDelete;
     private RectTransform _arrowRect;
-
-    // public float CurrentTime
-    // {
-    //     get => currentTime;
-    //     set => currentTime = value;
-    // }
-
-    // public bool IsPossibleDelete
-    // {
-    //     get => _isPossibleDelete;
-    //     set => _isPossibleDelete = value;
-    // }
-
-    // public float TimeLife
-    // {
-    //     get => _timeLife;
-    //     set => _timeLife = value;
-    // }
-
+    
     private void Awake()
     {
         UpdateTimeView();

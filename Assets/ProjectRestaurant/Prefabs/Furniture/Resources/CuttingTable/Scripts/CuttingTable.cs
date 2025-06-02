@@ -6,9 +6,7 @@ using Object = UnityEngine.Object;
 
 public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IFindReadyFood
 {
-
-    [SerializeField] private GameObject timer;
-    [SerializeField] private Transform timerPoint;
+    [SerializeField] private NewTimer timer;
     
     [SerializeField] private Transform positionIngredient1; 
     [SerializeField] private Transform positionIngredient2; 
@@ -16,7 +14,6 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
 
     [SerializeField] private ProductsContainer productsContainer;
     
-
     private bool _isWork = false;
     private bool _isHeroikTrigger = false;
     private GameObject _ingredient1 = null;
@@ -39,7 +36,7 @@ public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,I
     {
         _animator.SetBool("Work", false);
         _cuttingTablePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetCuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
-        _cuttingTableView = StaticManagerWithoutZenject.HelperScriptFactory.GetCuttingTableView(_animator,timer,timerPoint);
+        _cuttingTableView = StaticManagerWithoutZenject.HelperScriptFactory.GetCuttingTableView(_animator,timer);
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
