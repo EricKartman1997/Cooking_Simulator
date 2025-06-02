@@ -9,18 +9,14 @@ public class OvenView : IDisposable
     
      private GameObject _switchFirst;
      private GameObject _switchSecond;
-     private GameObject _timer;
-     private Transform _timerPoint;
-     private Transform _timerParent;
+     private NewTimer _timer;
      private Animator _animator;
 
-     public OvenView(GameObject switchFirst, GameObject switchSecond, GameObject timer, Transform timerPoint, Transform timerParent,Animator animator)
+     public OvenView(GameObject switchFirst, GameObject switchSecond, NewTimer timer,Animator animator)
      {
          _switchFirst = switchFirst;
          _switchSecond = switchSecond;
          _timer = timer;
-         _timerPoint = timerPoint;
-         _timerParent = timerParent;
          _animator = animator;
          
          _animator.SetBool(ANIMATIONCLOSE,false);
@@ -37,7 +33,8 @@ public class OvenView : IDisposable
     public void TurnOn()
     {
         ActiveView();
-        Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
+        _timer.gameObject.SetActive(true);
+        //Object.Instantiate(_timer, _timerPoint.position, Quaternion.identity,_timerParent);
     }
 
     public void TurnOff()

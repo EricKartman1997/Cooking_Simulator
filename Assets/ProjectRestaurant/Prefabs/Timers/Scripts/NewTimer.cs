@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class NewTimer : MonoBehaviour
 {
     [SerializeField] private float time;
-    [SerializeField] private Sprite arrowSprite;
     [SerializeField] private Sprite circleSprite;
+    [SerializeField] private Sprite arrowSprite;
     [SerializeField] private Image arrowImage;
     [SerializeField] private Image circleImage;
     
@@ -31,7 +31,7 @@ public class NewTimer : MonoBehaviour
             float angle = 360f * progress;
         
             // Применяем вращение (с учетом Z-оси для 2D)
-            _arrowRect.localEulerAngles = new Vector3(0, 0, -angle);
+            _arrowRect.localEulerAngles = new Vector3(0, 0, angle);
         }
         else
         {

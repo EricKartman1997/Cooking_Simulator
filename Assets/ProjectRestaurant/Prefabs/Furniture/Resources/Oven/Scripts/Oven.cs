@@ -8,7 +8,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
 {
     [SerializeField] private GameObject switchFirst;
     [SerializeField] private GameObject switchSecond;
-    [SerializeField] private GameObject timer;
+    [SerializeField] private NewTimer timer;
 
     [SerializeField] private Transform pointUp;
     [SerializeField] private Transform positionIngredient;
@@ -35,7 +35,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
 
     void Start()
     {
-        _ovenView = StaticManagerWithoutZenject.HelperScriptFactory.GetOvenView(switchFirst, switchSecond, timer, pointUp, pointUp,_animator);
+        _ovenView = StaticManagerWithoutZenject.HelperScriptFactory.GetOvenView(switchFirst, switchSecond, timer, _animator);
         _decorationFurniture = GetComponent<DecorationFurniture>();
         _animator.SetBool(ANIMATIONCLOSE,false);
         _animator.SetBool(ANIMATIONOPEN,true);
@@ -126,7 +126,7 @@ public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurn
     {
         _isWork = false;
         _ovenView.TurnOff();
-        Object.Destroy(_ingredient);
+        Destroy(_ingredient);
         _ingredient = null;
     }
     
