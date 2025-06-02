@@ -2587,6 +2587,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2445168121744246307, guid: 7ff0b45c96711f04d98d1ba75885576f, type: 3}
   m_PrefabInstance: {fileID: 1026881746}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1067051080 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2887624208944093254, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
+  m_PrefabInstance: {fileID: 6581505526839203063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736fe263db1393a4589f63845a9e9af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1113640436
 GameObject:
   m_ObjectHideFlags: 0
@@ -4904,9 +4915,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1744326738047333259, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
+      propertyPath: timer
+      value: 
+      objectReference: {fileID: 1067051080}
+    - target: {fileID: 1744326738047333259, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
       propertyPath: productsContainer
       value: 
       objectReference: {fileID: 173349867}
+    - target: {fileID: 2887624208944093254, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
+      propertyPath: time
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7296713711015147945, guid: 7f032305f7d970941862bf2fc29231f4, type: 3}
       propertyPath: m_Name
       value: Blender

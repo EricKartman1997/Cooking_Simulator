@@ -9,9 +9,9 @@ public class HelperScriptFactory
         return blenderPoints;
     }
     
-    public BlenderView GetBlenderView(GameObject timer, Transform timerPoint, Transform timerParent, Animator animator)
+    public BlenderView GetBlenderView(NewTimer timer, Animator animator)
     {
-        BlenderView blenderView = new BlenderView(timer, timerPoint, timerParent,animator);
+        BlenderView blenderView = new BlenderView(timer,animator);
         return blenderView;
     }
     

@@ -8,14 +8,13 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
 {
     [SerializeField] private ProductsContainer productsContainer;
     
-    [SerializeField] private GameObject timer;
+    [SerializeField] private NewTimer timer;
     [SerializeField] private Transform pointUp;
     [SerializeField] private Transform timerParent;
     
     [SerializeField] private Transform firstPoint;
     [SerializeField] private Transform secondPoint;
     [SerializeField] private Transform thirdPoint;
-
     
     private Heroik _heroik = null;
     private BlenderPoints _blenderPoints;
@@ -41,7 +40,7 @@ public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITu
     {
         //_animator.SetBool("Work", false);
         _blenderPoints = StaticManagerWithoutZenject.HelperScriptFactory.GetBlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
-        _blenderView = StaticManagerWithoutZenject.HelperScriptFactory.GetBlenderView(timer, pointUp, timerParent, _animator);
+        _blenderView = StaticManagerWithoutZenject.HelperScriptFactory.GetBlenderView(timer, _animator);
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
