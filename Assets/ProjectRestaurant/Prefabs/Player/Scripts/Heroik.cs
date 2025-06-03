@@ -4,7 +4,6 @@ using UnityEngine;
 public class Heroik : MonoBehaviour
 {
     [SerializeField] private Transform positionObj;
-    [SerializeField] private Transform parentObj;
     [SerializeField] private GameObject currentTakenObjects;
     //private bool _isBusyHands = false; // руки не заняты
     private IngredientHandler _ingredientHandler;
@@ -14,7 +13,7 @@ public class Heroik : MonoBehaviour
 
     private void Awake()
     {
-        _ingredientHandler = new IngredientHandler(positionObj,parentObj,currentTakenObjects);
+        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects);
     }
 
     private void Start()
