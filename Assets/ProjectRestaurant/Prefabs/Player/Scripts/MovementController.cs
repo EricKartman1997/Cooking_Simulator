@@ -1,14 +1,13 @@
-using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class MovementController : MonoBehaviour
 {
     [SerializeField] private HeroikConfig heroikConfig;
     private GameInput _gameInput;
-    //private bool isWalking;
     
     private float Speed => heroikConfig.MoveConfig.MoveSpeed;
     private float Distance => heroikConfig.MoveConfig.Distance;
+    private Vector3 HalfExtence => heroikConfig.MoveConfig.HalfExtence;
     
     private void Awake()
     {
@@ -17,17 +16,16 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-
         Vector2 inputVector = _gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x,0f, inputVector.y);
 
         float moveDistance = Speed * Time.deltaTime;
         
-        bool canMove = !Physics.BoxCast(transform.position, new Vector3(0, 0, 0),moveDir,Quaternion.identity,Distance);
+        bool canMove = !Physics.BoxCast(transform.position, HalfExtence,moveDir,Quaternion.identity,Distance);
         if (canMove == false)
         {
             Vector3 moveDirX = new Vector3(moveDir.x,0f, 0f).normalized;
-            canMove = !Physics.BoxCast(transform.position, new Vector3(0, 0, 0),moveDirX,Quaternion.identity,Distance);
+            canMove = !Physics.BoxCast(transform.position, HalfExtence,moveDirX,Quaternion.identity,Distance);
             if (canMove)
             {
                 moveDir = moveDirX;
@@ -35,7 +33,7 @@ public class Player : MonoBehaviour
             else
             {
                 Vector3 moveDirZ = new Vector3(0f,0f, moveDir.z).normalized;
-                canMove = !Physics.BoxCast(transform.position, new Vector3(0, 0, 0),moveDirZ,Quaternion.identity,Distance);
+                canMove = !Physics.BoxCast(transform.position, HalfExtence,moveDirZ,Quaternion.identity,Distance);
                 if (canMove)
                 {
                     moveDir = moveDirZ;
@@ -46,15 +44,26 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        
         if (canMove)
         {
             transform.position += moveDir * moveDistance;
         }
         
-        //isWalking = moveDir != Vector3.zero;
-        
         // менять направление движения тут transform.forward
         transform.forward = Vector3.Slerp(transform.forward, moveDir, heroikConfig.MoveConfig.RotateSpeed * Time.deltaTime);
     }
-
+    
+    // private void OnDrawGizmos()
+    // {
+    //     Vector3 center1 = transform.position;
+    //     Vector3 halfExtents = HalfExtence * 2 ;
+    //     Vector3 direction = transform.forward;
+    //     float distance = Distance;
+    //
+    //     Gizmos.color = Color.red;
+    //     //Gizmos.DrawWireCube(center, halfExtents / 2); // Начальная позиция куба
+    //     Gizmos.DrawWireCube(center1 + direction * distance, halfExtents); // Конечная позиция
+    //     Gizmos.DrawLine(center1, center1 + direction  * distance);
+    // }
 }
