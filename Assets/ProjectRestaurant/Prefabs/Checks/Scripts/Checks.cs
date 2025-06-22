@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,6 +20,16 @@ public class Checks : MonoBehaviour
     {
         _checkContainer = checkContainer;
         _content = content;
+    }
+
+    private void OnEnable()
+    {
+        EventBus.DeleteCheck += DeleteOverdueCheck;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.DeleteCheck -= DeleteOverdueCheck;
     }
 
     public void AddCheck() // добавление чека
@@ -49,7 +60,7 @@ public class Checks : MonoBehaviour
     {
         if (_check1 != null && _check1.GetDish() == dish.name)
         {
-            EventBus.AddScore.Invoke(100,_check1.GetScore());
+            EventBus.AddScore.Invoke(0,_check1.GetScore());
             _check1 = null;
             Destroy(_cloneCheck1);
             _cloneCheck1 = null;
@@ -59,7 +70,7 @@ public class Checks : MonoBehaviour
         }
         else if (_check2 != null && _check2.GetDish() == dish.name)
         {
-            EventBus.AddScore.Invoke(100,_check2.GetScore());
+            EventBus.AddScore.Invoke(0,_check2.GetScore());
             _check2 = null;
             Destroy(_cloneCheck2);
             _cloneCheck2 = null;
@@ -69,7 +80,7 @@ public class Checks : MonoBehaviour
         }
         else if (_check3 != null && _check3.GetDish() == dish.name)
         {
-            EventBus.AddScore.Invoke(100,_check3.GetScore());
+            EventBus.AddScore.Invoke(0,_check3.GetScore());
             _check3 = null;
             Destroy(_cloneCheck3);
             _cloneCheck3 = null;
@@ -80,6 +91,40 @@ public class Checks : MonoBehaviour
         else
         {
             Debug.Log("ошибка DeleteCheck");
+        }
+        
+    }
+    
+    public void DeleteOverdueCheck(InfoAboutCheck check) // удаление чека
+    {
+        if (_check1 != null && _cloneCheck1.GetComponent<InfoAboutCheck>().StartTime <= 0f)
+        {
+            _check1 = null;
+            Destroy(_cloneCheck1);
+            _cloneCheck1 = null;
+
+            Debug.Log("просрочен 1 чек");
+        }
+        else if (_check2 != null && _cloneCheck2.GetComponent<InfoAboutCheck>().StartTime <= 0f)
+        {
+            _check2 = null;
+            Destroy(_cloneCheck2);
+            _cloneCheck2 = null;
+            
+            Debug.Log("просрочен 2 чек");
+
+        }
+        else if (_check3 != null && _cloneCheck3.GetComponent<InfoAboutCheck>().StartTime <= 0f)
+        {
+            _check3 = null;
+            Destroy(_cloneCheck3);
+            _cloneCheck3 = null;
+
+            Debug.Log("просрочен 3 чек");
+        }
+        else
+        {
+            Debug.Log("ошибка DeleteOverdueCheck");
         }
         
     }
