@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,19 +12,24 @@ public class NewTimer : MonoBehaviour
     
     private RectTransform _arrowRect;
     private float _currentTime;
+    private bool _isWork;
 
-    private void Start()
+    public bool IsWork => _isWork;
+
+    private void Awake()
     {
         arrowImage.sprite = arrowSprite;
         circleImage.sprite = circleSprite;
         _arrowRect = arrowImage.GetComponent<RectTransform>();
     }
     
-    private void Update()
+    public IEnumerator StartTimer()
     {
-        _currentTime += Time.deltaTime ;
-        if (time >= _currentTime)
+        _isWork = false;
+        while (time >= _currentTime)
         {
+            _currentTime += Time.deltaTime;
+            
             // Рассчитываем процент оставшегося времени
             float progress = _currentTime / time;
         
@@ -32,11 +38,11 @@ public class NewTimer : MonoBehaviour
         
             // Применяем вращение (с учетом Z-оси для 2D)
             _arrowRect.localEulerAngles = new Vector3(0, 0, angle);
+            yield return null;
         }
-        else
-        {
-            _currentTime = 0;
-            gameObject.SetActive(false);
-        }
+
+        _currentTime = 0;
+        _isWork = true;
+        gameObject.SetActive(false);
     }
 }

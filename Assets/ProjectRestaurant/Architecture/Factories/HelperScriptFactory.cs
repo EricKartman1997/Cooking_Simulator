@@ -29,11 +29,11 @@ public class HelperScriptFactory
     }
     
     //Oven
-    public OvenView GetOvenView(GameObject switchFirst, GameObject switchSecond, NewTimer timer,Animator animator)
-    {
-        OvenView ovenView = new OvenView(switchFirst,switchSecond,timer,animator);
-        return ovenView;
-    }
+    // public OvenView GetOvenView(GameObject switchFirst, GameObject switchSecond, NewTimer timer,Animator animator)
+    // {
+    //     OvenView ovenView = new OvenView(switchFirst,switchSecond,timer,animator);
+    //     return ovenView;
+    // }
     
     // Stove
     public StovePoints GetStovePoints(Transform positionRawFood)
