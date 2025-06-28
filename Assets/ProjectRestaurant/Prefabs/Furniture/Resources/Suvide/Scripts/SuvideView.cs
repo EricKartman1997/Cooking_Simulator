@@ -2,71 +2,79 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class SuvideView : IDisposable
+namespace SuvideFurniture
 {
-    private GameObject _waterPrefab;
-    private GameObject _switchTimePrefab;
-    private GameObject _switchTemperPrefab;
-    private NewTimer _firstTimer;
-    private NewTimer _secondTimer;
-    private NewTimer _thirdTimer;
-    private Animator _animator; // добавить анимацию
-
-    public SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab,
-        NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
+    public class SuvideView : IDisposable
     {
-        _waterPrefab = waterPrefab;
-        _switchTimePrefab = switchTimePrefab;
-        _switchTemperPrefab = switchTemperPrefab;
-        _firstTimer = firstTimer;
-        _secondTimer = secondTimer;
-        _thirdTimer = thirdTimer;
-        _animator = animator;
+        private GameObject _waterPrefab;
+        private GameObject _switchTimePrefab;
+        private GameObject _switchTemperPrefab;
+        private NewTimer _firstTimer;
+        private NewTimer _secondTimer;
+        private NewTimer _thirdTimer;
+        private Animator _animator; // добавить анимацию
         
-        Debug.Log("Создал объект: SuvideView");
+        internal NewTimer Timer1 => _firstTimer;
+        internal NewTimer Timer2 => _secondTimer;
+        internal NewTimer Timer3 => _thirdTimer;
+    
+        internal SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab,
+            NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
+        {
+            _waterPrefab = waterPrefab;
+            _switchTimePrefab = switchTimePrefab;
+            _switchTemperPrefab = switchTemperPrefab;
+            _firstTimer = firstTimer;
+            _secondTimer = secondTimer;
+            _thirdTimer = thirdTimer;
+            _animator = animator;
+            
+            Debug.Log("Создал объект: SuvideView");
+        }
+    
+        public void Dispose()
+        {
+            Debug.Log("У объекта вызван Dispose : SuvideView");
+        }
+        
+        public void TurnOnFirstTimer() 
+        {
+            //_animator.SetBool("Work", true);
+            //Object.Instantiate(_firstTimer.timer, _firstTimer.timerPoint.position, Quaternion.identity,_firstTimer.timerParent);
+            _firstTimer.gameObject.SetActive(true);
+        }
+        
+        public void TurnOnSecondTimer() 
+        {
+            //_animator.SetBool("Work", true);
+            //Object.Instantiate(_secondTimer.timer, _secondTimer.timerPoint.position, Quaternion.identity,_secondTimer.timerParent);
+            _secondTimer.gameObject.SetActive(true);
+        }
+        
+        public void TurnOnThirdTimer() 
+        {
+            //_animator.SetBool("Work", true);
+            //Object.Instantiate(_thirdTimer.timer, _thirdTimer.timerPoint.position, Quaternion.identity,_thirdTimer.timerParent);
+            _thirdTimer.gameObject.SetActive(true);
+        }
+    
+        public void TurnOff() 
+        {
+            //_animator.SetBool("Work", false);
+        }
+        
+        public void WorkingSuvide()
+        {
+            _waterPrefab.SetActive(true);
+            _switchTemperPrefab.transform.localRotation = Quaternion.Euler(-135, 0, 0);
+            _switchTimePrefab.transform.localRotation = Quaternion.Euler(-60, 0, 0);
+        }
+        public void NotWorkingSuvide()
+        {
+            _waterPrefab.SetActive(false);
+            _switchTemperPrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            _switchTimePrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
-    public void Dispose()
-    {
-        Debug.Log("У объекта вызван Dispose : SuvideView");
-    }
-    
-    public void TurnOnFirstTimer() 
-    {
-        //_animator.SetBool("Work", true);
-        //Object.Instantiate(_firstTimer.timer, _firstTimer.timerPoint.position, Quaternion.identity,_firstTimer.timerParent);
-        _firstTimer.gameObject.SetActive(true);
-    }
-    
-    public void TurnOnSecondTimer() 
-    {
-        //_animator.SetBool("Work", true);
-        //Object.Instantiate(_secondTimer.timer, _secondTimer.timerPoint.position, Quaternion.identity,_secondTimer.timerParent);
-        _secondTimer.gameObject.SetActive(true);
-    }
-    
-    public void TurnOnThirdTimer() 
-    {
-        //_animator.SetBool("Work", true);
-        //Object.Instantiate(_thirdTimer.timer, _thirdTimer.timerPoint.position, Quaternion.identity,_thirdTimer.timerParent);
-        _thirdTimer.gameObject.SetActive(true);
-    }
-
-    public void TurnOff() 
-    {
-        //_animator.SetBool("Work", false);
-    }
-    
-    public void WorkingSuvide()
-    {
-        _waterPrefab.SetActive(true);
-        _switchTemperPrefab.transform.localRotation = Quaternion.Euler(-135, 0, 0);
-        _switchTimePrefab.transform.localRotation = Quaternion.Euler(-60, 0, 0);
-    }
-    public void NotWorkingSuvide()
-    {
-        _waterPrefab.SetActive(false);
-        _switchTemperPrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        _switchTimePrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
-    }
 }

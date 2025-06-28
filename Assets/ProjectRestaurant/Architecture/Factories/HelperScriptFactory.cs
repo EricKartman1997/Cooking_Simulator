@@ -3,30 +3,30 @@ using UnityEngine;
 public class HelperScriptFactory
 {
     // Blender
-    public BlenderPoints GetBlenderPoints(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform parentFood, Transform parentReadyFood)
-    {
-        BlenderPoints blenderPoints = new BlenderPoints(firstPoint,secondPoint,thirdPoint,parentFood, parentReadyFood);
-        return blenderPoints;
-    }
-    
-    public BlenderView GetBlenderView(NewTimer timer, Animator animator)
-    {
-        BlenderView blenderView = new BlenderView(timer,animator);
-        return blenderView;
-    }
+    // public BlenderPoints GetBlenderPoints(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform parentFood, Transform parentReadyFood)
+    // {
+    //     BlenderPoints blenderPoints = new BlenderPoints(firstPoint,secondPoint,thirdPoint,parentFood, parentReadyFood);
+    //     return blenderPoints;
+    // }
+    //
+    // public BlenderView GetBlenderView(NewTimer timer, Animator animator)
+    // {
+    //     BlenderView blenderView = new BlenderView(timer,animator);
+    //     return blenderView;
+    // }
     
     // CuttingTable
-    public CuttingTablePoints GetCuttingTablePoints(Transform positionIngredient1, Transform positionIngredient2, Transform positionResult)
-    {
-        CuttingTablePoints cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
-        return cuttingTablePoints;
-    }
-    
-    public CuttingTableView GetCuttingTableView(Animator animator, NewTimer timer)
-    {
-        CuttingTableView cuttingTableView = new CuttingTableView(animator, timer);
-        return cuttingTableView;
-    }
+    // public CuttingTablePoints GetCuttingTablePoints(Transform positionIngredient1, Transform positionIngredient2, Transform positionResult)
+    // {
+    //     CuttingTablePoints cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
+    //     return cuttingTablePoints;
+    // }
+    //
+    // public CuttingTableView GetCuttingTableView(Animator animator, NewTimer timer)
+    // {
+    //     CuttingTableView cuttingTableView = new CuttingTableView(animator, timer);
+    //     return cuttingTableView;
+    // }
     
     //Oven
     // public OvenView GetOvenView(GameObject switchFirst, GameObject switchSecond, NewTimer timer,Animator animator)
@@ -49,15 +49,15 @@ public class HelperScriptFactory
     }
     
     //Suvide
-    public SuvidePoints GetSuvidePoints(Transform firstPointIngredient, Transform secondPointIngredient, Transform thirdPointIngredient, Transform firstPointResult, Transform secondPointResult, Transform thirdPointResult)
-    {
-        SuvidePoints cuttingTablePoints = new SuvidePoints(firstPointIngredient,secondPointIngredient,thirdPointIngredient,firstPointResult,secondPointResult,thirdPointResult);
-        return cuttingTablePoints;
-    }
-    
-    public SuvideView GetSuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab, NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
-    {
-        SuvideView suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab,firstTimer,secondTimer,thirdTimer,animator);
-        return suvideView;
-    }
+    // public SuvidePoints GetSuvidePoints(Transform firstPointIngredient, Transform secondPointIngredient, Transform thirdPointIngredient, Transform firstPointResult, Transform secondPointResult, Transform thirdPointResult)
+    // {
+    //     SuvidePoints cuttingTablePoints = new SuvidePoints(firstPointIngredient,secondPointIngredient,thirdPointIngredient,firstPointResult,secondPointResult,thirdPointResult);
+    //     return cuttingTablePoints;
+    // }
+    //
+    // public SuvideView GetSuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab, NewTimer firstTimer, NewTimer secondTimer, NewTimer thirdTimer, Animator animator)
+    // {
+    //     SuvideView suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab,firstTimer,secondTimer,thirdTimer,animator);
+    //     return suvideView;
+    // }
 }
