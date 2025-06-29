@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SuvideFurniture
 {
-    public class Suvide : MonoBehaviour
+    public class SuvideFurniture : MonoBehaviour
     {
         private const string DISH1 = "DISH1";
         private const string DISH2 = "DISH2";
