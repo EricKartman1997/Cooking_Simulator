@@ -1,28 +1,34 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class TimerFurniture : IDisposable
 {
     private TimerView _timerView;
-    private RectTransform _arrowRect;
     private float _time;
+    private Transform _pointTimer;
+    
+    private RectTransform _arrowRect;
+    private GameObject _timerObject;
     private float _currentTime;
     private bool _isWork;
 
     public bool IsWork => _isWork;
 
-    public TimerFurniture(TimerView timerView,float time)
+    public TimerFurniture(TimerView timerView,float time, Transform pointTimer)
     {
         _timerView = timerView;
         _time = time;
-        _arrowRect = _timerView.ArrowRect;
-        
+        _pointTimer = pointTimer;
+
+        Initialization();
         Debug.Log("Создал объект: TimerFurniture");
     }
     
     public IEnumerator StartTimer()
     {
+        _timerObject.gameObject.SetActive(true);
         _isWork = true;
         while (_time >= _currentTime)
         {
@@ -41,12 +47,19 @@ public class TimerFurniture : IDisposable
 
         _currentTime = 0;
         _isWork = false;
-        Dispose();
+        _timerObject.gameObject.SetActive(false);
     }
 
     public void Dispose()
     {
-        _timerView.gameObject.SetActive(false);
         Debug.Log("У объекта вызван Dispose : TimerFurniture");
+    }
+
+    private void Initialization()
+    {
+        _timerObject = Object.Instantiate(_timerView.gameObject,_pointTimer);
+        _timerView = _timerObject.GetComponent<TimerView>();
+        _arrowRect = _timerView.ArrowRect;
+        _timerObject.gameObject.SetActive(false);
     }
 }

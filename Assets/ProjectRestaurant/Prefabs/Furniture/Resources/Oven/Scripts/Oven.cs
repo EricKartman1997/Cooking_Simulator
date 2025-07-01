@@ -10,11 +10,8 @@ namespace OvenFurniture
     {
         [SerializeField] private GameObject switchFirst;
         [SerializeField] private GameObject switchSecond;
-        [SerializeField] private NewTimer timer;
-        
-        [SerializeField] private TimerView timerView; // New
-        private TimerFurniture _timerFurniture; // New
-    
+        [SerializeField] private TimerView timerPref;
+        [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;
         [SerializeField] private ProductsContainer productsContainer;
@@ -41,8 +38,8 @@ namespace OvenFurniture
     
         void Start()
         {
-            //_ovenView = StaticManagerWithoutZenject.HelperScriptFactory.GetOvenView(switchFirst, switchSecond, timer, _animator);
-            _ovenView = new OvenView(switchFirst, switchSecond, timer, _animator);
+            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
+            _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
             _decorationFurniture = GetComponent<DecorationFurniture>();
             _animator.SetBool(ANIMATIONCLOSE,false);
@@ -196,7 +193,7 @@ namespace OvenFurniture
         private IEnumerator ContinueWorkCoroutine(GameObject obj)
         {
             StartCoroutine(_ovenView.Timer.StartTimer());
-            yield return new WaitUntil(() => _ovenView.Timer.IsWork);
+            yield return new WaitWhile(() => _ovenView.Timer.IsWork);
             TurnOff();
             CreateResult(obj);
         }

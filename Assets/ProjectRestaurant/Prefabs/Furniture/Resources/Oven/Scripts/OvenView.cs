@@ -8,28 +8,26 @@ namespace OvenFurniture
     {
         private const string ANIMATIONCLOSE = "Close";
         private const string ANIMATIONOPEN = "Open";
-        
-         private GameObject _switchFirst;
-         private GameObject _switchSecond;
-         private NewTimer _timer;
-         private Animator _animator;
-    
-         public NewTimer Timer => _timer;
+        private GameObject _switchFirst;
+        private GameObject _switchSecond;
+        private TimerFurniture _timerFurniture;
+        private Animator _animator;
+
+        public TimerFurniture Timer => _timerFurniture;
          
-         internal OvenView(GameObject switchFirst, GameObject switchSecond, NewTimer timer,Animator animator)
-         {
-             _switchFirst = switchFirst;
-             _switchSecond = switchSecond;
-             _timer = timer;
-             _animator = animator;
+        internal OvenView(GameObject switchFirst, GameObject switchSecond,TimerFurniture timerFurniture, Animator animator)
+        {
+            _switchFirst = switchFirst;
+            _switchSecond = switchSecond;
+            _timerFurniture = timerFurniture;
+            _animator = animator;
              
-             _animator.SetBool(ANIMATIONCLOSE,false);
-             _animator.SetBool(ANIMATIONOPEN,true);
-             
-             Debug.Log("Создан объект: OvenView");
-         }
+            _animator.SetBool(ANIMATIONCLOSE,false);
+            _animator.SetBool(ANIMATIONOPEN,true);
+            Debug.Log("Создан объект: OvenView");
+        }
     
-         public void Dispose()
+        public void Dispose()
         {
             Debug.Log("У объекта вызван Dispose : OvenView");
         }
@@ -37,7 +35,6 @@ namespace OvenFurniture
         public void TurnOn()
         {
             ActiveView();
-            _timer.gameObject.SetActive(true);
         }
     
         public void TurnOff()

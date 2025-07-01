@@ -4019,14 +4019,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 566445219739310496, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: config
-      value: 
-      objectReference: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
-    - target: {fileID: 722546003701191587, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2635636891125355626, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.63
@@ -4067,34 +4059,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4114940630771032057, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4114940630771032057, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4114940630771032057, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4212486630260703151, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
       propertyPath: productsContainer
       value: 
       objectReference: {fileID: 173349867}
-    - target: {fileID: 5852620004855858352, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: time
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5852620004855858352, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: arrowSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: c53239fa0347029419644e4940c2eae2, type: 3}
-    - target: {fileID: 5852620004855858352, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
-      propertyPath: circleSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 3597a08d3f83c5e49b48c8be07d53ef4, type: 3}
     - target: {fileID: 7736825090635847737, guid: aa911f22daa14f34296df3caf48bf3dc, type: 3}
       propertyPath: m_Name
       value: Oven
