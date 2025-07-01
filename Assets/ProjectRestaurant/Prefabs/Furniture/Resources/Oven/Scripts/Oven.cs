@@ -11,6 +11,9 @@ namespace OvenFurniture
         [SerializeField] private GameObject switchFirst;
         [SerializeField] private GameObject switchSecond;
         [SerializeField] private NewTimer timer;
+        
+        [SerializeField] private TimerView timerView; // New
+        private TimerFurniture _timerFurniture; // New
     
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;

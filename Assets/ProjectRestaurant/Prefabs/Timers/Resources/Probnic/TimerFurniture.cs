@@ -1,37 +1,35 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class NewTimer : MonoBehaviour
+public class TimerFurniture : IDisposable
 {
-    [SerializeField] private float time;
-    [SerializeField] private Sprite circleSprite;
-    [SerializeField] private Sprite arrowSprite;
-    [SerializeField] private Image arrowImage;
-    [SerializeField] private Image circleImage;
-    
+    private TimerView _timerView;
     private RectTransform _arrowRect;
+    private float _time;
     private float _currentTime;
     private bool _isWork;
 
     public bool IsWork => _isWork;
 
-    private void Awake()
+    public TimerFurniture(TimerView timerView,float time)
     {
-        arrowImage.sprite = arrowSprite;
-        circleImage.sprite = circleSprite;
-        _arrowRect = arrowImage.GetComponent<RectTransform>();
+        _timerView = timerView;
+        _time = time;
+        _arrowRect = _timerView.ArrowRect;
+        
+        Debug.Log("Создал объект: TimerFurniture");
     }
     
     public IEnumerator StartTimer()
     {
-        _isWork = false;
-        while (time >= _currentTime)
+        _isWork = true;
+        while (_time >= _currentTime)
         {
             _currentTime += Time.deltaTime;
             
             // Рассчитываем процент оставшегося времени
-            float progress = _currentTime / time;
+            float progress = _currentTime / _time;
         
             // Вычисляем угол вращения (360 градусов за время жизни)
             float angle = 360f * progress;
@@ -42,8 +40,13 @@ public class NewTimer : MonoBehaviour
         }
 
         _currentTime = 0;
-        _isWork = true;
-        gameObject.SetActive(false);
+        _isWork = false;
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        _timerView.gameObject.SetActive(false);
+        Debug.Log("У объекта вызван Dispose : TimerFurniture");
     }
 }
-
