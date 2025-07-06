@@ -7,11 +7,11 @@ namespace CuttingTableFurniture
     public class CuttingTableView : IDisposable
     {
         private Animator _animator;
-        private NewTimer _timer;
+        private TimerFurniture _timer;
     
-        public NewTimer Timer => _timer;
+        public TimerFurniture Timer => _timer;
     
-        internal CuttingTableView(Animator animator, NewTimer timer)
+        internal CuttingTableView(Animator animator, TimerFurniture timer)
         {
             _animator = animator;
             _timer = timer;
@@ -27,7 +27,6 @@ namespace CuttingTableFurniture
         public void TurnOn()
         {
             _animator.SetBool("Work", true);
-            _timer.gameObject.SetActive(true);
         }
         
         public void TurnOff()

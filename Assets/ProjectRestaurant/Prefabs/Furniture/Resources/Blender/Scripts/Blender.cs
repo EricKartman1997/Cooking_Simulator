@@ -10,14 +10,15 @@ namespace BlenderFurniture
     public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IFindReadyFood
     {
         [SerializeField] private ProductsContainer productsContainer;
-        
-        [SerializeField] private NewTimer timer;
+        [SerializeField] private TimerView timerPref;
+        [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
-        [SerializeField] private Transform timerParent;
         
         [SerializeField] private Transform firstPoint;
         [SerializeField] private Transform secondPoint;
         [SerializeField] private Transform thirdPoint;
+        
+        private TimerFurniture _timerFurniture;
         
         private Heroik _heroik = null;
         private BlenderPoints _blenderPoints;
@@ -42,8 +43,9 @@ namespace BlenderFurniture
         void Start()
         {
             //_animator.SetBool("Work", false);
+            TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
-            _blenderView = new BlenderView(timer, _animator);
+            _blenderView = new BlenderView(_timerFurniture, _animator);
             _outline = GetComponent<Outline>();
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
@@ -298,7 +300,7 @@ namespace BlenderFurniture
         private IEnumerator ContinueWorkCoroutine(GameObject obj)
         {
             StartCoroutine(_blenderView.Timer.StartTimer());
-            yield return new WaitUntil(() => _blenderView.Timer.IsWork);
+            yield return new WaitWhile(() => _blenderView.Timer.IsWork);
             TurnOff();
             CreateResult(obj);
         }

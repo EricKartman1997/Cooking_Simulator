@@ -103,7 +103,7 @@ public class Checks : MonoBehaviour
             Destroy(_cloneCheck1);
             _cloneCheck1 = null;
 
-            Debug.Log("просрочен 1 чек");
+            //Debug.Log("просрочен 1 чек");
         }
         else if (_check2 != null && _cloneCheck2.GetComponent<InfoAboutCheck>().StartTime <= 0f)
         {
@@ -111,7 +111,7 @@ public class Checks : MonoBehaviour
             Destroy(_cloneCheck2);
             _cloneCheck2 = null;
             
-            Debug.Log("просрочен 2 чек");
+            //Debug.Log("просрочен 2 чек");
 
         }
         else if (_check3 != null && _cloneCheck3.GetComponent<InfoAboutCheck>().StartTime <= 0f)
@@ -120,7 +120,7 @@ public class Checks : MonoBehaviour
             Destroy(_cloneCheck3);
             _cloneCheck3 = null;
 
-            Debug.Log("просрочен 3 чек");
+            //Debug.Log("просрочен 3 чек");
         }
         else
         {
@@ -138,7 +138,7 @@ public class Checks : MonoBehaviour
             if (check != null)
             {
                 allChecksNotNull.Add(check);
-                Debug.Log("Добавил");
+                //Debug.Log("Добавил");
             }
         }
         foreach (var check in allChecksNotNull)

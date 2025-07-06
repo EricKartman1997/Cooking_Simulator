@@ -8,8 +8,8 @@ namespace CuttingTableFurniture
 {
     public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IFindReadyFood
     {
-        [SerializeField] private NewTimer timer;
-        
+        [SerializeField] private TimerView timerPref;
+        [SerializeField] private float timeTimer;
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
         [SerializeField] private Transform positionResult;      
@@ -37,8 +37,9 @@ namespace CuttingTableFurniture
         void Start()
         {
             _animator.SetBool("Work", false);
+            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
-            _cuttingTableView = new CuttingTableView(_animator,timer);
+            _cuttingTableView = new CuttingTableView(_animator,timerFurniture);
             _outline = GetComponent<Outline>();
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
@@ -262,7 +263,7 @@ namespace CuttingTableFurniture
         private IEnumerator ContinueWorkCoroutine(GameObject obj)
         {
             StartCoroutine(_cuttingTableView.Timer.StartTimer());
-            yield return new WaitUntil(() => _cuttingTableView.Timer.IsWork);
+            yield return new WaitWhile(() => _cuttingTableView.Timer.IsWork);
             TurnOff();
             CreateResult(obj);
         }

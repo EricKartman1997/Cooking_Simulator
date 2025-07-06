@@ -15,10 +15,12 @@ namespace SuvideFurniture
         [SerializeField] private GameObject waterPrefab;
         [SerializeField] private GameObject switchTimePrefab;
         [SerializeField] private GameObject switchTemperPrefab;
-        [SerializeField] private NewTimer timer1;
-        [SerializeField] private NewTimer timer2;
-        [SerializeField] private NewTimer timer3;
+        [SerializeField] private TimerView timerPref;
+        [SerializeField] private float timeTimer;
         
+        [SerializeField] private Transform pointTimer1;
+        [SerializeField] private Transform pointTimer2;
+        [SerializeField] private Transform pointTimer3;
         [SerializeField] private Transform pointIngredient1;
         [SerializeField] private Transform pointIngredient2;
         [SerializeField] private Transform pointIngredient3;
@@ -51,8 +53,11 @@ namespace SuvideFurniture
         
         private void Start()
         {
+            TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
+            TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
+            TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
-            _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timer1, timer2, timer3, _animator);
+            _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator);
             _outline = GetComponent<Outline>();
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
@@ -208,21 +213,21 @@ namespace SuvideFurniture
         {
             if (TOKEN == DISH1)
             {
-                _suvideView.TurnOnFirstTimer();
+                _suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
             
             if (TOKEN == DISH2)
             {
-                _suvideView.TurnOnSecondTimer();
+                _suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
             
             if (TOKEN == DISH3)
             {
-                _suvideView.TurnOnThirdTimer();
+                _suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
@@ -316,7 +321,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH1)
             {
                 StartCoroutine(_suvideView.Timer1.StartTimer());
-                yield return new WaitUntil(() => _suvideView.Timer1.IsWork);
+                yield return new WaitWhile(() => _suvideView.Timer1.IsWork);
                 TurnOff(TOKEN);
                 CreateResult(obj,TOKEN);
                 ChangeView();
@@ -325,7 +330,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH2)
             {
                 StartCoroutine(_suvideView.Timer2.StartTimer());
-                yield return new WaitUntil(() => _suvideView.Timer2.IsWork);
+                yield return new WaitWhile(() => _suvideView.Timer2.IsWork);
                 TurnOff(TOKEN);
                 CreateResult(obj,TOKEN);
                 ChangeView();
@@ -334,7 +339,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH3)
             {
                 StartCoroutine(_suvideView.Timer3.StartTimer());
-                yield return new WaitUntil(() => _suvideView.Timer3.IsWork);
+                yield return new WaitWhile(() => _suvideView.Timer3.IsWork);
                 TurnOff(TOKEN);
                 CreateResult(obj,TOKEN);
                 ChangeView();

@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 { 
-    
+    private const string AnimNONE = "None";
+    private const string AnimDISTRIBUTION = "Distribution";
     [SerializeField] private Transform pointDish;
     [SerializeField] private Checks checks;
     
@@ -76,13 +78,15 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 
     public void TurnOff()
     {
-        _animator.Play("None");
+        _animator.Play(AnimNONE);
+        //_animator.SetBool(AnimWORK,false);
         _isWork = false;
     }
 
     public void TurnOn()
     {
-        _animator.Play("Distribution");
+        _animator.Play(AnimDISTRIBUTION);
+        //_animator.SetBool(AnimWORK,true);
         _isWork = true;
     }
     
@@ -118,7 +122,8 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
                         Debug.Log("Это блюдо есть в чеках");
                         AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
-                        StartCookingProcessAsync();
+                        //StartCookingProcessAsync();
+                        StartCoroutine(ContinueWorkCoroutine());
                     }
                     else
                     {
@@ -147,6 +152,21 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
         checks.DeleteCheck(_currentDish);
         Destroy(_currentDish);
         _currentDish = null;
+    }
+    
+    private IEnumerator ContinueWorkCoroutine()
+    {
+        while (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Distribution"))
+        {
+            yield return null;
+        }
+        
+        while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+        {
+            yield return null;
+        }
+        TakeToTheHall();
+        TurnOff();
     }
     
 }
