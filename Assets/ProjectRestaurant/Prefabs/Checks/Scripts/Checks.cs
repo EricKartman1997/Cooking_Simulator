@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -9,12 +8,12 @@ public class Checks : MonoBehaviour
     [SerializeField] private CheckContainer _checkContainer;
     [SerializeField] private GameObject _content;
     
-    [SerializeField] private InfoAboutCheck _check1 = null;
-    [SerializeField] private InfoAboutCheck _check2 = null;
-    [SerializeField] private InfoAboutCheck _check3 = null;
-    [SerializeField] private GameObject _cloneCheck1 = null;
-    [SerializeField] private GameObject _cloneCheck2 = null;
-    [SerializeField] private GameObject _cloneCheck3 = null;
+     private InfoAboutCheck _check1;
+     private InfoAboutCheck _check2;
+     private InfoAboutCheck _check3;
+     private GameObject _cloneCheck1;
+     private GameObject _cloneCheck2;
+     private GameObject _cloneCheck3;
     
     public void Initialized(CheckContainer checkContainer,GameObject content)
     {
@@ -56,9 +55,48 @@ public class Checks : MonoBehaviour
         }
     }
 
-    public void DeleteCheck(GameObject dish) // удаление чека
+    // public void DeleteCheck(GameObject dish) // удаление чека
+    // {
+    //     if (_check1 != null && _check1.GetDish() == dish.name)
+    //     {
+    //         EventBus.AddScore.Invoke(0,_check1.GetScore());
+    //         _check1 = null;
+    //         Destroy(_cloneCheck1);
+    //         _cloneCheck1 = null;
+    //         EventBus.AddOrder.Invoke();
+    //         EventBus.UpdateOrder.Invoke();
+    //         
+    //     }
+    //     else if (_check2 != null && _check2.GetDish() == dish.name)
+    //     {
+    //         EventBus.AddScore.Invoke(0,_check2.GetScore());
+    //         _check2 = null;
+    //         Destroy(_cloneCheck2);
+    //         _cloneCheck2 = null;
+    //         EventBus.AddOrder.Invoke();
+    //         EventBus.UpdateOrder.Invoke();
+    //        
+    //     }
+    //     else if (_check3 != null && _check3.GetDish() == dish.name)
+    //     {
+    //         EventBus.AddScore.Invoke(0,_check3.GetScore());
+    //         _check3 = null;
+    //         Destroy(_cloneCheck3);
+    //         _cloneCheck3 = null;
+    //         EventBus.AddOrder.Invoke();
+    //         EventBus.UpdateOrder.Invoke();
+    //         
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("ошибка DeleteCheck");
+    //     }
+    //     
+    // }
+    
+    public void DeleteCheck(InfoAboutCheck check) // удаление чека
     {
-        if (_check1 != null && _check1.GetDish() == dish.name)
+        if (_cloneCheck1.GetComponent<InfoAboutCheck>() == check)
         {
             EventBus.AddScore.Invoke(0,_check1.GetScore());
             _check1 = null;
@@ -66,9 +104,10 @@ public class Checks : MonoBehaviour
             _cloneCheck1 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
-            //Debug.Log("удалил первый чек");
+            return;
         }
-        else if (_check2 != null && _check2.GetDish() == dish.name)
+        
+        if (_cloneCheck2.GetComponent<InfoAboutCheck>() == check)
         {
             EventBus.AddScore.Invoke(0,_check2.GetScore());
             _check2 = null;
@@ -76,9 +115,10 @@ public class Checks : MonoBehaviour
             _cloneCheck2 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
-            //Debug.Log("удалил второй чек");
+            return;
         }
-        else if (_check3 != null && _check3.GetDish() == dish.name)
+        
+        if (_cloneCheck3.GetComponent<InfoAboutCheck>() == check)
         {
             EventBus.AddScore.Invoke(0,_check3.GetScore());
             _check3 = null;
@@ -86,16 +126,14 @@ public class Checks : MonoBehaviour
             _cloneCheck3 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
-            //Debug.Log("удалил третий чек");
+            return;
         }
-        else
-        {
-            Debug.Log("ошибка DeleteCheck");
-        }
+        
+        Debug.LogError("ошибка DeleteCheck");
         
     }
     
-    public void DeleteOverdueCheck(InfoAboutCheck check) // удаление чека
+    public void DeleteOverdueCheck(InfoAboutCheck check) // удаление просроченного чека
     {
         if (_check1 != null && _cloneCheck1.GetComponent<InfoAboutCheck>().StartTime <= 0f)
         {
@@ -129,26 +167,45 @@ public class Checks : MonoBehaviour
         
     }
 
-    public bool CheckTheCheck(GameObject dish) // проверка есть ли в чеках заказанное блюдо
+    // public bool CheckTheCheck(GameObject dish) // проверка есть ли в чеках заказанное блюдо
+    // {
+    //     List<InfoAboutCheck> allChecks = new List<InfoAboutCheck>() {_check1,_check2,_check3};
+    //     List<InfoAboutCheck> allChecksNotNull = new List<InfoAboutCheck>() {};
+    //     foreach (var check in allChecks)
+    //     {
+    //         if (check != null)
+    //         {
+    //             allChecksNotNull.Add(check);
+    //         }
+    //     }
+    //     foreach (var check in allChecksNotNull)
+    //     {
+    //         if (check.GetDish() == dish.name)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    public InfoAboutCheck CheckTheCheck(GameObject dish)
     {
-        List<InfoAboutCheck> allChecks = new List<InfoAboutCheck>() {_check1,_check2,_check3};
-        List<InfoAboutCheck> allChecksNotNull = new List<InfoAboutCheck>() {};
+        List<GameObject> allChecks = new List<GameObject>() {_cloneCheck1,_cloneCheck2,_cloneCheck3};
+        InfoAboutCheck targetCheck = null;
+        float minTime = float.MaxValue;
+
         foreach (var check in allChecks)
         {
-            if (check != null)
+            if (check == null) continue;
+
+            // Находим чек для текущего блюда с минимальным временем
+            if (check.GetComponent<InfoAboutCheck>().GetDish() == dish.name && check.GetComponent<InfoAboutCheck>().StartTime < minTime)
             {
-                allChecksNotNull.Add(check);
-                //Debug.Log("Добавил");
+                targetCheck = check.GetComponent<InfoAboutCheck>();
             }
         }
-        foreach (var check in allChecksNotNull)
-        {
-            if (check.GetDish() == dish.name)
-            {
-                return true;
-            }
-        }
-        return false;
+
+        return targetCheck;
     }
 
     public InfoAboutCheck GetCheck1()

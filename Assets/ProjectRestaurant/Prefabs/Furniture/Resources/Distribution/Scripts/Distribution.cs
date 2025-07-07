@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
@@ -10,7 +9,8 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private const string AnimDISTRIBUTION = "Distribution";
     [SerializeField] private Transform pointDish;
     [SerializeField] private Checks checks;
-    
+
+    private InfoAboutCheck _currentCheck;
     private Animator _animator;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
@@ -88,6 +88,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
         _animator.Play(AnimDISTRIBUTION);
         //_animator.SetBool(AnimWORK,true);
         _isWork = true;
+        _currentCheck.StopUpdateTime();
     }
     
     private void CookingProcess()
@@ -117,12 +118,11 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
             {
                 if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForDistribution)}))
                 {
-                    if (checks.CheckTheCheck(_heroik.CurrentTakenObjects))
+                    _currentCheck = checks.CheckTheCheck(_heroik.CurrentTakenObjects);
+                    if (_currentCheck!= null)
                     {
-                        Debug.Log("Это блюдо есть в чеках");
                         AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
-                        //StartCookingProcessAsync();
                         StartCoroutine(ContinueWorkCoroutine());
                     }
                     else
@@ -139,17 +139,10 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
         }
     }
     
-    private async void StartCookingProcessAsync()
-    {
-        await Task.Delay(1850);
-        TakeToTheHall();
-        TurnOff();
-    }
-    
     private void TakeToTheHall()
     {
         _currentDish.SetActive(false);
-        checks.DeleteCheck(_currentDish);
+        checks.DeleteCheck(_currentCheck);
         Destroy(_currentDish);
         _currentDish = null;
     }
