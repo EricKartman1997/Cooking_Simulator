@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class UpdateChecks : MonoBehaviour
 {
-    [SerializeField] private Checks _checks;
-    [SerializeField] private float _timeUpdateCheck = 0f;
+    private Checks _checks;
+     private float _timeUpdateCheck = 0f;
     [SerializeField] private float _timeAddNewCheck = 3f;
 
     private void Start()

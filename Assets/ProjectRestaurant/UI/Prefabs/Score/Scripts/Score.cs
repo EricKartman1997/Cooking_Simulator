@@ -2,29 +2,34 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
-    [SerializeField] private TimeGame timeGame;
+    private TimeGame _timeGame;
     private float _score;
-    public void AddScore(int score, float scoreCheck)
+
+    private void Start()
     {
-        _score += scoreCheck + score + AdditionalScore();
+        _timeGame = GetComponent<TimeGame>();
     }
+
     public void AddScore(int score)
     {
         _score += score + AdditionalScore();
     }
-
-    private float AdditionalScore()
-    {
-        var remSeconds = TimeGame.TimeLevel[0] - timeGame.GetSeconds();
-        var remMinutes = TimeGame.TimeLevel[1] - timeGame.GetMinutes();
-        var multiplyMinutes = remMinutes * 60;
-        var result = multiplyMinutes + remSeconds;
-        return result;
-    }
-
+    
     public float GetScore()
     {
         return _score;
+    }
+    private void AddScore(int score, float scoreCheck)
+    {
+        _score += scoreCheck + score + AdditionalScore();
+    }
+    private float AdditionalScore()
+    {
+        var remSeconds = TimeGame.TimeLevel[0] - _timeGame.GetSeconds();
+        var remMinutes = TimeGame.TimeLevel[1] - _timeGame.GetMinutes();
+        var multiplyMinutes = remMinutes * 60;
+        var result = multiplyMinutes + remSeconds;
+        return result;
     }
 
     private void OnEnable()
