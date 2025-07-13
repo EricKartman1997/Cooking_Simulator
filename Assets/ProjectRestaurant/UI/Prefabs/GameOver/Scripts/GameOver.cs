@@ -3,51 +3,56 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOver : MonoBehaviour
+public class GameOver : IDisposable
 {
-    [SerializeField] private GameObject windowScore;
-    [SerializeField] private TextMeshProUGUI scoreNumbersText;
-    [SerializeField] private TextMeshProUGUI timeNumbersText;
-    [SerializeField] private TextMeshProUGUI assignmentNumbersTimeText;
-    [SerializeField] private Button continueButton;
+    private GameObject _windowScore;
+    private TextMeshProUGUI _scoreNumbersText;
+    private TextMeshProUGUI _timeNumbersText;
+    private TextMeshProUGUI _assignmentNumbersTimeText;
+    private Button _continueButton;
     
-    [SerializeField] private Score score;
-    [SerializeField] private TimeGame timeGame;
+    private TimeGame TimeGame => StaticManagerWithoutZenject.BootstrapLVL2.TimeGame;
+    private Score Score => StaticManagerWithoutZenject.BootstrapLVL2.Score;
 
-    void Start()
+    public GameOver(GameObject windowScore, TextMeshProUGUI scoreNumbersText, TextMeshProUGUI timeNumbersText, TextMeshProUGUI assignmentNumbersTimeText, Button continueButton)
     {
-        windowScore.SetActive(false);
+        _windowScore = windowScore;
+        _scoreNumbersText = scoreNumbersText;
+        _timeNumbersText = timeNumbersText;
+        _assignmentNumbersTimeText = assignmentNumbersTimeText;
+        _continueButton = continueButton;
+
+        Init();
+        Debug.Log("Создать объект: GameOver");
     }
 
-    private void ShowWindowScore()
+    public void Dispose()
     {
-        windowScore.SetActive(true);
-        scoreNumbersText.text = $"{Mathf.Round(score.GetScore())}";
-        timeNumbersText.text = $"{timeGame.GetMinutes():00}:{timeGame.GetSeconds():00}";
-        assignmentNumbersTimeText.text = $"{TimeGame.TimeLevel[1]:00}:{TimeGame.TimeLevel[0]:00}";
-        // дописать кнопку
+        EventBus.GameOver -= GameOverMethod;
+        Debug.Log("У объекта вызван Dispose : GameOver");
     }
-
+    private void Init()
+    {
+        EventBus.GameOver += GameOverMethod;
+        _windowScore.SetActive(false);
+    }
+    
     private void GameOverMethod()
     {
         Debug.Log("Игра закончена, время больше не идет");
-        //Destroy(SecondCheck);
-        //Destroy(FirstCheck);
-        //Destroy(ThirdCheck);
-        //_check.DeleteAllChecks(); или через шину событий
         ShowWindowScore();
             
         Time.timeScale = 0f;
         AudioListener.pause = true;
     }
-
-    private void OnEnable()
+    
+    private void ShowWindowScore()
     {
-        EventBus.GameOver += GameOverMethod;
+        _windowScore.SetActive(true);
+        _scoreNumbersText.text = $"{Mathf.Round(Score.GetScore())}";
+        _timeNumbersText.text = $"{TimeGame.CurrentMinutes:00}:{TimeGame.CurrentSeconds:00}";
+        _assignmentNumbersTimeText.text = $"{TimeGame.TimeLevel[1]:00}:{TimeGame.TimeLevel[0]:00}";
+        // дописать кнопку
     }
-
-    private void OnDisable()
-    {
-        EventBus.GameOver -= GameOverMethod;
-    }
+    
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EventBus : MonoBehaviour
+public class EventBus : IDisposable
 {
     public static Action GameOver;
     public static Action AddOrder;
@@ -9,4 +9,14 @@ public class EventBus : MonoBehaviour
     public static Action UpdateOrder;
     public static Action PressE;
     public static Action<InfoAboutCheck> DeleteCheck;
+
+    public EventBus()
+    {
+        Debug.Log("Создать объект: EventBus");
+    }
+
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : EventBus");
+    }
 }

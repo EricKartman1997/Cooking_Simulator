@@ -7,8 +7,8 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 { 
     private const string AnimNONE = "None";
     private const string AnimDISTRIBUTION = "Distribution";
+    private Checks _checks;
     [SerializeField] private Transform pointDish;
-    [SerializeField] private Checks checks;
 
     private InfoAboutCheck _currentCheck;
     private Animator _animator;
@@ -20,8 +20,9 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private GameObject _currentDish;
     private bool _isHeroikTrigger = false;
     
-    void Start()
+    private void Start()
     {
+        _checks = StaticManagerWithoutZenject.BootstrapLVL2.Checks;
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
@@ -118,7 +119,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
             {
                 if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForDistribution)}))
                 {
-                    _currentCheck = checks.CheckTheCheck(_heroik.CurrentTakenObjects);
+                    _currentCheck = _checks.CheckTheCheck(_heroik.CurrentTakenObjects);
                     if (_currentCheck!= null)
                     {
                         AcceptObject(_heroik.TryGiveIngredient());
@@ -142,7 +143,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private void TakeToTheHall()
     {
         _currentDish.SetActive(false);
-        checks.DeleteCheck(_currentCheck);
+        _checks.DeleteCheck(_currentCheck);
         Destroy(_currentDish);
         _currentDish = null;
     }

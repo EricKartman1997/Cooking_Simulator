@@ -1,14 +1,28 @@
+using System;
 using UnityEngine;
 
-public class Score : MonoBehaviour
+public class Score : IDisposable
 {
     private TimeGame _timeGame;
     private float _score;
 
-    private void Start()
+    public Score(TimeGame timeGame)
     {
-        _timeGame = GetComponent<TimeGame>();
+        _timeGame = timeGame;
+        
+        EventBus.AddScore += AddScore;
+        Debug.Log("Создать объект: Score");
     }
+
+    public void Dispose()
+    {
+        EventBus.AddScore -= AddScore;
+        Debug.Log("У объекта вызван Dispose : Score");
+    }
+    // private void Start()
+    // {
+    //     _timeGame = GetComponent<TimeGame>();
+    // }
 
     public void AddScore(int score)
     {
@@ -25,20 +39,20 @@ public class Score : MonoBehaviour
     }
     private float AdditionalScore()
     {
-        var remSeconds = TimeGame.TimeLevel[0] - _timeGame.GetSeconds();
-        var remMinutes = TimeGame.TimeLevel[1] - _timeGame.GetMinutes();
+        var remSeconds = TimeGame.TimeLevel[0] - _timeGame.CurrentSeconds;
+        var remMinutes = TimeGame.TimeLevel[1] - _timeGame.CurrentMinutes;
         var multiplyMinutes = remMinutes * 60;
         var result = multiplyMinutes + remSeconds;
         return result;
     }
 
-    private void OnEnable()
-    {
-        EventBus.AddScore += AddScore;
-    }
+    // private void OnEnable()
+    // {
+    //     EventBus.AddScore += AddScore;
+    // }
 
-    private void OnDisable()
-    {
-        EventBus.AddScore -= AddScore;
-    }
+    // private void OnDisable()
+    // {
+    //     EventBus.AddScore -= AddScore;
+    // }
 }

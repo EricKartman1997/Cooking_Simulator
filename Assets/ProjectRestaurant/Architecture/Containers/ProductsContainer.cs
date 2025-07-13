@@ -9,6 +9,7 @@ public class ProductsContainer: MonoBehaviour
         StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);
         StaticManagerWithoutZenject.ProductsFactory = new ProductsFactory(this);
         StaticManagerWithoutZenject.HelperScriptFactory = new HelperScriptFactory();
+        StaticManagerWithoutZenject.BootstrapLVL2 = new BootstrapLVL2(GetComponent<FieldsForScriptContainer>());
     }
 
     [SerializeField] private Product apple;
@@ -110,7 +111,7 @@ public class ProductsContainer: MonoBehaviour
     public GameObject CrossView => crossView;
     public GameObject CrockView => crockView;
     public GameObject NewYearView => newYearView;
-
+    
     private void InitializeDictionaries()
     {
         _recipesForSuvide = new Dictionary<string, ObjsForDistribution>()

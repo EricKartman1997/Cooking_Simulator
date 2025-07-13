@@ -1,27 +1,34 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Object = UnityEngine.Object;
 
-public class Checks : MonoBehaviour
+public class Checks : IDisposable
 {
-    [SerializeField] private CheckContainer _checkContainer;
-    [SerializeField] private GameObject _content;
-    
+     private CheckContainer _checkContainer;
+     private GameObject _content;
+
      private InfoAboutCheck _check1;
      private InfoAboutCheck _check2;
      private InfoAboutCheck _check3;
      private GameObject _cloneCheck1;
      private GameObject _cloneCheck2;
      private GameObject _cloneCheck3;
-
-    private void OnEnable()
+    
+    public Checks(CheckContainer checkContainer, GameObject content)
     {
+        _checkContainer = checkContainer;
+        _content = content;
+        
         EventBus.DeleteCheck += DeleteOverdueCheck;
+        Debug.Log("Создать объект: Checks");
     }
-
-    private void OnDisable()
+    
+    public void Dispose()
     {
         EventBus.DeleteCheck -= DeleteOverdueCheck;
+        Debug.Log("У объекта вызван Dispose : Checks");
     }
 
     public void AddCheck() // добавление чека
@@ -30,17 +37,17 @@ public class Checks : MonoBehaviour
         if (_check1 == null)
         {
             _check1 = curentCheck;
-            _cloneCheck1 = Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck1 = Object.Instantiate(curentCheck.gameObject, _content.transform);
         }
         else if (_check2 == null)
         {
             _check2 = curentCheck;
-            _cloneCheck2 = Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck2 = Object.Instantiate(curentCheck.gameObject, _content.transform);
         }
         else if (_check3 == null)
         {
             _check3 = curentCheck;
-            _cloneCheck3 = Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck3 = Object.Instantiate(curentCheck.gameObject, _content.transform);
         }
         else
         {
@@ -54,7 +61,7 @@ public class Checks : MonoBehaviour
         {
             EventBus.AddScore.Invoke(0,_check1.GetScore());
             _check1 = null;
-            Destroy(_cloneCheck1);
+            Object.Destroy(_cloneCheck1);
             _cloneCheck1 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
@@ -65,7 +72,7 @@ public class Checks : MonoBehaviour
         {
             EventBus.AddScore.Invoke(0,_check2.GetScore());
             _check2 = null;
-            Destroy(_cloneCheck2);
+            Object.Destroy(_cloneCheck2);
             _cloneCheck2 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
@@ -76,7 +83,7 @@ public class Checks : MonoBehaviour
         {
             EventBus.AddScore.Invoke(0,_check3.GetScore());
             _check3 = null;
-            Destroy(_cloneCheck3);
+            Object.Destroy(_cloneCheck3);
             _cloneCheck3 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
@@ -124,15 +131,15 @@ public class Checks : MonoBehaviour
 
     public void DeleteAllChecks()
     {
-        Destroy(_check1);
+        Object.Destroy(_check1);
         _check1 = null;
         //Debug.Log("удалил первый чек");
         
-        Destroy(_check2);
+        Object.Destroy(_check2);
         _check2 = null;
         //Debug.Log("удалил второй чек");
         
-        Destroy(_check3);
+        Object.Destroy(_check3);
         _check3 = null;
         //Debug.Log("удалил третий чек");
     }
@@ -142,7 +149,7 @@ public class Checks : MonoBehaviour
         if (_check1 != null && _cloneCheck1.GetComponent<InfoAboutCheck>().StartTime <= 0f)
         {
             _check1 = null;
-            Destroy(_cloneCheck1);
+            Object.Destroy(_cloneCheck1);
             _cloneCheck1 = null;
 
             //Debug.Log("просрочен 1 чек");
@@ -150,7 +157,7 @@ public class Checks : MonoBehaviour
         else if (_check2 != null && _cloneCheck2.GetComponent<InfoAboutCheck>().StartTime <= 0f)
         {
             _check2 = null;
-            Destroy(_cloneCheck2);
+            Object.Destroy(_cloneCheck2);
             _cloneCheck2 = null;
             
             //Debug.Log("просрочен 2 чек");
@@ -159,7 +166,7 @@ public class Checks : MonoBehaviour
         else if (_check3 != null && _cloneCheck3.GetComponent<InfoAboutCheck>().StartTime <= 0f)
         {
             _check3 = null;
-            Destroy(_cloneCheck3);
+            Object.Destroy(_cloneCheck3);
             _cloneCheck3 = null;
 
             //Debug.Log("просрочен 3 чек");

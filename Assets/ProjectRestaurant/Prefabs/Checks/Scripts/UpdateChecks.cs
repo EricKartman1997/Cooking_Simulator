@@ -1,17 +1,30 @@
+using System;
 using UnityEngine;
 
-public class UpdateChecks : MonoBehaviour
+public class UpdateChecks : IDisposable
 {
     private Checks _checks;
-     private float _timeUpdateCheck = 0f;
-    [SerializeField] private float _timeAddNewCheck = 3f;
+    private float _timeAddNewCheck = 3f;
+    private float _timeUpdateCheck;
 
-    private void Start()
+    public UpdateChecks(Checks checks, float timeAddNewCheck)
     {
-        _checks = GetComponent<Checks>();
+        _checks = checks;
+        _timeAddNewCheck = timeAddNewCheck;
+        
+        Debug.Log("Создать объект: UpdateChecks");
     }
 
-    private void Update()
+    public void Dispose()
+    {
+        _checks?.Dispose();
+    }
+    // private void Start()
+    // {
+    //     _checks = GetComponent<Checks>();
+    // }
+
+    public void Update()
     {
         _timeUpdateCheck += Time.deltaTime;
         if (_checks.GetCheck1() == null && _timeUpdateCheck >= _timeAddNewCheck) 
@@ -40,4 +53,5 @@ public class UpdateChecks : MonoBehaviour
             _timeAddNewCheck = 5f;
         }
     }
+    
 }

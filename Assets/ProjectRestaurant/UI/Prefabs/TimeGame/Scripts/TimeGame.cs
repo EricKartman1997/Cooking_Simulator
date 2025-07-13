@@ -1,17 +1,30 @@
+using System;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class TimeGame : MonoBehaviour
+public class TimeGame : IDisposable
 {
-    public static float[] TimeLevel;
-    [SerializeField] private TextMeshProUGUI timeText;
-    [SerializeField] private float _currentSeconds = 0f;
-    [SerializeField] private float _currentMinutes = 0f;
-    [SerializeField] private float _secondsLevel;
-    [SerializeField] private float _minutesLevel;
+    public static float[] TimeLevel; // DataManager
+    
+    private TextMeshProUGUI _timeText;
+    private float _currentSeconds;
+    private float _currentMinutes;
+    private float _secondsLevel;
+    private float _minutesLevel;
 
-    private void Awake()
+    public float CurrentSeconds => _currentSeconds;
+
+    public float CurrentMinutes => _currentMinutes;
+
+    public TimeGame(TextMeshProUGUI timeText)
+    {
+        _timeText = timeText;
+        Init();
+        Debug.Log("Создать объект: TimeGame");
+    }
+
+    private void Init()
     {
         _secondsLevel = Random.Range(45, 60);
         _minutesLevel = Random.Range(1, 2);
@@ -20,7 +33,7 @@ public class TimeGame : MonoBehaviour
         TimeLevel = new float[]{_secondsLevel,_minutesLevel};
     }
 
-    void Update()
+    public void Update()
     {
         _currentSeconds -= Time.deltaTime;
         
@@ -38,15 +51,11 @@ public class TimeGame : MonoBehaviour
                 _currentSeconds = 60f;
             }
         }
-        timeText.text = string.Format("{0:00}:{1:00}", _currentMinutes, _currentSeconds);
+        _timeText.text = string.Format("{0:00}:{1:00}", _currentMinutes, _currentSeconds);
     }
 
-    public float GetSeconds()
+    public void Dispose()
     {
-        return _currentSeconds;
-    }
-    public float GetMinutes()
-    {
-        return _currentMinutes;
+        Debug.Log("У объекта вызван Dispose : TimeGame");
     }
 }

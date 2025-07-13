@@ -1,26 +1,39 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Orders : MonoBehaviour
+public class Orders : IDisposable
 {
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
     private byte _stayedOrders; // осталось сделать заказов
-    
-    private void Awake()
-    {
-        CreateOrders();
-    }
-    
-    private void OnEnable()
+
+    public Orders()
     {
         EventBus.AddOrder += AddMakeOrder;
+        CreateOrders();
+        Debug.Log("Создать объект: Orders");
     }
 
-    private void OnDisable()
+    public void Dispose()
     {
         EventBus.AddOrder -= AddMakeOrder;
+        Debug.Log("У объекта вызван Dispose : Orders");
     }
+    // private void Awake()
+    // {
+    //     CreateOrders();
+    // }
+    //
+    // private void OnEnable()
+    // {
+    //     EventBus.AddOrder += AddMakeOrder;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.AddOrder -= AddMakeOrder;
+    // }
     
     public int GetMakeOrders()
     {
