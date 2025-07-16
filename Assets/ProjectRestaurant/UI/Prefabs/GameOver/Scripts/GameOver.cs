@@ -11,8 +11,8 @@ public class GameOver : IDisposable
     private TextMeshProUGUI _assignmentNumbersTimeText;
     private Button _continueButton;
     
-    private TimeGame TimeGame => StaticManagerWithoutZenject.BootstrapLVL2.TimeGame;
-    private Score Score => StaticManagerWithoutZenject.BootstrapLVL2.Score;
+    private TimeGame TimeGame => StaticManagerWithoutZenject.GameManager.TimeGame;
+    private Score Score => StaticManagerWithoutZenject.GameManager.Score;
 
     public GameOver(GameObject windowScore, TextMeshProUGUI scoreNumbersText, TextMeshProUGUI timeNumbersText, TextMeshProUGUI assignmentNumbersTimeText, Button continueButton)
     {

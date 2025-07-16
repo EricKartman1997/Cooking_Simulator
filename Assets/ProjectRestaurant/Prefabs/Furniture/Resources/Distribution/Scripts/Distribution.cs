@@ -20,9 +20,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private GameObject _currentDish;
     private bool _isHeroikTrigger = false;
     
+    private GameManager _gameManager;
+    
     private void Start()
     {
-        _checks = StaticManagerWithoutZenject.BootstrapLVL2.Checks;
+        _gameManager = StaticManagerWithoutZenject.GameManager;
+        _checks = StaticManagerWithoutZenject.GameManager.Checks;
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
@@ -73,7 +76,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _currentDish = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
+        _currentDish = _gameManager.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
         Destroy(acceptObj);
     }
 

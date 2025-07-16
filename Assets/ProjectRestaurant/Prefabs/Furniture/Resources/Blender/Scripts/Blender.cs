@@ -34,6 +34,9 @@ namespace BlenderFurniture
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
         private Animator _animator;
+        
+        private GameManager _gameManager;
+        
     
         private void Awake()
         {
@@ -42,6 +45,7 @@ namespace BlenderFurniture
     
         void Start()
         {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
             //_animator.SetBool("Work", false);
             TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
@@ -102,15 +106,15 @@ namespace BlenderFurniture
         {
             if (_ingredient1 == null)
             {
-                _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
             }
             else if (_ingredient2 == null)
             {
-                _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
             }
             else if (_ingredient3 == null)
             {
-                _ingredient3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
             }
             else
             {
@@ -121,7 +125,7 @@ namespace BlenderFurniture
         
         public void CreateResult(GameObject obj)
         {
-            _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
+            _result = _gameManager.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
         }
     
         public void TurnOn()

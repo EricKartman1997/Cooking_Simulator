@@ -6,10 +6,10 @@ public class ProductsContainer: MonoBehaviour
     private void Awake()
     {
         InitializeDictionaries();
-        StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);
-        StaticManagerWithoutZenject.ProductsFactory = new ProductsFactory(this);
-        StaticManagerWithoutZenject.HelperScriptFactory = new HelperScriptFactory();
-        StaticManagerWithoutZenject.BootstrapLVL2 = new BootstrapLVL2(GetComponent<FieldsForScriptContainer>());
+        // StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);
+        // StaticManagerWithoutZenject.ProductsFactory = new ProductsFactory(this);
+        // StaticManagerWithoutZenject.HelperScriptFactory = new HelperScriptFactory();
+        // StaticManagerWithoutZenject.BootstrapLVL2 = new BootstrapLVL2(GetComponent<FieldsForScriptContainer>());
     }
 
     [SerializeField] private Product apple;

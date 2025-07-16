@@ -12,9 +12,11 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     private Heroik _heroik;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
+    private GameManager _gameManager;
     
     void Start()
     {
+        _gameManager = StaticManagerWithoutZenject.GameManager;
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
@@ -108,7 +110,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood,true);
+        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood,true);
         Destroy(acceptObj);
     }
     

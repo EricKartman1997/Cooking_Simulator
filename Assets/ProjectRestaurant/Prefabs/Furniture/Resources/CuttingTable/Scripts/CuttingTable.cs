@@ -28,6 +28,8 @@ namespace CuttingTableFurniture
         private Animator _animator;
         private CuttingTablePoints _cuttingTablePoints;
         private CuttingTableView _cuttingTableView;
+        
+        private GameManager _gameManager;
     
         private void Awake()
         {
@@ -36,6 +38,7 @@ namespace CuttingTableFurniture
     
         void Start()
         {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
             _animator.SetBool("Work", false);
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
@@ -98,12 +101,12 @@ namespace CuttingTableFurniture
         {
             if (_ingredient1 == null)
             {
-                _ingredient1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
+                _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
                     _cuttingTablePoints.PositionIngredient1,true);
             }
             else if (_ingredient2 == null)
             {
-                 _ingredient2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
+                 _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
                     _cuttingTablePoints.PositionIngredient2,true);
             }
             else
@@ -115,7 +118,7 @@ namespace CuttingTableFurniture
         
         public void CreateResult(GameObject obj)
         {
-            _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj, _cuttingTablePoints.PositionResult,
+            _result = _gameManager.ProductsFactory.GetProduct(obj, _cuttingTablePoints.PositionResult,
                 _cuttingTablePoints.PositionResult,true);
         }
         

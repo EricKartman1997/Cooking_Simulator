@@ -10,14 +10,17 @@ public class GetTable : MonoBehaviour, IGiveObj
     private GameObject _objectOnTheTable;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;
+    
+    private GameManager _gameManager;
 
     void Start()
     {
+        _gameManager = StaticManagerWithoutZenject.GameManager;
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
         
-        StaticManagerWithoutZenject.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
-        _objectOnTheTable = StaticManagerWithoutZenject.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
+        _gameManager.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
+        _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
     }
     
     private void OnTriggerEnter(Collider other)
@@ -66,7 +69,7 @@ public class GetTable : MonoBehaviour, IGiveObj
 
     public GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = StaticManagerWithoutZenject.ProductsFactory.GetProduct(giveObj, false);
+        GameObject giveObjCopy = _gameManager.ProductsFactory.GetProduct(giveObj, false);
         return giveObjCopy;
     }
     

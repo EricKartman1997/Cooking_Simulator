@@ -45,6 +45,9 @@ namespace SuvideFurniture
         
         //private bool _isWork;
         private bool _isHeroikTrigger;
+        
+        private GameManager _gameManager;
+        //_gameManager = StaticManagerWithoutZenject.GameManager;
     
         private void Awake()
         {
@@ -53,6 +56,7 @@ namespace SuvideFurniture
         
         private void Start()
         {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
             TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
             TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
             TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
@@ -116,7 +120,7 @@ namespace SuvideFurniture
         {
             if (TOKEN == DISH1)
             {
-                _dish1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
+                _dish1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
                 Destroy(acceptObj);
                 _cookingdish1 = true;
                 return;
@@ -124,7 +128,7 @@ namespace SuvideFurniture
             
             if (TOKEN == DISH2)
             {
-                _dish2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
+                _dish2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
                 Destroy(acceptObj);
                 _cookingdish2 = true;
                 return;
@@ -132,7 +136,7 @@ namespace SuvideFurniture
             
             if (TOKEN == DISH3)
             {
-                _dish3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
+                _dish3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
                 Destroy(acceptObj);
                 _cookingdish3 = true;
                 return;
@@ -149,7 +153,7 @@ namespace SuvideFurniture
                 if (readyObj != null)
                 {
                     Destroy(_dish1);
-                    _dish1 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult1, _suvidePoints.PointResult1, true,true);
+                    _dish1 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult1, _suvidePoints.PointResult1, true,true);
                     return;
                 }
                 Debug.LogError("Ошибка в CreateResult, такого ключа нет");
@@ -162,7 +166,7 @@ namespace SuvideFurniture
                 if (readyObj != null)
                 {
                     Destroy(_dish2);
-                    _dish2 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult2, _suvidePoints.PointResult2, true,true);
+                    _dish2 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult2, _suvidePoints.PointResult2, true,true);
                     return;
                 }
                 Debug.LogError("Ошибка в CreateResult, такого ключа нет");
@@ -175,7 +179,7 @@ namespace SuvideFurniture
                 if (readyObj != null)
                 {
                     Destroy(_dish3);
-                    _dish3 = StaticManagerWithoutZenject.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult3, _suvidePoints.PointResult3, true,true);
+                    _dish3 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult3, _suvidePoints.PointResult3, true,true);
                     return;
                 }
                 Debug.LogError("Ошибка в CreateResult, такого ключа нет");

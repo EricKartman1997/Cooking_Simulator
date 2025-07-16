@@ -6,18 +6,16 @@ public class Heroik : MonoBehaviour
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
     //private bool _isBusyHands = false; // руки не заняты
+    private GameManager _gameManager;
     private IngredientHandler _ingredientHandler;
     
     public GameObject CurrentTakenObjects => _ingredientHandler.CurrentTakenObjects;
     public bool IsBusyHands => _ingredientHandler.IsBusyHands;
-
-    private void Awake()
-    {
-        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects);
-    }
-
+    
     private void Start()
     {
+        _gameManager = StaticManagerWithoutZenject.GameManager;
+        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,_gameManager);
         _ingredientHandler.CreateObj();
     }
     

@@ -204,7 +204,8 @@ GameObject:
   - component: {fileID: 173349867}
   - component: {fileID: 173349876}
   - component: {fileID: 173349877}
-  - component: {fileID: 173349878}
+  - component: {fileID: 173349880}
+  - component: {fileID: 173349881}
   m_Layer: 0
   m_Name: ManagerAllProject
   m_TagString: Untagged
@@ -333,7 +334,7 @@ MonoBehaviour:
   timeNumbersText: {fileID: 661284118}
   assignmentNumbersTimeText: {fileID: 529079364}
   continueButton: {fileID: 1621936256}
---- !u!114 &173349878
+--- !u!114 &173349880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -342,7 +343,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 173349866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029d8915ed55e254e840ac41b2955625, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f62e8ee729643043b682f3277532ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldsContainer: {fileID: 173349877}
+  productsContainer: {fileID: 173349867}
+  checkContainer: {fileID: 173349876}
+  gameManagerUpdate: {fileID: 173349881}
+--- !u!114 &173349881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173349866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1500bd66cb73a46b6833b9ddfce6c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &244000072

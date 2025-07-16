@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class IngredientHandler  
-{  
+public class IngredientHandler: IDisposable
+{
+    private GameManager _gameManager;
     private Transform _ingredientPosition;
     private Transform _ingredientParent;
     private GameObject _currentTakenObjects;
@@ -13,13 +14,19 @@ public class IngredientHandler
     public GameObject CurrentTakenObjects => _currentTakenObjects;
     public bool IsBusyHands => _isBusyHands;
     
-    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects)
+    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects,GameManager gameManager)
     {
         _ingredientPosition = ingredientPosition;
         _ingredientParent = ingredientParent;
         _currentTakenObjects = currentTakenObjects;
+        _gameManager = gameManager;
         
         Debug.Log("Создан объект: IngredientHandler");
+    }
+    
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : IngredientHandler");
     }
 
     // взять объект в руки
@@ -104,7 +111,9 @@ public class IngredientHandler
         if (_currentTakenObjects == null)
             return;
         
-        _currentTakenObjects = StaticManagerWithoutZenject.ProductsFactory.GetProduct(_currentTakenObjects, _ingredientPosition, _ingredientParent, true);
+        _currentTakenObjects = _gameManager.ProductsFactory.GetProduct(_currentTakenObjects, _ingredientPosition, _ingredientParent, true);
         _isBusyHands = true;
     }
+
+
 }  

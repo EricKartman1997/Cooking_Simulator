@@ -18,17 +18,14 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private GameObject _ingredient;
     private IForStove _componentForStove;
     private GameObject _result;
-
-    // private void Awake()
-    // {
-    //     _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoint(positionRawFood);
-    //     _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
-    // }
-
+    
+    private GameManager _gameManager;
+    
     void Start()
     {
-        _stovePoints = StaticManagerWithoutZenject.HelperScriptFactory.GetStovePoints(positionRawFood);
-        _stoveView = StaticManagerWithoutZenject.HelperScriptFactory.GetStoveView();
+        _gameManager = StaticManagerWithoutZenject.GameManager;
+        _stovePoints = _gameManager.HelperScriptFactory.GetStovePoints(positionRawFood);
+        _stoveView = _gameManager.HelperScriptFactory.GetStoveView();
         
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
@@ -132,7 +129,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
+        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _componentForStove = _ingredient.GetComponent<IForStove>();
         Destroy(acceptObj);
     }
@@ -140,7 +137,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     public void CreateResult(GameObject obj) 
     {
         _componentForStove.IsOnStove = false;
-        _result = StaticManagerWithoutZenject.ProductsFactory.GetCutlet(_componentForStove.Roasting);
+        _result = _gameManager.ProductsFactory.GetCutlet(_componentForStove.Roasting);
         _result.GetComponent<Cutlet>().UpdateTime(_componentForStove.TimeRemaining); 
         Destroy(_ingredient);
         _ingredient = null;

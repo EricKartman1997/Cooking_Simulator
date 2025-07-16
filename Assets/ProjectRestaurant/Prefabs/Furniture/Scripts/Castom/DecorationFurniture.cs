@@ -8,12 +8,15 @@ public class DecorationFurniture : MonoBehaviour
 
     private GameObject _decorationTableTop;
     private GameObject _decorationLowerSurface;
-    
+
+    private GameManager _gameManager;
+
     public DecorationTableConfig Config => config;
 
     private void Start()
     {
-        _decorationLowerSurface = StaticManagerWithoutZenject.ViewFactory.GetDecorationLowerSurface(config.DecorationLowerSurface,positionViewLowerSurface);
-        _decorationTableTop = StaticManagerWithoutZenject.ViewFactory.GetDecorationTableTop(config.DecorationTableTop,positionViewTableTop);
+        _gameManager = StaticManagerWithoutZenject.GameManager;
+        _decorationLowerSurface = _gameManager.ViewFactory.GetDecorationLowerSurface(config.DecorationLowerSurface,positionViewLowerSurface);
+        _decorationTableTop = _gameManager.ViewFactory.GetDecorationTableTop(config.DecorationTableTop,positionViewTableTop);
     }
 }

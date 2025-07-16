@@ -29,6 +29,8 @@ namespace OvenFurniture
         private Animator _animator;
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
+        
+        private GameManager _gameManager;
     
         private void Awake()
         {
@@ -38,6 +40,7 @@ namespace OvenFurniture
     
         void Start()
         {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
@@ -96,7 +99,7 @@ namespace OvenFurniture
     
         public void AcceptObject(GameObject obj)
         {
-            _ingredient = StaticManagerWithoutZenject.ProductsFactory.GetProduct(obj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
+            _ingredient = _gameManager.ProductsFactory.GetProduct(obj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
             Object.Destroy(obj);
         }
         
@@ -107,7 +110,7 @@ namespace OvenFurniture
                 productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
                 if (bakedObj != null)
                 {
-                    _result = StaticManagerWithoutZenject.ProductsFactory.GetProduct(bakedObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
+                    _result = _gameManager.ProductsFactory.GetProduct(bakedObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
                 }
                 else
                 {
