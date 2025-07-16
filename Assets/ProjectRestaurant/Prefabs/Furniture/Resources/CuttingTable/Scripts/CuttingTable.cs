@@ -13,8 +13,6 @@ namespace CuttingTableFurniture
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
         [SerializeField] private Transform positionResult;      
-    
-        [SerializeField] private ProductsContainer productsContainer;
         
         private bool _isWork = false;
         private bool _isHeroikTrigger = false;
@@ -28,7 +26,7 @@ namespace CuttingTableFurniture
         private Animator _animator;
         private CuttingTablePoints _cuttingTablePoints;
         private CuttingTableView _cuttingTableView;
-        
+        private ProductsContainer _productsContainer;
         private GameManager _gameManager;
     
         private void Awake()
@@ -39,6 +37,7 @@ namespace CuttingTableFurniture
         void Start()
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            _productsContainer = _gameManager.ProductsContainer;
             _animator.SetBool("Work", false);
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
@@ -143,15 +142,15 @@ namespace CuttingTableFurniture
         public GameObject FindReadyFood()
         {
             List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
-            if (SuitableIngredients(currentIngredient,productsContainer.RequiredFruitSalad))
+            if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
             {
-                return productsContainer.FruitSalad;
+                return _productsContainer.FruitSalad;
             }
-            if(SuitableIngredients(currentIngredient,productsContainer.RequiredMixBakedFruit))
+            if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
             {
-                return productsContainer.MixBakedFruit;
+                return _productsContainer.MixBakedFruit;
             }
-            return productsContainer.Rubbish;
+            return _productsContainer.Rubbish;
         }
     
         public bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)

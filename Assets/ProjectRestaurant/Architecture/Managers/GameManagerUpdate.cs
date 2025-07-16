@@ -3,7 +3,8 @@ using UnityEngine;
 public class GameManagerUpdate : MonoBehaviour
 {
     private GameManager _gameManager;
-
+    public bool IsWork;// переделать
+    
     private void Start()
     {
         _gameManager = StaticManagerWithoutZenject.GameManager;
@@ -11,7 +12,10 @@ public class GameManagerUpdate : MonoBehaviour
 
     void Update()
     {
-        _gameManager.TimeGame.Update();
-        _gameManager.UpdateChecks.Update();
+        if (IsWork == true)
+        {
+            _gameManager.TimeGame.Update();
+            _gameManager.UpdateChecks.Update();
+        }
     }
 }

@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : IDisposable
 {
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    
     // Managers
     private BootstrapLVL2 _bootstrapLvl2;
     private ProductsContainer _productsContainer;
@@ -12,6 +12,7 @@ public class GameManager : IDisposable
     private FieldsForScriptContainer _fieldsContainer;
     private GameManagerUpdate _gameManagerUpdate;
     private DataManager _dataManager;
+    private UIManager _uiManager;
     
     // Scripts
     private Checks _checks;
@@ -28,12 +29,16 @@ public class GameManager : IDisposable
     private ProductsFactory _productsFactory;
     private HelperScriptFactory _helperScriptFactory;
 
+    
     public BootstrapLVL2 BootstrapLvl2 => _bootstrapLvl2;
     public ProductsContainer ProductsContainer => _productsContainer;
+    
     public CheckContainer CheckContainer => _checkContainer;
     public FieldsForScriptContainer FieldsContainer => _fieldsContainer;
+    
     public DataManager DataManager => _dataManager;
-
+    
+    public UIManager UIManager => _uiManager;
     public Checks Checks => _checks;
     public Score Score => _score;
     public UpdateChecks UpdateChecks => _updateChecks;
@@ -47,7 +52,7 @@ public class GameManager : IDisposable
     public ProductsFactory ProductsFactory => _productsFactory;
     public HelperScriptFactory HelperScriptFactory => _helperScriptFactory;
 
-    public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, CheckContainer checkContainer, FieldsForScriptContainer fieldsContainer, GameManagerUpdate gameManagerUpdate, DataManager dataManager, Checks checks, Score score, UpdateChecks updateChecks, Orders orders, OrdersUI ordersUI, EventBus eventBus, TimeGame timeGame, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory, HelperScriptFactory helperScriptFactory)
+    public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, CheckContainer checkContainer, FieldsForScriptContainer fieldsContainer, GameManagerUpdate gameManagerUpdate, DataManager dataManager,UIManager uiManager, Checks checks, Score score, UpdateChecks updateChecks, Orders orders, OrdersUI ordersUI, EventBus eventBus, TimeGame timeGame, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory, HelperScriptFactory helperScriptFactory,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _bootstrapLvl2 = bootstrapLvl2;
         _productsContainer = productsContainer;
@@ -55,6 +60,8 @@ public class GameManager : IDisposable
         _fieldsContainer = fieldsContainer;
         _gameManagerUpdate = gameManagerUpdate;
         _dataManager = dataManager;
+        _uiManager = uiManager;
+        
         _checks = checks;
         _score = score;
         _updateChecks = updateChecks;
@@ -63,9 +70,11 @@ public class GameManager : IDisposable
         _eventBus = eventBus;
         _timeGame = timeGame;
         _gameOver = gameOver;
+        
         _viewFactory = viewFactory;
         _productsFactory = productsFactory;
         _helperScriptFactory = helperScriptFactory;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
 
         Init();
         Debug.Log("Создать объект: GameManager");

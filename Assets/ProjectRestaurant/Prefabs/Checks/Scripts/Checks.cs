@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -6,8 +7,12 @@ using Object = UnityEngine.Object;
 
 public class Checks : IDisposable
 {
+     private GameManager _gameManager;
+     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
      private CheckContainer _checkContainer;
-     private GameObject _content;
+     private UIManager _uiManager;
+
+     private Transform _contentTransform;
 
      private InfoAboutCheck _check1;
      private InfoAboutCheck _check2;
@@ -16,19 +21,39 @@ public class Checks : IDisposable
      private GameObject _cloneCheck2;
      private GameObject _cloneCheck3;
     
-    public Checks(CheckContainer checkContainer, GameObject content)
+    public Checks(CheckContainer checkContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _checkContainer = checkContainer;
-        _content = content;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
         
         EventBus.DeleteCheck += DeleteOverdueCheck;
-        Debug.Log("Создать объект: Checks");
+        _coroutineMonoBehaviour.StartCoroutine(Init());
+        //Debug.Log("Создать объект: Checks");
     }
     
     public void Dispose()
     {
         EventBus.DeleteCheck -= DeleteOverdueCheck;
         Debug.Log("У объекта вызван Dispose : Checks");
+    }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_uiManager == null)
+        {
+            _uiManager = _gameManager.UIManager;
+            yield return null;
+        }
+
+        _contentTransform = _uiManager.Content.transform;
+        
+        Debug.Log("Создать объект: Checks");
     }
 
     public void AddCheck() // добавление чека
@@ -37,17 +62,17 @@ public class Checks : IDisposable
         if (_check1 == null)
         {
             _check1 = curentCheck;
-            _cloneCheck1 = Object.Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck1 = Object.Instantiate(curentCheck.gameObject, _contentTransform);
         }
         else if (_check2 == null)
         {
             _check2 = curentCheck;
-            _cloneCheck2 = Object.Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck2 = Object.Instantiate(curentCheck.gameObject, _contentTransform);
         }
         else if (_check3 == null)
         {
             _check3 = curentCheck;
-            _cloneCheck3 = Object.Instantiate(curentCheck.gameObject, _content.transform);
+            _cloneCheck3 = Object.Instantiate(curentCheck.gameObject, _contentTransform);
         }
         else
         {

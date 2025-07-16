@@ -1,12 +1,42 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using System.Collections;
 
-public class ViewFactory
+public class ViewFactory: IDisposable
 {
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private ProductsContainer _productsContainer;
 
-    public ViewFactory(ProductsContainer productsContainer)
+    public ViewFactory(ProductsContainer productsContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _productsContainer = productsContainer;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+
+        _coroutineMonoBehaviour.StartCoroutine(Init());
+    }
+    
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : ViewFactory");
+    }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        // while (_timeGame == null)
+        // {
+        //     _timeGame = _gameManager.TimeGame;
+        //     yield return null;
+        // }
+        
+        Debug.Log("Создать объект: ViewFactory");
     }
 
     public GameObject GetProduct(EnumViewFood enumViewFood,Transform parent)

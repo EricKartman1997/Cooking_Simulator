@@ -1,7 +1,43 @@
+using System;
 using UnityEngine;
+using System.Collections;
 
-public class HelperScriptFactory
+public class HelperScriptFactory: IDisposable
 {
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    public bool IsWork;
+
+    public HelperScriptFactory(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    {
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+        
+        _coroutineMonoBehaviour.StartCoroutine(Init());
+        IsWork = true;
+    }
+
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : HelperScriptFactory");
+    }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        // while (_timeGame == null)
+        // {
+        //     _timeGame = _gameManager.TimeGame;
+        //     yield return null;
+        // }
+        
+        Debug.Log("Создать объект: HelperScriptFactory");
+    }
+    
     // Blender
     // public BlenderPoints GetBlenderPoints(Transform firstPoint,Transform secondPoint,Transform thirdPoint,Transform parentFood, Transform parentReadyFood)
     // {
@@ -60,4 +96,5 @@ public class HelperScriptFactory
     //     SuvideView suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab,firstTimer,secondTimer,thirdTimer,animator);
     //     return suvideView;
     // }
+
 }

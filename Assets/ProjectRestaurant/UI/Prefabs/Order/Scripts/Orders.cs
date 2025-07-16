@@ -1,18 +1,24 @@
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Collections;
 
 public class Orders : IDisposable
 {
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
     private byte _stayedOrders; // осталось сделать заказов
 
-    public Orders()
+    public Orders(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
         EventBus.AddOrder += AddMakeOrder;
+        
+        _coroutineMonoBehaviour.StartCoroutine(Init());
         CreateOrders();
-        Debug.Log("Создать объект: Orders");
+        //Debug.Log("Создать объект: Orders");
     }
 
     public void Dispose()
@@ -20,20 +26,23 @@ public class Orders : IDisposable
         EventBus.AddOrder -= AddMakeOrder;
         Debug.Log("У объекта вызван Dispose : Orders");
     }
-    // private void Awake()
-    // {
-    //     CreateOrders();
-    // }
-    //
-    // private void OnEnable()
-    // {
-    //     EventBus.AddOrder += AddMakeOrder;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.AddOrder -= AddMakeOrder;
-    // }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        // while (_timeGame == null)
+        // {
+        //     _timeGame = _gameManager.TimeGame;
+        //     yield return null;
+        // }
+        
+        Debug.Log("Создать объект: Orders");
+    }
     
     public int GetMakeOrders()
     {

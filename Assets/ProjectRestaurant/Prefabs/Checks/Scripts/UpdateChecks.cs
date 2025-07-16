@@ -1,28 +1,49 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 public class UpdateChecks : IDisposable
 {
+    public bool IsInit;// переделать
+    
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private Checks _checks;
     private float _timeAddNewCheck = 3f;
     private float _timeUpdateCheck;
 
-    public UpdateChecks(Checks checks, float timeAddNewCheck)
+    public UpdateChecks(Checks checks, float timeAddNewCheck,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _checks = checks;
         _timeAddNewCheck = timeAddNewCheck;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+
+        _coroutineMonoBehaviour.StartCoroutine(Init());
         
-        Debug.Log("Создать объект: UpdateChecks");
+        //Debug.Log("Создать объект: UpdateChecks");
     }
 
     public void Dispose()
     {
         _checks?.Dispose();
     }
-    // private void Start()
-    // {
-    //     _checks = GetComponent<Checks>();
-    // }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        // while (_timeGame == null)
+        // {
+        //     _timeGame = _gameManager.TimeGame;
+        //     yield return null;
+        // }
+        IsInit = true;
+        Debug.Log("Создать объект: UpdateChecks");
+    }
 
     public void Update()
     {

@@ -1,20 +1,27 @@
 using System;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class OrdersUI : IDisposable
 {
+    private GameManager _gameManager;
+    private UIManager _uiManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    
     private Orders _orders;
+    
     private TextMeshProUGUI _scoretext;
 
-    public OrdersUI(Orders orders, TextMeshProUGUI scoretext)
+    public OrdersUI(Orders orders, CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _orders = orders;
-        _scoretext = scoretext;
-        
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
         EventBus.UpdateOrder += UpdateOrders;
-        UpdateOrders();
-        Debug.Log("Создать объект: OrdersUI");
+
+        _coroutineMonoBehaviour.StartCoroutine(Init());
+        
+        //Debug.Log("Создать объект: OrdersUI");
     }
 
     public void Dispose()
@@ -23,11 +30,26 @@ public class OrdersUI : IDisposable
         _orders?.Dispose();
         Debug.Log("У объекта вызван Dispose : OrdersUI");
     }
-    // void Start()
-    // {
-    //     _orders = GetComponent<Orders>();
-    //     UpdateOrders();
-    // }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_uiManager == null)
+        {
+            _uiManager = _gameManager.UIManager;
+            yield return null;
+        }
+
+        _scoretext = _uiManager.ScoreText;
+        
+        UpdateOrders();
+        Debug.Log("Создать объект: OrdersUI");
+    }
 
     private void UpdateOrders()
     {
@@ -38,16 +60,5 @@ public class OrdersUI : IDisposable
             Debug.Log("Сработал GameOver в UpdateOrders");
         }
     }
-
-    // private void OnEnable()
-    // {
-    //     EventBus.UpdateOrder += UpdateOrders;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.UpdateOrder -= UpdateOrders;
-    // }
-
 
 }

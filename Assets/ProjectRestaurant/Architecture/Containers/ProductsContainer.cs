@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ProductsContainer: MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         InitializeDictionaries();
         // StaticManagerWithoutZenject.ViewFactory = new ViewFactory(this);

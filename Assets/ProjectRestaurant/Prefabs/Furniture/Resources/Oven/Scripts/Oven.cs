@@ -14,23 +14,24 @@ namespace OvenFurniture
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;
-        [SerializeField] private ProductsContainer productsContainer;
-        private Heroik _heroik; // только для объекта героя, а надо и другие...
         
-        private bool _isWork = false;
-        private bool _isHeroikTrigger = false;
-        private GameObject _ingredient;
-        private GameObject _result;
         
         private const string ANIMATIONCLOSE = "Close";
         private const string ANIMATIONOPEN = "Open";
+        
+        private GameObject _ingredient;
+        private GameObject _result;
+        private bool _isWork = false;
+        private bool _isHeroikTrigger = false;
+        private Heroik _heroik; // только для объекта героя, а надо и другие...
         private OvenView _ovenView;
         private OvenPoints _ovenPoints;
         private Animator _animator;
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
-        
         private GameManager _gameManager;
+        private ProductsContainer _productsContainer;
+        
     
         private void Awake()
         {
@@ -41,6 +42,7 @@ namespace OvenFurniture
         void Start()
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            _productsContainer = _gameManager.ProductsContainer;
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
@@ -107,7 +109,7 @@ namespace OvenFurniture
         {
             try
             {
-                productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
+                _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
                 if (bakedObj != null)
                 {
                     _result = _gameManager.ProductsFactory.GetProduct(bakedObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );

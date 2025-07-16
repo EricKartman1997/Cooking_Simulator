@@ -7,4 +7,5 @@ public static class StaticManagerWithoutZenject
     //public static HelperScriptFactory HelperScriptFactory;
     //public static BootstrapLVL2 BootstrapLVL2;
     public static GameManager GameManager;
+    //public static CoroutineMonoBehaviour CoroutineMonoBehaviour;
 }

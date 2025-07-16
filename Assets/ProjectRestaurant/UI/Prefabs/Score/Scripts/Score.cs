@@ -1,17 +1,22 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Score : IDisposable
 {
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private TimeGame _timeGame;
     private float _score;
 
-    public Score(TimeGame timeGame)
+    public float ScorePlayer => _score;
+
+    public Score(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
-        _timeGame = timeGame;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
         
-        EventBus.AddScore += AddScore;
-        Debug.Log("Создать объект: Score");
+        
+        _coroutineMonoBehaviour.StartCoroutine(Init());
     }
 
     public void Dispose()
@@ -19,10 +24,25 @@ public class Score : IDisposable
         EventBus.AddScore -= AddScore;
         Debug.Log("У объекта вызван Dispose : Score");
     }
-    // private void Start()
-    // {
-    //     _timeGame = GetComponent<TimeGame>();
-    // }
+
+    private IEnumerator Init()
+    {
+        EventBus.AddScore += AddScore;
+        
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_timeGame == null)
+        {
+            _timeGame = _gameManager.TimeGame;
+            yield return null;
+        }
+        
+        Debug.Log("Создать объект: Score");
+    }
 
     public void AddScore(int score)
     {
@@ -39,20 +59,11 @@ public class Score : IDisposable
     }
     private float AdditionalScore()
     {
-        var remSeconds = TimeGame.TimeLevel[0] - _timeGame.CurrentSeconds;
-        var remMinutes = TimeGame.TimeLevel[1] - _timeGame.CurrentMinutes;
+        var remSeconds = _timeGame.TimeLevel[0] - _timeGame.CurrentSeconds;
+        var remMinutes = _timeGame.TimeLevel[1] - _timeGame.CurrentMinutes;
         var multiplyMinutes = remMinutes * 60;
         var result = multiplyMinutes + remSeconds;
         return result;
     }
 
-    // private void OnEnable()
-    // {
-    //     EventBus.AddScore += AddScore;
-    // }
-
-    // private void OnDisable()
-    // {
-    //     EventBus.AddScore -= AddScore;
-    // }
 }

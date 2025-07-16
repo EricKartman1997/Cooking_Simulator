@@ -1,14 +1,44 @@
+using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using System.Collections;
 
-public class ProductsFactory
+public class ProductsFactory: IDisposable
 {
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private ProductsContainer _productsContainer;
 
-    public ProductsFactory(ProductsContainer productsContainer)
+    public ProductsFactory(ProductsContainer productsContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _productsContainer = productsContainer;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+
+        _coroutineMonoBehaviour.StartCoroutine(Init());
     }
+    
+    public void Dispose()
+    {
+        Debug.Log("У объекта вызван Dispose : ProductsFactory");
+    }
+    
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        // while (_timeGame == null)
+        // {
+        //     _timeGame = _gameManager.TimeGame;
+        //     yield return null;
+        // }
+        
+        Debug.Log("Создать объект: ProductsFactory");
+    }
+
 
     public GameObject GetCutlet(EnumRoasting roasting)
     {
@@ -206,4 +236,5 @@ public class ProductsFactory
     {
         return Object.Instantiate(_productsContainer.BurnCutlet).gameObject;
     }
+    
 }

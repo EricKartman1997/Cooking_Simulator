@@ -9,7 +9,6 @@ namespace BlenderFurniture
 {
     public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IFindReadyFood
     {
-        [SerializeField] private ProductsContainer productsContainer;
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
@@ -34,7 +33,7 @@ namespace BlenderFurniture
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
         private Animator _animator;
-        
+        private ProductsContainer _productsContainer;
         private GameManager _gameManager;
         
     
@@ -46,6 +45,7 @@ namespace BlenderFurniture
         void Start()
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            _productsContainer = _gameManager.ProductsContainer;
             //_animator.SetBool("Work", false);
             TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
@@ -152,15 +152,15 @@ namespace BlenderFurniture
         public GameObject FindReadyFood()
         {
             List<GameObject> currentFruits = new List<GameObject>(){_ingredient1,_ingredient2,_ingredient3};
-            if (SuitableIngredients(currentFruits,productsContainer.RequiredFreshnessCocktail))
+            if (SuitableIngredients(currentFruits,_productsContainer.RequiredFreshnessCocktail))
             {
-                return productsContainer.FreshnessCocktail;
+                return _productsContainer.FreshnessCocktail;
             }
-            if(SuitableIngredients(currentFruits,productsContainer.RequiredWildBerryCocktail))
+            if(SuitableIngredients(currentFruits,_productsContainer.RequiredWildBerryCocktail))
             {
-                return productsContainer.WildBerryCocktail;
+                return _productsContainer.WildBerryCocktail;
             }
-            return productsContainer.Rubbish;
+            return _productsContainer.Rubbish;
         }
     
         public bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)

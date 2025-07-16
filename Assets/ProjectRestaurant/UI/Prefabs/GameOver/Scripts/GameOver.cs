@@ -2,10 +2,15 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameOver : IDisposable
 {
-    private GameObject _windowScore;
+    private GameManager _gameManager;
+    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private UIManager _uiManager;
+
+    private GameObject _windowGameOver;
     private TextMeshProUGUI _scoreNumbersText;
     private TextMeshProUGUI _timeNumbersText;
     private TextMeshProUGUI _assignmentNumbersTimeText;
@@ -14,16 +19,13 @@ public class GameOver : IDisposable
     private TimeGame TimeGame => StaticManagerWithoutZenject.GameManager.TimeGame;
     private Score Score => StaticManagerWithoutZenject.GameManager.Score;
 
-    public GameOver(GameObject windowScore, TextMeshProUGUI scoreNumbersText, TextMeshProUGUI timeNumbersText, TextMeshProUGUI assignmentNumbersTimeText, Button continueButton)
+    public GameOver(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
-        _windowScore = windowScore;
-        _scoreNumbersText = scoreNumbersText;
-        _timeNumbersText = timeNumbersText;
-        _assignmentNumbersTimeText = assignmentNumbersTimeText;
-        _continueButton = continueButton;
 
+        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+
+        _coroutineMonoBehaviour.StartCoroutine(Init());
         Init();
-        Debug.Log("Создать объект: GameOver");
     }
 
     public void Dispose()
@@ -31,10 +33,32 @@ public class GameOver : IDisposable
         EventBus.GameOver -= GameOverMethod;
         Debug.Log("У объекта вызван Dispose : GameOver");
     }
-    private void Init()
+    
+    private IEnumerator Init()
     {
         EventBus.GameOver += GameOverMethod;
-        _windowScore.SetActive(false);
+        
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_uiManager == null)
+        {
+            _uiManager = _gameManager.UIManager;
+            yield return null;
+        }
+        
+        _windowGameOver = _uiManager.WindowGameOver;
+        _scoreNumbersText = _uiManager.ScoreNumbersText;
+        _timeNumbersText = _uiManager.TimeNumbersText;
+        _assignmentNumbersTimeText = _uiManager.AssignmentNumbersTimeText;
+        _continueButton = _uiManager.ContinueButton;
+        
+        _windowGameOver.SetActive(false);
+        
+        Debug.Log("Создать объект: GameOver");
     }
     
     private void GameOverMethod()
@@ -48,7 +72,7 @@ public class GameOver : IDisposable
     
     private void ShowWindowScore()
     {
-        _windowScore.SetActive(true);
+        _windowGameOver.SetActive(true);
         _scoreNumbersText.text = $"{Mathf.Round(Score.GetScore())}";
         _timeNumbersText.text = $"{TimeGame.CurrentMinutes:00}:{TimeGame.CurrentSeconds:00}";
         _assignmentNumbersTimeText.text = $"{TimeGame.TimeLevel[1]:00}:{TimeGame.TimeLevel[0]:00}";

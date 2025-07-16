@@ -6,36 +6,31 @@ public class FieldsForScriptContainer : MonoBehaviour
 {
     //Checks
     [SerializeField] private GameObject content;
-    [SerializeField] private CheckContainer checkContainer;
     
     //OrdersUI
-    [SerializeField] private TextMeshProUGUI scoretext;
+    [SerializeField] private TextMeshProUGUI scoreText; //OrderText
 
     //TimeGame
     [SerializeField] private TextMeshProUGUI timeText;
     
     // GameOver
-    [SerializeField] private GameObject windowScore;
     [SerializeField] private TextMeshProUGUI scoreNumbersText;
     [SerializeField] private TextMeshProUGUI timeNumbersText;
     [SerializeField] private TextMeshProUGUI assignmentNumbersTimeText;
     [SerializeField] private Button continueButton;
+    
+    // UIManager
+    [SerializeField] private GameObject windowGameOver;
+    [SerializeField] private GameObject windowGame;
+    
+    
     public GameObject Content => content;
-
-    public TextMeshProUGUI Scoretext => scoretext;
-    
-    public CheckContainer CheckContainer => checkContainer;
-    
+    public TextMeshProUGUI ScoreText => scoreText;
     public TextMeshProUGUI TimeText => timeText;
-
-    // GameOver
-    public GameObject WindowScore => windowScore;
-
     public TextMeshProUGUI ScoreNumbersText => scoreNumbersText;
-
     public TextMeshProUGUI TimeNumbersText => timeNumbersText;
-
     public TextMeshProUGUI AssignmentNumbersTimeText => assignmentNumbersTimeText;
-
     public Button ContinueButton => continueButton;
+    public GameObject WindowGameOver => windowGameOver;
+    public GameObject WindowGame => windowGame;
 }

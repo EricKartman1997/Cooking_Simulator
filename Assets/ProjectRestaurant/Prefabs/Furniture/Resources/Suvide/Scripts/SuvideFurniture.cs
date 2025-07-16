@@ -10,7 +10,6 @@ namespace SuvideFurniture
         private const string DISH1 = "DISH1";
         private const string DISH2 = "DISH2";
         private const string DISH3 = "DISH3";
-        [SerializeField] private ProductsContainer productsContainer;
         
         [SerializeField] private GameObject waterPrefab;
         [SerializeField] private GameObject switchTimePrefab;
@@ -28,6 +27,8 @@ namespace SuvideFurniture
         [SerializeField] private Transform pointResult2;
         [SerializeField] private Transform pointResult3;
         
+        private bool _isHeroikTrigger;
+        
         private GameObject _dish1;
         private GameObject _dish2;
         private GameObject _dish3;
@@ -43,11 +44,9 @@ namespace SuvideFurniture
         private Heroik _heroik; // только для объекта героя, а надо и другие...
         private Animator _animator;
         
-        //private bool _isWork;
-        private bool _isHeroikTrigger;
-        
         private GameManager _gameManager;
-        //_gameManager = StaticManagerWithoutZenject.GameManager;
+        private ProductsContainer _productsContainer;
+        //private bool _isWork;
     
         private void Awake()
         {
@@ -57,6 +56,8 @@ namespace SuvideFurniture
         private void Start()
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            _productsContainer = _gameManager.ProductsContainer;
+            
             TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
             TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
             TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
@@ -149,7 +150,7 @@ namespace SuvideFurniture
         {
             if (TOKEN == DISH1)
             {
-                productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish1);
@@ -162,7 +163,7 @@ namespace SuvideFurniture
 
             if (TOKEN == DISH2)
             {
-                productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish2);
@@ -175,7 +176,7 @@ namespace SuvideFurniture
 
             if (TOKEN == DISH3)
             {
-                productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish3);
