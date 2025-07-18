@@ -259,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a927f6850e8457d4d82847d3676a4056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: e20589ede5bab5e4a800889763fae9fe, type: 2}
+  config: {fileID: 11400000, guid: 52a7f3d4c0113cf48a08d0375ff95edf, type: 2}
   positionViewTableTop: {fileID: 1998138829731695873}
   positionViewLowerSurface: {fileID: 3367059461909654384}
 --- !u!114 &3564121532839871414
@@ -274,10 +274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2aacfa823ea0e4f9ae813821041be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredient: {fileID: 0}
-  _ingredientPoint: {fileID: 732755802198324534}
-  _parentFood: {fileID: 732755802198324534}
-  _unusableObjects:
+  ingredientPoint: {fileID: 732755802198324534}
+  parentFood: {fileID: 732755802198324534}
+  unusableObjects:
   - {fileID: 6572019045923011835, guid: 39949616b4374a043a3005fc49353630, type: 3}
 --- !u!1 &1334285300655355288
 GameObject:

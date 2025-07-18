@@ -21,8 +21,9 @@ namespace OvenFurniture
         
         private GameObject _ingredient;
         private GameObject _result;
-        private bool _isWork = false;
-        private bool _isHeroikTrigger = false;
+        private bool _isWork;
+        private bool _isHeroikTrigger;
+        private bool _isInit;
         private Heroik _heroik; // только для объекта героя, а надо и другие...
         private OvenView _ovenView;
         private OvenPoints _ovenPoints;
@@ -32,27 +33,44 @@ namespace OvenFurniture
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
         
-    
         private void Awake()
         {
             _outline = GetComponent<Outline>();
             _animator = GetComponent<Animator>();
+            _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        void Start()
+        private IEnumerator Start()
         {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            _productsContainer = _gameManager.ProductsContainer;
+            while (_gameManager == null)
+            {
+                _gameManager = StaticManagerWithoutZenject.GameManager;
+                yield return null;
+            }
+            while (_productsContainer == null)
+            {
+                _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
-            _decorationFurniture = GetComponent<DecorationFurniture>();
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
+            
+            _isInit = true;
+            Debug.Log("Oven Init");
         }
         
         private void OnTriggerEnter(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 2f;
@@ -70,6 +88,12 @@ namespace OvenFurniture
         
         private void OnTriggerExit(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 0f;
@@ -142,6 +166,12 @@ namespace OvenFurniture
         
         private void CookingProcess()
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if(_isHeroikTrigger == false)
             {
                 return;

@@ -27,47 +27,63 @@ namespace SuvideFurniture
         [SerializeField] private Transform pointResult2;
         [SerializeField] private Transform pointResult3;
         
-        private bool _isHeroikTrigger;
-        
         private GameObject _dish1;
         private GameObject _dish2;
         private GameObject _dish3;
         
+        private bool _isHeroikTrigger;
         private bool _cookingdish1;
         private bool _cookingdish2;
         private bool _cookingdish3;
+        private bool _isInit;
     
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
         private SuvideView _suvideView;
         private SuvidePoints _suvidePoints;
-        private Heroik _heroik; // только для объекта героя, а надо и другие...
+        private Heroik _heroik;
         private Animator _animator;
-        
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
-        //private bool _isWork;
-    
+        
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _outline = GetComponent<Outline>();
+            _decorationFurniture = GetComponent<DecorationFurniture>();
         }
         
-        private void Start()
+        private IEnumerator Start()
         {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            _productsContainer = _gameManager.ProductsContainer;
+            while (_gameManager == null)
+            {
+                _gameManager = StaticManagerWithoutZenject.GameManager;
+                yield return null;
+            }
+            
+            while (_productsContainer == null)
+            {
+                _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
             
             TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
             TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
             TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
             _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator);
-            _outline = GetComponent<Outline>();
-            _decorationFurniture = GetComponent<DecorationFurniture>();
+
+            _isInit = true;
+            Debug.Log("SuvideFurniture Init");
         }
         private void OnTriggerEnter(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 2f;
@@ -85,6 +101,12 @@ namespace SuvideFurniture
             
         private void OnTriggerExit(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 0f;
@@ -241,6 +263,12 @@ namespace SuvideFurniture
     
         private void CookingProcess()
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if(_isHeroikTrigger == false)
             {
                 return;

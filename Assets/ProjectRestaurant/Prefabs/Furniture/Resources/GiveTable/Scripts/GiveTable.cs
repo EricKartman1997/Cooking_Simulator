@@ -1,27 +1,46 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
 {
-    [SerializeField] private GameObject _ingredient;
-    [SerializeField] private Transform _ingredientPoint;
-    [SerializeField] private Transform _parentFood;
-    [SerializeField] private List<GameObject> _unusableObjects;
-    
+    [SerializeField] private Transform ingredientPoint;
+    [SerializeField] private Transform parentFood;
+    [SerializeField] private List<GameObject> unusableObjects;
+    private GameObject _ingredient;
     private bool _isHeroikTrigger;
     private Heroik _heroik;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
     private GameManager _gameManager;
-    
-    void Start()
+    private bool _isInit;
+
+    private void Awake()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
+
+    private IEnumerator Start()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        _isInit = true;
+        Debug.Log("GiveTable Init");
+
+    }
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 2f;
@@ -39,6 +58,12 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
 
     private void OnTriggerExit(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 0f;
@@ -66,6 +91,12 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     
     private void CookingProcess()
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if(_isHeroikTrigger == false)
         {
             return;
@@ -92,7 +123,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         {
             if (_ingredient == null) // ни одного активного объекта
             {
-                if (_heroik.CanGiveIngredient(_unusableObjects))
+                if (_heroik.CanGiveIngredient(unusableObjects))
                 {
                     AcceptObject(_heroik.TryGiveIngredient());
                 }
@@ -110,7 +141,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     
     public void AcceptObject(GameObject acceptObj)
     {
-        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, _ingredientPoint, _parentFood,true);
+        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
         Destroy(acceptObj);
     }
     

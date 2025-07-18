@@ -61,7 +61,7 @@ public class BootstrapLVL2 : MonoBehaviour
         yield return new WaitUntil(() => _updateChecks.IsInit);// переделать
         _gameManagerUpdate.IsWork = true;// переделать
         
-        Debug.Log("Создать объект: BootstrapLVL2");
+        Debug.Log("Инициализация Завершена");
     }
     
 }

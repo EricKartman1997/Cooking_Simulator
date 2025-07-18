@@ -1,21 +1,42 @@
 using System;
+using System.Collections;
 using UnityEngine;
 public class Garbage : MonoBehaviour, IAcceptObject
 {
     private Heroik _heroik = null; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;
+    private bool _isInit;
     private GameObject _obj;
     private Outline _outline;
+    private GameManager _gameManager;
     private DecorationFurniture _decorationFurniture;
-    
-    void Start()
+
+    private void Awake()
     {
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
+
+    private IEnumerator Start()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        _isInit = true;
+        Debug.Log("Garbage Init");
+    }
     
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 2f;
@@ -34,6 +55,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
     
     private void OnTriggerExit(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 0f;
@@ -67,6 +94,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
     
     private void CookingProcess()
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_isHeroikTrigger == false)
         {
             return;

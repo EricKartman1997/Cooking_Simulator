@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class DecorationFurniture : MonoBehaviour
@@ -8,15 +9,24 @@ public class DecorationFurniture : MonoBehaviour
 
     private GameObject _decorationTableTop;
     private GameObject _decorationLowerSurface;
-
     private GameManager _gameManager;
+    private bool _isInit;
 
     public DecorationTableConfig Config => config;
+    public bool IsInit => _isInit;
 
-    private void Start()
+    private IEnumerator Start()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
         _decorationLowerSurface = _gameManager.ViewFactory.GetDecorationLowerSurface(config.DecorationLowerSurface,positionViewLowerSurface);
         _decorationTableTop = _gameManager.ViewFactory.GetDecorationTableTop(config.DecorationTableTop,positionViewTableTop);
+        
+        _isInit = true;
+        //Debug.Log("DecorationFurniture Init");
     }
 }

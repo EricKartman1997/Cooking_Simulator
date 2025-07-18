@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,31 +15,50 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private DecorationFurniture _decorationFurniture;
     
     private bool _isHeroikTrigger;
+    private bool _isInit;
     private Heroik _heroik;
     private GameObject _ingredient;
     private IForStove _componentForStove;
     private GameObject _result;
     
     private GameManager _gameManager;
-    
-    void Start()
+
+    private void Awake()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
-        _stovePoints = _gameManager.HelperScriptFactory.GetStovePoints(positionRawFood);
-        _stoveView = _gameManager.HelperScriptFactory.GetStoveView();
-        
         _outline = GetComponent<Outline>();
         _animator = GetComponent<Animator>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
-        _unusableObjects = new List<Type>()
+    }
+
+    private IEnumerator Start()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        _stovePoints = _gameManager.HelperScriptFactory.GetStovePoints(positionRawFood);
+        _stoveView = _gameManager.HelperScriptFactory.GetStoveView();
+        
+
+        _unusableObjects = new List<Type>() // изменить
         {
             typeof(ObjsForStove)
             //typeof(IForStove)
         };
+        
+        _isInit = true;
+        Debug.Log("Stove Init");
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _isHeroikTrigger = true;
@@ -56,6 +76,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     
     private void OnTriggerExit(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _isHeroikTrigger = false;
@@ -83,6 +109,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
     private void CookingProcess()
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if(_isHeroikTrigger == false)
         {
             return;

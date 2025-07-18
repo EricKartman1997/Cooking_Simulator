@@ -7,32 +7,54 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
 { 
     private const string AnimNONE = "None";
     private const string AnimDISTRIBUTION = "Distribution";
-    private Checks _checks;
+    
     [SerializeField] private Transform pointDish;
 
+    private Checks _checks;
     private InfoAboutCheck _currentCheck;
     private Animator _animator;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
     private Heroik _heroik;
-    
-    private bool _isWork = false;
+    private bool _isWork;
+    private bool _isHeroikTrigger;
+    private bool _isInit;
     private GameObject _currentDish;
-    private bool _isHeroikTrigger = false;
-    
     private GameManager _gameManager;
-    
-    private void Start()
+
+    private void Awake()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
-        _checks = StaticManagerWithoutZenject.GameManager.Checks;
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
+
+    private IEnumerator Start()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+            
+        while (_checks == null)
+        {
+            _checks = _gameManager.Checks;
+            yield return null;
+        }
+        
+        _isInit = true;
+        Debug.Log("Distribution Init");
+    }
     
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 2f;
@@ -49,6 +71,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     }
     private void OnTriggerExit(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 0f;
@@ -97,6 +125,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     
     private void CookingProcess()
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if(_isHeroikTrigger == false)
         {
             return;

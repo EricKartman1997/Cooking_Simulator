@@ -17,7 +17,7 @@ namespace BlenderFurniture
         [SerializeField] private Transform secondPoint;
         [SerializeField] private Transform thirdPoint;
         
-        private TimerFurniture _timerFurniture;
+        //private TimerFurniture _timerFurniture;
         
         private Heroik _heroik = null;
         private BlenderPoints _blenderPoints;
@@ -27,8 +27,9 @@ namespace BlenderFurniture
         private GameObject _ingredient2 = null;
         private GameObject _ingredient3 = null;
         private GameObject _result = null;
-        private bool _isWork = false;
-        private bool _isHeroikTrigger = false;
+        private bool _isWork;
+        private bool _isHeroikTrigger;
+        private bool _isInit;
         
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
@@ -40,22 +41,42 @@ namespace BlenderFurniture
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _outline = GetComponent<Outline>();
+            _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        void Start()
+        private IEnumerator Start()
         {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            _productsContainer = _gameManager.ProductsContainer;
+            while (_gameManager == null)
+            {
+                _gameManager = StaticManagerWithoutZenject.GameManager;
+                yield return null;
+            }
+            
+            while (_productsContainer == null)
+            {
+                _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
             //_animator.SetBool("Work", false);
             TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
             _blenderView = new BlenderView(_timerFurniture, _animator);
-            _outline = GetComponent<Outline>();
-            _decorationFurniture = GetComponent<DecorationFurniture>();
+            
+            _isInit = true;
+            Debug.Log("Blender Init");
+
         }
         
         private void OnTriggerEnter(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 2f;
@@ -72,6 +93,12 @@ namespace BlenderFurniture
         }
         private void OnTriggerExit(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _isHeroikTrigger = false;
@@ -193,6 +220,12 @@ namespace BlenderFurniture
         }
         private void CookingProcess()
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if(_isHeroikTrigger == false)
             {
                 return;

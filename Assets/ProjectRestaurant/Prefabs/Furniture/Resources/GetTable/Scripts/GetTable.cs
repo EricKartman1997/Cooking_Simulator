@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GetTable : MonoBehaviour, IGiveObj
@@ -5,26 +6,54 @@ public class GetTable : MonoBehaviour, IGiveObj
     [SerializeField] private GetTableConfig getTableConfig;
     [SerializeField] private Transform parentViewDish;
     
-    private DecorationFurniture _decorationFurniture;
     private Outline _outline;
     private GameObject _objectOnTheTable;
+    private GameObject _objectFoodView;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;
-    
+    private bool _isInit;
     private GameManager _gameManager;
+    private DecorationFurniture _decorationFurniture;
+    
 
-    void Start()
+    private void Awake()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
+    }
+
+    private IEnumerator Start()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
         
-        _gameManager.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
-        _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
+        while (_objectFoodView == null)
+        {
+            _objectFoodView = _gameManager.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
+            yield return null;
+        }
+        
+        while (_objectOnTheTable == null)
+        {
+            _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
+            yield return null;
+        }
+        
+        _isInit = true;
+        Debug.Log("GetTable Init");
     }
     
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 2f;
@@ -42,6 +71,12 @@ public class GetTable : MonoBehaviour, IGiveObj
 
     private void OnTriggerExit(Collider other)
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+        
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             _outline.OutlineWidth = 0f;
@@ -75,6 +110,12 @@ public class GetTable : MonoBehaviour, IGiveObj
     
     private void CookingProcess()
     {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return;
+        }
+
         if (_isHeroikTrigger == false)
         {
             return;

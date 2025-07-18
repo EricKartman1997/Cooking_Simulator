@@ -12,8 +12,9 @@ namespace CuttingTableFurniture
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
-        [SerializeField] private Transform positionResult;      
-        
+        [SerializeField] private Transform positionResult;
+
+        private bool _isInit;
         private bool _isWork = false;
         private bool _isHeroikTrigger = false;
         private GameObject _ingredient1 = null;
@@ -32,22 +33,41 @@ namespace CuttingTableFurniture
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _outline = GetComponent<Outline>();
+            _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        void Start()
+        private IEnumerator Start()
         {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            _productsContainer = _gameManager.ProductsContainer;
+            while (_gameManager == null)
+            {
+                _gameManager = StaticManagerWithoutZenject.GameManager;
+                yield return null;
+            }
+            
+            while (_productsContainer == null)
+            {
+                _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
             _animator.SetBool("Work", false);
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
             _cuttingTableView = new CuttingTableView(_animator,timerFurniture);
-            _outline = GetComponent<Outline>();
-            _decorationFurniture = GetComponent<DecorationFurniture>();
+            
+            _isInit = true;
+            Debug.Log("CuttingTable Init");
         }
         
         private void OnTriggerEnter(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 2f;
@@ -65,6 +85,12 @@ namespace CuttingTableFurniture
         }
         private void OnTriggerExit(Collider other)
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 _outline.OutlineWidth = 0f;
@@ -177,6 +203,12 @@ namespace CuttingTableFurniture
         
         private void CookingProcess()
         {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return;
+            }
+            
             if(_isHeroikTrigger == false)
             {
                 return;

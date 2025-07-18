@@ -23,7 +23,7 @@ public class TimerFurniture : IDisposable
         _pointTimer = pointTimer;
 
         Initialization();
-        Debug.Log("Создал объект: TimerFurniture");
+        //Debug.Log("Создал объект: TimerFurniture");
     }
     
     public IEnumerator StartTimer()
