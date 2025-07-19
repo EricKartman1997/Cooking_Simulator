@@ -10,9 +10,10 @@ public class UIManager : IDisposable
     private GameManager _gameManager;
     private FieldsForScriptContainer _fieldsContainer;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private bool _isInit;
     
+    // ...
     private GameObject _windowGame;
-    private GameObject _windowGameOver;
     
     //Checks
     private GameObject _content;
@@ -24,11 +25,13 @@ public class UIManager : IDisposable
     private TextMeshProUGUI _timeText;
     
     // GameOver
+    private GameObject _windowGameOver;
     private TextMeshProUGUI _scoreNumbersText;
     private TextMeshProUGUI _timeNumbersText;
     private TextMeshProUGUI _assignmentNumbersTimeText;
     private Button _continueButton;
 
+    public bool IsInit => _isInit;
     public GameObject WindowGame => _windowGame;
 
     public GameObject WindowGameOver => _windowGameOver;
@@ -84,5 +87,6 @@ public class UIManager : IDisposable
         _continueButton = _fieldsContainer.ContinueButton;
         
         Debug.Log("Создать объект: UIManager");
+        _isInit = true;
     }
 }

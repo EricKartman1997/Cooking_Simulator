@@ -14,6 +14,8 @@ public class GetTable : MonoBehaviour, IGiveObj
     private bool _isInit;
     private GameManager _gameManager;
     private DecorationFurniture _decorationFurniture;
+
+    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
     
 
     private void Awake()
@@ -42,8 +44,13 @@ public class GetTable : MonoBehaviour, IGiveObj
             yield return null;
         }
         
-        _isInit = true;
+        while (IsAllInit == false)
+        {
+            yield return null;
+        }
+        
         Debug.Log("GetTable Init");
+        _isInit = true;
     }
     
     private void OnTriggerEnter(Collider other)

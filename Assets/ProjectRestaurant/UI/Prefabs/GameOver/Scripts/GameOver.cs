@@ -15,6 +15,9 @@ public class GameOver : IDisposable
     private TextMeshProUGUI _timeNumbersText;
     private TextMeshProUGUI _assignmentNumbersTimeText;
     private Button _continueButton;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
     
     private TimeGame TimeGame => StaticManagerWithoutZenject.GameManager.TimeGame;
     private Score Score => StaticManagerWithoutZenject.GameManager.Score;
@@ -59,6 +62,7 @@ public class GameOver : IDisposable
         _windowGameOver.SetActive(false);
         
         Debug.Log("Создать объект: GameOver");
+        _isInit = true;
     }
     
     private void GameOverMethod()

@@ -37,6 +37,8 @@ namespace BlenderFurniture
         private ProductsContainer _productsContainer;
         private GameManager _gameManager;
         
+        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
     
         private void Awake()
         {
@@ -56,6 +58,11 @@ namespace BlenderFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (IsAllInit == false)
+            {
                 yield return null;
             }
             

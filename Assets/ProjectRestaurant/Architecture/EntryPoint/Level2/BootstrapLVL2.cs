@@ -25,7 +25,10 @@ public class BootstrapLVL2 : MonoBehaviour
     private ViewFactory _viewFactory;
     private ProductsFactory _productsFactory;
     private HelperScriptFactory _helperScriptFactory;
-    
+    private bool _isAllInit;
+
+    public bool IsAllInit => _isAllInit;
+
     private void Awake()
     {
         StartCoroutine(Initialize());// переделать
@@ -57,11 +60,28 @@ public class BootstrapLVL2 : MonoBehaviour
         
         _gameManager = new GameManager(this,_productsContainer,_checkContainer,_fieldsContainer,_gameManagerUpdate,_dataManager,_uiManager,_checks,_score,_updateChecks,_orders,_ordersUI,_eventBus,_timeGame,_gameOver,_viewFactory,_productsFactory,_helperScriptFactory,_coroutineMonoBehaviour);
         
-        yield return new WaitUntil(() => _timeGame.IsInit);// переделать
-        yield return new WaitUntil(() => _updateChecks.IsInit);// переделать
-        _gameManagerUpdate.IsWork = true;// переделать
+        StartCoroutine(AllInitServices());
+        yield return new WaitUntil(() => _isAllInit);
         
         Debug.Log("Инициализация Завершена");
+        //_isAllInit = true;
+    }
+
+    private IEnumerator AllInitServices()
+    {
+        yield return new WaitUntil(() => _eventBus.IsInit);
+        yield return new WaitUntil(() => _checks.IsInit);
+        yield return new WaitUntil(() => _updateChecks.IsInit);
+        yield return new WaitUntil(() => _orders.IsInit);
+        yield return new WaitUntil(() => _ordersUI.IsInit);
+        yield return new WaitUntil(() => _timeGame.IsInit);
+        yield return new WaitUntil(() => _score.IsInit);
+        yield return new WaitUntil(() => _gameOver.IsInit);
+        yield return new WaitUntil(() => _uiManager.IsInit);
+        yield return new WaitUntil(() => _viewFactory.IsInit);
+        yield return new WaitUntil(() => _productsFactory.IsInit);
+        yield return new WaitUntil(() => _helperScriptFactory.IsInit);
+        _isAllInit = true;
     }
     
 }

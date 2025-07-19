@@ -6,14 +6,15 @@ public class HelperScriptFactory: IDisposable
 {
     private GameManager _gameManager;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
-    public bool IsWork;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public HelperScriptFactory(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         
         _coroutineMonoBehaviour.StartCoroutine(Init());
-        IsWork = true;
     }
 
     public void Dispose()
@@ -36,6 +37,7 @@ public class HelperScriptFactory: IDisposable
         // }
         
         Debug.Log("Создать объект: HelperScriptFactory");
+        _isInit = true;
     }
     
     // Blender

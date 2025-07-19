@@ -46,6 +46,8 @@ namespace SuvideFurniture
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
         
+        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -64,6 +66,11 @@ namespace SuvideFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (IsAllInit == false)
+            {
                 yield return null;
             }
             
@@ -132,14 +139,14 @@ namespace SuvideFurniture
             EventBus.PressE -= CookingProcess;
         }
         
-        public GameObject GiveObj(ref GameObject giveObj)
+        private GameObject GiveObj(ref GameObject giveObj)
         {
             GameObject copy = giveObj;
             Destroy(giveObj);
             return copy;
         }
     
-        public void AcceptObject(GameObject acceptObj,string TOKEN)
+        private void AcceptObject(GameObject acceptObj,string TOKEN)
         {
             if (TOKEN == DISH1)
             {
@@ -168,7 +175,7 @@ namespace SuvideFurniture
             Debug.Log("ошибка в AcceptObject");
         }
     
-        public void CreateResult(GameObject obj,string TOKEN)
+        private void CreateResult(GameObject obj,string TOKEN)
         {
             if (TOKEN == DISH1)
             {
@@ -210,7 +217,7 @@ namespace SuvideFurniture
             }
         }
     
-        public void TurnOff(string TOKEN)
+        private void TurnOff(string TOKEN)
         {
             if (TOKEN == DISH1)
             {
@@ -236,7 +243,7 @@ namespace SuvideFurniture
             Debug.LogError("Ошибка в TurnOff");
         }
     
-        public void TurnOn(string TOKEN)
+        private void TurnOn(string TOKEN)
         {
             if (TOKEN == DISH1)
             {

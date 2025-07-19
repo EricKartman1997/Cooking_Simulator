@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 public class GameManager : IDisposable
 {
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
@@ -29,6 +30,7 @@ public class GameManager : IDisposable
     private ProductsFactory _productsFactory;
     private HelperScriptFactory _helperScriptFactory;
 
+    // Other 
     
     public BootstrapLVL2 BootstrapLvl2 => _bootstrapLvl2;
     public ProductsContainer ProductsContainer => _productsContainer;
@@ -74,7 +76,7 @@ public class GameManager : IDisposable
         _viewFactory = viewFactory;
         _productsFactory = productsFactory;
         _helperScriptFactory = helperScriptFactory;
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+        _coroutineMonoBehaviour = coroutineMonoBehaviour; // End
 
         Init();
         Debug.Log("Создать объект: GameManager");

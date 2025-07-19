@@ -8,10 +8,11 @@ public class OrdersUI : IDisposable
     private GameManager _gameManager;
     private UIManager _uiManager;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
-    
     private Orders _orders;
-    
     private TextMeshProUGUI _scoretext;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public OrdersUI(Orders orders, CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
@@ -49,6 +50,7 @@ public class OrdersUI : IDisposable
         
         UpdateOrders();
         Debug.Log("Создать объект: OrdersUI");
+        _isInit = true;
     }
 
     private void UpdateOrders()

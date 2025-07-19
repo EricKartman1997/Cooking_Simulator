@@ -10,6 +10,8 @@ public class Garbage : MonoBehaviour, IAcceptObject
     private Outline _outline;
     private GameManager _gameManager;
     private DecorationFurniture _decorationFurniture;
+    
+    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
 
     private void Awake()
     {
@@ -22,6 +24,11 @@ public class Garbage : MonoBehaviour, IAcceptObject
         while (_gameManager == null)
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (IsAllInit == false)
+        {
             yield return null;
         }
         

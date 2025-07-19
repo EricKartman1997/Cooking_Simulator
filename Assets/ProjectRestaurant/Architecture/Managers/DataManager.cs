@@ -6,8 +6,6 @@ using UnityEngine;
 public class DataManager : IDisposable
 {
     private GameManager _gameManager;
-
-    //public bool _isInitLevel; // ПОМЕНЯТЬ
     
     private float _score;
     private float[] _timeLevel;
@@ -15,11 +13,16 @@ public class DataManager : IDisposable
     private int _level;
     private string _name;
 
-    //public bool IsInitLevel => _isInitLevel;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public DataManager(GameManager gameManager)
     {
         _gameManager = gameManager;
+
+        Debug.Log("Создать объект: DataManager");
+        _isInit = true;
     }
 
     public void Dispose()

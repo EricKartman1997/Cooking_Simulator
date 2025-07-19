@@ -9,10 +9,14 @@ public class EventBus : IDisposable
     public static Action UpdateOrder;
     public static Action PressE;
     public static Action<InfoAboutCheck> DeleteCheck;
-
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
+    
     public EventBus()
     {
         Debug.Log("Создать объект: EventBus");
+        _isInit = true;
     }
 
     public void Dispose()

@@ -7,7 +7,7 @@ namespace CuttingTableFurniture
     {
         private Transform _positionIngredient1; 
         private Transform _positionIngredient2; 
-        private Transform _positionResult;      
+        private Transform _positionResult;   
     
         internal CuttingTablePoints(Transform positionIngredient1, Transform positionIngredient2, Transform positionResult)
         {

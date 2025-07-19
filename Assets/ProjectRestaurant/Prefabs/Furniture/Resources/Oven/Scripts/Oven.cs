@@ -32,6 +32,8 @@ namespace OvenFurniture
         private Outline _outline;
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
+
+        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
         
         private void Awake()
         {
@@ -47,9 +49,15 @@ namespace OvenFurniture
                 _gameManager = StaticManagerWithoutZenject.GameManager;
                 yield return null;
             }
+            
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (IsAllInit == false)
+            {
                 yield return null;
             }
             

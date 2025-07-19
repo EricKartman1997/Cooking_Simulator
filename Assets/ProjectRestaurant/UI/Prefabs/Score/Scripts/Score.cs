@@ -8,7 +8,9 @@ public class Score : IDisposable
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private TimeGame _timeGame;
     private float _score;
-
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
     public float ScorePlayer => _score;
 
     public Score(CoroutineMonoBehaviour coroutineMonoBehaviour)
@@ -42,6 +44,7 @@ public class Score : IDisposable
         }
         
         Debug.Log("Создать объект: Score");
+        _isInit = true;
     }
 
     public void AddScore(int score)

@@ -21,6 +21,8 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private bool _isInit;
     private GameObject _currentDish;
     private GameManager _gameManager;
+    
+    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
 
     private void Awake()
     {
@@ -40,6 +42,11 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
         while (_checks == null)
         {
             _checks = _gameManager.Checks;
+            yield return null;
+        }
+        
+        while (IsAllInit == false)
+        {
             yield return null;
         }
         

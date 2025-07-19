@@ -14,6 +14,8 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     private DecorationFurniture _decorationFurniture;
     private GameManager _gameManager;
     private bool _isInit;
+    
+    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
 
     private void Awake()
     {
@@ -26,6 +28,11 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         while (_gameManager == null)
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (IsAllInit == false)
+        {
             yield return null;
         }
         

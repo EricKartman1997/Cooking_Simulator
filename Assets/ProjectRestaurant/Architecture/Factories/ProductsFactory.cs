@@ -8,6 +8,9 @@ public class ProductsFactory: IDisposable
     private GameManager _gameManager;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private ProductsContainer _productsContainer;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public ProductsFactory(ProductsContainer productsContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
@@ -37,6 +40,7 @@ public class ProductsFactory: IDisposable
         // }
         
         Debug.Log("Создать объект: ProductsFactory");
+        _isInit = true;
     }
 
 

@@ -8,6 +8,9 @@ public class ViewFactory: IDisposable
     private GameManager _gameManager;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     private ProductsContainer _productsContainer;
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public ViewFactory(ProductsContainer productsContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
@@ -37,6 +40,7 @@ public class ViewFactory: IDisposable
         // }
         
         Debug.Log("Создать объект: ViewFactory");
+        _isInit = true;
     }
 
     public GameObject GetProduct(EnumViewFood enumViewFood,Transform parent)

@@ -10,6 +10,9 @@ public class Orders : IDisposable
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
     private byte _stayedOrders; // осталось сделать заказов
+    private bool _isInit;
+    
+    public bool IsInit => _isInit;
 
     public Orders(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
@@ -42,6 +45,7 @@ public class Orders : IDisposable
         // }
         
         Debug.Log("Создать объект: Orders");
+        _isInit = true;
     }
     
     public int GetMakeOrders()

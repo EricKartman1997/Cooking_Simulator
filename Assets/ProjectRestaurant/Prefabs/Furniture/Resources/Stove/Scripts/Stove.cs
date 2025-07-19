@@ -20,8 +20,9 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private GameObject _ingredient;
     private IForStove _componentForStove;
     private GameObject _result;
-    
     private GameManager _gameManager;
+    
+    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
 
     private void Awake()
     {
@@ -37,6 +38,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
             _gameManager = StaticManagerWithoutZenject.GameManager;
             yield return null;
         }
+        
+        while (IsAllInit == false)
+        {
+            yield return null;
+        }
+        
         _stovePoints = _gameManager.HelperScriptFactory.GetStovePoints(positionRawFood);
         _stoveView = _gameManager.HelperScriptFactory.GetStoveView();
         

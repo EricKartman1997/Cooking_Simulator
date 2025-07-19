@@ -20,6 +20,9 @@ public class Checks : IDisposable
      private GameObject _cloneCheck1;
      private GameObject _cloneCheck2;
      private GameObject _cloneCheck3;
+     private bool _isInit;
+    
+     public bool IsInit => _isInit;
     
     public Checks(CheckContainer checkContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
@@ -54,6 +57,7 @@ public class Checks : IDisposable
         _contentTransform = _uiManager.Content.transform;
         
         Debug.Log("Создать объект: Checks");
+        _isInit = true;
     }
 
     public void AddCheck() // добавление чека
