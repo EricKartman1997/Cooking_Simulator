@@ -1,0 +1,4 @@
+public class WildBerryCocktail : CookedFood
+{
+
+}

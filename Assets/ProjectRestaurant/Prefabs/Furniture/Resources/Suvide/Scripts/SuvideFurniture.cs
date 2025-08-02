@@ -43,10 +43,13 @@ namespace SuvideFurniture
         private SuvidePoints _suvidePoints;
         private Heroik _heroik;
         private Animator _animator;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
+        private List<Product> ListProduct => _foodsForFurnitureContainer.Suvide.ListForFurniture;
         
         private void Awake()
         {
@@ -66,6 +69,12 @@ namespace SuvideFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (_foodsForFurnitureContainer== null)
+            {
+                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
                 yield return null;
             }
             
@@ -317,7 +326,7 @@ namespace SuvideFurniture
     
             if (_heroik.IsBusyHands == true)
             {
-                if (!_heroik.CanGiveIngredient(new List<Type>() { typeof(ObjsForSuvide) }))
+                if (!_heroik.CanGiveIngredient(ListProduct))
                 {
                     Debug.Log("продукт не подходит для сувида");
                     return;

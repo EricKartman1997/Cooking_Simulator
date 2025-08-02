@@ -32,8 +32,11 @@ namespace OvenFurniture
         private Outline _outline;
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
 
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
+        private List<Product> ListProduct => _foodsForFurnitureContainer.Oven.ListForFurniture;
         
         private void Awake()
         {
@@ -53,6 +56,12 @@ namespace OvenFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (_foodsForFurnitureContainer== null)
+            {
+                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
                 yield return null;
             }
             
@@ -141,7 +150,7 @@ namespace OvenFurniture
         {
             try
             {
-                _productsContainer.RecipesForOven.TryGetValue(obj.name, out FromOven bakedObj);
+                _productsContainer.RecipesForOven.TryGetValue(obj.name, out Product bakedObj);
                 if (bakedObj != null)
                 {
                     _result = _gameManager.ProductsFactory.GetProduct(bakedObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
@@ -223,7 +232,7 @@ namespace OvenFurniture
                     }
                     else
                     {
-                        if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForOven)}))
+                        if (_heroik.CanGiveIngredient(ListProduct))
                         {
                             AcceptObject(_heroik.TryGiveIngredient());
                             TurnOn();

@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff74fd59dcb26342a31f01984d70362, type: 3}
+  m_Name: ListFoodsForFurniture
+  m_EditorClassIdentifier: 
+  getTable:
+    listForFurniture:
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -3244989212628810464, guid: 1aaabe6a7cad255409d706a57ddb659d, type: 3}
+    - {fileID: -297364954730840498, guid: eaae98ea50f91184c958818f62446bb3, type: 3}
+    - {fileID: -3982786116716109591, guid: d4d2525b89bc9c24a8b65201763458f1, type: 3}
+    - {fileID: -287662380035368609, guid: fb69ed7dd7653254b8b9f58f9bca6853, type: 3}
+    - {fileID: 6093056270584627825, guid: 023f06586f9b0344fb41587f850e8e35, type: 3}
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: 5211159613988133225, guid: aa9a3b560500cad4f9c3e86403442e4f, type: 3}
+    - {fileID: -1768801538847146110, guid: 4e08b84e815e1f04ca7620c688eabdca, type: 3}
+  giveTable:
+    listForFurniture:
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -3244989212628810464, guid: 1aaabe6a7cad255409d706a57ddb659d, type: 3}
+    - {fileID: -297364954730840498, guid: eaae98ea50f91184c958818f62446bb3, type: 3}
+    - {fileID: -3982786116716109591, guid: d4d2525b89bc9c24a8b65201763458f1, type: 3}
+    - {fileID: -287662380035368609, guid: fb69ed7dd7653254b8b9f58f9bca6853, type: 3}
+    - {fileID: 6093056270584627825, guid: 023f06586f9b0344fb41587f850e8e35, type: 3}
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: 5211159613988133225, guid: aa9a3b560500cad4f9c3e86403442e4f, type: 3}
+    - {fileID: -1768801538847146110, guid: 4e08b84e815e1f04ca7620c688eabdca, type: 3}
+    - {fileID: 1441007615355698805, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+    - {fileID: 8669618348180312675, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+    - {fileID: 4691165416614756748, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+    - {fileID: -1447125079803239183, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+    - {fileID: -5081591094021165521, guid: 78cfb24711ea2db458fbe5febd2e8ed3, type: 3}
+    - {fileID: -8226218727246264489, guid: cadf51cf3e76f9d4eb71f4f9a26b14ea, type: 3}
+    - {fileID: 2389646594383102306, guid: e3c2c6def1435694587a0f91e77022c6, type: 3}
+    - {fileID: -8527019196409078146, guid: 970ee5f070515f9428983ad5beb4bcbb, type: 3}
+    - {fileID: -7937197606529055668, guid: 8315757e274f3504faaa5d37c8946f72, type: 3}
+    - {fileID: 3873425109682390019, guid: 62009e040668ef540bf39d8f00f36a36, type: 3}
+  oven:
+    listForFurniture:
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: 6093056270584627825, guid: 023f06586f9b0344fb41587f850e8e35, type: 3}
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -3982786116716109591, guid: d4d2525b89bc9c24a8b65201763458f1, type: 3}
+  cuttingTable:
+    listForFurniture:
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: 1441007615355698805, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+    - {fileID: -1447125079803239183, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+  distribution:
+    listForFurniture:
+    - {fileID: 1441007615355698805, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+    - {fileID: 8669618348180312675, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+    - {fileID: 4691165416614756748, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+    - {fileID: -1447125079803239183, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+    - {fileID: -5081591094021165521, guid: 78cfb24711ea2db458fbe5febd2e8ed3, type: 3}
+    - {fileID: -8226218727246264489, guid: cadf51cf3e76f9d4eb71f4f9a26b14ea, type: 3}
+    - {fileID: 2389646594383102306, guid: e3c2c6def1435694587a0f91e77022c6, type: 3}
+    - {fileID: -8527019196409078146, guid: 970ee5f070515f9428983ad5beb4bcbb, type: 3}
+    - {fileID: -7937197606529055668, guid: 8315757e274f3504faaa5d37c8946f72, type: 3}
+    - {fileID: 3873425109682390019, guid: 62009e040668ef540bf39d8f00f36a36, type: 3}
+  suvide:
+    listForFurniture:
+    - {fileID: 6093056270584627825, guid: 023f06586f9b0344fb41587f850e8e35, type: 3}
+    - {fileID: -3982786116716109591, guid: d4d2525b89bc9c24a8b65201763458f1, type: 3}
+  blender:
+    listForFurniture:
+    - {fileID: -287662380035368609, guid: fb69ed7dd7653254b8b9f58f9bca6853, type: 3}
+    - {fileID: -297364954730840498, guid: eaae98ea50f91184c958818f62446bb3, type: 3}
+    - {fileID: -3244989212628810464, guid: 1aaabe6a7cad255409d706a57ddb659d, type: 3}
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: -1768801538847146110, guid: 4e08b84e815e1f04ca7620c688eabdca, type: 3}
+  garbage:
+    listForFurniture:
+    - {fileID: -4437318515836812192, guid: 827b3c48c998f554a8fa8098aeda4e58, type: 3}
+    - {fileID: -3244989212628810464, guid: 1aaabe6a7cad255409d706a57ddb659d, type: 3}
+    - {fileID: -297364954730840498, guid: eaae98ea50f91184c958818f62446bb3, type: 3}
+    - {fileID: -3982786116716109591, guid: d4d2525b89bc9c24a8b65201763458f1, type: 3}
+    - {fileID: -287662380035368609, guid: fb69ed7dd7653254b8b9f58f9bca6853, type: 3}
+    - {fileID: 6093056270584627825, guid: 023f06586f9b0344fb41587f850e8e35, type: 3}
+    - {fileID: -7405419142219841925, guid: c5e047da3c0fa674c80bfe166a59df40, type: 3}
+    - {fileID: 5211159613988133225, guid: aa9a3b560500cad4f9c3e86403442e4f, type: 3}
+    - {fileID: -1768801538847146110, guid: 4e08b84e815e1f04ca7620c688eabdca, type: 3}
+    - {fileID: 5220190936383768198, guid: 39949616b4374a043a3005fc49353630, type: 3}
+    - {fileID: 1441007615355698805, guid: 971ed9f5a663a5a48b2c8df322de7217, type: 3}
+    - {fileID: 8669618348180312675, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+    - {fileID: 4691165416614756748, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+    - {fileID: -1447125079803239183, guid: 736c0e1130df04248a2a56c4842b4b4d, type: 3}
+    - {fileID: -5081591094021165521, guid: 78cfb24711ea2db458fbe5febd2e8ed3, type: 3}
+    - {fileID: -8226218727246264489, guid: cadf51cf3e76f9d4eb71f4f9a26b14ea, type: 3}
+    - {fileID: 2389646594383102306, guid: e3c2c6def1435694587a0f91e77022c6, type: 3}
+    - {fileID: -8527019196409078146, guid: 970ee5f070515f9428983ad5beb4bcbb, type: 3}
+    - {fileID: -7937197606529055668, guid: 8315757e274f3504faaa5d37c8946f72, type: 3}
+    - {fileID: 3873425109682390019, guid: 62009e040668ef540bf39d8f00f36a36, type: 3}
+  stove:
+    listForFurniture:
+    - {fileID: -8527019196409078146, guid: 970ee5f070515f9428983ad5beb4bcbb, type: 3}
+    - {fileID: 5211159613988133225, guid: aa9a3b560500cad4f9c3e86403442e4f, type: 3}

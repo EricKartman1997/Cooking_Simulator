@@ -77,7 +77,7 @@ public class GameOver : IDisposable
     private void ShowWindowScore()
     {
         _windowGameOver.SetActive(true);
-        _scoreNumbersText.text = $"{Mathf.Round(Score.GetScore())}";
+        _scoreNumbersText.text = $"{Mathf.Round(Score.ScorePlayer)}";
         _timeNumbersText.text = $"{TimeGame.CurrentMinutes:00}:{TimeGame.CurrentSeconds:00}";
         _assignmentNumbersTimeText.text = $"{TimeGame.TimeLevel[1]:00}:{TimeGame.TimeLevel[0]:00}";
         // дописать кнопку

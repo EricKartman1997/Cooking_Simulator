@@ -9,14 +9,16 @@ public class Score : IDisposable
     private TimeGame _timeGame;
     private float _score;
     private bool _isInit;
+    private ScoreCheckVisitore _checkVisitore;
+    private ChecksFactory _checksFactory;
     
     public bool IsInit => _isInit;
-    public float ScorePlayer => _score;
+    // public float ScorePlayer => _score => _checkVisitore.Score;
+    public float ScorePlayer => _checkVisitore.Score ;
 
     public Score(CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
-        
         
         _coroutineMonoBehaviour.StartCoroutine(Init());
     }
@@ -43,22 +45,27 @@ public class Score : IDisposable
             yield return null;
         }
         
+        while (_checksFactory == null)
+        {
+            _checksFactory = _gameManager.ChecksFactory;
+            yield return null;
+        }
+        
+        _checkVisitore = new ScoreCheckVisitore(_checksFactory); // создать медиатор
+        
         Debug.Log("Создать объект: Score");
         _isInit = true;
     }
 
-    public void AddScore(int score)
-    {
-        _score += score + AdditionalScore();
-    }
+    // public void AddScore(int score)
+    // {
+    //     _score += score + AdditionalScore();
+    // }
     
-    public float GetScore()
+    private void AddScore(int score, Check check)
     {
-        return _score;
-    }
-    private void AddScore(int score, float scoreCheck)
-    {
-        _score += scoreCheck + score + AdditionalScore();
+        check.Accept(_checkVisitore);
+        _checkVisitore.Score += score + AdditionalScore();
     }
     private float AdditionalScore()
     {
@@ -68,5 +75,54 @@ public class Score : IDisposable
         var result = multiplyMinutes + remSeconds;
         return result;
     }
+    
+    private class ScoreCheckVisitore: ICheckVisitor
+    {
+        public float Score;
+        private ChecksFactory _checksFactory;
 
+        public ScoreCheckVisitore(ChecksFactory checksFactory)
+        {
+            _checksFactory = checksFactory;
+            Debug.Log("Создать объект: ScoreCheckVisitore");
+        }
+
+        public void Visit(BakedFishCheck bakedFish)
+        {
+            Score += _checksFactory.BakedFish;
+        }
+
+        public void Visit(BakedMeatCheck bakedMeat)
+        {
+            Score += _checksFactory.BakedMeat;
+        }
+
+        public void Visit(BakedSaladCheck bakedSalad)
+        {
+            Score += _checksFactory.BakedSalad;
+        }
+
+        public void Visit(FruitSaladCheck fruitSalad)
+        {
+            Score += _checksFactory.FruitSalad;
+        }
+
+        public void Visit(CutletMediumCheck cutletMedium)
+        {
+            Score += _checksFactory.CutletMedium;
+        }
+
+        public void Visit(WildBerryCocktailCheck wildBerryCocktail)
+        {
+            Score += _checksFactory.WildBerryCocktail;
+        }
+
+        public void Visit(FreshnessCocktailCheck freshnessCocktail)
+        {
+            Score += _checksFactory.FreshnessCocktail;
+        }
+    }
+    
 }
+
+

@@ -13,9 +13,12 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
     private GameManager _gameManager;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private bool _isInit;
     
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    
+    private List<Product> ListProduct => _foodsForFurnitureContainer.GiveTable.ListForFurniture;
 
     private void Awake()
     {
@@ -28,6 +31,12 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         while (_gameManager == null)
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_foodsForFurnitureContainer== null)
+        {
+            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
             yield return null;
         }
         
@@ -130,7 +139,7 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         {
             if (_ingredient == null) // ни одного активного объекта
             {
-                if (_heroik.CanGiveIngredient(unusableObjects))
+                if (_heroik.CanGiveIngredient(ListProduct))
                 {
                     AcceptObject(_heroik.TryGiveIngredient());
                 }

@@ -17,8 +17,6 @@ namespace BlenderFurniture
         [SerializeField] private Transform secondPoint;
         [SerializeField] private Transform thirdPoint;
         
-        //private TimerFurniture _timerFurniture;
-        
         private Heroik _heroik = null;
         private BlenderPoints _blenderPoints;
         private BlenderView _blenderView;
@@ -35,9 +33,12 @@ namespace BlenderFurniture
         private DecorationFurniture _decorationFurniture;
         private Animator _animator;
         private ProductsContainer _productsContainer;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private GameManager _gameManager;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
+        private List<Product> ListProduct => _foodsForFurnitureContainer.Blender.ListForFurniture;
         
     
         private void Awake()
@@ -58,6 +59,12 @@ namespace BlenderFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (_foodsForFurnitureContainer== null)
+            {
+                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
                 yield return null;
             }
             
@@ -292,7 +299,7 @@ namespace BlenderFurniture
                     {
                         if (_ingredient1 == null)
                         {
-                            if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                            if(_heroik.CanGiveIngredient(ListProduct))
                             {
                                 AcceptObject(_heroik.TryGiveIngredient());
                                 Debug.Log("Предмет первый положен в блендер");
@@ -306,7 +313,7 @@ namespace BlenderFurniture
                         {
                             if (_ingredient2 == null)
                             {
-                                if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                                if(_heroik.CanGiveIngredient(ListProduct))
                                 {
                                     AcceptObject(_heroik.TryGiveIngredient());
                                     Debug.Log("Предмет второй положен в блендер");
@@ -318,7 +325,7 @@ namespace BlenderFurniture
                             }
                             else
                             {
-                                if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForBlender),typeof(Fruit)}))
+                                if(_heroik.CanGiveIngredient(ListProduct))
                                 {
                                     AcceptObject(_heroik.TryGiveIngredient());
                                     TurnOn(); 

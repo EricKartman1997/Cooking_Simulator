@@ -5,10 +5,11 @@ public class EventBus : IDisposable
 {
     public static Action GameOver;
     public static Action AddOrder;
-    public static Action<int,float> AddScore;
+    public static Action<int,Check> AddScore;
     public static Action UpdateOrder;
     public static Action PressE;
-    public static Action<InfoAboutCheck> DeleteCheck;
+    //public static Action<InfoAboutCheck> DeleteCheck;
+    public static Action<Check> DeleteCheck;
     private bool _isInit;
     
     public bool IsInit => _isInit;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Cherry : MonoBehaviour
+public class Cherry : RawFood
 {
 
 }

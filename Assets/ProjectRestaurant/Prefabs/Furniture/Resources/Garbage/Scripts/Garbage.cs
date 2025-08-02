@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 public class Garbage : MonoBehaviour, IAcceptObject
 {
@@ -9,9 +10,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
     private GameObject _obj;
     private Outline _outline;
     private GameManager _gameManager;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private DecorationFurniture _decorationFurniture;
     
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    
+    private List<Product> ListProduct => _foodsForFurnitureContainer.Garbage.ListForFurniture;
 
     private void Awake()
     {
@@ -24,6 +28,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
         while (_gameManager == null)
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_foodsForFurnitureContainer== null)
+        {
+            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
             yield return null;
         }
         
@@ -119,7 +129,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
         }
         
         try
-        { 
+        {
+            if (!_heroik.CanGiveIngredient(ListProduct))
+            {
+                Debug.Log("Объект нельзя выбросить");
+                return;
+            }
             AcceptObject(_heroik.TryGiveIngredient());
             DeleteObj();
         }

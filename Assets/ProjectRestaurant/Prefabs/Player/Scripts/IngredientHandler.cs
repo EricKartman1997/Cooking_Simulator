@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using System.Linq;
 
 public class IngredientHandler: IDisposable
 {
@@ -77,6 +78,46 @@ public class IngredientHandler: IDisposable
             return false;
         }
         return true;
+    }
+    
+    // проверка на отдачу объекта из рук по списку Product
+    // public bool CanGiveIngredient(List<Product> unusableObjects) 
+    // {
+    //     // List<string> unusableObjectsNames = new List<string>();
+    //     // foreach (var food in unusableObjects)
+    //     // {
+    //     //     unusableObjectsNames.Add(food.name); // Используем имя объекта
+    //     // }
+    //     if (unusableObjects.Contains(_currentTakenObjects.GetType()))
+    //     {
+    //         Debug.Log("Сработал false");
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    
+    public bool CanGiveIngredient(List<Product> products)
+    {
+        // Получаем все компоненты Product на блюде
+        var dishProducts = _currentTakenObjects.GetComponents<Product>();
+        
+        // Получаем уникальные типы из списка продуктов
+        var validTypes = products
+            .Select(p => p.GetType())
+            .Distinct()
+            .ToHashSet();
+
+        // Считаем количество совпадений
+        int matchCount = 0;
+        foreach (var dishProduct in dishProducts)
+        {
+            if (validTypes.Contains(dishProduct.GetType()))
+            {
+                matchCount++;
+            }
+        }
+
+        return matchCount == 1;
     }
     
     // проверка на отдачу объекта из рук по компонентам

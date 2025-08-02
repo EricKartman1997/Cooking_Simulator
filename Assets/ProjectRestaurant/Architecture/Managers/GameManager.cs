@@ -9,8 +9,8 @@ public class GameManager : IDisposable
     // Managers
     private BootstrapLVL2 _bootstrapLvl2;
     private ProductsContainer _productsContainer;
-    private CheckContainer _checkContainer;
     private FieldsForScriptContainer _fieldsContainer;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private GameManagerUpdate _gameManagerUpdate;
     private DataManager _dataManager;
     private UIManager _uiManager;
@@ -29,14 +29,16 @@ public class GameManager : IDisposable
     private ViewFactory _viewFactory;
     private ProductsFactory _productsFactory;
     private HelperScriptFactory _helperScriptFactory;
+    private ChecksFactory _checksFactory;
 
     // Other 
     
     public BootstrapLVL2 BootstrapLvl2 => _bootstrapLvl2;
     public ProductsContainer ProductsContainer => _productsContainer;
     
-    public CheckContainer CheckContainer => _checkContainer;
     public FieldsForScriptContainer FieldsContainer => _fieldsContainer;
+    
+    public FoodsForFurnitureContainer FoodsForFurnitureContainer => _foodsForFurnitureContainer;
     
     public DataManager DataManager => _dataManager;
     
@@ -53,13 +55,14 @@ public class GameManager : IDisposable
     public ViewFactory ViewFactory => _viewFactory;
     public ProductsFactory ProductsFactory => _productsFactory;
     public HelperScriptFactory HelperScriptFactory => _helperScriptFactory;
+    public ChecksFactory ChecksFactory => _checksFactory;
 
-    public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, CheckContainer checkContainer, FieldsForScriptContainer fieldsContainer, GameManagerUpdate gameManagerUpdate, DataManager dataManager,UIManager uiManager, Checks checks, Score score, UpdateChecks updateChecks, Orders orders, OrdersUI ordersUI, EventBus eventBus, TimeGame timeGame, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory, HelperScriptFactory helperScriptFactory,CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, FieldsForScriptContainer fieldsContainer, GameManagerUpdate gameManagerUpdate, DataManager dataManager,UIManager uiManager, Checks checks, Score score, UpdateChecks updateChecks, Orders orders, OrdersUI ordersUI, EventBus eventBus, TimeGame timeGame, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory, HelperScriptFactory helperScriptFactory,ChecksFactory checksFactory, FoodsForFurnitureContainer foodsForFurnitureContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
     {
         _bootstrapLvl2 = bootstrapLvl2;
         _productsContainer = productsContainer;
-        _checkContainer = checkContainer;
         _fieldsContainer = fieldsContainer;
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
         _gameManagerUpdate = gameManagerUpdate;
         _dataManager = dataManager;
         _uiManager = uiManager;
@@ -76,6 +79,7 @@ public class GameManager : IDisposable
         _viewFactory = viewFactory;
         _productsFactory = productsFactory;
         _helperScriptFactory = helperScriptFactory;
+        _checksFactory = checksFactory;
         _coroutineMonoBehaviour = coroutineMonoBehaviour; // End
 
         Init();

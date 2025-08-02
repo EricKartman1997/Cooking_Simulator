@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +10,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     [SerializeField] private Transform pointDish;
 
     private Checks _checks;
-    private InfoAboutCheck _currentCheck;
+    private Check _currentCheck;
     private Animator _animator;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
@@ -21,8 +20,10 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
     private bool _isInit;
     private GameObject _currentDish;
     private GameManager _gameManager;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
     private void Awake()
     {
@@ -42,6 +43,12 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
         while (_checks == null)
         {
             _checks = _gameManager.Checks;
+            yield return null;
+        }
+        
+        while (_foodsForFurnitureContainer== null)
+        {
+            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
             yield return null;
         }
         
@@ -161,7 +168,7 @@ public class Distribution : MonoBehaviour , IAcceptObject, ITurnOffOn
             }
             else
             {
-                if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForDistribution)}))
+                if (_heroik.CanGiveIngredient(ListProduct))
                 {
                     _currentCheck = _checks.CheckTheCheck(_heroik.CurrentTakenObjects);
                     if (_currentCheck!= null)

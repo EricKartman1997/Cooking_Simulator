@@ -20,9 +20,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
     private GameObject _ingredient;
     private IForStove _componentForStove;
     private GameObject _result;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private GameManager _gameManager;
     
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    
+    private List<Product> ListProduct => _foodsForFurnitureContainer.Stove.ListForFurniture;
 
     private void Awake()
     {
@@ -36,6 +39,12 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         while (_gameManager == null)
         {
             _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        
+        while (_foodsForFurnitureContainer== null)
+        {
+            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
             yield return null;
         }
         
@@ -135,7 +144,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         
         if (_heroik.IsBusyHands == true)
         {
-            if (_heroik.CanGiveIngredient(_unusableObjects))
+            if (_heroik.CanGiveIngredient(ListProduct))
             {
                 AcceptObject(_heroik.TryGiveIngredient());
                     

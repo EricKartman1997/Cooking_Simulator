@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class CheckContainer: MonoBehaviour
 {
-    [SerializeField] private InfoAboutCheck checkBakedMeat;
-    [SerializeField] private InfoAboutCheck checkBakedFish;
-    [SerializeField] private InfoAboutCheck checkFreshnessCocktail;
-    [SerializeField] private InfoAboutCheck checkWildBerryCocktail;
-    [SerializeField] private InfoAboutCheck checkFruitSalad;
-    [SerializeField] private InfoAboutCheck checkMixBakedFruit;
-    [SerializeField] private List<InfoAboutCheck> allPrefChecks;
+    [SerializeField] private Check checkBakedMeat;
+    [SerializeField] private Check checkBakedFish;
+    [SerializeField] private Check checkFreshnessCocktail;
+    [SerializeField] private Check checkWildBerryCocktail;
+    [SerializeField] private Check checkFruitSalad;
+    [SerializeField] private Check checkMixBakedFruit;
+    [SerializeField] private List<Check> allPrefChecks;
 
-    public InfoAboutCheck CheckBakedMeat => checkBakedMeat;
-    public InfoAboutCheck CheckBakedFish => checkBakedFish;
-    public InfoAboutCheck CheckFreshnessCocktail => checkFreshnessCocktail;
-    public InfoAboutCheck CheckWildBerryCocktail => checkWildBerryCocktail;
-    public InfoAboutCheck CheckFruitSalad => checkFruitSalad;
-    public InfoAboutCheck CheckMixBakedFruit => checkMixBakedFruit;
+    public Check CheckBakedMeat => checkBakedMeat;
+    public Check CheckBakedFish => checkBakedFish;
+    public Check CheckFreshnessCocktail => checkFreshnessCocktail;
+    public Check CheckWildBerryCocktail => checkWildBerryCocktail;
+    public Check CheckFruitSalad => checkFruitSalad;
+    public Check CheckMixBakedFruit => checkMixBakedFruit;
     
-    public List<InfoAboutCheck> AllPrefChecks => allPrefChecks;
+    public List<Check> AllPrefChecks => allPrefChecks;
 }

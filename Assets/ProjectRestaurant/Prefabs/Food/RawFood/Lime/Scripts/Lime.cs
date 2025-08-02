@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Lime : MonoBehaviour
+public class Lime : RawFood
 {
 
 }

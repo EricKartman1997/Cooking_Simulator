@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class Blueberry : MonoBehaviour
+public class Blueberry : RawFood
 {
 
 }

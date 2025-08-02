@@ -28,9 +28,11 @@ namespace CuttingTableFurniture
         private CuttingTablePoints _cuttingTablePoints;
         private CuttingTableView _cuttingTableView;
         private ProductsContainer _productsContainer;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private GameManager _gameManager;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
     
         private void Awake()
         {
@@ -50,6 +52,12 @@ namespace CuttingTableFurniture
             while (_productsContainer == null)
             {
                 _productsContainer = _gameManager.ProductsContainer;
+                yield return null;
+            }
+            
+            while (_foodsForFurnitureContainer== null)
+            {
+                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
                 yield return null;
             }
             
@@ -267,7 +275,7 @@ namespace CuttingTableFurniture
                     {
                         if (_ingredient1 == null)// ингредиентов нет
                         {
-                            if(_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForCutting)}))
+                            if(_heroik.CanGiveIngredient(ListProduct))
                             {
                                 AcceptObject(_heroik.TryGiveIngredient());
                             }
@@ -278,7 +286,7 @@ namespace CuttingTableFurniture
                         }
                         else// есть первый ингредиент
                         {
-                            if (_heroik.CanGiveIngredient(new List<Type>(){typeof(ObjsForCutting)}))
+                            if (_heroik.CanGiveIngredient(ListProduct))
                             {
                                 AcceptObject(_heroik.TryGiveIngredient());
                                 TurnOn(); 

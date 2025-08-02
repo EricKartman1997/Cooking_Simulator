@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Strawberry : MonoBehaviour
+public class Strawberry : RawFood
 {
 
 }

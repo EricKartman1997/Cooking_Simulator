@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class BootstrapLVL2 : MonoBehaviour
 {
+    //ScriptableObjects
+    [SerializeField] private ChecksFactory checksFactory;
+    [SerializeField] private FoodsForFurnitureContainer foodsForFurnitureContainer;
+    
     private FieldsForScriptContainer _fieldsContainer;
     private ProductsContainer _productsContainer;
-    private CheckContainer _checkContainer;
     private GameManagerUpdate _gameManagerUpdate;
     private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     
@@ -38,7 +41,6 @@ public class BootstrapLVL2 : MonoBehaviour
     {
         _fieldsContainer = GetComponent<FieldsForScriptContainer>();
         _productsContainer = GetComponent<ProductsContainer>();
-        _checkContainer = GetComponent<CheckContainer>();
         _gameManagerUpdate = GetComponent<GameManagerUpdate>();
         _coroutineMonoBehaviour = GetComponent<CoroutineMonoBehaviour>();
 
@@ -46,7 +48,7 @@ public class BootstrapLVL2 : MonoBehaviour
         //_dataManager = new DataManager();
         
         _eventBus = new EventBus();
-        _checks = new Checks(_checkContainer,_coroutineMonoBehaviour);
+        _checks = new Checks(_coroutineMonoBehaviour);
         _updateChecks = new UpdateChecks(_checks,3f,_coroutineMonoBehaviour);
         _orders = new Orders(_coroutineMonoBehaviour);
         _ordersUI = new OrdersUI(_orders,_coroutineMonoBehaviour);
@@ -58,7 +60,7 @@ public class BootstrapLVL2 : MonoBehaviour
         _productsFactory = new ProductsFactory(_productsContainer,_coroutineMonoBehaviour);
         _helperScriptFactory = new HelperScriptFactory(_coroutineMonoBehaviour);
         
-        _gameManager = new GameManager(this,_productsContainer,_checkContainer,_fieldsContainer,_gameManagerUpdate,_dataManager,_uiManager,_checks,_score,_updateChecks,_orders,_ordersUI,_eventBus,_timeGame,_gameOver,_viewFactory,_productsFactory,_helperScriptFactory,_coroutineMonoBehaviour);
+        _gameManager = new GameManager(this,_productsContainer,_fieldsContainer,_gameManagerUpdate,_dataManager,_uiManager,_checks,_score,_updateChecks,_orders,_ordersUI,_eventBus,_timeGame,_gameOver,_viewFactory,_productsFactory,_helperScriptFactory,checksFactory,foodsForFurnitureContainer,_coroutineMonoBehaviour);
         
         StartCoroutine(AllInitServices());
         yield return new WaitUntil(() => _isAllInit);

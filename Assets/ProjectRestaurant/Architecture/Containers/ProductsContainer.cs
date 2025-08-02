@@ -12,31 +12,31 @@ public class ProductsContainer: MonoBehaviour
         // StaticManagerWithoutZenject.BootstrapLVL2 = new BootstrapLVL2(GetComponent<FieldsForScriptContainer>());
     }
 
-    [SerializeField] private Product apple;
-    [SerializeField] private Product orange;
-    [SerializeField] private GameObject lime;
-    [SerializeField] private GameObject blueberry;
-    [SerializeField] private GameObject strawberry;
-    [SerializeField] private GameObject cherry;
+    [SerializeField] private Apple apple;
+    [SerializeField] private Orange orange;
+    [SerializeField] private Lime lime;
+    [SerializeField] private Blueberry blueberry;
+    [SerializeField] private Strawberry strawberry;
+    [SerializeField] private Cherry cherry;
     
-    [SerializeField] private Product bakedApple;
-    [SerializeField] private Product bakedOrange;
+    [SerializeField] private BakedApple bakedApple;
+    [SerializeField] private BakedOrange bakedOrange;
 
-    [SerializeField] private GameObject fruitSalad;
-    [SerializeField] private GameObject mixBakedFruit;
-    [SerializeField] private GameObject wildBerryCocktail;
-    [SerializeField] private GameObject freshnessCocktail;
+    [SerializeField] private FruitSalad fruitSalad;
+    [SerializeField] private BakedSalad bakedFruit;
+    [SerializeField] private WildBerryCocktail wildBerryCocktail;
+    [SerializeField] private FreshnessCocktail freshnessCocktail;
     
-    [SerializeField] private Product meat;
-    [SerializeField] private Product fish;
-    [SerializeField] private Cutlet rawCutlet;
+    [SerializeField] private Meat meat;
+    [SerializeField] private Fish fish;
+    [SerializeField] private RawCutlet rawCutlet;
     
-    [SerializeField] private Product bakedMeat;
-    [SerializeField] private Product bakedFish;
-    [SerializeField] private Cutlet mediumCutlet;
-    [SerializeField] private Cutlet burnCutlet;
+    [SerializeField] private BakedMeat bakedMeat;
+    [SerializeField] private BakedFish bakedFish;
+    [SerializeField] private MediumCutlet mediumCutlet;
+    [SerializeField] private BurnCutlet burnCutlet;
     
-    [SerializeField] private GameObject rubbish;
+    [SerializeField] private Rubbish rubbish;
 
     [SerializeField] private List<GameObject> requiredFruitSalad;
     [SerializeField] private List<GameObject> requiredMixBakedFruit;
@@ -44,7 +44,7 @@ public class ProductsContainer: MonoBehaviour
     [SerializeField] private List<GameObject> requiredWildBerryCocktail;
 
     private Dictionary<string, ObjsForDistribution> _recipesForSuvide;
-    private Dictionary<string, FromOven> _recipesForOven;
+    private Dictionary<string, Product> _recipesForOven;
     
     [SerializeField] private GameObject appleDish;
     [SerializeField] private GameObject orangeDish;
@@ -63,31 +63,31 @@ public class ProductsContainer: MonoBehaviour
     [SerializeField] private GameObject newYearView;
     
     // Свойства с публичным геттером и приватным сеттером
-    public Product Apple => apple;
-    public Product Orange => orange;
-    public GameObject Lime => lime;
-    public GameObject Blueberry => blueberry;
-    public GameObject Strawberry => strawberry;
-    public GameObject Cherry => cherry;
+    public GameObject Apple => apple.gameObject;
+    public GameObject Orange => orange.gameObject;
+    public GameObject Lime => lime.gameObject;
+    public GameObject Blueberry => blueberry.gameObject;
+    public GameObject Strawberry => strawberry.gameObject;
+    public GameObject Cherry => cherry.gameObject;
     
-    public Product BakedApple => bakedApple;
-    public Product BakedOrange => bakedOrange;
+    public GameObject BakedApple => bakedApple.gameObject;
+    public GameObject BakedOrange => bakedOrange.gameObject;
 
-    public GameObject FruitSalad => fruitSalad;
-    public GameObject MixBakedFruit => mixBakedFruit;
-    public GameObject WildBerryCocktail => wildBerryCocktail;
-    public GameObject FreshnessCocktail => freshnessCocktail;
+    public GameObject FruitSalad => fruitSalad.gameObject;
+    public GameObject MixBakedFruit => bakedFruit.gameObject;
+    public GameObject WildBerryCocktail => wildBerryCocktail.gameObject;
+    public GameObject FreshnessCocktail => freshnessCocktail.gameObject;
     
-    public Product Meat => meat;
-    public Product Fish => fish;
-    public Cutlet RawCutlet => rawCutlet;
+    public GameObject Meat => meat.gameObject;
+    public GameObject Fish => fish.gameObject;
+    public GameObject RawCutlet => rawCutlet.gameObject;
     
-    public Product BakedMeat => bakedMeat;
-    public Product BakedFish => bakedFish;
-    public Cutlet BurnCutlet => burnCutlet;
-    public Cutlet MediumCutlet => mediumCutlet;
+    public GameObject BakedMeat => bakedMeat.gameObject;
+    public GameObject BakedFish => bakedFish.gameObject;
+    public GameObject BurnCutlet => burnCutlet.gameObject;
+    public GameObject MediumCutlet => mediumCutlet.gameObject;
     
-    public GameObject Rubbish => rubbish;
+    public GameObject Rubbish => rubbish.gameObject;
 
     public List<GameObject> RequiredFruitSalad => requiredFruitSalad;
     public List<GameObject> RequiredMixBakedFruit => requiredMixBakedFruit;
@@ -95,7 +95,7 @@ public class ProductsContainer: MonoBehaviour
     public List<GameObject> RequiredWildBerryCocktail => requiredWildBerryCocktail;
     
     public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
-    public Dictionary<string, FromOven> RecipesForOven => _recipesForOven;
+    public Dictionary<string, Product> RecipesForOven => _recipesForOven;
     
     public GameObject AppleDish => appleDish;
     public GameObject OrangeDish => orangeDish;
@@ -120,14 +120,12 @@ public class ProductsContainer: MonoBehaviour
             { fish.name, bakedFish.GetComponent<ObjsForDistribution>()}
         };
         
-        _recipesForOven = new Dictionary<string, FromOven>()
+        _recipesForOven = new Dictionary<string, Product>()
         {
-            { meat.name, bakedMeat.GetComponent<FromOven>() },
-            { fish.name, bakedFish.GetComponent<FromOven>() },
-            { apple.name, bakedApple.GetComponent<FromOven>() },
-            { orange.name, bakedOrange.GetComponent<FromOven>() }
+            { meat.name, bakedMeat.GetComponent<CookedFood>() },
+            { fish.name, bakedFish.GetComponent<CookedFood>() },
+            { apple.name, bakedApple.GetComponent<CookedIngredient>() },
+            { orange.name, bakedOrange.GetComponent<CookedIngredient>() }
         };
     }
-
-
 }

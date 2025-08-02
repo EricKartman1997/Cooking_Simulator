@@ -34,6 +34,11 @@ public class Heroik : MonoBehaviour
         return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
     }
     
+    public bool CanGiveIngredient(List<Product> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
+    {
+        return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
+    }
+    
     public bool CanGiveIngredient(List<Type> forbiddenComponents) // проверка на отдачу объекта из рук по компонентам
     {
         return _ingredientHandler.CanGiveIngredient(forbiddenComponents);
