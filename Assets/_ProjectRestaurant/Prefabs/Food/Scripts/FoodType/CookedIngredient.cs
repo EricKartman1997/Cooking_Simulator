@@ -1,5 +1,4 @@
-public class CookedIngredient: Product
-
+public abstract class CookedIngredient: Product
 {
 
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -15,19 +16,29 @@ public class IngredientHandler: IDisposable
     public GameObject CurrentTakenObjects => _currentTakenObjects;
     public bool IsBusyHands => _isBusyHands;
     
-    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects,GameManager gameManager)
+    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects,MonoBehaviour monoBehaviour)
     {
         _ingredientPosition = ingredientPosition;
         _ingredientParent = ingredientParent;
         _currentTakenObjects = currentTakenObjects;
-        _gameManager = gameManager;
         
-        Debug.Log("Создан объект: IngredientHandler");
+        monoBehaviour.StartCoroutine(Init());
+        
     }
     
     public void Dispose()
     {
         Debug.Log("У объекта вызван Dispose : IngredientHandler");
+    }
+
+    private IEnumerator Init()
+    {
+        while (_gameManager == null)
+        {
+            _gameManager = StaticManagerWithoutZenject.GameManager;
+            yield return null;
+        }
+        Debug.Log("Создан объект: IngredientHandler");
     }
 
     // взять объект в руки

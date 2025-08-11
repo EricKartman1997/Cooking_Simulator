@@ -1,4 +1,4 @@
-public class OtherFood: Product
+public abstract class OtherFood: Product
 {
 
 }

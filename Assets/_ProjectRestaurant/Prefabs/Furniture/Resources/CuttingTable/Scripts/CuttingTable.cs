@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace CuttingTableFurniture
 {
-    public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ICreateResult,ITurnOffOn,IFindReadyFood
+    public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ITurnOffOn,IFindReadyFood
     {
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
@@ -29,6 +28,7 @@ namespace CuttingTableFurniture
         private CuttingTableView _cuttingTableView;
         private ProductsContainer _productsContainer;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
+        private RecipeService _recipeService;
         private GameManager _gameManager;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
@@ -58,6 +58,12 @@ namespace CuttingTableFurniture
             while (_foodsForFurnitureContainer== null)
             {
                 _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
+                yield return null;
+            }
+            
+            while (_recipeService== null)
+            {
+                _recipeService = _gameManager.RecipeService;
                 yield return null;
             }
             
@@ -156,12 +162,6 @@ namespace CuttingTableFurniture
             Object.Destroy(acceptObj);
         }
         
-        public void CreateResult(GameObject obj)
-        {
-            _result = _gameManager.ProductsFactory.GetProduct(obj, _cuttingTablePoints.PositionResult,
-                _cuttingTablePoints.PositionResult,true);
-        }
-        
         public void TurnOn()
         {
             _isWork = true;
@@ -214,6 +214,21 @@ namespace CuttingTableFurniture
                 }
             }
             return true;
+        }
+        
+        private void CreateResult()
+        {
+            List<Product> listProducts = new List<Product>() {_ingredient1.GetComponent<Product>(),_ingredient2.GetComponent<Product>() };
+            Product readyObj = _recipeService.GetDish(StationType.CuttingTable,listProducts);
+            if (readyObj != null)
+            {
+                _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _cuttingTablePoints.PositionResult,
+                    _cuttingTablePoints.PositionResult,true);
+                return;
+            }
+            Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+            return;
+            
         }
         
         private void CookingProcess()
@@ -290,8 +305,9 @@ namespace CuttingTableFurniture
                             {
                                 AcceptObject(_heroik.TryGiveIngredient());
                                 TurnOn(); 
-                                GameObject objdish = FindReadyFood();
-                                StartCoroutine(ContinueWorkCoroutine(objdish));
+                                //GameObject objdish = FindReadyFood();
+                                // Product objdish = _recipeService.GetDish(StationType.Suvide,listProducts);
+                                StartCoroutine(ContinueWorkCoroutine());
                             }
                             else
                             {
@@ -309,12 +325,12 @@ namespace CuttingTableFurniture
             }
         }
         
-        private IEnumerator ContinueWorkCoroutine(GameObject obj)
+        private IEnumerator ContinueWorkCoroutine()
         {
             StartCoroutine(_cuttingTableView.Timer.StartTimer());
             yield return new WaitWhile(() => _cuttingTableView.Timer.IsWork);
+            CreateResult();
             TurnOff();
-            CreateResult(obj);
         }
         
     }

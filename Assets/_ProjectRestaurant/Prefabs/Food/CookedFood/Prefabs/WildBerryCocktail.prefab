@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8072541245691730274}
   - component: {fileID: 3873425109682390019}
-  - component: {fileID: 5367909777493904977}
   - component: {fileID: 6391184659050274257}
   m_Layer: 0
   m_Name: WildBerryCocktail
@@ -51,19 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b599032d930cf24d90277aa2ecff24b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5367909777493904977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 57934241340229875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bc366d64012114281fdf928658e053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 55
+  type: 12
 --- !u!114 &6391184659050274257
 MonoBehaviour:
   m_ObjectHideFlags: 0

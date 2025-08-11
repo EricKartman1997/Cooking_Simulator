@@ -11,6 +11,8 @@ public class ChecksFactory: ScriptableObject
         wildBerryCocktail,
         freshnessCocktail;
 
+    private bool _isInit;
+    public bool IsInit => _isInit;
     public float BakedFish => bakedFish.Score;
 
     public float BakedMeat => bakedMeat.Score;
@@ -25,6 +27,10 @@ public class ChecksFactory: ScriptableObject
 
     public float FreshnessCocktail => freshnessCocktail.Score;
 
+    private void OnEnable()
+    {
+        _isInit = true;
+    }
 
     public GameObject GetCheckPrefab(CheckType type, Check check, Transform parent = null)
     {

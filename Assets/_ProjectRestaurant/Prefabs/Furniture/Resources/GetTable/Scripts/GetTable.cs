@@ -17,9 +17,6 @@ public class GetTable : MonoBehaviour, IGiveObj
 
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
     
-
-    
-
     private void Awake()
     {
         _outline = GetComponent<Outline>();

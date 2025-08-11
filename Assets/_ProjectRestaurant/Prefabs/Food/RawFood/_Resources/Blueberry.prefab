@@ -93,9 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3136665217468071733}
   - component: {fileID: -3244989212628810464}
-  - component: {fileID: 6849019845034290904}
-  - component: {fileID: 3242883744377034943}
-  - component: {fileID: -2941374107404047615}
   m_Layer: 0
   m_Name: Blueberry
   m_TagString: Untagged
@@ -134,42 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f16ec2bda38be4cab317790750b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6849019845034290904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210966970951489310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 294c633e103fc0a4fba65840c91c192b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3242883744377034943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210966970951489310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9230549d677943b4aaa302dbe9e53f03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-2941374107404047615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210966970951489310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d54cf6e42ac4e42891f5937db3695e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  type: 5
 --- !u!1 &4653309278789552841
 GameObject:
   m_ObjectHideFlags: 0

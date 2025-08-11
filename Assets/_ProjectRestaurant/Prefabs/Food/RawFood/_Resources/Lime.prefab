@@ -10,9 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3440226460225739032}
   - component: {fileID: -287662380035368609}
-  - component: {fileID: -2286350279671268513}
-  - component: {fileID: 9004701380374747972}
-  - component: {fileID: 29246079723354103}
   m_Layer: 0
   m_Name: Lime
   m_TagString: Untagged
@@ -48,42 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9a0f4441866ab42a39bbe016512a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-2286350279671268513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766590089483173324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 294c633e103fc0a4fba65840c91c192b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9004701380374747972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766590089483173324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9230549d677943b4aaa302dbe9e53f03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &29246079723354103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766590089483173324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d54cf6e42ac4e42891f5937db3695e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  type: 4
 --- !u!1 &2150880667488730168
 GameObject:
   m_ObjectHideFlags: 0

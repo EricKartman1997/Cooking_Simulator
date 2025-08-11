@@ -1,5 +1,5 @@
 
-public class RawFood : Product
+public abstract class RawFood : Product
 {
 
 }

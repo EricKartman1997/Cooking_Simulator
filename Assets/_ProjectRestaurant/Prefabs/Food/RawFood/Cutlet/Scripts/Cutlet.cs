@@ -5,7 +5,7 @@ public class Cutlet : MonoBehaviour,IForStove
     private CutletStateMachine _cutletStateMachine;
     private EnumStateRoasting _stateRoasting;
     
-    private Renderer _renderer;
+    [SerializeField] private Renderer renderer;
     [SerializeField] private CutletConfigs cutletConfig;
     [SerializeField] private GameObject timePref;
     [SerializeField] private EnumRoasting _roasting; //Debug
@@ -17,8 +17,8 @@ public class Cutlet : MonoBehaviour,IForStove
     
     public Material Material
     {
-        get => _renderer.material;
-        set => _renderer.material = value;
+        get => renderer.material;
+        set => renderer.material = value;
     }
     
     public CutletConfigs Config
@@ -69,7 +69,7 @@ public class Cutlet : MonoBehaviour,IForStove
     private void Awake()
     {
         _stateRoasting = Config.CurrentStateRoasting;
-        _renderer = GetComponent<Renderer>();
+        //_renderer = GetComponent<Renderer>();
         _cutletStateMachine = new CutletStateMachine(this,_stateRoasting);
         _componentTimerCutlet = timePref.GetComponent<TimerCutlet>();
     }

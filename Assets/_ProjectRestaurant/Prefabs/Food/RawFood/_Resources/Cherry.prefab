@@ -342,9 +342,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8049474823916808459}
   - component: {fileID: -297364954730840498}
-  - component: {fileID: -8447617009784137712}
-  - component: {fileID: 4892165451000729547}
-  - component: {fileID: -7085973488564347719}
   m_Layer: 0
   m_Name: Cherry
   m_TagString: Untagged
@@ -383,39 +380,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec5e0b7aba38eb479699f8fe54c9d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8447617009784137712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884443192940265812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 294c633e103fc0a4fba65840c91c192b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4892165451000729547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884443192940265812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9230549d677943b4aaa302dbe9e53f03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-7085973488564347719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884443192940265812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d54cf6e42ac4e42891f5937db3695e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  type: 6

@@ -15,7 +15,7 @@ public class Heroik : MonoBehaviour
     private void Start()
     {
         _gameManager = StaticManagerWithoutZenject.GameManager;
-        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,_gameManager);
+        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,this);
         _ingredientHandler.CreateObj();
     }
     

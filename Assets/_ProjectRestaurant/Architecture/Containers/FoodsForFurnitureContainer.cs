@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ListFoodsForFurniture", menuName = "Container/ListFoodsForFurniture")]
@@ -13,6 +14,8 @@ public class FoodsForFurnitureContainer : ScriptableObject
         garbage,
         stove;
 
+    private bool _isInit;
+    public bool IsInit => _isInit;
     public FoodsForFurnitureConfig GetTable => getTable;
 
     public FoodsForFurnitureConfig GiveTable => giveTable;
@@ -30,4 +33,9 @@ public class FoodsForFurnitureContainer : ScriptableObject
     public FoodsForFurnitureConfig Garbage => garbage;
 
     public FoodsForFurnitureConfig Stove => stove;
+
+    private void OnEnable()
+    {
+        _isInit = true;
+    }
 }

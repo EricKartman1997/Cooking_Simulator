@@ -43,7 +43,7 @@ public class ProductsContainer: MonoBehaviour
     [SerializeField] private List<GameObject> requiredFreshnessCocktail;
     [SerializeField] private List<GameObject> requiredWildBerryCocktail;
 
-    private Dictionary<string, ObjsForDistribution> _recipesForSuvide;
+    //private Dictionary<string, ObjsForDistribution> _recipesForSuvide;
     private Dictionary<string, Product> _recipesForOven;
     
     [SerializeField] private GameObject appleDish;
@@ -94,7 +94,7 @@ public class ProductsContainer: MonoBehaviour
     public List<GameObject> RequiredFreshnessCocktail => requiredFreshnessCocktail;
     public List<GameObject> RequiredWildBerryCocktail => requiredWildBerryCocktail;
     
-    public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
+    //public Dictionary<string, ObjsForDistribution> RecipesForSuvide => _recipesForSuvide;
     public Dictionary<string, Product> RecipesForOven => _recipesForOven;
     
     public GameObject AppleDish => appleDish;
@@ -114,11 +114,11 @@ public class ProductsContainer: MonoBehaviour
     
     private void InitializeDictionaries()
     {
-        _recipesForSuvide = new Dictionary<string, ObjsForDistribution>()
-        {
-            { meat.name, bakedMeat.GetComponent<ObjsForDistribution>() },
-            { fish.name, bakedFish.GetComponent<ObjsForDistribution>()}
-        };
+        // _recipesForSuvide = new Dictionary<string, ObjsForDistribution>()
+        // {
+        //     { meat.name, bakedMeat.GetComponent<ObjsForDistribution>() },
+        //     { fish.name, bakedFish.GetComponent<ObjsForDistribution>()}
+        // };
         
         _recipesForOven = new Dictionary<string, Product>()
         {

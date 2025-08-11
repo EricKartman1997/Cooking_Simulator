@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7229366896090666992}
   - component: {fileID: -8226218727246264489}
-  - component: {fileID: -450624368604408971}
   - component: {fileID: -402769643085110658}
   m_Layer: 0
   m_Name: FreshnessCocktail
@@ -51,19 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5754ae501aaecd428420da3105dfab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-450624368604408971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1026970929638269036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bc366d64012114281fdf928658e053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 65
+  type: 12
 --- !u!114 &-402769643085110658
 MonoBehaviour:
   m_ObjectHideFlags: 0

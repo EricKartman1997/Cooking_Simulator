@@ -6,7 +6,6 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
 {
     [SerializeField] private Transform ingredientPoint;
     [SerializeField] private Transform parentFood;
-    [SerializeField] private List<GameObject> unusableObjects;
     private GameObject _ingredient;
     private bool _isHeroikTrigger;
     private Heroik _heroik;

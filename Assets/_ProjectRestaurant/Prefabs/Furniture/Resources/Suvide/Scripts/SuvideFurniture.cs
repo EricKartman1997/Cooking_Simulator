@@ -46,6 +46,7 @@ namespace SuvideFurniture
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private GameManager _gameManager;
         private ProductsContainer _productsContainer;
+        private RecipeService _recipeService;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
         
@@ -75,6 +76,12 @@ namespace SuvideFurniture
             while (_foodsForFurnitureContainer== null)
             {
                 _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
+                yield return null;
+            }
+            
+            while (_recipeService== null)
+            {
+                _recipeService = _gameManager.RecipeService;
                 yield return null;
             }
             
@@ -186,9 +193,11 @@ namespace SuvideFurniture
     
         private void CreateResult(GameObject obj,string TOKEN)
         {
+            List<Product> listProducts = new List<Product>() {obj.GetComponent<Product>() };// временное решение
             if (TOKEN == DISH1)
             {
-                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
+                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish1);
@@ -201,7 +210,8 @@ namespace SuvideFurniture
 
             if (TOKEN == DISH2)
             {
-                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
+                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish2);
@@ -214,7 +224,8 @@ namespace SuvideFurniture
 
             if (TOKEN == DISH3)
             {
-                _productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
+                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
+                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish3);
@@ -406,6 +417,11 @@ namespace SuvideFurniture
                 _suvideView.NotWorkingSuvide();
             }
         }
+
+        // private Product CheckProductAccordingRecipe(List<Product> recipe, List<Product> ingridients)
+        // {
+        //     
+        // }
     }
 
 }

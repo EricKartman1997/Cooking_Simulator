@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8075067745476044244}
   - component: {fileID: -7937197606529055668}
-  - component: {fileID: -613068154068145025}
   - component: {fileID: 7366985084081819843}
   m_Layer: 0
   m_Name: MixBakedFruit
@@ -49,19 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6037ca9ea06c3c4f99905780a737a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-613068154068145025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1999129322956263942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bc366d64012114281fdf928658e053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 105
+  type: 12
 --- !u!114 &7366985084081819843
 MonoBehaviour:
   m_ObjectHideFlags: 0

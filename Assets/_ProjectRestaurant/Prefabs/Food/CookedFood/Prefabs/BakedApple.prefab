@@ -93,8 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8572369990007360773}
   - component: {fileID: 1441007615355698805}
-  - component: {fileID: 7208127003565549723}
-  - component: {fileID: 2489278255774389312}
   m_Layer: 0
   m_Name: BakedApple
   m_TagString: Untagged
@@ -131,30 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dac4706df232432397274a81787aa084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7208127003565549723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6082538980200591646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272b431c249883b4ab1c494f9629f836, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2489278255774389312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6082538980200591646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be9c74d83d6e304c8edfc0b6b44b859, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  type: 9
 --- !u!1 &8200353996390340581
 GameObject:
   m_ObjectHideFlags: 0

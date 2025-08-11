@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class CookedFood : Product
+public abstract class CookedFood : Product
 {
 
 }
