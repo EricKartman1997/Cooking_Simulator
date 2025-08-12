@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace OvenFurniture
 {
-    public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn
+    public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ITurnOffOn
     {
         [SerializeField] private GameObject switchFirst;
         [SerializeField] private GameObject switchSecond;
@@ -31,6 +31,7 @@ namespace OvenFurniture
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
         private GameManager _gameManager;
+        private RecipeService _recipeService;
         private ProductsContainer _productsContainer;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
 
@@ -62,6 +63,12 @@ namespace OvenFurniture
             while (_foodsForFurnitureContainer== null)
             {
                 _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
+                yield return null;
+            }
+            
+            while (_recipeService== null)
+            {
+                _recipeService = _gameManager.RecipeService;
                 yield return null;
             }
             
@@ -146,27 +153,6 @@ namespace OvenFurniture
             Object.Destroy(obj);
         }
         
-        public void CreateResult(GameObject obj)
-        {
-            try
-            {
-                _productsContainer.RecipesForOven.TryGetValue(obj.name, out Product bakedObj);
-                if (bakedObj != null)
-                {
-                    _result = _gameManager.ProductsFactory.GetProduct(bakedObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
-                }
-                else
-                {
-                    Debug.LogError("Ошибка в CreateResult, такого ключа нет");
-                }
-                
-            }
-            catch (Exception e)
-            {
-                Debug.Log("ошибка приготовления в духовке" + e);
-            }
-        }
-        
         public void TurnOn()
         {
             _isWork = true;
@@ -236,18 +222,33 @@ namespace OvenFurniture
                         {
                             AcceptObject(_heroik.TryGiveIngredient());
                             TurnOn();
-                            StartCoroutine(ContinueWorkCoroutine(_ingredient));
+                            StartCoroutine(ContinueWorkCoroutine());
                         }
                     }
                 }
             }
         }
-        private IEnumerator ContinueWorkCoroutine(GameObject obj)
+        private IEnumerator ContinueWorkCoroutine()
         {
             StartCoroutine(_ovenView.Timer.StartTimer());
             yield return new WaitWhile(() => _ovenView.Timer.IsWork);
+            CreateResult();
             TurnOff();
-            CreateResult(obj);
+        }
+        
+        private void CreateResult()
+        {
+            List<Product> listProducts = new List<Product>() {_ingredient.GetComponent<Product>()};
+            Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
+            //_productsContainer.RecipesForOven.TryGetValue(obj.name, out Product bakedObj);
+            if (readyObj != null)
+            {
+                _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
+            }
+            else
+            {
+                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+            }
         }
         
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace BlenderFurniture
 {
-    public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IFindReadyFood
+    public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ITurnOffOn
     {
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
@@ -35,6 +34,7 @@ namespace BlenderFurniture
         private ProductsContainer _productsContainer;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private GameManager _gameManager;
+        private RecipeService _recipeService;
         
         private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
         
@@ -65,6 +65,12 @@ namespace BlenderFurniture
             while (_foodsForFurnitureContainer== null)
             {
                 _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
+                yield return null;
+            }
+            
+            while (_recipeService== null)
+            {
+                _recipeService = _gameManager.RecipeService;
                 yield return null;
             }
             
@@ -164,9 +170,11 @@ namespace BlenderFurniture
             Object.Destroy(acceptObj);
         }
         
-        public void CreateResult(GameObject obj)
+        public void CreateResult()
         {
-            _result = _gameManager.ProductsFactory.GetProduct(obj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
+            List<Product> listProducts = new List<Product>() {_ingredient1.GetComponent<Product>(),_ingredient2.GetComponent<Product>(),_ingredient3.GetComponent<Product>(),};
+            Product readyObj = _recipeService.GetDish(StationType.Blender,listProducts);
+            _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
         }
     
         public void TurnOn()
@@ -190,48 +198,6 @@ namespace BlenderFurniture
             _blenderView.TurnOff();
         }
         
-        public GameObject FindReadyFood()
-        {
-            List<GameObject> currentFruits = new List<GameObject>(){_ingredient1,_ingredient2,_ingredient3};
-            if (SuitableIngredients(currentFruits,_productsContainer.RequiredFreshnessCocktail))
-            {
-                return _productsContainer.FreshnessCocktail;
-            }
-            if(SuitableIngredients(currentFruits,_productsContainer.RequiredWildBerryCocktail))
-            {
-                return _productsContainer.WildBerryCocktail;
-            }
-            return _productsContainer.Rubbish;
-        }
-    
-        public bool SuitableIngredients(List<GameObject> currentFruits, List<GameObject> requiredFruits)
-        {
-            List<string> requiredFruitsNames = new List<string>();
-            List<string> currentFruitNames = new List<string>();
-            foreach (var fruit in currentFruits)
-            {
-                currentFruitNames.Add(fruit.name); // Используем имя объекта
-            }
-            foreach (var fruit in requiredFruits)
-            {
-                requiredFruitsNames.Add(fruit.name); // Используем имя объекта
-            }
-            foreach (string fruit in requiredFruitsNames)
-            {
-                if (!currentFruitNames.Contains(fruit))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        private async void StartCookingProcessAsync(GameObject obj)
-        {
-            await Task.Delay(4000);
-            TurnOff();
-            CreateResult(obj);
-        }
         private void CookingProcess()
         {
             if (_isInit == false)
@@ -329,9 +295,9 @@ namespace BlenderFurniture
                                 {
                                     AcceptObject(_heroik.TryGiveIngredient());
                                     TurnOn(); 
-                                    GameObject objdish = FindReadyFood();
+                                    //GameObject objdish = FindReadyFood();
                                     //StartCookingProcessAsync(objdish);
-                                    StartCoroutine(ContinueWorkCoroutine(objdish));
+                                    StartCoroutine(ContinueWorkCoroutine());
                                 }
                                 else
                                 {
@@ -348,12 +314,12 @@ namespace BlenderFurniture
             }
         }
         
-        private IEnumerator ContinueWorkCoroutine(GameObject obj)
+        private IEnumerator ContinueWorkCoroutine()
         {
             StartCoroutine(_blenderView.Timer.StartTimer());
             yield return new WaitWhile(() => _blenderView.Timer.IsWork);
+            CreateResult();
             TurnOff();
-            CreateResult(obj);
         }
         
     }

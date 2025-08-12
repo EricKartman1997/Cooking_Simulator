@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITurnOffOn,IIsAllowDestroy
+public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
 {
     [SerializeField] private Transform positionRawFood;
     
-    private List<Type> _unusableObjects;
     private Animator _animator;
     private Outline _outline;
     private StovePoints _stovePoints;
@@ -55,13 +54,6 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         
         _stovePoints = _gameManager.HelperScriptFactory.GetStovePoints(positionRawFood);
         _stoveView = _gameManager.HelperScriptFactory.GetStoveView();
-        
-
-        _unusableObjects = new List<Type>() // изменить
-        {
-            typeof(ObjsForStove)
-            //typeof(IForStove)
-        };
         
         _isInit = true;
         Debug.Log("Stove Init");
@@ -123,6 +115,46 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         EventBus.PressE -= CookingProcess;
     }
 
+    public GameObject GiveObj(ref GameObject giveObj)
+    {
+        return giveObj;
+    }
+
+    public void AcceptObject(GameObject acceptObj)
+    {
+        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
+        _componentForStove = _ingredient.GetComponent<IForStove>();
+        Destroy(acceptObj);
+    }
+    
+    public void TurnOff()
+    {
+        
+    }
+
+    public void TurnOn()
+    {
+        
+    }
+    
+    private void CreateResult() 
+    {
+        _componentForStove.IsOnStove = false;
+        if (_componentForStove != null)
+        {
+            _result = _gameManager.ProductsFactory.GetCutlet(_componentForStove.Roasting);
+            _result.GetComponent<Cutlet>().UpdateTime(_componentForStove.TimeRemaining); 
+            Destroy(_ingredient);
+            _ingredient = null;
+            _componentForStove = null;
+        }
+        else
+        {
+            Debug.LogError("Ошибка в CreateResult");
+        }
+
+    }
+    
     private void CookingProcess()
     {
         if (_isInit == false)
@@ -159,7 +191,7 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
         {
             if (_ingredient != null)
             {
-                CreateResult(_ingredient);
+                CreateResult();
                 _heroik.TryPickUp(GiveObj(ref _result));
             }
             else
@@ -169,45 +201,5 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ICreateResult, ITu
 
         }
     }
-
-    public GameObject GiveObj(ref GameObject giveObj)
-    {
-        return giveObj;
-    }
-
-    public void AcceptObject(GameObject acceptObj)
-    {
-        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
-        _componentForStove = _ingredient.GetComponent<IForStove>();
-        Destroy(acceptObj);
-    }
-
-    public void CreateResult(GameObject obj) 
-    {
-        _componentForStove.IsOnStove = false;
-        _result = _gameManager.ProductsFactory.GetCutlet(_componentForStove.Roasting);
-        _result.GetComponent<Cutlet>().UpdateTime(_componentForStove.TimeRemaining); 
-        Destroy(_ingredient);
-        _ingredient = null;
-        _componentForStove = null;
-    }
-
-    public void TurnOff()
-    {
-        
-    }
-
-    public void TurnOn()
-    {
-        
-    }
-
-    public bool IsAllowDestroy()
-    {
-        if (_ingredient == null && _result == null )
-        {
-            return true;
-        }
-        return false;
-    }
+    
 }

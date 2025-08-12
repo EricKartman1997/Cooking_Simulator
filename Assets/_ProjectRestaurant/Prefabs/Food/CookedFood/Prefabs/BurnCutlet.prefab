@@ -9,11 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6607513552467099008}
-  - component: {fileID: 7658794073963053867}
   - component: {fileID: 1532962088473841328}
   - component: {fileID: 7490914077747929956}
-  - component: {fileID: 7180512838106216171}
-  - component: {fileID: 1395218192551945921}
   m_Layer: 0
   m_Name: BurnCutletPref
   m_TagString: Untagged
@@ -37,19 +34,6 @@ Transform:
   - {fileID: 2949515937246243948}
   m_Father: {fileID: 3606198384712711473}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7658794073963053867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424504339024740507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2da04cee372b624083636832da833df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 12
 --- !u!33 &1532962088473841328
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100,37 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7180512838106216171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424504339024740507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8efb2d9eb71b54d87c62458b73371e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderer: {fileID: 0}
-  cutletConfig: {fileID: 11400000, guid: 75901e47f691b874fad7d117ab8163fc, type: 2}
-  timePref: {fileID: 6721921598428397923}
-  _roasting: 0
-  _timeCooking: 0
-  _timeRemaining: 0
-  _isOnStove: 0
---- !u!114 &1395218192551945921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1424504339024740507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 702d6185ade1f2f4e85f24d43fe71565, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2178664704119620995
 GameObject:
   m_ObjectHideFlags: 0

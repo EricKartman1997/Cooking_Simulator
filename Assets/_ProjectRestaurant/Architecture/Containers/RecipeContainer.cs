@@ -7,6 +7,8 @@ public class RecipeContainer : ScriptableObject
     [SerializeField] private RecipeContainerConfig
         bakedFishRecipe,
         bakedMeatRecipe,
+        bakedAppleRecipe,
+        bakedOrangeRecipe,
         bakedSaladRecipe,
         fruitSaladRecipe,
         suvideMeatRecipe,
@@ -38,7 +40,8 @@ public class RecipeContainer : ScriptableObject
         {
             bakedFishRecipe,
             bakedMeatRecipe,
-           
+            bakedAppleRecipe,
+            bakedOrangeRecipe,
         };
         
         _listCuttingTableRecipes = new List<RecipeContainerConfig>()
