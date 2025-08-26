@@ -13,7 +13,7 @@ public class BootstrapLVL2 : MonoBehaviour
     private UIContainer _uiContainer;
     private ProductsContainer _productsContainer;
     private GameManagerUpdate _gameManagerUpdate;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    //private CoroutineMonoBehaviour _coroutineMonoBehaviour;
     
     private GameManager _gameManager;
     private UIManager _uiManager; 
@@ -51,28 +51,28 @@ public class BootstrapLVL2 : MonoBehaviour
         _uiContainer = GetComponent<UIContainer>();
         _productsContainer = GetComponent<ProductsContainer>();
         _gameManagerUpdate = GetComponent<GameManagerUpdate>();
-        _coroutineMonoBehaviour = GetComponent<CoroutineMonoBehaviour>();
+        //_coroutineMonoBehaviour = GetComponent<CoroutineMonoBehaviour>();
 
-        _uiManager = new UIManager(_coroutineMonoBehaviour);
+        _uiManager = new UIManager(this);
         //_dataManager = new DataManager();
         
-        _checks = new Checks(_coroutineMonoBehaviour);
-        _updateChecks = new UpdateChecks(_checks,3f,_coroutineMonoBehaviour);
-        _orders = new Orders(_coroutineMonoBehaviour);
-        _timeGame = new TimeGame(_coroutineMonoBehaviour);
-        _score = new Score(_coroutineMonoBehaviour);
+        _checks = new Checks(this);
+        _updateChecks = new UpdateChecks(_checks,3f,this);
+        _orders = new Orders(this);
+        _timeGame = new TimeGame(this);
+        _score = new Score(this);
         _recipeService = new RecipeService(recipeContainer,_productsContainer);
-        _gameOver = new GameOver(_coroutineMonoBehaviour);
+        _gameOver = new GameOver(this);
         
-        _viewFactory = new ViewFactory(_productsContainer,_coroutineMonoBehaviour);
-        _productsFactory = new ProductsFactory(_productsContainer,_coroutineMonoBehaviour);
-        _helperScriptFactory = new HelperScriptFactory(_coroutineMonoBehaviour);
+        _viewFactory = new ViewFactory(_productsContainer,this);
+        _productsFactory = new ProductsFactory(_productsContainer,this);
+        _helperScriptFactory = new HelperScriptFactory(this);
         
         _gameManager = new GameManager(this,_productsContainer,_uiContainer,_gameManagerUpdate,
             _dataManager,_uiManager,_checks,_score,_updateChecks,_orders,
             _eventBus,_timeGame,_recipeService,_gameOver,_viewFactory,_productsFactory,
             _helperScriptFactory,checksFactory,
-            foodsForFurnitureContainer,recipeContainer,_coroutineMonoBehaviour);
+            foodsForFurnitureContainer,recipeContainer,this);
         
         StartCoroutine(AllInitServices());
         yield return new WaitUntil(() => _isAllInit);

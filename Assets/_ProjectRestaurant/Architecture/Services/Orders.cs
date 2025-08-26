@@ -9,7 +9,7 @@ public class Orders : IDisposable
     public event Action ShowOrders;
     
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
     private byte _stayedOrders; // осталось сделать заказов
@@ -17,7 +17,7 @@ public class Orders : IDisposable
 
     public bool IsInit => _isInit;
 
-    public Orders(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public Orders(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         EventBus.AddOrder += OnAddMakeOrder;

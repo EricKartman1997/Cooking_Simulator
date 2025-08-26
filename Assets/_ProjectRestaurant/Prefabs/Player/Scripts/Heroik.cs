@@ -5,10 +5,29 @@ public class Heroik : MonoBehaviour
 {
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
-    //private bool _isBusyHands = false; // руки не заняты
+    private IUseFurniture _useFurniture;
     private GameManager _gameManager;
     private IngredientHandler _ingredientHandler;
-    
+
+    public IUseFurniture CurrentUseFurniture
+    {
+        get
+        {
+            return _useFurniture;
+        }
+        set
+        {
+            if (_useFurniture == null)
+            {
+                _useFurniture = value;
+                return;
+            }
+            
+            IUseFurniture copy = _useFurniture;
+            _useFurniture = value;
+            copy.UpdateCondition();
+        }
+    }
     public GameObject CurrentTakenObjects => _ingredientHandler.CurrentTakenObjects;
     public bool IsBusyHands => _ingredientHandler.IsBusyHands;
     

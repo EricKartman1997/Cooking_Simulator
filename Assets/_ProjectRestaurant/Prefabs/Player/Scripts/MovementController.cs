@@ -4,6 +4,10 @@ public class MovementController : MonoBehaviour
 {
     [SerializeField] private HeroikConfig heroikConfig;
     private GameInput _gameInput;
+
+    //private bool canMove;
+    private Vector3 moveDir;
+    private Rigidbody _rb;
     
     private float Speed => heroikConfig.MoveConfig.MoveSpeed;
     private float Distance => heroikConfig.MoveConfig.Distance;
@@ -12,16 +16,17 @@ public class MovementController : MonoBehaviour
     private void Awake()
     {
         _gameInput = GetComponent<GameInput>();
+        _rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    private void Update()
     {
         Vector2 inputVector = _gameInput.GetMovementVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x,0f, inputVector.y);
-
-        float moveDistance = Speed * Time.deltaTime;
+        //Vector3 moveDir = new Vector3(inputVector.x,0f, inputVector.y);
+        moveDir = new Vector3(inputVector.x,0f, inputVector.y);
         
         bool canMove = !Physics.BoxCast(transform.position, HalfExtence,moveDir,Quaternion.identity,Distance);
+        //canMove = !Physics.BoxCast(transform.position, HalfExtence,moveDir,Quaternion.identity,Distance);
         if (canMove == false)
         {
             Vector3 moveDirX = new Vector3(moveDir.x,0f, 0f).normalized;
@@ -47,13 +52,13 @@ public class MovementController : MonoBehaviour
         
         if (canMove)
         {
-            transform.position += moveDir * moveDistance;
+            transform.position += moveDir * Time.deltaTime * Speed;
         }
         
         // менять направление движения тут transform.forward
         transform.forward = Vector3.Slerp(transform.forward, moveDir, heroikConfig.MoveConfig.RotateSpeed * Time.deltaTime);
     }
-    
+
     // private void OnDrawGizmos()
     // {
     //     Vector3 center1 = transform.position;

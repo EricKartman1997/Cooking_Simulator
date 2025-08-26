@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class GetTable : MonoBehaviour, IGiveObj
+public class GetTable : MonoBehaviour, IUseFurniture
 {
     [SerializeField] private GetTableConfig getTableConfig;
     [SerializeField] private Transform parentViewDish;
@@ -62,16 +62,14 @@ public class GetTable : MonoBehaviour, IGiveObj
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
         }
     }
 
@@ -85,16 +83,13 @@ public class GetTable : MonoBehaviour, IGiveObj
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
         }
     }
     
@@ -107,6 +102,37 @@ public class GetTable : MonoBehaviour, IGiveObj
     {
         EventBus.PressE -= CookingProcess;
     }
+    
+    public void UpdateCondition()
+    {
+        if (CheckUseFurniture() == false)
+        {
+            _outline.OutlineWidth = 0f;
+        }
+    }
+    
+    private void EnterTrigger()
+    {
+        _outline.OutlineWidth = 2f;
+        _isHeroikTrigger = true;
+        _heroik.CurrentUseFurniture = this;
+    }
+    
+    private void ExitTrigger()
+    {
+        _outline.OutlineWidth = 0f;
+        _isHeroikTrigger = false;
+    }
+    
+    private bool CheckUseFurniture()
+    {
+        if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     public GameObject GiveObj(ref GameObject giveObj)
     {
@@ -116,20 +142,8 @@ public class GetTable : MonoBehaviour, IGiveObj
     
     private void CookingProcess()
     {
-        if (_isInit == false)
+        if (CheckCookingProcess() == false)
         {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-
-        if (_isHeroikTrigger == false)
-        {
-            return;
-        }
-        
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-        {
-            Debug.LogWarning("Стол не работает");
             return;
         }
 
@@ -141,6 +155,33 @@ public class GetTable : MonoBehaviour, IGiveObj
         {
             Debug.Log("объект есть на столе,руки заняты");
         }
+    }
+    
+    private bool CheckCookingProcess()
+    {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return false;
+        }
+        
+        if(_isHeroikTrigger == false)
+        {
+            return false;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Стол не работает");
+            return false;
+        }
+        
+        if (CheckUseFurniture() == false)
+        {
+            return false;
+        }
+
+        return true;
     }
     
 }

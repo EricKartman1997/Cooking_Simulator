@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace CuttingTableFurniture
 {
-    public class CuttingTable : MonoBehaviour,IGiveObj,IAcceptObject,ITurnOffOn,IFindReadyFood
+    public class CuttingTable : MonoBehaviour, IUseFurniture
     {
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
@@ -91,17 +91,14 @@ namespace CuttingTableFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
-    
+                EnterTrigger();
             }
         }
         private void OnTriggerExit(Collider other)
@@ -114,17 +111,13 @@ namespace CuttingTableFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 0f;
-                _isHeroikTrigger = false;
+                ExitTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
-                _heroik = null;
-                _outline.OutlineWidth = 0f;
-                _isHeroikTrigger = false;
-                
+                ExitTrigger();
             }
         }
         
@@ -138,12 +131,43 @@ namespace CuttingTableFurniture
             EventBus.PressE -= CookingProcess;
         }
         
-        public GameObject GiveObj(ref GameObject giveObj)
+        public void UpdateCondition()
+        {
+            if (CheckUseFurniture() == false)
+            {
+                _outline.OutlineWidth = 0f;
+            }
+        }
+    
+        private void EnterTrigger()
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            _heroik.CurrentUseFurniture = this;
+        }
+    
+        private void ExitTrigger()
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
+    
+        private bool CheckUseFurniture()
+        {
+            if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private GameObject GiveObj(ref GameObject giveObj)
         {
             return giveObj;
         }
         
-        public void AcceptObject(GameObject acceptObj)
+        private void AcceptObject(GameObject acceptObj)
         {
             if (_ingredient1 == null)
             {
@@ -162,7 +186,7 @@ namespace CuttingTableFurniture
             Object.Destroy(acceptObj);
         }
         
-        public void TurnOn()
+        private void TurnOn()
         {
             _isWork = true;
             _ingredient1.SetActive(false);
@@ -170,7 +194,7 @@ namespace CuttingTableFurniture
             _cuttingTableView.TurnOn();
         }
         
-        public void TurnOff()
+        private void TurnOff()
         {
             _isWork = false;
             Object.Destroy(_ingredient1);
@@ -180,41 +204,41 @@ namespace CuttingTableFurniture
             _cuttingTableView.TurnOff();
         }
         
-        public GameObject FindReadyFood()
-        {
-            List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
-            if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
-            {
-                return _productsContainer.FruitSalad;
-            }
-            if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
-            {
-                return _productsContainer.MixBakedFruit;
-            }
-            return _productsContainer.Rubbish;
-        }
-    
-        public bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
-        {
-            List<string> requiredFruitsNames = new List<string>();
-            List<string> currentIngredientsNames = new List<string>();
-            foreach (var ingredient in currentIngredients)
-            {
-                currentIngredientsNames.Add(ingredient.name); // Используем имя объекта
-            }
-            foreach (var ingredient in requiredFruits)
-            {
-                requiredFruitsNames.Add(ingredient.name); // Используем имя объекта
-            }
-            foreach (string ingredient in requiredFruitsNames)
-            {
-                if (!currentIngredientsNames.Contains(ingredient))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        // private GameObject FindReadyFood()
+        // {
+        //     List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
+        //     if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
+        //     {
+        //         return _productsContainer.FruitSalad;
+        //     }
+        //     if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
+        //     {
+        //         return _productsContainer.MixBakedFruit;
+        //     }
+        //     return _productsContainer.Rubbish;
+        // }
+        //
+        // private bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
+        // {
+        //     List<string> requiredFruitsNames = new List<string>();
+        //     List<string> currentIngredientsNames = new List<string>();
+        //     foreach (var ingredient in currentIngredients)
+        //     {
+        //         currentIngredientsNames.Add(ingredient.name); // Используем имя объекта
+        //     }
+        //     foreach (var ingredient in requiredFruits)
+        //     {
+        //         requiredFruitsNames.Add(ingredient.name); // Используем имя объекта
+        //     }
+        //     foreach (string ingredient in requiredFruitsNames)
+        //     {
+        //         if (!currentIngredientsNames.Contains(ingredient))
+        //         {
+        //             return false;
+        //         }
+        //     }
+        //     return true;
+        // }
         
         private void CreateResult()
         {
@@ -247,6 +271,11 @@ namespace CuttingTableFurniture
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 Debug.LogWarning("Стол не работает");
+                return;
+            }
+            
+            if (CheckUseFurniture() == false)
+            {
                 return;
             }
             
@@ -305,8 +334,6 @@ namespace CuttingTableFurniture
                             {
                                 AcceptObject(_heroik.TryGiveIngredient());
                                 TurnOn(); 
-                                //GameObject objdish = FindReadyFood();
-                                // Product objdish = _recipeService.GetDish(StationType.Suvide,listProducts);
                                 StartCoroutine(ContinueWorkCoroutine());
                             }
                             else

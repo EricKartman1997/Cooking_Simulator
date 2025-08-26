@@ -17,12 +17,12 @@ public class UIManager : IDisposable
     
     private GameManager _gameManager;
     private UIContainer _uiContainer;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private bool _isInit;
 
     public bool IsInit => _isInit;
     
-    public UIManager(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public UIManager(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         

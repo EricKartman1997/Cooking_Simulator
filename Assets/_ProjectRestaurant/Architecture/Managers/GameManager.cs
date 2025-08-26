@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameManager : IDisposable
 {
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     
     //Container
     private RecipeContainer _recipeContainer;
@@ -68,7 +68,7 @@ public class GameManager : IDisposable
         TimeGame timeGame,RecipeService recipeService, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory,
         HelperScriptFactory helperScriptFactory,ChecksFactory checksFactory,
         FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeContainer recipeContainer,
-        CoroutineMonoBehaviour coroutineMonoBehaviour)
+        MonoBehaviour coroutineMonoBehaviour)
     {
         _bootstrapLvl2 = bootstrapLvl2;
         _productsContainer = productsContainer;

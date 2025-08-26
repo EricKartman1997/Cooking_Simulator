@@ -6,13 +6,13 @@ using System.Collections;
 public class ProductsFactory: IDisposable
 {
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private ProductsContainer _productsContainer;
     private bool _isInit;
     
     public bool IsInit => _isInit;
 
-    public ProductsFactory(ProductsContainer productsContainer,CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public ProductsFactory(ProductsContainer productsContainer,MonoBehaviour coroutineMonoBehaviour)
     {
         _productsContainer = productsContainer;
         _coroutineMonoBehaviour = coroutineMonoBehaviour;

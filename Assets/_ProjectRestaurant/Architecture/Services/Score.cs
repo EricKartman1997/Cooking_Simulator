@@ -5,7 +5,7 @@ using UnityEngine;
 public class Score : IDisposable
 {
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private TimeGame _timeGame;
     private float _score;
     private bool _isInit;
@@ -16,7 +16,7 @@ public class Score : IDisposable
     // public float ScorePlayer => _score => _checkVisitore.Score;
     public float ScorePlayer => _checkVisitore.Score ;
 
-    public Score(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public Score(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         

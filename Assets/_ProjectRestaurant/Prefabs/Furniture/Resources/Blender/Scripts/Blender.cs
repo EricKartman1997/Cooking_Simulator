@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace BlenderFurniture
 {
-    public class Blender : MonoBehaviour,IGiveObj, IAcceptObject, ITurnOffOn
+    public class Blender : MonoBehaviour, IUseFurniture
     {
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
@@ -99,16 +98,14 @@ namespace BlenderFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
             }
         }
         private void OnTriggerExit(Collider other)
@@ -121,16 +118,13 @@ namespace BlenderFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _isHeroikTrigger = false;
-                _outline.OutlineWidth = 0f;
+                ExitTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
-                _heroik = null;
-                _isHeroikTrigger = false;
-                _outline.OutlineWidth = 0f;
+                ExitTrigger();
             }
         }
         
@@ -144,12 +138,43 @@ namespace BlenderFurniture
             EventBus.PressE -= CookingProcess;
         }
         
-        public GameObject GiveObj(ref GameObject giveObj) 
+        public void UpdateCondition()
+        {
+            if (CheckUseFurniture() == false)
+            {
+                _outline.OutlineWidth = 0f;
+            }
+        }
+    
+        private void EnterTrigger()
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            _heroik.CurrentUseFurniture = this;
+        }
+    
+        private void ExitTrigger()
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
+    
+        private bool CheckUseFurniture()
+        {
+            if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private GameObject GiveObj(ref GameObject giveObj) 
         {
             return giveObj;
         }
     
-        public void AcceptObject(GameObject acceptObj)
+        private void AcceptObject(GameObject acceptObj)
         {
             if (_ingredient1 == null)
             {
@@ -170,14 +195,14 @@ namespace BlenderFurniture
             Object.Destroy(acceptObj);
         }
         
-        public void CreateResult()
+        private void CreateResult()
         {
             List<Product> listProducts = new List<Product>() {_ingredient1.GetComponent<Product>(),_ingredient2.GetComponent<Product>(),_ingredient3.GetComponent<Product>(),};
             Product readyObj = _recipeService.GetDish(StationType.Blender,listProducts);
             _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
         }
     
-        public void TurnOn()
+        private void TurnOn()
         {
             _ingredient1.SetActive(false);
             _ingredient2.SetActive(false);
@@ -186,7 +211,7 @@ namespace BlenderFurniture
             _blenderView.TurnOn();
         }
     
-        public void TurnOff()
+        private void TurnOff()
         {
             _isWork = false;
             Object.Destroy(_ingredient1);
@@ -200,20 +225,8 @@ namespace BlenderFurniture
         
         private void CookingProcess()
         {
-            if (_isInit == false)
+            if (CheckCookingProcess() == false)
             {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
-            if(_isHeroikTrigger == false)
-            {
-                return;
-            }
-            
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-            {
-                Debug.LogWarning("Блендер не работает");
                 return;
             }
             
@@ -295,8 +308,6 @@ namespace BlenderFurniture
                                 {
                                     AcceptObject(_heroik.TryGiveIngredient());
                                     TurnOn(); 
-                                    //GameObject objdish = FindReadyFood();
-                                    //StartCookingProcessAsync(objdish);
                                     StartCoroutine(ContinueWorkCoroutine());
                                 }
                                 else
@@ -313,7 +324,33 @@ namespace BlenderFurniture
                 }
             }
         }
-        
+
+        private bool CheckCookingProcess()
+        {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return false;
+            }
+            
+            if(_isHeroikTrigger == false)
+            {
+                return false;
+            }
+            
+            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            {
+                Debug.LogWarning("Блендер не работает");
+                return false;
+            }
+            
+            if (CheckUseFurniture() == false)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private IEnumerator ContinueWorkCoroutine()
         {
             StartCoroutine(_blenderView.Timer.StartTimer());

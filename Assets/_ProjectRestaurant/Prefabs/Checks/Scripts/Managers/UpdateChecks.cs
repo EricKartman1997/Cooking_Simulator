@@ -7,12 +7,12 @@ public class UpdateChecks : IDisposable
     public bool IsInit;// переделать
     
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private Checks _checks;
     private float _timeAddNewCheck = 3f;
     private float _timeUpdateCheck;
 
-    public UpdateChecks(Checks checks, float timeAddNewCheck,CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public UpdateChecks(Checks checks, float timeAddNewCheck,MonoBehaviour coroutineMonoBehaviour)
     {
         _checks = checks;
         _timeAddNewCheck = timeAddNewCheck;

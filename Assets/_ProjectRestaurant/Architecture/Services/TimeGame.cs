@@ -12,7 +12,7 @@ public class TimeGame : IDisposable
     
     private GameManager _gameManager;
     private UIManager _uiManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     
     private TextMeshProUGUI _timeText;
     
@@ -27,7 +27,7 @@ public class TimeGame : IDisposable
 
     public float CurrentMinutes => _currentMinutes;
 
-    public TimeGame(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public TimeGame(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         

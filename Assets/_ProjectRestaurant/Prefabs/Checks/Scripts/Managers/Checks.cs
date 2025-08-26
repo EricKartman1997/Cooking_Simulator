@@ -11,7 +11,7 @@ public class Checks : IDisposable
     public event Action<Check> RemoveCheckAction;
     
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private UIManager _uiManager;
     private ChecksFactory _checksFactory;
 
@@ -31,7 +31,7 @@ public class Checks : IDisposable
 
     public bool IsInit => _isInit;
     
-    public Checks(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public Checks(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         

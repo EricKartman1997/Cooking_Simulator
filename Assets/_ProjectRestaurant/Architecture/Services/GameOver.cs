@@ -8,7 +8,7 @@ public class GameOver : IDisposable
     public event Action HideAction;
     
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     
     private bool _isInit;
     
@@ -17,7 +17,7 @@ public class GameOver : IDisposable
     private TimeGame TimeGame => StaticManagerWithoutZenject.GameManager.TimeGame;
     private Score Score => StaticManagerWithoutZenject.GameManager.Score;
 
-    public GameOver(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public GameOver(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
 

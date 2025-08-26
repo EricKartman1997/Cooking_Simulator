@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SuvideFurniture
 {
-    public class SuvideFurniture : MonoBehaviour
+    public class SuvideFurniture : MonoBehaviour, IUseFurniture
     {
         private const string DISH1 = "DISH1";
         private const string DISH2 = "DISH2";
@@ -109,16 +108,14 @@ namespace SuvideFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
                 return;
             }
                 
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
             }
         }
             
@@ -132,16 +129,13 @@ namespace SuvideFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 0f;
-                _isHeroikTrigger = false;
+                ExitTrigger();
                 return;
             }
                 
             if (other.GetComponent<Heroik>())
             {
-                _heroik = null;
-                _outline.OutlineWidth = 0f;
-                _isHeroikTrigger = false;
+                ExitTrigger();
             }
         }
             
@@ -153,6 +147,37 @@ namespace SuvideFurniture
         private void OnDisable()
         {
             EventBus.PressE -= CookingProcess;
+        }
+        
+        public void UpdateCondition()
+        {
+            if (CheckUseFurniture() == false)
+            {
+                _outline.OutlineWidth = 0f;
+            }
+        }
+    
+        private void EnterTrigger()
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            _heroik.CurrentUseFurniture = this;
+        }
+    
+        private void ExitTrigger()
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
+    
+        private bool CheckUseFurniture()
+        {
+            if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+            {
+                return true;
+            }
+
+            return false;
         }
         
         private GameObject GiveObj(ref GameObject giveObj)
@@ -197,7 +222,6 @@ namespace SuvideFurniture
             if (TOKEN == DISH1)
             {
                 Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish1);
@@ -211,7 +235,6 @@ namespace SuvideFurniture
             if (TOKEN == DISH2)
             {
                 Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish2);
@@ -225,7 +248,6 @@ namespace SuvideFurniture
             if (TOKEN == DISH3)
             {
                 Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                //_productsContainer.RecipesForSuvide.TryGetValue(obj.name, out ObjsForDistribution readyObj);
                 if (readyObj != null)
                 {
                     Destroy(_dish3);
@@ -290,20 +312,8 @@ namespace SuvideFurniture
     
         private void CookingProcess()
         {
-            if (_isInit == false)
+            if (CheckCookingProcess() == false)
             {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
-            if(_isHeroikTrigger == false)
-            {
-                return;
-            }
-                
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-            {
-                Debug.LogWarning("Сувид не работает");
                 return;
             }
     
@@ -418,10 +428,31 @@ namespace SuvideFurniture
             }
         }
 
-        // private Product CheckProductAccordingRecipe(List<Product> recipe, List<Product> ingridients)
-        // {
-        //     
-        // }
+        private bool CheckCookingProcess()
+        {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return false;
+            }
+            
+            if(_isHeroikTrigger == false)
+            {
+                return false;
+            }
+                
+            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            {
+                Debug.LogWarning("Сувид не работает");
+                return false;
+            }
+        
+            if (CheckUseFurniture() == false)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 
 }

@@ -5,12 +5,12 @@ using System.Collections;
 public class HelperScriptFactory: IDisposable
 {
     private GameManager _gameManager;
-    private CoroutineMonoBehaviour _coroutineMonoBehaviour;
+    private MonoBehaviour _coroutineMonoBehaviour;
     private bool _isInit;
     
     public bool IsInit => _isInit;
 
-    public HelperScriptFactory(CoroutineMonoBehaviour coroutineMonoBehaviour)
+    public HelperScriptFactory(MonoBehaviour coroutineMonoBehaviour)
     {
         _coroutineMonoBehaviour = coroutineMonoBehaviour;
         

@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Garbage : MonoBehaviour, IAcceptObject
+public class Garbage : MonoBehaviour,IUseFurniture
 {
-    private Heroik _heroik = null; // только для объекта героя, а надо и другие...
+    private Heroik _heroik;
     private bool _isHeroikTrigger;
     private bool _isInit;
     private GameObject _obj;
@@ -56,17 +55,14 @@ public class Garbage : MonoBehaviour, IAcceptObject
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
-
+            EnterTrigger();
         }
     }
     
@@ -80,16 +76,13 @@ public class Garbage : MonoBehaviour, IAcceptObject
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
             return;
         }
 
         if (other.GetComponent<Heroik>())
         {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
         }
     }
     
@@ -103,7 +96,38 @@ public class Garbage : MonoBehaviour, IAcceptObject
         EventBus.PressE -= CookingProcess;
     }
     
-    public void AcceptObject(GameObject acceptObj)
+    public void UpdateCondition()
+    {
+        if (CheckUseFurniture() == false)
+        {
+            _outline.OutlineWidth = 0f;
+        }
+    }
+    
+    private void EnterTrigger()
+    {
+        _outline.OutlineWidth = 2f;
+        _isHeroikTrigger = true;
+        _heroik.CurrentUseFurniture = this;
+    }
+    
+    private void ExitTrigger()
+    {
+        _outline.OutlineWidth = 0f;
+        _isHeroikTrigger = false;
+    }
+    
+    private bool CheckUseFurniture()
+    {
+        if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    private void AcceptObject(GameObject acceptObj)
     {
         _obj = acceptObj;
         Destroy(acceptObj);
@@ -128,7 +152,12 @@ public class Garbage : MonoBehaviour, IAcceptObject
             return;
         }
         
-        try
+        if (CheckUseFurniture() == false)
+        {
+            return;
+        }
+
+        if (_heroik.IsBusyHands == true)
         {
             if (!_heroik.CanGiveIngredient(ListProduct))
             {
@@ -138,10 +167,11 @@ public class Garbage : MonoBehaviour, IAcceptObject
             AcceptObject(_heroik.TryGiveIngredient());
             DeleteObj();
         }
-        catch (Exception e)
+        else
         {
-            Debug.Log("Вам нечего выкидывать" + e);
+            Debug.Log("Вам нечего выкидывать");
         }
+
     }
     
     private void DeleteObj()

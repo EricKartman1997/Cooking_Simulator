@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace OvenFurniture
 {
-    public class Oven : MonoBehaviour, IGiveObj, IAcceptObject, ITurnOffOn
+    public class Oven : MonoBehaviour, IUseFurniture
     {
         [SerializeField] private GameObject switchFirst;
         [SerializeField] private GameObject switchSecond;
@@ -14,7 +14,6 @@ namespace OvenFurniture
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;
-        
         
         private const string ANIMATIONCLOSE = "Close";
         private const string ANIMATIONOPEN = "Open";
@@ -97,16 +96,14 @@ namespace OvenFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
-                _outline.OutlineWidth = 2f;
-                _isHeroikTrigger = true;
+                EnterTrigger();
             }
         }
         
@@ -120,16 +117,13 @@ namespace OvenFurniture
             
             if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
-                _outline.OutlineWidth = 0f;
-                _isHeroikTrigger = false;
+                ExitTrigger();
                 return;
             }
             
             if (other.GetComponent<Heroik>())
             {
-                _heroik = null;
-                _isHeroikTrigger = false;
-                _outline.OutlineWidth = 0f;
+                ExitTrigger();
             }
         }
         
@@ -142,24 +136,24 @@ namespace OvenFurniture
         {
             EventBus.PressE -= CookingProcess;
         }
-        public GameObject GiveObj(ref GameObject giveObj)
+        private GameObject GiveObj(ref GameObject giveObj)
         {
             return giveObj;
         }
     
-        public void AcceptObject(GameObject obj)
+        private void AcceptObject(GameObject obj)
         {
             _ingredient = _gameManager.ProductsFactory.GetProduct(obj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
             Object.Destroy(obj);
         }
         
-        public void TurnOn()
+        private void TurnOn()
         {
             _isWork = true;
             _ovenView.TurnOn();
         }
     
-        public void TurnOff()
+        private void TurnOff()
         {
             _isWork = false;
             _ovenView.TurnOff();
@@ -167,22 +161,41 @@ namespace OvenFurniture
             _ingredient = null;
         }
         
+        public void UpdateCondition()
+        {
+            if (CheckUseFurniture() == false)
+            {
+                _outline.OutlineWidth = 0f;
+            }
+        }
+    
+        private void EnterTrigger()
+        {
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
+            _heroik.CurrentUseFurniture = this;
+        }
+    
+        private void ExitTrigger()
+        {
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
+        }
+    
+        private bool CheckUseFurniture()
+        {
+            if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
         private void CookingProcess()
         {
-            if (_isInit == false)
+            if (CheckCookingProcess() == false)
             {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
-            if(_isHeroikTrigger == false)
-            {
-                return;
-            }
-            
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-            {
-                Debug.LogWarning("Печка не работает");
                 return;
             }
             
@@ -234,6 +247,33 @@ namespace OvenFurniture
             yield return new WaitWhile(() => _ovenView.Timer.IsWork);
             CreateResult();
             TurnOff();
+        }
+        
+        private bool CheckCookingProcess()
+        {
+            if (_isInit == false)
+            {
+                Debug.Log("Инициализация не закончена");
+                return false;
+            }
+            
+            if(_isHeroikTrigger == false)
+            {
+                return false;
+            }
+            
+            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            {
+                Debug.LogWarning("Печка не работает");
+                return false;
+            }
+        
+            if (CheckUseFurniture() == false)
+            {
+                return false;
+            }
+
+            return true;
         }
         
         private void CreateResult()

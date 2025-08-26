@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
+public class Stove : MonoBehaviour, IUseFurniture
 {
     [SerializeField] private Transform positionRawFood;
     
@@ -69,16 +68,14 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _isHeroikTrigger = true;
-            _outline.OutlineWidth = 2f;
+            EnterTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
         }
     }
     
@@ -92,16 +89,13 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _isHeroikTrigger = false;
-            _outline.OutlineWidth = 0f;
+            ExitTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
         }
     }
 
@@ -114,25 +108,56 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
     {
         EventBus.PressE -= CookingProcess;
     }
+    
+    public void UpdateCondition()
+    {
+        if (CheckUseFurniture() == false)
+        {
+            _outline.OutlineWidth = 0f;
+        }
+    }
+    
+    private void EnterTrigger()
+    {
+        _outline.OutlineWidth = 2f;
+        _isHeroikTrigger = true;
+        _heroik.CurrentUseFurniture = this;
+    }
+    
+    private void ExitTrigger()
+    {
+        _outline.OutlineWidth = 0f;
+        _isHeroikTrigger = false;
+    }
+    
+    private bool CheckUseFurniture()
+    {
+        if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+        {
+            return true;
+        }
 
-    public GameObject GiveObj(ref GameObject giveObj)
+        return false;
+    }
+
+    private GameObject GiveObj(ref GameObject giveObj)
     {
         return giveObj;
     }
 
-    public void AcceptObject(GameObject acceptObj)
+    private void AcceptObject(GameObject acceptObj)
     {
         _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _componentForStove = _ingredient.GetComponent<IForStove>();
         Destroy(acceptObj);
     }
     
-    public void TurnOff()
+    private void TurnOff()
     {
         
     }
 
-    public void TurnOn()
+    private void TurnOn()
     {
         
     }
@@ -157,20 +182,9 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
     
     private void CookingProcess()
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
         
-        if(_isHeroikTrigger == false)
+        if (CheckCookingProcess() == false)
         {
-            return;
-        }
-        
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-        {
-            Debug.LogWarning("Плита не работает");
             return;
         }
         
@@ -200,6 +214,33 @@ public class Stove : MonoBehaviour,  IGiveObj, IAcceptObject, ITurnOffOn
             }
 
         }
+    }
+    
+    private bool CheckCookingProcess()
+    {
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return false;
+        }
+        
+        if(_isHeroikTrigger == false)
+        {
+            return false;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Плита не работает");
+            return false;
+        }
+        
+        if (CheckUseFurniture() == false)
+        {
+            return false;
+        }
+
+        return true;
     }
     
 }

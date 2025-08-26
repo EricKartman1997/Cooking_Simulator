@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
+public class GiveTable : MonoBehaviour,IUseFurniture
 {
     [SerializeField] private Transform ingredientPoint;
     [SerializeField] private Transform parentFood;
@@ -58,16 +58,14 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
-            _outline.OutlineWidth = 2f;
-            _isHeroikTrigger = true;
+            EnterTrigger();
         }
     }
 
@@ -81,16 +79,13 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         
         if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
             return;
         }
         
         if (other.GetComponent<Heroik>())
         {
-            _heroik = null;
-            _outline.OutlineWidth = 0f;
-            _isHeroikTrigger = false;
+            ExitTrigger();
         }
     }
     
@@ -104,22 +99,53 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
         EventBus.PressE -= CookingProcess;
     }
     
+    private void AcceptObject(GameObject acceptObj)
+    {
+        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
+        Destroy(acceptObj);
+    }
+    
+    private GameObject GiveObj(ref GameObject giveObj)
+    {
+        return giveObj;
+    }
+    
+    public void UpdateCondition()
+    {
+        if (CheckUseFurniture() == false)
+        {
+            //_heroik = null;
+            _outline.OutlineWidth = 0f;
+        }
+    }
+    
+    private void EnterTrigger()
+    {
+        _outline.OutlineWidth = 2f;
+        _isHeroikTrigger = true;
+        _heroik.CurrentUseFurniture = this;
+    }
+    
+    private void ExitTrigger()
+    {
+        _outline.OutlineWidth = 0f;
+        _isHeroikTrigger = false;
+    }
+    
+    private bool CheckUseFurniture()
+    {
+        if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
     private void CookingProcess()
     {
-        if (_isInit == false)
+        if (CheckCookingProcess() == false)
         {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
-        if(_isHeroikTrigger == false)
-        {
-            return;
-        }
-        
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-        {
-            Debug.LogWarning("Стол не работает");
             return;
         }
         
@@ -153,16 +179,32 @@ public class GiveTable : MonoBehaviour,IAcceptObject,IGiveObj
             }
         }
     }
-    
-    public void AcceptObject(GameObject acceptObj)
+
+    private bool CheckCookingProcess()
     {
-        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
-        Destroy(acceptObj);
-    }
-    
-    public GameObject GiveObj(ref GameObject giveObj)
-    {
-        return giveObj;
+        if (_isInit == false)
+        {
+            Debug.Log("Инициализация не закончена");
+            return false;
+        }
+        
+        if(_isHeroikTrigger == false)
+        {
+            return false;
+        }
+        
+        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        {
+            Debug.LogWarning("Стол не работает");
+            return false;
+        }
+        
+        if (CheckUseFurniture() == false)
+        {
+            return false;
+        }
+
+        return true;
     }
     
 }
