@@ -6,6 +6,7 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private ButtonManager buttonStart;
     [SerializeField] private ModalWindowManager windowManager;
+    [SerializeField] private WindowManager settingsWindowManager;
 
     private void Awake()
     {
@@ -18,6 +19,8 @@ public class MenuController : MonoBehaviour
         buttonStart.onHover.AddListener(ShowOnHover);
         buttonStart.onLeave.AddListener(ShowOnLeave);
         buttonStart.onDoubleClick.AddListener(ShowOnDoubleClick);
+
+        
         Debug.Log("Init Done");
     }
 
