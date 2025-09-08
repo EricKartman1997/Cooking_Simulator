@@ -6,6 +6,11 @@ public class SocialNetViewController : MonoBehaviour
 {
     private const string OPEN = "Open";
     private const string CLOSE = "Close";
+    
+    private const string TELEGRAMURL = "https://t.me/E_R_I_C_CARTMAN";
+    private const string DISCORDURL = "https://discord.gg/R56NSYPUaJ";
+    private const string EMAILADDRESS = "your.erickartmangamedev@gmail.com";
+    private const string GITHUBURL = "https://github.com/EricKartman1997";
 
     [SerializeField] private ButtonManager buttonGitHub;
     [SerializeField] private ButtonManager buttonEmail;
@@ -16,23 +21,52 @@ public class SocialNetViewController : MonoBehaviour
 
     private bool _isOpenPanel;
     private bool _isPlayAnim;
+    
     private void OnEnable()
     {
-        //buttonSocialNet.onClick.AddListener(OpenClosePanel);
-
+        buttonGitHub.onClick.AddListener(FollowGitHub);
+        buttonEmail.onClick.AddListener(FollowEmail);
+        buttonTelegram.onClick.AddListener(FollowTelegram);
+        buttonDiscord.onClick.AddListener(FollowDiscord);
     }
 
     private void OnDisable()
     {
-        //buttonSocialNet.onClick.RemoveListener(OpenClosePanel);
+        buttonGitHub.onClick.RemoveListener(FollowGitHub);
+        buttonEmail.onClick.RemoveListener(FollowEmail);
+        buttonTelegram.onClick.RemoveListener(FollowTelegram);
+        buttonDiscord.onClick.RemoveListener(FollowDiscord);
     }
 
     private void Awake()
     {
         buttonGitHub.Interactable(true);
-        buttonEmail.Interactable(true);
+        buttonEmail.Interactable(false);
         buttonTelegram.Interactable(true);
-        buttonDiscord.Interactable(false);
+        buttonDiscord.Interactable(true);
+    }
+
+    private void FollowTelegram()
+    {
+        Application.OpenURL(TELEGRAMURL);
+    }
+    
+    private void FollowDiscord()
+    {
+        Application.OpenURL(DISCORDURL);
+    }
+    
+    private void FollowEmail()
+    {
+        string subject = "Feedback about Your Game";
+        
+        Application.OpenURL($"mailto:{EMAILADDRESS}?subject={Uri.EscapeDataString(subject)}");
+        //Application.OpenURL(EMAILADDRESS);
+    }
+    
+    private void FollowGitHub()
+    {
+        Application.OpenURL(GITHUBURL);
     }
 
     public void Open()
