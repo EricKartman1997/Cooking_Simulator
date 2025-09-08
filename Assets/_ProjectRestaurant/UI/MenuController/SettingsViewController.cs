@@ -8,6 +8,8 @@ public class SettingsViewController : MonoBehaviour
 
     [SerializeField] private ButtonManager buttonBack;
     [SerializeField] private Animator animator;
+    
+    private bool _isPlayAnim;
 
     private void OnEnable()
     {
@@ -21,12 +23,25 @@ public class SettingsViewController : MonoBehaviour
 
     public void OpenPanel()
     {
+        if(_isPlayAnim == true)
+            return;
+        
         animator.SetTrigger(OPEN);
+        _isPlayAnim = true;
     }
     
     public void ClosePanel()
     {
+        if(_isPlayAnim == true)
+            return;
+        
         animator.SetTrigger(CLOSE);
+        _isPlayAnim = true;
+    }
+    
+    public void FinishAnim()
+    {
+        _isPlayAnim = false;
     }
     
 }
