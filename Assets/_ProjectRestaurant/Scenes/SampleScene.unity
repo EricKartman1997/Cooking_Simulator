@@ -867,6 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894c3d821d2e5e94fbc86e6616881f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 0}
 --- !u!114 &520906702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5865,6 +5866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894c3d821d2e5e94fbc86e6616881f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 9121212140401846425}
 --- !u!1 &3403835941608947088
 GameObject:
   m_ObjectHideFlags: 0
@@ -11452,7 +11454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: dfdec0269e186574e9aed4aeb0ff2d53, type: 3}
-  m_NotificationBehavior: 2
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:

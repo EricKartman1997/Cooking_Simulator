@@ -3,22 +3,32 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
-    private PlayerInputActions _playerInputActions;
+    [SerializeField] private PlayerInput playerInput;
+    //private PlayerInputActions _playerInputActions;
+    private InputAction _interactableAction;
+    private InputAction _moveAction;
+    
     private void Awake()
     {
-        _playerInputActions = new PlayerInputActions();
-        _playerInputActions.Player.Enable();
+        playerInput.ActivateInput();
+        _moveAction = playerInput.actions["Move"];
+        _interactableAction = playerInput.actions["interactable"];
+        
+        //_playerInputActions = new PlayerInputActions();
+        //playerInputActions.Player.Enable();
     }
+    
+    
     
     private void OnEnable()
     {
-        _playerInputActions.Player.InteractionWithObjects.performed += OnPressE;
+        _interactableAction.performed += OnPressE;
         
     }
     
     private void OnDisable()
     {
-        _playerInputActions.Player.InteractionWithObjects.performed -= OnPressE;
+        _interactableAction.performed -= OnPressE;
     }
     
     private void OnPressE(InputAction.CallbackContext obj)
@@ -26,10 +36,14 @@ public class GameInput : MonoBehaviour
         EventBus.PressE?.Invoke();
     }
     
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        GetMovementVectorNormalized();
+    }
+    
     public Vector2 GetMovementVectorNormalized()
     {
-        
-        Vector2 inputVector = _playerInputActions.Player.Move.ReadValue<Vector2>();
+        Vector2 inputVector = _moveAction.ReadValue<Vector2>();
  
         inputVector = inputVector.normalized;
         

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +10,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private PlayerInput playerInput;
 
+
+    
     private float _currentAttractionCharacter;
     private Vector3 _movement;
     
     private float MoveSpeed => heroikConfig.MoveConfig.MoveSpeed;
     private float RotateSpeed => heroikConfig.MoveConfig.RotateSpeed;
     private float GravityForce => heroikConfig.MoveConfig.GravityForce;
-    
+
     private void Update()
     {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
