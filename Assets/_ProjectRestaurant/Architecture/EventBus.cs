@@ -7,9 +7,6 @@ public class EventBus : IDisposable
     public static Action AddOrder;
     public static Action<int,Check> AddScore;
     public static Action UpdateOrder;
-    public static Action PressE;
-    //public static Action ListFilled;
-    //public static Action<InfoAboutCheck> DeleteCheck;
     public static Action<Check> DeleteCheck;
     private bool _isInit;
     

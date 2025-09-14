@@ -4,50 +4,52 @@ using UnityEngine.InputSystem;
 public class GameInput : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
-    //private PlayerInputActions _playerInputActions;
+    [SerializeField] private Heroik heroik;
     private InputAction _interactableAction;
     private InputAction _moveAction;
+    private InputAction _menuAction;
     
     private void Awake()
     {
         playerInput.ActivateInput();
         _moveAction = playerInput.actions["Move"];
         _interactableAction = playerInput.actions["interactable"];
-        
-        //_playerInputActions = new PlayerInputActions();
-        //playerInputActions.Player.Enable();
+        _menuAction = playerInput.actions["Menu"];
     }
-    
-    
     
     private void OnEnable()
     {
         _interactableAction.performed += OnPressE;
+        _menuAction.performed += OnPressEcs;
         
     }
     
     private void OnDisable()
     {
         _interactableAction.performed -= OnPressE;
+        _menuAction.performed -= OnPressEcs;
     }
     
-    private void OnPressE(InputAction.CallbackContext obj)
+    private void OnPressE(InputAction.CallbackContext context)
     {
-        EventBus.PressE?.Invoke();
+        heroik.ToInteractAction?.Invoke();
     }
     
-    private void OnMove(InputAction.CallbackContext context)
+    private void OnPressEcs(InputAction.CallbackContext context)
     {
-        GetMovementVectorNormalized();
+        Debug.Log("Вызов меню");
+        //EventBus.PressE?.Invoke();
     }
     
-    public Vector2 GetMovementVectorNormalized()
+    public Vector3 GetMovementVectorNormalized()
     {
         Vector2 inputVector = _moveAction.ReadValue<Vector2>();
  
-        inputVector = inputVector.normalized;
+        Vector3 movement =  new Vector3(inputVector.x,0f, inputVector.y);
         
-        return inputVector;
+        movement = movement.normalized;
+        
+        return movement;
     }
 }
 

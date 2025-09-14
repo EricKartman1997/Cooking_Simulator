@@ -115,6 +115,7 @@ namespace SuvideFurniture
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
             }
         }
@@ -135,19 +136,20 @@ namespace SuvideFurniture
                 
             if (other.GetComponent<Heroik>())
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
         }
             
-        private void OnEnable()
-        {
-            EventBus.PressE += CookingProcess;
-        }
-        
-        private void OnDisable()
-        {
-            EventBus.PressE -= CookingProcess;
-        }
+        // private void OnEnable()
+        // {
+        //     EventBus.PressE += CookingProcess;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     EventBus.PressE -= CookingProcess;
+        // }
         
         public void UpdateCondition()
         {
@@ -182,19 +184,25 @@ namespace SuvideFurniture
         
         private GameObject GiveObj(ref GameObject giveObj)
         {
-            GameObject copy = giveObj;
-            Destroy(giveObj);
+            GameObject copy = Object.Instantiate(giveObj);
+            Object.Destroy(giveObj);
+            giveObj = null;
             return copy;
         }
     
-        private void AcceptObject(GameObject acceptObj,string TOKEN)
+        private bool AcceptObject(GameObject acceptObj,string TOKEN)
         {
+            if (acceptObj == null)
+            {
+                Debug.Log("Объект не передался");
+                return false;
+            }
             if (TOKEN == DISH1)
             {
                 _dish1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
                 Destroy(acceptObj);
                 _cookingdish1 = true;
-                return;
+                return true;
             }
             
             if (TOKEN == DISH2)
@@ -202,7 +210,7 @@ namespace SuvideFurniture
                 _dish2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
                 Destroy(acceptObj);
                 _cookingdish2 = true;
-                return;
+                return true;
             }
             
             if (TOKEN == DISH3)
@@ -210,10 +218,10 @@ namespace SuvideFurniture
                 _dish3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
                 Destroy(acceptObj);
                 _cookingdish3 = true;
-                return;
+                return true;
             }
-            
             Debug.Log("ошибка в AcceptObject");
+            return false;
         }
     
         private void CreateResult(GameObject obj,string TOKEN)
@@ -347,36 +355,48 @@ namespace SuvideFurniture
     
             if (_heroik.IsBusyHands == true)
             {
-                if (!_heroik.CanGiveIngredient(ListProduct))
-                {
-                    Debug.Log("продукт не подходит для сувида");
-                    return;
-                }
-    
                 if (_dish1 == null)
                 {
-                    AcceptObject(_heroik.TryGiveIngredient(), DISH1);
-                    TurnOn(DISH1);
-                    StartCoroutine(ContinueWorkCoroutine(_dish1,DISH1));
-                    ChangeView();
+                    if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH1))
+                    {
+                        TurnOn(DISH1);
+                        StartCoroutine(ContinueWorkCoroutine(_dish1,DISH1));
+                        ChangeView();
+                    }
+                    else
+                    {
+                        Debug.Log("с предметом что-то пошло не так");
+                    }
                     return;
                 }
                 
                 if (_dish2 == null)
                 {
-                    AcceptObject(_heroik.TryGiveIngredient(), DISH2);
-                    TurnOn(DISH2);
-                    StartCoroutine(ContinueWorkCoroutine(_dish2,DISH2));
-                    ChangeView();
+                    if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH2))
+                    {
+                        TurnOn(DISH2);
+                        StartCoroutine(ContinueWorkCoroutine(_dish2,DISH2));
+                        ChangeView();
+                    }
+                    else
+                    {
+                        Debug.Log("с предметом что-то пошло не так");
+                    }
                     return;
                 }
                 
                 if (_dish3 == null)
                 {
-                    AcceptObject(_heroik.TryGiveIngredient(), DISH3);
-                    TurnOn(DISH3);
-                    StartCoroutine(ContinueWorkCoroutine(_dish3,DISH3));
-                    ChangeView();
+                    if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH3))
+                    {
+                        TurnOn(DISH3);
+                        StartCoroutine(ContinueWorkCoroutine(_dish3,DISH3));
+                        ChangeView();
+                    }
+                    else
+                    {
+                        Debug.Log("с предметом что-то пошло не так");
+                    }
                     return;
                 }
                 

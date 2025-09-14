@@ -75,6 +75,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
         }
     }
@@ -95,19 +96,20 @@ public class Stove : MonoBehaviour, IUseFurniture
         
         if (other.GetComponent<Heroik>())
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
     }
 
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.PressE -= CookingProcess;
-    }
+    // private void OnEnable()
+    // {
+    //     EventBus.PressE += CookingProcess;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.PressE -= CookingProcess;
+    // }
     
     public void UpdateCondition()
     {
@@ -142,14 +144,23 @@ public class Stove : MonoBehaviour, IUseFurniture
 
     private GameObject GiveObj(ref GameObject giveObj)
     {
-        return giveObj;
+        GameObject copy = Object.Instantiate(giveObj);
+        Object.Destroy(giveObj);
+        giveObj = null;
+        return copy;
     }
 
-    private void AcceptObject(GameObject acceptObj)
+    private bool AcceptObject(GameObject acceptObj)
     {
+        if (acceptObj == null)
+        {
+            Debug.Log("Объект не передался");
+            return false;
+        }
         _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
-        _componentForStove = _ingredient.GetComponent<IForStove>();
         Destroy(acceptObj);
+        _componentForStove = _ingredient.GetComponent<IForStove>();
+        return true;
     }
     
     private void TurnOff()
@@ -190,15 +201,13 @@ public class Stove : MonoBehaviour, IUseFurniture
         
         if (_heroik.IsBusyHands == true)
         {
-            if (_heroik.CanGiveIngredient(ListProduct))
+            if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
-                AcceptObject(_heroik.TryGiveIngredient());
-                    
                 _componentForStove.IsOnStove = true;
             }
             else
             {
-                Debug.LogWarning("На объекте нет нужного компонента, объект нельзя положить");
+                Debug.Log("с предметом что-то пошло не так");
             }
         }
         else

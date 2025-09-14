@@ -105,6 +105,7 @@ namespace BlenderFurniture
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
             }
         }
@@ -124,19 +125,20 @@ namespace BlenderFurniture
             
             if (other.GetComponent<Heroik>())
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
         }
         
-        private void OnEnable()
-        {
-            EventBus.PressE += CookingProcess;
-        }
-    
-        private void OnDisable()
-        {
-            EventBus.PressE -= CookingProcess;
-        }
+        // private void OnEnable()
+        // {
+        //     EventBus.PressE += CookingProcess;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     EventBus.PressE -= CookingProcess;
+        // }
         
         public void UpdateCondition()
         {
@@ -171,28 +173,42 @@ namespace BlenderFurniture
         
         private GameObject GiveObj(ref GameObject giveObj) 
         {
-            return giveObj;
+            GameObject copy = Object.Instantiate(giveObj);
+            Object.Destroy(giveObj);
+            giveObj = null;
+            return copy;
         }
     
-        private void AcceptObject(GameObject acceptObj)
+        private bool AcceptObject(GameObject acceptObj)
         {
+            if (acceptObj == null)
+            {
+                Debug.Log("Объект не передался");
+                return false;
+            }
             if (_ingredient1 == null)
             {
                 _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
+                Destroy(acceptObj);
+                return true;
             }
             else if (_ingredient2 == null)
             {
                 _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
+                Destroy(acceptObj);
+                return true;
             }
             else if (_ingredient3 == null)
             {
                 _ingredient3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
+                Destroy(acceptObj);
+                return true;
             }
             else
             {
                 Debug.LogWarning("В блендере нет места");
+                return false;
             }
-            Object.Destroy(acceptObj);
         }
         
         private void CreateResult()
@@ -249,12 +265,10 @@ namespace BlenderFurniture
                             if (_ingredient2 == null)
                             {
                                 _heroik.TryPickUp(GiveObj(ref _ingredient1));
-                                _ingredient1 = null;
                             }
                             else
                             {
                                 _heroik.TryPickUp(GiveObj(ref _ingredient2));
-                                _ingredient2 = null;
                             }
                         }
                     }
@@ -278,41 +292,24 @@ namespace BlenderFurniture
                     {
                         if (_ingredient1 == null)
                         {
-                            if(_heroik.CanGiveIngredient(ListProduct))
-                            {
-                                AcceptObject(_heroik.TryGiveIngredient());
-                                Debug.Log("Предмет первый положен в блендер");
-                            }
-                            else
-                            {
-                                Debug.Log("с предметом нельзя взаимодействовать");
-                            }
+                            AcceptObject(_heroik.TryGiveIngredient(ListProduct));
                         }
                         else
                         {
                             if (_ingredient2 == null)
                             {
-                                if(_heroik.CanGiveIngredient(ListProduct))
-                                {
-                                    AcceptObject(_heroik.TryGiveIngredient());
-                                    Debug.Log("Предмет второй положен в блендер");
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
-                                }
+                                AcceptObject(_heroik.TryGiveIngredient(ListProduct));
                             }
                             else
                             {
-                                if(_heroik.CanGiveIngredient(ListProduct))
+                                if(AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                                 {
-                                    AcceptObject(_heroik.TryGiveIngredient());
                                     TurnOn(); 
                                     StartCoroutine(ContinueWorkCoroutine());
                                 }
                                 else
                                 {
-                                    Debug.Log("с предметом нельзя взаимодействовать");
+                                    Debug.Log("с предметом что-то пошло не так");
                                 }
                             }
                         }

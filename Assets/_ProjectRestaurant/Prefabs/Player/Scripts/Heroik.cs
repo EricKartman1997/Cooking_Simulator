@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Heroik : MonoBehaviour
 {
+    public OneSubcribeAction ToInteractAction;
+    
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
     private IUseFurniture _useFurniture;
@@ -30,7 +32,12 @@ public class Heroik : MonoBehaviour
     }
     public GameObject CurrentTakenObjects => _ingredientHandler.CurrentTakenObjects;
     public bool IsBusyHands => _ingredientHandler.IsBusyHands;
-    
+
+    private void Awake()
+    {
+        ToInteractAction = new OneSubcribeAction();
+    }
+
     private void Start()
     {
         _gameManager = StaticManagerWithoutZenject.GameManager;
@@ -43,24 +50,29 @@ public class Heroik : MonoBehaviour
         _ingredientHandler.TryPickUp(ingredient); 
     }
     
-    public GameObject TryGiveIngredient() // отдать объект из рук
+    public GameObject TryGiveIngredient(List<Product> forbiddenIngredients) // отдать объект из рук
     {
-        return _ingredientHandler.TryGiveIngredient();  
+        if (_ingredientHandler.CanGiveIngredient(forbiddenIngredients))
+        {
+            return _ingredientHandler.TryGiveIngredient(); 
+        }
+        Debug.LogWarning("Объект не подходит для этой furniture");
+        return null;
     }
     
-    public bool CanGiveIngredient(List<GameObject> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
-    {
-        return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
-    }
+    // public bool CanGiveIngredient(List<GameObject> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
+    // {
+    //     return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
+    // }
     
     public bool CanGiveIngredient(List<Product> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
     {
         return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
     }
     
-    public bool CanGiveIngredient(List<Type> forbiddenComponents) // проверка на отдачу объекта из рук по компонентам
-    {
-        return _ingredientHandler.CanGiveIngredient(forbiddenComponents);
-    }
+    // public bool CanGiveIngredient(List<Type> forbiddenComponents) // проверка на отдачу объекта из рук по компонентам
+    // {
+    //     return _ingredientHandler.CanGiveIngredient(forbiddenComponents);
+    // }
     
 }

@@ -98,6 +98,7 @@ namespace CuttingTableFurniture
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
             }
         }
@@ -117,19 +118,20 @@ namespace CuttingTableFurniture
             
             if (other.GetComponent<Heroik>())
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
         }
         
-        private void OnEnable()
-        {
-            EventBus.PressE += CookingProcess;
-        }
-    
-        private void OnDisable()
-        {
-            EventBus.PressE -= CookingProcess;
-        }
+        // private void OnEnable()
+        // {
+        //     EventBus.PressE += CookingProcess;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     EventBus.PressE -= CookingProcess;
+        // }
         
         public void UpdateCondition()
         {
@@ -164,26 +166,39 @@ namespace CuttingTableFurniture
         
         private GameObject GiveObj(ref GameObject giveObj)
         {
-            return giveObj;
+            GameObject copy = Object.Instantiate(giveObj);
+            Object.Destroy(giveObj);
+            giveObj = null;
+            return copy;
         }
         
-        private void AcceptObject(GameObject acceptObj)
+        private bool AcceptObject(GameObject acceptObj)
         {
+            if (acceptObj == null)
+            {
+                Debug.Log("Объект не передался");
+                return false;
+            }
             if (_ingredient1 == null)
             {
                 _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
                     _cuttingTablePoints.PositionIngredient1,true);
+                Destroy(acceptObj);
+                return true;
             }
             else if (_ingredient2 == null)
             {
                  _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
                     _cuttingTablePoints.PositionIngredient2,true);
+                 Destroy(acceptObj);
+                 return true;
             }
             else
             {
                 Debug.LogWarning("На нарезочном столе нет места");
+                return false; 
             }
-            Object.Destroy(acceptObj);
+            
         }
         
         private void TurnOn()
@@ -203,42 +218,6 @@ namespace CuttingTableFurniture
             _ingredient2 = null;
             _cuttingTableView.TurnOff();
         }
-        
-        // private GameObject FindReadyFood()
-        // {
-        //     List<GameObject> currentIngredient = new List<GameObject>(){_ingredient1,_ingredient2};
-        //     if (SuitableIngredients(currentIngredient,_productsContainer.RequiredFruitSalad))
-        //     {
-        //         return _productsContainer.FruitSalad;
-        //     }
-        //     if(SuitableIngredients(currentIngredient,_productsContainer.RequiredMixBakedFruit))
-        //     {
-        //         return _productsContainer.MixBakedFruit;
-        //     }
-        //     return _productsContainer.Rubbish;
-        // }
-        //
-        // private bool SuitableIngredients(List<GameObject> currentIngredients, List<GameObject> requiredFruits)
-        // {
-        //     List<string> requiredFruitsNames = new List<string>();
-        //     List<string> currentIngredientsNames = new List<string>();
-        //     foreach (var ingredient in currentIngredients)
-        //     {
-        //         currentIngredientsNames.Add(ingredient.name); // Используем имя объекта
-        //     }
-        //     foreach (var ingredient in requiredFruits)
-        //     {
-        //         requiredFruitsNames.Add(ingredient.name); // Используем имя объекта
-        //     }
-        //     foreach (string ingredient in requiredFruitsNames)
-        //     {
-        //         if (!currentIngredientsNames.Contains(ingredient))
-        //         {
-        //             return false;
-        //         }
-        //     }
-        //     return true;
-        // }
         
         private void CreateResult()
         {
@@ -296,13 +275,11 @@ namespace CuttingTableFurniture
                         else //есть первый ингредиент // забираете первый ингредиент 
                         {
                             _heroik.TryPickUp(GiveObj(ref _ingredient1));
-                            _ingredient1 = null;
                         }
                     }
                     else //есть результат // забрать результат
                     {
                         _heroik.TryPickUp(GiveObj(ref _result));
-                        _result = null;
                         Debug.Log("Вы забрали конечный продукт"); 
                     }
                 }
@@ -319,26 +296,18 @@ namespace CuttingTableFurniture
                     {
                         if (_ingredient1 == null)// ингредиентов нет
                         {
-                            if(_heroik.CanGiveIngredient(ListProduct))
-                            {
-                                AcceptObject(_heroik.TryGiveIngredient());
-                            }
-                            else
-                            {
-                                Debug.Log("с предметом нельзя взаимодействовать");
-                            }
+                            AcceptObject(_heroik.TryGiveIngredient(ListProduct));
                         }
                         else// есть первый ингредиент
                         {
-                            if (_heroik.CanGiveIngredient(ListProduct))
+                            if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                             {
-                                AcceptObject(_heroik.TryGiveIngredient());
                                 TurnOn(); 
                                 StartCoroutine(ContinueWorkCoroutine());
                             }
                             else
                             {
-                                Debug.Log("Объект не подходит для слияния");
+                                Debug.Log("с предметом что-то пошло не так");
                             }
                         }
                     }

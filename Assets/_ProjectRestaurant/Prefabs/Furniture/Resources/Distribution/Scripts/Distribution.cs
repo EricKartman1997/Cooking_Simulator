@@ -77,6 +77,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
         }
     }
@@ -96,19 +97,20 @@ public class Distribution : MonoBehaviour, IUseFurniture
         
         if (other.GetComponent<Heroik>())
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
     }
     
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.PressE -= CookingProcess;
-    }
+    // private void OnEnable()
+    // {
+    //     EventBus.PressE += CookingProcess;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.PressE -= CookingProcess;
+    // }
     
     public void UpdateCondition()
     {
@@ -141,10 +143,16 @@ public class Distribution : MonoBehaviour, IUseFurniture
         return false;
     }
 
-    private void AcceptObject(GameObject acceptObj)
+    private bool AcceptObject(GameObject acceptObj)
     {
+        if (acceptObj == null)
+        {
+            Debug.Log("Объект не передался");
+            return false;
+        }
         _currentDish = _gameManager.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
         Destroy(acceptObj);
+        return true;
     }
 
     private void TurnOff()
@@ -178,25 +186,23 @@ public class Distribution : MonoBehaviour, IUseFurniture
             }
             else
             {
-                if (_heroik.CanGiveIngredient(ListProduct))
+                _currentCheck = _checks.CheckTheCheck(_heroik.CurrentTakenObjects);
+                if (_currentCheck!= null)
                 {
-                    _currentCheck = _checks.CheckTheCheck(_heroik.CurrentTakenObjects);
-                    if (_currentCheck!= null)
+                    if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                     {
-                        AcceptObject(_heroik.TryGiveIngredient());
                         TurnOn();
                         StartCoroutine(ContinueWorkCoroutine());
                     }
                     else
                     {
-                        Debug.Log("Этого блюдо нет в чеках");
+                        Debug.Log("с предметом что-то пошло не так");
                     }
                 }
-                else 
+                else
                 {
-                    Debug.Log("Это блюдо нельзя подавать гостям");
+                    Debug.Log("Этого блюдо нет в чеках");
                 }
-                        
             }
         }
     }

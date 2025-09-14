@@ -65,6 +65,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
         }
     }
@@ -85,29 +86,39 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         
         if (other.GetComponent<Heroik>())
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
     }
     
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.PressE -= CookingProcess;
-    }
+    // private void OnEnable()
+    // {
+    //     EventBus.PressE += CookingProcess;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.PressE -= CookingProcess;
+    // }
     
-    private void AcceptObject(GameObject acceptObj)
+    private bool AcceptObject(GameObject acceptObj)
     {
+        if (acceptObj == null)
+        {
+            Debug.Log("Объект не передался");
+            return false;
+        }
         _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
         Destroy(acceptObj);
+        return true;
     }
     
     private GameObject GiveObj(ref GameObject giveObj)
     {
-        return giveObj;
+        GameObject copy = Object.Instantiate(giveObj);
+        Object.Destroy(giveObj);
+        giveObj = null;
+        return copy;
     }
     
     public void UpdateCondition()
@@ -164,13 +175,9 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         {
             if (_ingredient == null) // ни одного активного объекта
             {
-                if (_heroik.CanGiveIngredient(ListProduct))
+                if (!AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                 {
-                    AcceptObject(_heroik.TryGiveIngredient());
-                }
-                else
-                {
-                    Debug.Log("Этот предмет положить нельзя");
+                    Debug.Log("с предметом что-то пошло не так");
                 }
             }
             else // активного объект есть

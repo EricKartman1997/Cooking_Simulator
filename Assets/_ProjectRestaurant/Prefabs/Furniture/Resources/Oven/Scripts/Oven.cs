@@ -103,6 +103,7 @@ namespace OvenFurniture
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
             }
         }
@@ -123,28 +124,38 @@ namespace OvenFurniture
             
             if (other.GetComponent<Heroik>())
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
         }
         
-        private void OnEnable()
-        {
-            EventBus.PressE += CookingProcess;
-        }
-    
-        private void OnDisable()
-        {
-            EventBus.PressE -= CookingProcess;
-        }
+        // private void OnEnable()
+        // {
+        //     EventBus.PressE += CookingProcess;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     EventBus.PressE -= CookingProcess;
+        // }
         private GameObject GiveObj(ref GameObject giveObj)
         {
-            return giveObj;
+            GameObject copy = Object.Instantiate(giveObj);
+            Object.Destroy(giveObj);
+            giveObj = null;
+            return copy;
         }
     
-        private void AcceptObject(GameObject obj)
+        private bool AcceptObject(GameObject acceptObj)
         {
-            _ingredient = _gameManager.ProductsFactory.GetProduct(obj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
-            Object.Destroy(obj);
+            if (acceptObj == null)
+            {
+                Debug.Log("Объект не передался");
+                return false;
+            }
+            _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
+            Destroy(acceptObj);
+            return true;
         }
         
         private void TurnOn()
@@ -231,11 +242,14 @@ namespace OvenFurniture
                     }
                     else
                     {
-                        if (_heroik.CanGiveIngredient(ListProduct))
+                        if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                         {
-                            AcceptObject(_heroik.TryGiveIngredient());
                             TurnOn();
                             StartCoroutine(ContinueWorkCoroutine());
+                        }
+                        else
+                        {
+                            Debug.Log("с предметом что-то пошло не так");
                         }
                     }
                 }

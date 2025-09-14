@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -8,9 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private HeroikConfig heroikConfig;
     [SerializeField] private CharacterController characterController;
     [SerializeField] private GameInput gameInput;
-    [SerializeField] private PlayerInput playerInput;
-
-
+    //[SerializeField] private Heroik heroik;
     
     private float _currentAttractionCharacter;
     private Vector3 _movement;
@@ -21,13 +17,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        _movement = new Vector3(inputVector.x,0f, inputVector.y);
+        _movement = gameInput.GetMovementVectorNormalized();
     }
 
     private void FixedUpdate()
     {
-        //playerInput.
         GravityHandling();
         MoveCharacter(_movement);
         RotateCharacter(_movement);

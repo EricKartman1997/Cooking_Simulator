@@ -69,6 +69,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
         }
     }
@@ -89,19 +90,20 @@ public class GetTable : MonoBehaviour, IUseFurniture
         
         if (other.GetComponent<Heroik>())
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
     }
     
-    private void OnEnable()
-    {
-        EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.PressE -= CookingProcess;
-    }
+    // private void OnEnable()
+    // {
+    //     EventBus.PressE += CookingProcess;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     EventBus.PressE -= CookingProcess;
+    // }
     
     public void UpdateCondition()
     {
@@ -134,10 +136,10 @@ public class GetTable : MonoBehaviour, IUseFurniture
         return false;
     }
 
-    public GameObject GiveObj(ref GameObject giveObj)
+    private GameObject GiveObj(ref GameObject giveObj)
     {
-        GameObject giveObjCopy = _gameManager.ProductsFactory.GetProduct(giveObj, false);
-        return giveObjCopy;
+        GameObject copy = Instantiate(giveObj);
+        return copy;
     }
     
     private void CookingProcess()

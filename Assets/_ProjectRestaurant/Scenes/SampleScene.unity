@@ -828,7 +828,6 @@ MonoBehaviour:
   heroikConfig: {fileID: 11400000, guid: a6eea07d7426f4f4b8c80a54207bddae, type: 2}
   characterController: {fileID: 520906700}
   gameInput: {fileID: 520906701}
-  playerInput: {fileID: 0}
 --- !u!143 &520906700
 CharacterController:
   m_ObjectHideFlags: 0
@@ -868,6 +867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
+  heroik: {fileID: 0}
 --- !u!114 &520906702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1464,37 +1464,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.991724, y: 1.5305963, z: 0.3687849}
   m_Center: {x: 0.35907173, y: 0.26529825, z: -0.31560755}
---- !u!1 &1323063717
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1323063718}
-  m_Layer: 0
-  m_Name: Git
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1323063718
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1323063717}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1394834054
 GameObject:
   m_ObjectHideFlags: 0
@@ -5867,6 +5836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 9121212140401846425}
+  heroik: {fileID: 9121212140401846424}
 --- !u!1 &3403835941608947088
 GameObject:
   m_ObjectHideFlags: 0
@@ -8984,7 +8954,6 @@ MonoBehaviour:
   heroikConfig: {fileID: 11400000, guid: a6eea07d7426f4f4b8c80a54207bddae, type: 2}
   characterController: {fileID: 6731050740984516108}
   gameInput: {fileID: 3387740380048543650}
-  playerInput: {fileID: 0}
 --- !u!143 &6731050740984516108
 CharacterController:
   m_ObjectHideFlags: 0
@@ -11415,8 +11384,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4306433029003237218}
-  - component: {fileID: 3387740380048543650}
   - component: {fileID: 6731050740984516108}
+  - component: {fileID: 3387740380048543650}
   - component: {fileID: 6731050740984516107}
   - component: {fileID: 9121212140401846424}
   - component: {fileID: 9121212140401846425}
@@ -11560,4 +11529,3 @@ SceneRoots:
   - {fileID: 520906705}
   - {fileID: 4306433029003237218}
   - {fileID: 595210394}
-  - {fileID: 1323063718}

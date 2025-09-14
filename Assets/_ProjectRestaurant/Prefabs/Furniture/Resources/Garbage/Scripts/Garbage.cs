@@ -62,6 +62,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
         if (other.GetComponent<Heroik>())
         {
             _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
         }
     }
@@ -82,18 +83,19 @@ public class Garbage : MonoBehaviour,IUseFurniture
 
         if (other.GetComponent<Heroik>())
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
     }
     
     private void OnEnable()
     {
-        EventBus.PressE += CookingProcess;
+        //EventBus.PressE += CookingProcess;
     }
 
     private void OnDisable()
     {
-        EventBus.PressE -= CookingProcess;
+        //EventBus.PressE -= CookingProcess;
     }
     
     public void UpdateCondition()
@@ -127,10 +129,15 @@ public class Garbage : MonoBehaviour,IUseFurniture
         return false;
     }
     
-    private void AcceptObject(GameObject acceptObj)
+    private bool AcceptObject(GameObject acceptObj)
     {
+        if (acceptObj == null)
+        {
+            Debug.Log("Объект не передался");
+            return false;
+        }
         _obj = acceptObj;
-        Destroy(acceptObj);
+        return true;
     }
     
     private void CookingProcess()
@@ -159,13 +166,15 @@ public class Garbage : MonoBehaviour,IUseFurniture
 
         if (_heroik.IsBusyHands == true)
         {
-            if (!_heroik.CanGiveIngredient(ListProduct))
+            if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
-                Debug.Log("Объект нельзя выбросить");
-                return;
+                DeleteObj();
             }
-            AcceptObject(_heroik.TryGiveIngredient());
-            DeleteObj();
+            else
+            {
+                Debug.Log("с предметом что-то пошло не так");
+            }
+            
         }
         else
         {

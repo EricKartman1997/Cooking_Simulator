@@ -58,7 +58,7 @@ public class IngredientHandler: IDisposable
         
         _currentTakenObjects = objTable;
         CreateObj();
-        Object.Destroy(objTable); // надо переделать
+        Object.Destroy(objTable);
         return true;
     }
     
@@ -70,36 +70,28 @@ public class IngredientHandler: IDisposable
             Debug.LogWarning("Руки пустые");
             return null;
         }
+        if (_currentTakenObjects == null)
+        {
+            Debug.LogWarning("Объект в руках почему-то пуст");
+            return null;
+        }
         
         _isBusyHands = false;
-        return _currentTakenObjects;
+        GameObject copy = Object.Instantiate(_currentTakenObjects);
+        Object.Destroy(_currentTakenObjects);
+        _currentTakenObjects = null;
+        return copy;
     }
     
-    // проверка на отдачу объекта из рук по списку объектов
-    public bool CanGiveIngredient(List<GameObject> unusableObjects) 
-    {
-        List<string> unusableObjectsNames = new List<string>();
-        foreach (var food in unusableObjects)
-        {
-            unusableObjectsNames.Add(food.name); // Используем имя объекта
-        }
-        if (unusableObjectsNames.Contains(_currentTakenObjects.name))
-        {
-            Debug.Log("Сработал false");
-            return false;
-        }
-        return true;
-    }
-    
-    // проверка на отдачу объекта из рук по списку Product
-    // public bool CanGiveIngredient(List<Product> unusableObjects) 
+    // // проверка на отдачу объекта из рук по списку объектов
+    // public bool CanGiveIngredient(List<GameObject> unusableObjects) 
     // {
-    //     // List<string> unusableObjectsNames = new List<string>();
-    //     // foreach (var food in unusableObjects)
-    //     // {
-    //     //     unusableObjectsNames.Add(food.name); // Используем имя объекта
-    //     // }
-    //     if (unusableObjects.Contains(_currentTakenObjects.GetType()))
+    //     List<string> unusableObjectsNames = new List<string>();
+    //     foreach (var food in unusableObjects)
+    //     {
+    //         unusableObjectsNames.Add(food.name); // Используем имя объекта
+    //     }
+    //     if (unusableObjectsNames.Contains(_currentTakenObjects.name))
     //     {
     //         Debug.Log("Сработал false");
     //         return false;
@@ -131,32 +123,32 @@ public class IngredientHandler: IDisposable
         return matchCount == 1;
     }
     
-    // проверка на отдачу объекта из рук по компонентам
-    public bool CanGiveIngredient(List<Type> unusableObjects) 
-    {
-        // Получаем все компоненты на объекте
-        Component[] components = _currentTakenObjects.GetComponents<Component>();
-        byte count = 0;
-
-        // Проверяем каждый компонент
-        foreach (Component component in components)
-        {
-            // Если тип компонента содержится в списке _unusableObjects
-            if (unusableObjects.Contains(component.GetType()))
-            {
-                count++;
-                if (count == unusableObjects.Count)
-                {
-                    //Debug.Log("На объекте найдены все компоненты");
-                    return true;
-                }
-            }
-        }
-
-        // разрешенных компонентов не найдено
-        Debug.Log("Продукт нельзя передать.");
-        return false;
-    }
+    // // проверка на отдачу объекта из рук по компонентам
+    // public bool CanGiveIngredient(List<Type> unusableObjects) 
+    // {
+    //     // Получаем все компоненты на объекте
+    //     Component[] components = _currentTakenObjects.GetComponents<Component>();
+    //     byte count = 0;
+    //
+    //     // Проверяем каждый компонент
+    //     foreach (Component component in components)
+    //     {
+    //         // Если тип компонента содержится в списке _unusableObjects
+    //         if (unusableObjects.Contains(component.GetType()))
+    //         {
+    //             count++;
+    //             if (count == unusableObjects.Count)
+    //             {
+    //                 //Debug.Log("На объекте найдены все компоненты");
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //
+    //     // разрешенных компонентов не найдено
+    //     Debug.Log("Продукт нельзя передать.");
+    //     return false;
+    // }
 
     public void CreateObj()
     {
