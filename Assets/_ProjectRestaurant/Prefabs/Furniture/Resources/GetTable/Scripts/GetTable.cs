@@ -40,6 +40,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
         while (_objectOnTheTable == null)
         {
             _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
+            //_gameManager.ProductsFactory.GetProduct(_objectOnTheTable, Transform transform,Transform parent, bool setActive = true)
             yield return null;
         }
         
@@ -136,10 +137,9 @@ public class GetTable : MonoBehaviour, IUseFurniture
         return false;
     }
 
-    private GameObject GiveObj(ref GameObject giveObj)
+    private GameObject GiveObj(GameObject giveObj)
     {
-        GameObject copy = Instantiate(giveObj);
-        return copy;
+        return giveObj;
     }
     
     private void CookingProcess()
@@ -149,14 +149,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             return;
         }
 
-        if (_heroik.IsBusyHands == false) //объект есть на столе, руки незаняты
-        {
-            _heroik.TryPickUp(GiveObj(ref _objectOnTheTable));
-        }
-        else// объект есть на столе, руки заняты
-        {
-            Debug.Log("объект есть на столе,руки заняты");
-        }
+        _heroik.TryPickUp(GiveObj(_objectOnTheTable));
     }
     
     private bool CheckCookingProcess()

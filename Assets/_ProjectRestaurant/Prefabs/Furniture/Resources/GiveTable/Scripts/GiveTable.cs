@@ -109,16 +109,13 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             return false;
         }
         _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
-        Destroy(acceptObj);
+        _heroik.CleanObjOnHands();
         return true;
     }
     
-    private GameObject GiveObj(ref GameObject giveObj)
+    private GameObject GiveObj(GameObject giveObj)
     {
-        GameObject copy = Object.Instantiate(giveObj);
-        Object.Destroy(giveObj);
-        giveObj = null;
-        return copy;
+        return giveObj;
     }
     
     public void UpdateCondition()
@@ -165,10 +162,13 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             if (_ingredient == null) // ни одного активного объекта
             {
                 Debug.Log("У вас пустые руки и прилавок пуст");
+                return;
             }
-            else // на столе что-то есть
+            
+            // на столе что-то есть
+            if (_heroik.TryPickUp(GiveObj(_ingredient)))
             {
-                _heroik.TryPickUp(GiveObj(ref _ingredient));
+                CleanObjOnTable(_ingredient);
             }
         }
         else // заняты
@@ -185,6 +185,11 @@ public class GiveTable : MonoBehaviour,IUseFurniture
                 Debug.Log("У вас полные руки и прилавок полон");
             }
         }
+    }
+
+    private void CleanObjOnTable(GameObject ingredient)
+    {
+        Destroy(ingredient);
     }
 
     private bool CheckCookingProcess()

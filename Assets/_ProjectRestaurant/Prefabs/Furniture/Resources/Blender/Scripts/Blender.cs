@@ -171,12 +171,9 @@ namespace BlenderFurniture
             return false;
         }
         
-        private GameObject GiveObj(ref GameObject giveObj) 
+        private GameObject GiveObj(GameObject giveObj) 
         {
-            GameObject copy = Object.Instantiate(giveObj);
-            Object.Destroy(giveObj);
-            giveObj = null;
-            return copy;
+            return giveObj;
         }
     
         private bool AcceptObject(GameObject acceptObj)
@@ -189,19 +186,19 @@ namespace BlenderFurniture
             if (_ingredient1 == null)
             {
                 _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient2 == null)
             {
                 _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient3 == null)
             {
                 _ingredient3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 return true;
             }
             else
@@ -264,17 +261,26 @@ namespace BlenderFurniture
                         {
                             if (_ingredient2 == null)
                             {
-                                _heroik.TryPickUp(GiveObj(ref _ingredient1));
+                                if (_heroik.TryPickUp(GiveObj(_ingredient1)))
+                                {
+                                    CleanObjOnTable(_ingredient1);
+                                }
                             }
                             else
                             {
-                                _heroik.TryPickUp(GiveObj(ref _ingredient2));
+                                if (_heroik.TryPickUp(GiveObj(_ingredient2)))
+                                {
+                                    CleanObjOnTable(_ingredient2);
+                                }
                             }
                         }
                     }
                     else
                     {
-                        _heroik.TryPickUp(GiveObj(ref _result));
+                        if (_heroik.TryPickUp(GiveObj(_result)))
+                        {
+                            CleanObjOnTable(_result);
+                        }
                     }
                             
                 }
@@ -354,6 +360,11 @@ namespace BlenderFurniture
             yield return new WaitWhile(() => _blenderView.Timer.IsWork);
             CreateResult();
             TurnOff();
+        }
+        
+        private void CleanObjOnTable(GameObject ingredient)
+        {
+            Destroy(ingredient);
         }
         
     }

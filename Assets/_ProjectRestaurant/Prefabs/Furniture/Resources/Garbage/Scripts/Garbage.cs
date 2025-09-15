@@ -137,6 +137,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
             return false;
         }
         _obj = acceptObj;
+        //_heroik.CleanObjOnHands();
         return true;
     }
     

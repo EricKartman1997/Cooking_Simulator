@@ -164,12 +164,9 @@ namespace CuttingTableFurniture
             return false;
         }
         
-        private GameObject GiveObj(ref GameObject giveObj)
+        private GameObject GiveObj(GameObject giveObj)
         {
-            GameObject copy = Object.Instantiate(giveObj);
-            Object.Destroy(giveObj);
-            giveObj = null;
-            return copy;
+            return giveObj;
         }
         
         private bool AcceptObject(GameObject acceptObj)
@@ -183,14 +180,14 @@ namespace CuttingTableFurniture
             {
                 _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
                     _cuttingTablePoints.PositionIngredient1,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient2 == null)
             {
                  _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
                     _cuttingTablePoints.PositionIngredient2,true);
-                 Destroy(acceptObj);
+                 _heroik.CleanObjOnHands();
                  return true;
             }
             else
@@ -274,12 +271,18 @@ namespace CuttingTableFurniture
                         }
                         else //есть первый ингредиент // забираете первый ингредиент 
                         {
-                            _heroik.TryPickUp(GiveObj(ref _ingredient1));
+                            if (_heroik.TryPickUp(GiveObj(_ingredient1)))
+                            {
+                                CleanObjOnTable(_ingredient1);
+                            }
                         }
                     }
                     else //есть результат // забрать результат
                     {
-                        _heroik.TryPickUp(GiveObj(ref _result));
+                        if (_heroik.TryPickUp(GiveObj(_result)))
+                        {
+                            CleanObjOnTable(_result);
+                        }
                         Debug.Log("Вы забрали конечный продукт"); 
                     }
                 }
@@ -327,6 +330,11 @@ namespace CuttingTableFurniture
             yield return new WaitWhile(() => _cuttingTableView.Timer.IsWork);
             CreateResult();
             TurnOff();
+        }
+        
+        private void CleanObjOnTable(GameObject ingredient)
+        {
+            Destroy(ingredient);
         }
         
     }

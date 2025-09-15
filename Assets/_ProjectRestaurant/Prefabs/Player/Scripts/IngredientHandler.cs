@@ -50,15 +50,19 @@ public class IngredientHandler: IDisposable
             return false;
         }
         
+        if (_currentTakenObjects != null)
+        {
+            Debug.LogWarning("Руки заняты");
+            return false;
+        }
+        
         if (objTable == null)
         {
             Debug.LogWarning("Принимаемый объект пуст");
             return false;
         }
         
-        _currentTakenObjects = objTable;
-        CreateObj();
-        Object.Destroy(objTable);
+        CreateObj(objTable);
         return true;
     }
     
@@ -77,27 +81,12 @@ public class IngredientHandler: IDisposable
         }
         
         _isBusyHands = false;
-        GameObject copy = Object.Instantiate(_currentTakenObjects);
-        Object.Destroy(_currentTakenObjects);
-        _currentTakenObjects = null;
-        return copy;
+        //GameObject copy = Object.Instantiate(_currentTakenObjects);
+        //Object.Destroy(_currentTakenObjects);
+        //_currentTakenObjects = null;
+        //return copy;
+        return _currentTakenObjects;
     }
-    
-    // // проверка на отдачу объекта из рук по списку объектов
-    // public bool CanGiveIngredient(List<GameObject> unusableObjects) 
-    // {
-    //     List<string> unusableObjectsNames = new List<string>();
-    //     foreach (var food in unusableObjects)
-    //     {
-    //         unusableObjectsNames.Add(food.name); // Используем имя объекта
-    //     }
-    //     if (unusableObjectsNames.Contains(_currentTakenObjects.name))
-    //     {
-    //         Debug.Log("Сработал false");
-    //         return false;
-    //     }
-    //     return true;
-    // }
     
     public bool CanGiveIngredient(List<Product> products)
     {
@@ -123,41 +112,14 @@ public class IngredientHandler: IDisposable
         return matchCount == 1;
     }
     
-    // // проверка на отдачу объекта из рук по компонентам
-    // public bool CanGiveIngredient(List<Type> unusableObjects) 
-    // {
-    //     // Получаем все компоненты на объекте
-    //     Component[] components = _currentTakenObjects.GetComponents<Component>();
-    //     byte count = 0;
-    //
-    //     // Проверяем каждый компонент
-    //     foreach (Component component in components)
-    //     {
-    //         // Если тип компонента содержится в списке _unusableObjects
-    //         if (unusableObjects.Contains(component.GetType()))
-    //         {
-    //             count++;
-    //             if (count == unusableObjects.Count)
-    //             {
-    //                 //Debug.Log("На объекте найдены все компоненты");
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //
-    //     // разрешенных компонентов не найдено
-    //     Debug.Log("Продукт нельзя передать.");
-    //     return false;
-    // }
-
-    public void CreateObj()
+    public void CleanObjOnHands()
     {
-        if (_currentTakenObjects == null)
-            return;
-        
-        _currentTakenObjects = _gameManager.ProductsFactory.GetProduct(_currentTakenObjects, _ingredientPosition, _ingredientParent, true);
+        Object.Destroy(_currentTakenObjects);
+    }
+    
+    private void CreateObj(GameObject obj)
+    {
+        _currentTakenObjects = _gameManager.ProductsFactory.GetProduct(obj, _ingredientPosition, _ingredientParent, true);
         _isBusyHands = true;
     }
-
-
 }  

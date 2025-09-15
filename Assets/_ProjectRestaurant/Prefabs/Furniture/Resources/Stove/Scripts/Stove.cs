@@ -142,12 +142,9 @@ public class Stove : MonoBehaviour, IUseFurniture
         return false;
     }
 
-    private GameObject GiveObj(ref GameObject giveObj)
+    private GameObject GiveObj(GameObject giveObj)
     {
-        GameObject copy = Object.Instantiate(giveObj);
-        Object.Destroy(giveObj);
-        giveObj = null;
-        return copy;
+        return giveObj;
     }
 
     private bool AcceptObject(GameObject acceptObj)
@@ -158,7 +155,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             return false;
         }
         _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
-        Destroy(acceptObj);
+        _heroik.CleanObjOnHands();
         _componentForStove = _ingredient.GetComponent<IForStove>();
         return true;
     }
@@ -215,7 +212,10 @@ public class Stove : MonoBehaviour, IUseFurniture
             if (_ingredient != null)
             {
                 CreateResult();
-                _heroik.TryPickUp(GiveObj(ref _result));
+                if (_heroik.TryPickUp(GiveObj(_result)))
+                {
+                    CleanObjOnTable(_result);
+                }
             }
             else
             {
@@ -250,6 +250,11 @@ public class Stove : MonoBehaviour, IUseFurniture
         }
 
         return true;
+    }
+    
+    private void CleanObjOnTable(GameObject ingredient)
+    {
+        Destroy(ingredient);
     }
     
 }

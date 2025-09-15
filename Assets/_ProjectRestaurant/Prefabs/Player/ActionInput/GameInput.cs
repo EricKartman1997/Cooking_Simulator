@@ -21,7 +21,6 @@ public class GameInput : MonoBehaviour
     {
         _interactableAction.performed += OnPressE;
         _menuAction.performed += OnPressEcs;
-        
     }
     
     private void OnDisable()

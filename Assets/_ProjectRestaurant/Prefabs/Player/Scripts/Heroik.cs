@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 public class Heroik : MonoBehaviour
@@ -42,14 +41,15 @@ public class Heroik : MonoBehaviour
     {
         _gameManager = StaticManagerWithoutZenject.GameManager;
         _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,this);
-        _ingredientHandler.CreateObj();
+        //_ingredientHandler.CreateObj(currentTakenObjects);
     }
     
-    public void TryPickUp(GameObject ingredient) // взять объект в руки
+    public bool TryPickUp(GameObject ingredient) // взять объект в руки
     {
-        _ingredientHandler.TryPickUp(ingredient); 
+        return _ingredientHandler.TryPickUp(ingredient); 
     }
     
+    // не забыть уничтожить объект из рук
     public GameObject TryGiveIngredient(List<Product> forbiddenIngredients) // отдать объект из рук
     {
         if (_ingredientHandler.CanGiveIngredient(forbiddenIngredients))
@@ -60,19 +60,13 @@ public class Heroik : MonoBehaviour
         return null;
     }
     
-    // public bool CanGiveIngredient(List<GameObject> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
-    // {
-    //     return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
-    // }
-    
     public bool CanGiveIngredient(List<Product> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
     {
         return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
     }
-    
-    // public bool CanGiveIngredient(List<Type> forbiddenComponents) // проверка на отдачу объекта из рук по компонентам
-    // {
-    //     return _ingredientHandler.CanGiveIngredient(forbiddenComponents);
-    // }
-    
+
+    public void CleanObjOnHands()
+    {
+        _ingredientHandler.CleanObjOnHands();
+    }
 }

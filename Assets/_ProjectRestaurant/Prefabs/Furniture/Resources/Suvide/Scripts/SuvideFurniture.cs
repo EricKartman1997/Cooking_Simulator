@@ -182,12 +182,9 @@ namespace SuvideFurniture
             return false;
         }
         
-        private GameObject GiveObj(ref GameObject giveObj)
+        private GameObject GiveObj(GameObject giveObj)
         {
-            GameObject copy = Object.Instantiate(giveObj);
-            Object.Destroy(giveObj);
-            giveObj = null;
-            return copy;
+            return giveObj;
         }
     
         private bool AcceptObject(GameObject acceptObj,string TOKEN)
@@ -200,7 +197,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH1)
             {
                 _dish1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 _cookingdish1 = true;
                 return true;
             }
@@ -208,7 +205,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH2)
             {
                 _dish2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 _cookingdish2 = true;
                 return true;
             }
@@ -216,7 +213,7 @@ namespace SuvideFurniture
             if (TOKEN == DISH3)
             {
                 _dish3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
-                Destroy(acceptObj);
+                _heroik.CleanObjOnHands();
                 _cookingdish3 = true;
                 return true;
             }
@@ -329,21 +326,30 @@ namespace SuvideFurniture
             {
                 if (_dish1 != null && _cookingdish1 == false)
                 {
-                    _heroik.TryPickUp(GiveObj(ref _dish1));
+                    if (_heroik.TryPickUp(GiveObj(_dish1)))
+                    {
+                        CleanObjOnTable(_dish1);
+                    }
                     ChangeView();
                     return;
                 }
                 
                 if (_dish2 != null && _cookingdish2 == false)
                 {
-                    _heroik.TryPickUp(GiveObj(ref _dish2));
+                    if (_heroik.TryPickUp(GiveObj(_dish2)))
+                    {
+                        CleanObjOnTable(_dish2);
+                    }
                     ChangeView();
                     return;
                 }
                 
                 if (_dish3 != null && _cookingdish3 == false)
                 {
-                    _heroik.TryPickUp(GiveObj(ref _dish3));
+                    if (_heroik.TryPickUp(GiveObj(_dish3)))
+                    {
+                        CleanObjOnTable(_dish3);
+                    }
                     ChangeView();
                     return;
                 }
@@ -472,6 +478,11 @@ namespace SuvideFurniture
                 return false;
             }
             return true;
+        }
+        
+        private void CleanObjOnTable(GameObject ingredient)
+        {
+            Destroy(ingredient);
         }
     }
 

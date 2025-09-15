@@ -151,7 +151,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             return false;
         }
         _currentDish = _gameManager.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
-        Destroy(acceptObj);
+        _heroik.CleanObjOnHands();
         return true;
     }
 

@@ -138,12 +138,9 @@ namespace OvenFurniture
         // {
         //     EventBus.PressE -= CookingProcess;
         // }
-        private GameObject GiveObj(ref GameObject giveObj)
+        private GameObject GiveObj(GameObject giveObj)
         {
-            GameObject copy = Object.Instantiate(giveObj);
-            Object.Destroy(giveObj);
-            giveObj = null;
-            return copy;
+            return giveObj;
         }
     
         private bool AcceptObject(GameObject acceptObj)
@@ -154,7 +151,7 @@ namespace OvenFurniture
                 return false;
             }
             _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
-            Destroy(acceptObj);
+            _heroik.CleanObjOnHands();
             return true;
         }
         
@@ -220,7 +217,10 @@ namespace OvenFurniture
                 {
                     if (_result != null)
                     {
-                        _heroik.TryPickUp(GiveObj(ref _result));
+                        if (_heroik.TryPickUp(GiveObj(_result)))
+                        {
+                            CleanObjOnTable(_result);
+                        }
                     }
                     else
                     {
@@ -294,7 +294,6 @@ namespace OvenFurniture
         {
             List<Product> listProducts = new List<Product>() {_ingredient.GetComponent<Product>()};
             Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
-            //_productsContainer.RecipesForOven.TryGetValue(obj.name, out Product bakedObj);
             if (readyObj != null)
             {
                 _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
@@ -303,6 +302,11 @@ namespace OvenFurniture
             {
                 Debug.LogError("Ошибка в CreateResult, такого ключа нет");
             }
+        }
+        
+        private void CleanObjOnTable(GameObject ingredient)
+        {
+            Destroy(ingredient);
         }
         
     }
