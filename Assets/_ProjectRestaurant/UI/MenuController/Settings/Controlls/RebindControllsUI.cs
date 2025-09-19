@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class RebindControllsUI : MonoBehaviour
+public class RebindControllsUI : MonoBehaviour, IResetToDefault
 {
         /// <summary>
         /// Ссылка на действие, которое нужно переназначить.
@@ -302,7 +302,8 @@ public class RebindControllsUI : MonoBehaviour
                 var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
                     ? $"{partName}Waiting for {m_RebindOperation.expectedControlType} input..."
                     : $"{partName}Waiting for input...";
-                m_RebindText.text = text;
+                //m_RebindText.text = text;
+                m_RebindText.text = "Waiting Action...";
             }
 
             // If we have no rebind overlay and no callback but we have a binding text label,
@@ -441,3 +442,10 @@ public class RebindControllsUI : MonoBehaviour
         {
         }
 }
+
+public interface IResetToDefault
+{
+    void ResetToDefault();
+}
+
+
