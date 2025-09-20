@@ -5,6 +5,7 @@ public class SettingsViewController : MonoBehaviour
 {
     private const string OPEN = "Open";
     private const string CLOSE = "Close";
+    
 
     [SerializeField] private ButtonManager buttonBack;
     [SerializeField] private Animator animator;

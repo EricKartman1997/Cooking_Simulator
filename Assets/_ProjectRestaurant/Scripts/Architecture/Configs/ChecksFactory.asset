@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa231eefd2e4f29abd6f13b06a4234e, type: 3}
+  m_Name: ChecksFactory
+  m_EditorClassIdentifier: 
+  bakedFish:
+    prefab: {fileID: -8401688511195679001, guid: 319d71df03dd72541843365389c94ef9, type: 3}
+    startTime: 18
+    score: 50
+    dish: {fileID: 2221238024408986804, guid: 71d37b6d97508354fa22d22805011333, type: 3}
+  bakedMeat:
+    prefab: {fileID: 2501686747530109704, guid: f36b83dde4f812746aac2c32ed140523, type: 3}
+    startTime: 18
+    score: 50
+    dish: {fileID: 6311627311868675925, guid: e591b8d3aab86214d8ab52f1f8a9fb97, type: 3}
+  bakedSalad:
+    prefab: {fileID: 6489855143590558603, guid: d474ddf75632f2441b5fd3a9e1c24582, type: 3}
+    startTime: 33
+    score: 100
+    dish: {fileID: 1999129322956263942, guid: 8315757e274f3504faaa5d37c8946f72, type: 3}
+  fruitSalad:
+    prefab: {fileID: 6724517729856386380, guid: fce775e3556665e49a712581495acf52, type: 3}
+    startTime: 28
+    score: 70
+    dish: {fileID: 3517954237658636344, guid: e3c2c6def1435694587a0f91e77022c6, type: 3}
+  cutletMedium:
+    prefab: {fileID: 5834590931329251055, guid: 74991441a79007245aec7be1a5297c8a, type: 3}
+    startTime: 20
+    score: 65
+    dish: {fileID: 763755698100520813, guid: 970ee5f070515f9428983ad5beb4bcbb, type: 3}
+  wildBerryCocktail:
+    prefab: {fileID: 1201267409140397390, guid: 96d84fe7c693d2f4398d46bb67892ca3, type: 3}
+    startTime: 28
+    score: 80
+    dish: {fileID: 57934241340229875, guid: 62009e040668ef540bf39d8f00f36a36, type: 3}
+  freshnessCocktail:
+    prefab: {fileID: 8911350262660152688, guid: eb0bebf8e39c67b4faaae72b42b2e046, type: 3}
+    startTime: 28
+    score: 80
+    dish: {fileID: 1026970929638269036, guid: cadf51cf3e76f9d4eb71f4f9a26b14ea, type: 3}
