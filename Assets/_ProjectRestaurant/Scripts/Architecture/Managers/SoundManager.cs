@@ -1,37 +1,99 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using UnityEngine.Audio;
 
-public class SoundManager: IDisposable
+public class SoundManager: MonoBehaviour
 {
-    public AudioClip ClickButtonSound;
-    public AudioClip SelectButtonSound;
-    public AudioClip SwipePanelSound;
-    public AudioClip BackgroundSound;
+    public static SoundManager Instance { get; private set; }
+    
+    private const string MASTER_VOLUME_KEY = "MasterVolume";
+    private const string MUSIC_VOLUME_KEY = "MusicVolume";
+    private const string SFX_VOLUME_KEY = "SFXVolume";
+    
+    private const float DEFAULT_VOLUME = 80f;
+    
+    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private LoadReleaseMusic loadReleaseAssetMusic;
 
-    public SoundManager()
+    public IReadOnlyDictionary<AudioName, AudioClip> AudioDic => loadReleaseAssetMusic.AudioDic;
+    
+    // временно до DI Container
+    private void Awake()
     {
-        InitMenuAudio();
+        // Реализация singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        // Загружаем сохраненные настройки громкости
+        LoadVolumeSettings();
     }
     
-    public void Dispose()
+    private float VolumeToDecibelLogarithmic(float volume)
     {
-        ReleaseMenuAudio();
-    }
-
-    private void InitMenuAudio()
-    {
-        ClickButtonSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav").Result;
-        SelectButtonSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav").Result ;
-        SwipePanelSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3").Result;
-        BackgroundSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3").Result ;
+        volume = Mathf.Clamp(volume, 1f, 100f);
+        
+        if (volume <= 1f) return -80f;
+        
+        // Преобразуем в 0-1 диапазон
+        float normalized = (volume - 1f) / 99f;
+        // Логарифмическое масштабирование
+        float logarithmic = Mathf.Log10(normalized * 9f + 1f);
+        
+        return logarithmic * 20f - 20f; // -20dB до 0dB
     }
     
-    private void ReleaseMenuAudio()
+    // Установка общей громкости
+    public void SetMasterVolume(float volume)
     {
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3");
+        // Сохраняем значение
+        PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, volume);
+        // Применяем к микшеру
+        audioMixer.SetFloat("Master", VolumeToDecibelLogarithmic(volume));
+    }
+    
+    // Установка громкости музыки
+    public void SetMusicVolume(float volume)
+    {
+        PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, volume);
+        audioMixer.SetFloat("Music", VolumeToDecibelLogarithmic(volume));
+    }
+    
+    // Установка громкости эффектов
+    public void SetSFXVolume(float volume)
+    {
+        PlayerPrefs.SetFloat(SFX_VOLUME_KEY, volume);
+        audioMixer.SetFloat("SFX", VolumeToDecibelLogarithmic(volume));
+    }
+    
+    // Загрузка сохраненных настроек
+    private void LoadVolumeSettings()
+    {
+        SetMasterVolume(PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME));
+        SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME));
+        SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME));
+    }
+    
+    // Получение текущих значений громкости
+    public float GetMasterVolume()
+    {
+        return PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME);
+    }
+    
+    public float GetMusicVolume()
+    {
+        return PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME);
+    }
+    
+    public float GetSFXVolume()
+    {
+        return PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME);
     }
 }

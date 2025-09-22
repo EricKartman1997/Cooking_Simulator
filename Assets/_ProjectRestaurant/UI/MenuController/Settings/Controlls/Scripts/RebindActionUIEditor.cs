@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEditor;
 
-////TODO: support multi-object editing
+
 
 namespace UnityEngine.InputSystem.Samples.RebindUI
 {
