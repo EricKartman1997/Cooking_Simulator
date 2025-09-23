@@ -1,11 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class SoundManager: MonoBehaviour
+public class SoundManager: IDisposable
 {
-    public static SoundManager Instance { get; private set; }
-    
     private const string MASTER_VOLUME_KEY = "MasterVolume";
     private const string MUSIC_VOLUME_KEY = "MusicVolume";
     private const string SFX_VOLUME_KEY = "SFXVolume";
@@ -14,26 +13,20 @@ public class SoundManager: MonoBehaviour
     
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private LoadReleaseMusic loadReleaseAssetMusic;
-
+    
     public IReadOnlyDictionary<AudioName, AudioClip> AudioDic => loadReleaseAssetMusic.AudioDic;
     
-    // временно до DI Container
-    private void Awake()
+    public SoundManager(AudioMixer audioMixer, LoadReleaseMusic loadReleaseAssetMusic)
     {
-        // Реализация singleton
-        if (Instance == null)
-        {
-            Instance = this;
-            //DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        this.audioMixer = audioMixer;
+        this.loadReleaseAssetMusic = loadReleaseAssetMusic;
         
-        // Загружаем сохраненные настройки громкости
         LoadVolumeSettings();
+    }
+
+    public void Dispose()
+    {
+        
     }
     
     private float VolumeToDecibelLogarithmic(float volume)
@@ -96,4 +89,5 @@ public class SoundManager: MonoBehaviour
     {
         return PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME);
     }
+    
 }

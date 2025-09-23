@@ -1,49 +1,68 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Zenject;
 
-public class LoadReleaseMusic : MonoBehaviour
+public class LoadReleaseMusic : IInitializable, IDisposable
 {
-    private Dictionary<AudioName, AudioClip> _audioDic = new Dictionary<AudioName, AudioClip>();
+    private Dictionary<AudioName, AudioClip> _audioDic;
+    private List<AudioClip> _loadedClips;
     
-    public IReadOnlyDictionary<AudioName, AudioClip> AudioDic
+    public IReadOnlyDictionary<AudioName, AudioClip> AudioDic => _audioDic;
+
+    public LoadReleaseMusic()
     {
-        get
+        _audioDic = new Dictionary<AudioName, AudioClip>();
+        _loadedClips = new List<AudioClip>();
+    }
+    
+    public async void Initialize()
+    {
+        await InitMenuAudioAsync();
+    }
+    
+    public void Dispose()
+    {
+        ReleaseMenuAudio();
+    }
+
+    private async Task InitMenuAudioAsync()
+    {
+        // Асинхронная загрузка всех ассетов параллельно
+        var loadTasks = new List<Task<AudioClip>>
         {
-            IReadOnlyDictionary<AudioName, AudioClip> readOnlyDict = _audioDic;
-            return readOnlyDict;
-        }
-    }
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav"),
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav"),
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3"),
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3")
+        };
 
-    private void Awake()
-    {
-        InitMenuAudio();
-    }
-
-    private void InitMenuAudio()
-    {
-        var clickButtonSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav").Result;
-        var selectButtonSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav").Result ;
-        var swipePanelSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3").Result;
-        var backgroundSound = Addressables.LoadAssetAsync<AudioClip>("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3").Result ;
+        var results = await Task.WhenAll(loadTasks);
         
-        _audioDic.Add(AudioName.ClickButton,clickButtonSound);
-        _audioDic.Add(AudioName.HoverButton,selectButtonSound);
-        _audioDic.Add(AudioName.SwipePanel,swipePanelSound);
-        _audioDic.Add(AudioName.Background,backgroundSound);
+        _audioDic.Add(AudioName.ClickButton, results[0]);
+        _audioDic.Add(AudioName.HoverButton, results[1]);
+        _audioDic.Add(AudioName.SwipePanel, results[2]);
+        _audioDic.Add(AudioName.Background, results[3]);
+    }
+
+    private async Task<AudioClip> LoadAudioClipAsync(string address)
+    {
+        var operation = Addressables.LoadAssetAsync<AudioClip>(address);
+        var audioClip = await operation.Task;
+        _loadedClips.Add(audioClip);
+        return audioClip;
     }
     
     private void ReleaseMenuAudio()
     {
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3");
-        Addressables.Release("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3");
-        
-        _audioDic.Remove(AudioName.ClickButton);
-        _audioDic.Remove(AudioName.HoverButton);
-        _audioDic.Remove(AudioName.SwipePanel);
-        _audioDic.Remove(AudioName.Background);
+        foreach (var audioClip in _loadedClips)
+        {
+            Addressables.Release(audioClip);
+        }
+        _loadedClips.Clear();
+        _audioDic.Clear();
     }
 }
 
