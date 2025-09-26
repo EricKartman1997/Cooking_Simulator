@@ -11,8 +11,8 @@ public class SoundManager: IDisposable
     
     private const float DEFAULT_VOLUME = 80f;
     
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private LoadReleaseMusic loadReleaseAssetMusic;
+    private AudioMixer audioMixer;
+    private LoadReleaseMusic loadReleaseAssetMusic;
     
     public IReadOnlyDictionary<AudioName, AudioClip> AudioDic => loadReleaseAssetMusic.AudioDic;
     

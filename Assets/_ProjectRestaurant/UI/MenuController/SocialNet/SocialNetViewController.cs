@@ -61,7 +61,6 @@ public class SocialNetViewController : MonoBehaviour
         string subject = "Feedback about Your Game";
         
         Application.OpenURL($"mailto:{EMAILADDRESS}?subject={Uri.EscapeDataString(subject)}");
-        //Application.OpenURL(EMAILADDRESS);
     }
     
     private void FollowGitHub()

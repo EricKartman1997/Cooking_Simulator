@@ -13,7 +13,6 @@ public class MenuViewController : MonoBehaviour
 
     [SerializeField] private SettingsViewController settingsViewController;
     [SerializeField] private SocialNetViewController socialNetViewController;
-    //[SerializeField] private WindowManager settingsWindowManager;
 
     private void OnEnable()
     {
