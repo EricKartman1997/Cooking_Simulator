@@ -9,7 +9,7 @@ public class GlobalInstaller : MonoInstaller
     {
         Container.Bind<AudioMixer>().FromInstance(mainAudioMixer).AsSingle();
         
-        Container.BindInterfacesAndSelfTo<LoadReleaseMusic>().AsSingle();
+        Container.BindInterfacesAndSelfTo<LoadReleaseGlobalScene>().AsSingle();
         Container.BindInterfacesAndSelfTo<SoundManager>().AsSingle();
     }
 }

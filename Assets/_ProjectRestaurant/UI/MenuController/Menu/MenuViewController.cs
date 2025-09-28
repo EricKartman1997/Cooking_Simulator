@@ -9,42 +9,36 @@ public class MenuViewController : MonoBehaviour
     [SerializeField] private ButtonManager buttonSettings;
     [SerializeField] private ButtonManager buttonSocialNetworks;
     
-    [SerializeField] private ModalWindowManager warringWindow;
-
-    [SerializeField] private SettingsViewController settingsViewController;
-    [SerializeField] private SocialNetViewController socialNetViewController;
-
+    [SerializeField] private ModalWindowManager _warringWindow;
+    [SerializeField] private SettingsViewController _settingsViewController;
+    [SerializeField] private SocialNetViewController _socialNetViewController;
+    
     private void OnEnable()
     {
-        buttonSettings.onClick.AddListener(socialNetViewController.Close);
-        buttonSettings.onClick.AddListener(settingsViewController.OpenPanel);
+        buttonSettings.onClick.AddListener(_socialNetViewController.Close);
+        buttonSettings.onClick.AddListener(_settingsViewController.OpenPanel);
         
-        buttonSocialNetworks.onClick.AddListener(socialNetViewController.Close);
-        buttonSocialNetworks.onClick.AddListener(socialNetViewController.Open);
+        buttonSocialNetworks.onClick.AddListener(_socialNetViewController.Close);
+        buttonSocialNetworks.onClick.AddListener(_socialNetViewController.Open);
         
         buttonStart.onClick.AddListener(ShowOnClick);
     }
 
     private void OnDisable()
     {
-        buttonSettings.onClick.RemoveListener(settingsViewController.OpenPanel);
-        buttonSettings.onClick.AddListener(socialNetViewController.Close);
+        buttonSettings.onClick.RemoveListener(_settingsViewController.OpenPanel);
+        buttonSettings.onClick.AddListener(_socialNetViewController.Close);
         
-        buttonSocialNetworks.onClick.RemoveListener(socialNetViewController.Open);
-        buttonSocialNetworks.onClick.RemoveListener(socialNetViewController.Close);
+        buttonSocialNetworks.onClick.RemoveListener(_socialNetViewController.Open);
+        buttonSocialNetworks.onClick.RemoveListener(_socialNetViewController.Close);
         
         buttonStart.onClick.RemoveListener(ShowOnClick);
-    }
-
-    private void Awake()
-    {
-        
     }
     
     private void ShowOnClick()
     {
-        Debug.Log("onClick");
-        warringWindow.Open();
+        //Debug.Log("onClick");
+        _warringWindow.Open();
     }
     
 }

@@ -8,19 +8,21 @@ public class AudioViewController : MonoBehaviour
     [SerializeField] private SliderManager musicSlider;
     [SerializeField] private SliderManager sfxSlider;
 
-    private SoundManager _soundManager;
+    private SoundsServiceMainMenu _soundService;
+
+    private SoundManager SoundManager => _soundService.SoundManager;
 
     [Inject]
-    private void ConstructZenject(SoundManager soundManager)
+    private void ConstructZenject(SoundsServiceMainMenu soundService)
     {
-        _soundManager = soundManager;
+        _soundService = soundService;
     }
     private void Start()
     {
         // Загружаем текущие значения
-        masterSlider.mainSlider.value = _soundManager.GetMasterVolume();
-        musicSlider.mainSlider.value = _soundManager.GetMusicVolume();
-        sfxSlider.mainSlider.value = _soundManager.GetSFXVolume();
+        masterSlider.mainSlider.value = SoundManager.GetMasterVolume();
+        musicSlider.mainSlider.value = SoundManager.GetMusicVolume();
+        sfxSlider.mainSlider.value = SoundManager.GetSFXVolume();
         
         // Добавляем обработчики изменений
         masterSlider.mainSlider.onValueChanged.AddListener(SetMasterVolume);
@@ -30,18 +32,20 @@ public class AudioViewController : MonoBehaviour
     
     private void SetMasterVolume(float volume)
     {
-        _soundManager.SetMasterVolume(volume);
+        SoundManager.SetMasterVolume(volume);
+        //Debug.Log("Движение Master");
     }
     
     private void SetMusicVolume(float volume)
     {
-        _soundManager.SetMusicVolume(volume);
-        //Debug.Log("Изменилось");
+        SoundManager.SetMusicVolume(volume);
+        //Debug.Log("Движение Music");
     }
     
     private void SetSFXVolume(float volume)
     {
-        _soundManager.SetSFXVolume(volume);
+        SoundManager.SetSFXVolume(volume);
+        //Debug.Log("Движение SFX");
     }
 
 

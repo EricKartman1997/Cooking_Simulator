@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using Zenject;
 
-public class SoundManager: IDisposable
+public class SoundManager: IDisposable, IInitializable
 {
     private const string MASTER_VOLUME_KEY = "MasterVolume";
     private const string MUSIC_VOLUME_KEY = "MusicVolume";
@@ -11,16 +11,15 @@ public class SoundManager: IDisposable
     
     private const float DEFAULT_VOLUME = 80f;
     
-    private AudioMixer audioMixer;
-    private LoadReleaseMusic loadReleaseAssetMusic;
-    
-    public IReadOnlyDictionary<AudioName, AudioClip> AudioDic => loadReleaseAssetMusic.AudioDic;
-    
-    public SoundManager(AudioMixer audioMixer, LoadReleaseMusic loadReleaseAssetMusic)
+    private AudioMixer _audioMixer;
+
+    public SoundManager(AudioMixer audioMixer)
     {
-        this.audioMixer = audioMixer;
-        this.loadReleaseAssetMusic = loadReleaseAssetMusic;
-        
+        _audioMixer = audioMixer;
+    }
+    
+    public void Initialize()
+    {
         LoadVolumeSettings();
     }
 
@@ -49,21 +48,21 @@ public class SoundManager: IDisposable
         // Сохраняем значение
         PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, volume);
         // Применяем к микшеру
-        audioMixer.SetFloat("Master", VolumeToDecibelLogarithmic(volume));
+        _audioMixer.SetFloat("Master", VolumeToDecibelLogarithmic(volume));
     }
     
     // Установка громкости музыки
     public void SetMusicVolume(float volume)
     {
         PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, volume);
-        audioMixer.SetFloat("Music", VolumeToDecibelLogarithmic(volume));
+        _audioMixer.SetFloat("Music", VolumeToDecibelLogarithmic(volume));
     }
     
     // Установка громкости эффектов
     public void SetSFXVolume(float volume)
     {
         PlayerPrefs.SetFloat(SFX_VOLUME_KEY, volume);
-        audioMixer.SetFloat("SFX", VolumeToDecibelLogarithmic(volume));
+        _audioMixer.SetFloat("SFX", VolumeToDecibelLogarithmic(volume));
     }
     
     // Загрузка сохраненных настроек
@@ -72,6 +71,9 @@ public class SoundManager: IDisposable
         SetMasterVolume(PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME));
         SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME));
         SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME));
+        //Debug.Log("Общая = " + PlayerPrefs.GetFloat(MASTER_VOLUME_KEY));
+        //Debug.Log("Музыка = " + PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY));
+        //Debug.Log("SFX = " + PlayerPrefs.GetFloat(SFX_VOLUME_KEY));
     }
     
     // Получение текущих значений громкости
@@ -89,5 +91,6 @@ public class SoundManager: IDisposable
     {
         return PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME);
     }
-    
+
+
 }
