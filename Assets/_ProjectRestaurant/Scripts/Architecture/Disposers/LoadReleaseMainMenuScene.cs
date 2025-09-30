@@ -71,7 +71,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable
     {
         var loadTasks = new List<Task<GameObject>>
         {
-            LoadPrefabAsync("Assets/_ProjectRestaurant/UI/_Prefabs/MainMenuPrefab/UIPanel.prefab")
+            LoadPrefabAsync("UIPanel")
         };
 
         var results = await Task.WhenAll(loadTasks);

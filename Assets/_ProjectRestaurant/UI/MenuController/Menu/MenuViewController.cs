@@ -22,6 +22,9 @@ public class MenuViewController : MonoBehaviour
         buttonSocialNetworks.onClick.AddListener(_socialNetViewController.Open);
         
         buttonStart.onClick.AddListener(ShowOnClick);
+        //buttonStart.clickSound;
+        //buttonStart.hoverSound;
+        //buttonStart.soundSource;
     }
 
     private void OnDisable()

@@ -24,9 +24,9 @@ public class ViewControlls : MonoBehaviour
     {
         foreach (var button in defaulControllsList)
         {
-            if (button.GetComponent<IResetToDefault>() != null)
+            if (button.GetComponent<RebindControllsUI.IResetToDefault>() != null)
             {
-                _resetedDefaultAction += button.GetComponent<IResetToDefault>().ResetToDefault;
+                _resetedDefaultAction += button.GetComponent<RebindControllsUI.IResetToDefault>().ResetToDefault;
             }
             
         }
