@@ -15,7 +15,7 @@ public class LoadReleaseGlobalScene : IDisposable
         _globalPrefDic = new Dictionary<GlobalPref, GameObject>();
         _loadedPrefabs = new List<GameObject>();
         InitGlobal();
-        Debug.Log("вошел в конструктор LoadReleaseGlobalScene");
+        //Debug.Log("вошел в конструктор LoadReleaseGlobalScene");
     }
 
     public void Dispose()
@@ -43,7 +43,7 @@ public class LoadReleaseGlobalScene : IDisposable
         {
             _globalPrefDic.Add(GlobalPref.LoadingPanel, loadingPanelPrefab);
             _loadedPrefabs.Add(loadingPanelPrefab);
-            Debug.Log("Создал панель");
+            //Debug.Log("Создал панель");
         }
         else
         {

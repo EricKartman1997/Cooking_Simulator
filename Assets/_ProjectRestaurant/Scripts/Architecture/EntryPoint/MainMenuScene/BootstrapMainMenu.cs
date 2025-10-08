@@ -17,9 +17,8 @@ public class BootstrapMainMenu : MonoBehaviour
     {
         _loadReleaseMainMenuScene = loadReleaseMainMenuScene;
         _factoryUIMainMenuScene = factoryUIMainMenuScene;
-        Debug.Log("Вошел в конструктор MainMenu");
     }
-    
+
     private async void Start()
     {
         ShowLoadingPanel();
@@ -34,7 +33,7 @@ public class BootstrapMainMenu : MonoBehaviour
     private void ShowLoadingPanel()
     {
         _loadingPanel = Instantiate(_loadReleaseMainMenuScene.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
-        Debug.Log(" панель Загрузки");
+        //Debug.Log(" панель Загрузки");
     }
     
     private async Task WaitForResourcesLoaded()
@@ -62,7 +61,7 @@ public class BootstrapMainMenu : MonoBehaviour
     private void HideLoadingPanel()
     {
         Destroy(_loadingPanel);
-        Debug.Log(" панель Загрузки удалена");
+        //Debug.Log(" панель Загрузки удалена");
     }
     
 }

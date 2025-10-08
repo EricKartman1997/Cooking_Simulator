@@ -29,7 +29,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable
         _prefDic = new Dictionary<PrefUINameMainMenu, GameObject>();
         _loadedClips = new List<AudioClip>();
         _loadedPrefabs = new List<GameObject>();
-        Debug.Log("Enter LoadReleaseMainMenuScene");
+        //Debug.Log("Enter LoadReleaseMainMenuScene");
     }
     
     public async void Initialize()
@@ -39,7 +39,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable
             InitMenuPrefabsAsync()
         );
         _isLoaded = true;
-        Debug.Log("Initialize LoadReleaseMainMenuScene");
+        //Debug.Log("Initialize LoadReleaseMainMenuScene");
     }
     
     public void Dispose()
