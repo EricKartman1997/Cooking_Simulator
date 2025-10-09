@@ -14795,6 +14795,8 @@ MonoBehaviour:
   toggle: {fileID: 5265409814645137674}
   dropdown: {fileID: 4552367766186506727}
   horizontalSelector: {fileID: 1792988477648571548}
+  nextButton: {fileID: 8005920861312107200}
+  backButton: {fileID: 2174166688424586534}
 --- !u!1 &3061546330435476352
 GameObject:
   m_ObjectHideFlags: 0
@@ -15031,7 +15033,7 @@ MonoBehaviour:
   normalImage: {fileID: 3896631400397151473}
   highlightImage: {fileID: 1778279238766638919}
   disabledImage: {fileID: 0}
-  soundSource: {fileID: 0}
+  soundSource: {fileID: 3488314619408490725}
   rippleParent: {fileID: 0}
   isInteractable: 1
   enableIcon: 1
@@ -15039,7 +15041,7 @@ MonoBehaviour:
   useCustomContent: 0
   useCustomTextSize: 0
   checkForDoubleClick: 1
-  enableButtonSounds: 0
+  enableButtonSounds: 1
   useHoverSound: 1
   useClickSound: 1
   hoverSound: {fileID: 0}
@@ -17011,7 +17013,7 @@ MonoBehaviour:
   renderOnTop: 1
   centered: 1
   isPreset: 1
-  latestTabIndex: 0
+  latestTabIndex: 2
 --- !u!114 &6341831837125613787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34961,7 +34963,7 @@ MonoBehaviour:
   normalImage: {fileID: 4578692286312141983}
   highlightImage: {fileID: 2390214752850781418}
   disabledImage: {fileID: 0}
-  soundSource: {fileID: 0}
+  soundSource: {fileID: 3488314619408490725}
   rippleParent: {fileID: 0}
   isInteractable: 1
   enableIcon: 1
@@ -34969,7 +34971,7 @@ MonoBehaviour:
   useCustomContent: 0
   useCustomTextSize: 0
   checkForDoubleClick: 1
-  enableButtonSounds: 0
+  enableButtonSounds: 1
   useHoverSound: 1
   useClickSound: 1
   hoverSound: {fileID: 0}
@@ -41230,7 +41232,7 @@ MonoBehaviour:
   itemObject: {fileID: 1168081051609938, guid: a10f1ce858922584bbbcc45f2e1d1ab1, type: 3}
   scrollbar: {fileID: 8079582980697623905}
   itemList: {fileID: 0}
-  soundSource: {fileID: 0}
+  soundSource: {fileID: 3488314619408490725}
   listRect: {fileID: 2080082469187730651}
   listCG: {fileID: 1923017583827585545}
   contentCG: {fileID: 0}
@@ -41243,7 +41245,7 @@ MonoBehaviour:
   setHighPriority: 1
   invokeAtStart: 0
   initAtStart: 1
-  enableDropdownSounds: 0
+  enableDropdownSounds: 1
   useHoverSound: 1
   useClickSound: 1
   itemPaddingTop: 1

@@ -43,6 +43,10 @@ public class BootstrapMainMenu : MonoBehaviour
         {
             await Task.Yield(); // Ждем один кадр
         }
+        while (!_loadReleaseMainMenuScene.IsLoaded == true) 
+        {
+            await Task.Yield(); // Ждем один кадр
+        }
         Debug.Log("Подгрузка завершена");
     }
     
