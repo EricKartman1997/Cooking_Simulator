@@ -1,4 +1,3 @@
-using System;
 using Michsky.MUIP;
 using UnityEngine;
 using Zenject;
@@ -12,13 +11,13 @@ public class GraphicsView : MonoBehaviour
     [SerializeField] private ButtonManager backButton;
 
     private Graphic _graphic;
-    private ISaveReadGraphicSettings _jsonHandler;
+    private IStorageJson _jsonHandler;
     private SoundsServiceMainMenu _soundsService;
 
-    private GraphicSettings Settings => _jsonHandler.ReadOnlyGraphicSettings;
+    private GraphicSettings _saveObj = new GraphicSettings();
 
     [Inject]
-    private void ConstructZenject(Graphic graphic,ISaveReadGraphicSettings jsonHandler,SoundsServiceMainMenu serviceMainMenu)
+    private void ConstructZenject(Graphic graphic,IStorageJson jsonHandler,SoundsServiceMainMenu serviceMainMenu)
     {
         _graphic = graphic;
         _jsonHandler = jsonHandler;
@@ -27,7 +26,12 @@ public class GraphicsView : MonoBehaviour
 
     private void OnDestroy()
     {
-        _jsonHandler.SaveGraphicSettings(toggle.toggleObject.isOn,horizontalSelector.index,dropdown.selectedItemIndex);
+        _saveObj.ResolutionSize = dropdown.selectedItemIndex;
+        _saveObj.QualityLevel = horizontalSelector.index;
+        _saveObj.IsFullScreen = toggle.toggleObject.isOn;
+        _jsonHandler.Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_saveObj);
+        Debug.Log("полный экран (сохранение) = " + _saveObj.IsFullScreen);
+        Debug.Log("OnDestroy GraphicsView");
     }
 
     private void Start()
@@ -40,6 +44,7 @@ public class GraphicsView : MonoBehaviour
         horizontalSelector.items[1].onItemSelect.AddListener(SetQualityMedium);
         horizontalSelector.items[2].onItemSelect.AddListener(SetQualityHigh);
         horizontalSelector.items[3].onItemSelect.AddListener(SetQualityUltra);
+        //dropdown.onValueChanged.AddListener(SetResolution);
 
         //JsonDownload
         DownloadSettings();
@@ -48,11 +53,18 @@ public class GraphicsView : MonoBehaviour
 
     private void DownloadSettings()
     {
-        toggle.toggleObject.isOn = Settings.IsFullScreen;
-        toggle.UpdateState();
-        horizontalSelector.index = Settings.QualityLevel;
-        horizontalSelector.UpdateUI();
-        dropdown.SetDropdownIndex(Settings.ResolutionSize);
+        _jsonHandler.Load<GraphicSettings>(JsonPathName.GRAPHIC_SETTINGS_PATH, data =>
+        {
+            _graphic.SetFullScreen(data.IsFullScreen);
+            //toggle.toggleObject.isOn = data.IsFullScreen;
+            //Debug.Log("полный экран (загрузка) = " + data.IsFullScreen);
+            toggle.UpdateState();
+            //horizontalSelector.index = data.QualityLevel;
+            _graphic.SetQuality((Quality)data.QualityLevel);
+            horizontalSelector.UpdateUI();
+            dropdown.SetDropdownIndex(data.ResolutionSize);
+            //_graphic.
+        });
     }
 
     private void EnabeleSounds()
@@ -73,26 +85,36 @@ public class GraphicsView : MonoBehaviour
     private void SetFullScreen(bool isFullScreen)
     {
         _graphic.SetFullScreen(isFullScreen);
+        //_saveObj.IsFullScreen = toggle.toggleObject.isOn;
     }
     
     private void SetQualityLow()
     {
         _graphic.SetQuality(Quality.Low);
+        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityMedium()
     {
         _graphic.SetQuality(Quality.Medium);
+        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityHigh()
     {
         _graphic.SetQuality(Quality.High);
+        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityUltra()
     {
         _graphic.SetQuality(Quality.Ultra);
+        //_saveObj.QualityLevel = horizontalSelector.index;
+    }
+
+    private void SetResolution(int index)
+    {
+        //_saveObj.ResolutionSize = index;
     }
     
 }

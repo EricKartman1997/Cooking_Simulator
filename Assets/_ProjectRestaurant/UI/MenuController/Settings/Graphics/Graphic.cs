@@ -15,7 +15,7 @@ public class Graphic : IDisposable
     {
         Screen.fullScreen = isFullScreen;
         //_jsonHandler.JsonGraphicSettingsFile.IsFullScreen = isFullScreen;
-        //Debug.Log("SetFullScreen");
+        Debug.Log("SetFullScreen");
     }
     
     public void SetQuality(Quality quality)
@@ -78,7 +78,6 @@ public class Graphic : IDisposable
         
         Resolution resolution = _resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-        //_jsonHandler.JsonGraphicSettingsFile.ResolutionSize = resolutionIndex;
     }
 }
 

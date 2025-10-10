@@ -3,45 +3,10 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 
-public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
+public class JsonHandler : IDisposable, IStorageJson
 {
-    // private GraphicSettings _jsonGraphicSettingsFile;
-    //
-    // public GraphicSettings ReadOnlyGraphicSettings => _jsonGraphicSettingsFile;
-
-    public JsonHandler()
-    {
-
-        // Проверяем существование файла
-        if (File.Exists(BuildPath(JsonPathName.GRAPHIC_SETTINGS_PATH)))
-        {
-            // Файл существует - загружаем данные
-            Load<GraphicSettings>(JsonPathName.GRAPHIC_SETTINGS_PATH, data =>
-            {
-                _jsonGraphicSettingsFile = new GraphicSettings(data.IsFullScreen, data.QualityLevel, data.ResolutionSize);
-            
-                Debug.Log($"QL = {data.QualityLevel}, FS = {data.IsFullScreen}, RS = {data.ResolutionSize}");
-                Debug.Log("Считал данные из файла");
-            });
-        }
-        else
-        {
-            // Файла нет - создаем дефолтные настройки и сохраняем
-            Debug.Log("Файл не найден, создаю дефолтные настройки");
-        
-            // Создаем дефолтный объект
-            _jsonGraphicSettingsFile = new GraphicSettings(); // Пример дефолтных значений
-        
-            // Сохраняем дефолтные настройки
-            Save(JsonPathName.GRAPHIC_SETTINGS_PATH, _jsonGraphicSettingsFile);
-        
-            Debug.Log($"Создал дефолтные настройки: QL = {_jsonGraphicSettingsFile.QualityLevel}, FS = {_jsonGraphicSettingsFile.IsFullScreen}, RS = {_jsonGraphicSettingsFile.ResolutionSize}");
-        }
-    }
-
     public void Dispose()
     {
-        Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile);
         Debug.Log("Dispose JsonHandler");
     }
 
@@ -58,61 +23,58 @@ public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
         callback?.Invoke(true);
     }
 
-    public void Load<T>(string key, Action<T> callback)
+    public void Load<T>(string key, Action<T> callback) where T : new()
     {
         string path = BuildPath(key);
         StreamReader filestream = null;
-    
+
         try
         {
+            if (!File.Exists(path))
+            {
+                // Создаём новый объект с конструктором по умолчанию
+                var defaultData = new T();
+
+                // Сохраняем его как новый JSON-файл
+                var defaultJson = JsonConvert.SerializeObject(defaultData, Formatting.Indented);
+                File.WriteAllText(path, defaultJson);
+
+                Debug.Log($"Файл не найден, создан новый: {path}");
+                callback?.Invoke(defaultData);
+                return;
+            }
+
+            // Если файл существует — читаем и десериализуем
             filestream = new StreamReader(path);
             var json = filestream.ReadToEnd();
             var data = JsonConvert.DeserializeObject<T>(json);
-        
+
             callback?.Invoke(data);
-        }
-        catch (FileNotFoundException ex)
-        {
-            Debug.LogError($"Файл не найден: {path}. Ошибка: {ex.Message}");
-            callback?.Invoke(default(T));
-        }
-        catch (DirectoryNotFoundException ex)
-        {
-            Debug.LogError($"Директория не найдена: {path}. Ошибка: {ex.Message}");
-            callback?.Invoke(default(T));
-        }
-        catch (IOException ex)
-        {
-            Debug.LogError($"Ошибка ввода-вывода при чтении файла: {path}. Ошибка: {ex.Message}");
-            callback?.Invoke(default(T));
         }
         catch (JsonException ex)
         {
             Debug.LogError($"Ошибка десериализации JSON: {ex.Message}");
-            callback?.Invoke(default(T));
+            callback?.Invoke(new T());
+        }
+        catch (IOException ex)
+        {
+            Debug.LogError($"Ошибка ввода-вывода при чтении файла: {path}. Ошибка: {ex.Message}");
+            callback?.Invoke(new T());
         }
         catch (Exception ex)
         {
             Debug.LogError($"Неожиданная ошибка при загрузке данных: {ex.Message}");
-            callback?.Invoke(default(T));
+            callback?.Invoke(new T());
         }
         finally
         {
             filestream?.Dispose();
         }
     }
-
-    public void SaveGraphicSettings(bool fullScreen, int qualityIndex, int resolutionIndex)
-    {
-        _jsonGraphicSettingsFile.IsFullScreen = fullScreen;
-        _jsonGraphicSettingsFile.QualityLevel = qualityIndex;
-        _jsonGraphicSettingsFile.ResolutionSize = resolutionIndex;
-        Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile,null);
-    }
-
+    
     private string BuildPath(string key)
     {
-        return Path.Combine(Application.persistentDataPath, key);
+        return Path.Combine(Application.persistentDataPath, key + ".json");
     }
 }
 
@@ -121,14 +83,7 @@ public class GraphicSettings
     public bool IsFullScreen;
     public int QualityLevel;
     public int ResolutionSize;
-
-    public GraphicSettings(bool isFullScreen, int qualityLevel, int resolutionSize)
-    {
-        IsFullScreen = isFullScreen;
-        QualityLevel = qualityLevel;
-        ResolutionSize = resolutionSize;
-    }
-
+    
     public GraphicSettings()
     {
         // Значения по умолчанию
