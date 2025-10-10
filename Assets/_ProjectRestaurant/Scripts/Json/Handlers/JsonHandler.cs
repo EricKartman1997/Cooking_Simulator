@@ -5,20 +5,18 @@ using System.IO;
 
 public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
 {
-    private const string GRAPHIC_SETTINGS_PATH = "graphic_settings";
-    
-    private GraphicSettings _jsonGraphicSettingsFile;
-
-    public GraphicSettings ReadOnlyGraphicSettings => _jsonGraphicSettingsFile;
+    // private GraphicSettings _jsonGraphicSettingsFile;
+    //
+    // public GraphicSettings ReadOnlyGraphicSettings => _jsonGraphicSettingsFile;
 
     public JsonHandler()
     {
 
         // Проверяем существование файла
-        if (File.Exists(BuildPath(GRAPHIC_SETTINGS_PATH)))
+        if (File.Exists(BuildPath(JsonPathName.GRAPHIC_SETTINGS_PATH)))
         {
             // Файл существует - загружаем данные
-            Load<GraphicSettings>(GRAPHIC_SETTINGS_PATH, data =>
+            Load<GraphicSettings>(JsonPathName.GRAPHIC_SETTINGS_PATH, data =>
             {
                 _jsonGraphicSettingsFile = new GraphicSettings(data.IsFullScreen, data.QualityLevel, data.ResolutionSize);
             
@@ -35,7 +33,7 @@ public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
             _jsonGraphicSettingsFile = new GraphicSettings(); // Пример дефолтных значений
         
             // Сохраняем дефолтные настройки
-            Save(GRAPHIC_SETTINGS_PATH, _jsonGraphicSettingsFile);
+            Save(JsonPathName.GRAPHIC_SETTINGS_PATH, _jsonGraphicSettingsFile);
         
             Debug.Log($"Создал дефолтные настройки: QL = {_jsonGraphicSettingsFile.QualityLevel}, FS = {_jsonGraphicSettingsFile.IsFullScreen}, RS = {_jsonGraphicSettingsFile.ResolutionSize}");
         }
@@ -43,7 +41,7 @@ public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
 
     public void Dispose()
     {
-        Save(GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile);
+        Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile);
         Debug.Log("Dispose JsonHandler");
     }
 
@@ -109,7 +107,7 @@ public class JsonHandler : IDisposable, IStorageJson, ISaveReadGraphicSettings
         _jsonGraphicSettingsFile.IsFullScreen = fullScreen;
         _jsonGraphicSettingsFile.QualityLevel = qualityIndex;
         _jsonGraphicSettingsFile.ResolutionSize = resolutionIndex;
-        Save(GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile,null);
+        Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_jsonGraphicSettingsFile,null);
     }
 
     private string BuildPath(string key)

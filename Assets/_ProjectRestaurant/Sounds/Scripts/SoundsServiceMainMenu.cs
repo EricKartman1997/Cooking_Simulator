@@ -7,8 +7,8 @@ public class SoundsServiceMainMenu : IDisposable
 {
     private SoundManager _soundManager;
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
-    private AudioSource _sFX;
-    private AudioSource _background;
+    //private AudioSource _sFX;
+    //private AudioSource _background;
 
     //public AudioSource SFX => _sFX;
 
