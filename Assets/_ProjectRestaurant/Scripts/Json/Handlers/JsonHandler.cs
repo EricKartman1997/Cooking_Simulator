@@ -91,4 +91,31 @@ public class GraphicSettings
         QualityLevel = 1;
         ResolutionSize = 0;
     }
+
+    public void ShowValue()
+    {
+        Debug.Log($"IsFullScreen = {IsFullScreen}, QualityLevel = {QualityLevel}, ResolutionSize = {ResolutionSize}");
+    }
 }
+
+public class AudioSettings
+{
+    public float MasterVolume;
+    public float MusicVolum;
+    public float SFXVolum;
+    
+    public AudioSettings()
+    {
+        // Значения по умолчанию
+        MasterVolume = 80f;
+        MusicVolum = 80f;
+        SFXVolum = 80f;
+    }
+
+    public void ShowValue()
+    {
+        Debug.Log($"MasterVolume = {MasterVolume}, MusicVolum = {MusicVolum}, SFXVolum = {SFXVolum}");
+    }
+}
+
+

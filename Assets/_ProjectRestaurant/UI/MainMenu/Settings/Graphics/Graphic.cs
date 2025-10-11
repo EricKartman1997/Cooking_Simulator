@@ -15,14 +15,14 @@ public class Graphic : IDisposable
     {
         Screen.fullScreen = isFullScreen;
         //_jsonHandler.JsonGraphicSettingsFile.IsFullScreen = isFullScreen;
-        Debug.Log("SetFullScreen");
+        //Debug.Log("Вызов метода SetFullScreen");
     }
     
     public void SetQuality(Quality quality)
     {
         QualitySettings.SetQualityLevel((int)quality);
         //_jsonHandler.JsonGraphicSettingsFile.QualityLevel = (int)quality;
-        //Debug.Log("SetQuality " + quality);
+        //Debug.Log("Вызов метода SetQuality ");
     }
     
     public void InitializeResolutionDropdown(CustomDropdown resolutionDropdown)
@@ -78,6 +78,7 @@ public class Graphic : IDisposable
         
         Resolution resolution = _resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        //Debug.Log("Вызов метода SetResolution");
     }
 }
 

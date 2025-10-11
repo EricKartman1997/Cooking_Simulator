@@ -47,7 +47,7 @@ public class BootstrapMainMenu : MonoBehaviour
         {
             await Task.Yield(); // Ждем один кадр
         }
-        Debug.Log("Подгрузка завершена");
+        //Debug.Log("Подгрузка завершена");
     }
     
     private async Task CreateUI()

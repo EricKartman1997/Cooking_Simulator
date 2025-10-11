@@ -9,25 +9,51 @@ public class AudioViewController : MonoBehaviour
     [SerializeField] private SliderManager sfxSlider;
 
     private SoundsServiceMainMenu _soundService;
+    private JsonHandler _jsonHandler;
+
+    private AudioSettings _saveObj = new AudioSettings();
 
     private SoundManager SoundManager => _soundService.SoundManager;
 
     [Inject]
-    private void ConstructZenject(SoundsServiceMainMenu soundService)
+    private void ConstructZenject(SoundsServiceMainMenu soundService, JsonHandler jsonHandler)
     {
         _soundService = soundService;
+        _jsonHandler = jsonHandler;
+    }
+
+    private void OnDestroy()
+    {
+        _saveObj.MasterVolume = masterSlider.mainSlider.value;
+        _saveObj.MusicVolum = musicSlider.mainSlider.value;
+        _saveObj.SFXVolum = sfxSlider.mainSlider.value;
+        _jsonHandler.Save(JsonPathName.AUDIO_SETTINGS_PATH,_saveObj);
+        Debug.Log("(сохранение) Json Аудио");
+        _saveObj.ShowValue();
+        //Debug.Log("OnDestroy GraphicsView");
     }
     private void Start()
     {
-        // Загружаем текущие значения
-        masterSlider.mainSlider.value = SoundManager.GetMasterVolume();
-        musicSlider.mainSlider.value = SoundManager.GetMusicVolume();
-        sfxSlider.mainSlider.value = SoundManager.GetSFXVolume();
-        
         // Добавляем обработчики изменений
         masterSlider.mainSlider.onValueChanged.AddListener(SetMasterVolume);
         musicSlider.mainSlider.onValueChanged.AddListener(SetMusicVolume);
         sfxSlider.mainSlider.onValueChanged.AddListener(SetSFXVolume);
+        
+        DownloadSettings();
+
+    }
+    
+    private void DownloadSettings()
+    {
+        _jsonHandler.Load<AudioSettings>(JsonPathName.AUDIO_SETTINGS_PATH, data =>
+        {
+            masterSlider.mainSlider.value = data.MasterVolume;// не работает
+            musicSlider.mainSlider.value = data.MusicVolum;
+            sfxSlider.mainSlider.value = data.SFXVolum;
+
+            Debug.Log("(загрузка) Json Аудио");
+            data.ShowValue();
+        });
     }
     
     private void SetMasterVolume(float volume)
