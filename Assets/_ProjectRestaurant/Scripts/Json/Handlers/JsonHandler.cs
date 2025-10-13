@@ -125,7 +125,12 @@ public class BindingSettings
     public BindingSettings()
     {
         // Значения по умолчанию
-        Rebinds = null;
+        Rebinds = "";
+    }
+    
+    public BindingSettings(string rebinds)
+    {
+        Rebinds = rebinds;
     }
 
     // public void ShowValue()

@@ -485,9 +485,11 @@ public class RebindControllsUI : MonoBehaviour, RebindControllsUI.IResetToDefaul
 
     private void SaveBindings()
     {
-        var rebinds = m_Action.action.actionMap.asset.SaveBindingOverridesAsJson();
-        PlayerPrefs.SetString("rebinds", rebinds);
-        PlayerPrefs.Save();
+        //var rebinds = m_Action.action.actionMap.asset.SaveBindingOverridesAsJson();
+        //PlayerPrefs.SetString("rebinds", rebinds);
+        //PlayerPrefs.Save();
+        
+        m_Action.action.actionMap.asset.SaveBindingOverridesAsJson();
     }
 
     [Tooltip("Reference to action that is to be rebound from the UI.")]
