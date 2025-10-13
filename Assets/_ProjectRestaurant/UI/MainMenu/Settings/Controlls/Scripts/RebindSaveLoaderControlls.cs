@@ -7,7 +7,7 @@ public class RebindSaveLoaderControlls : MonoBehaviour
 
     public void Start()
     {
-        LoadBindings();
+        //LoadBindings();
     }
 
     public void OnEnable()

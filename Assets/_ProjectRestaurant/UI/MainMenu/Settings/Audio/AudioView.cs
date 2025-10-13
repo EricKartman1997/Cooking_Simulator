@@ -2,7 +2,7 @@ using Michsky.MUIP;
 using UnityEngine;
 using Zenject;
 
-public class AudioViewController : MonoBehaviour
+public class AudioView: MonoBehaviour
 {
     [SerializeField] private SliderManager masterSlider;
     [SerializeField] private SliderManager musicSlider;
@@ -28,8 +28,8 @@ public class AudioViewController : MonoBehaviour
         _saveObj.MusicVolum = musicSlider.mainSlider.value;
         _saveObj.SFXVolum = sfxSlider.mainSlider.value;
         _jsonHandler.Save(JsonPathName.AUDIO_SETTINGS_PATH,_saveObj);
-        Debug.Log("(сохранение) Json Аудио");
-        _saveObj.ShowValue();
+        //Debug.Log("(сохранение) Json Аудио");
+        //_saveObj.ShowValue();
         //Debug.Log("OnDestroy GraphicsView");
     }
     private void Start()
@@ -51,8 +51,8 @@ public class AudioViewController : MonoBehaviour
             musicSlider.mainSlider.value = data.MusicVolum;
             sfxSlider.mainSlider.value = data.SFXVolum;
 
-            Debug.Log("(загрузка) Json Аудио");
-            data.ShowValue();
+            //Debug.Log("(загрузка) Json Аудио");
+            //data.ShowValue();
         });
     }
     

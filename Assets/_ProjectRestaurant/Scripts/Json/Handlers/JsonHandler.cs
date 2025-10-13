@@ -118,4 +118,20 @@ public class AudioSettings
     }
 }
 
+public class BindingSettings
+{
+    public string Rebinds;
+    
+    public BindingSettings()
+    {
+        // Значения по умолчанию
+        Rebinds = null;
+    }
+
+    // public void ShowValue()
+    // {
+    //     Debug.Log($"Rebinds = {Rebinds}");
+    // }
+}
+
 
