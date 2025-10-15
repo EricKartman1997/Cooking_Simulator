@@ -6,6 +6,7 @@ public class BootstrapMainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject canvas;
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
+    private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIMainMenuScene _factoryUIMainMenuScene;
 
     private GameObject _mainUIPanel;
@@ -13,9 +14,10 @@ public class BootstrapMainMenu : MonoBehaviour
     private GameObject _loadingPanel;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseMainMenuScene loadReleaseMainMenuScene, FactoryUIMainMenuScene factoryUIMainMenuScene)
+    private void ConstructZenject(LoadReleaseMainMenuScene loadReleaseMainMenuScene, FactoryUIMainMenuScene factoryUIMainMenuScene,LoadReleaseGlobalScene loadReleaseGlobalScene)
     {
         _loadReleaseMainMenuScene = loadReleaseMainMenuScene;
+        _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _factoryUIMainMenuScene = factoryUIMainMenuScene;
     }
 
@@ -28,6 +30,12 @@ public class BootstrapMainMenu : MonoBehaviour
         await CreateUI();
         await Task.Delay(1200);
         StartLevel();
+    }
+
+    public async void ExitLevel()
+    {
+        ShowLoadingPanel();
+        await _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay"); 
     }
 
     private void ShowLoadingPanel()

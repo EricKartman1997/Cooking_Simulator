@@ -13,6 +13,7 @@ public class MainMenuInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<LoadReleaseMainMenuScene>().AsSingle();
         Container.BindInterfacesAndSelfTo<SoundsServiceMainMenu>().AsSingle();
         Container.Bind<FactoryUIMainMenuScene>().AsSingle();
+        Container.BindInterfacesAndSelfTo<SoundsServiceMainMenu>().AsSingle();
         //Container.BindInterfacesAndSelfTo<FactoryUIMainMenuScene>().AsSingle();
     }
 }

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 public class LoadReleaseGlobalScene : IDisposable
 {
@@ -27,6 +31,28 @@ public class LoadReleaseGlobalScene : IDisposable
         _loadedPrefabs.Clear();
         _globalPrefDic.Clear();
         Debug.Log("Dispose LoadReleaseGlobalScene");
+    }
+    
+    
+    public async Task LoadSceneAsync(string address)
+    {
+        await Addressables.LoadAssetAsync<Scene>(address).Task; // дописать
+        
+        // Загружаем сцену по адресу (названию ключа в Addressables)
+        AsyncOperationHandle<SceneInstance> handle = 
+            Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single);
+
+        // Дожидаемся окончания загрузки
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            Debug.Log("Сцена загружена и активирована.");
+        }
+        else
+        {
+            Debug.LogError("Ошибка при загрузке сцены.");
+        }
     }
     
     private void InitGlobal()
