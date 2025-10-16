@@ -1,6 +1,7 @@
 using System;
 using Michsky.MUIP;
 using UnityEngine;
+using Zenject;
 
 public class SocialNetViewController : MonoBehaviour
 {
@@ -22,12 +23,25 @@ public class SocialNetViewController : MonoBehaviour
     private bool _isOpenPanel;
     private bool _isPlayAnim;
     
+    private SoundsServiceMainMenu _soundsService;
+
+    [Inject]
+    private void ConstructZenject(SoundsServiceMainMenu soundsService)
+    {
+        _soundsService = soundsService;
+    }
     private void OnEnable()
     {
         buttonGitHub.onClick.AddListener(FollowGitHub);
         buttonEmail.onClick.AddListener(FollowEmail);
         buttonTelegram.onClick.AddListener(FollowTelegram);
         buttonDiscord.onClick.AddListener(FollowDiscord);
+        
+        buttonGitHub.soundSource = _soundsService.SourceSfx;
+        buttonEmail.soundSource = _soundsService.SourceSfx;
+        buttonTelegram.soundSource = _soundsService.SourceSfx;
+        buttonDiscord.soundSource = _soundsService.SourceSfx;
+
     }
 
     private void OnDisable()

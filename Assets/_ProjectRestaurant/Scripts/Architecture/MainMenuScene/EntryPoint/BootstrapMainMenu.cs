@@ -8,34 +8,39 @@ public class BootstrapMainMenu : MonoBehaviour
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIMainMenuScene _factoryUIMainMenuScene;
+    private SoundsServiceMainMenu _soundsServiceMainMenu;
 
     private GameObject _mainUIPanel;
     
     private GameObject _loadingPanel;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseMainMenuScene loadReleaseMainMenuScene, FactoryUIMainMenuScene factoryUIMainMenuScene,LoadReleaseGlobalScene loadReleaseGlobalScene)
+    private void ConstructZenject(LoadReleaseMainMenuScene loadReleaseMainMenuScene, FactoryUIMainMenuScene factoryUIMainMenuScene,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceMainMenu soundsServiceMainMenu)
     {
         _loadReleaseMainMenuScene = loadReleaseMainMenuScene;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _factoryUIMainMenuScene = factoryUIMainMenuScene;
+        _soundsServiceMainMenu = soundsServiceMainMenu;
     }
 
     private async void Start()
     {
         ShowLoadingPanel();
-        //await Task.Delay(3000);
         await WaitForResourcesLoaded();
-        //await Task.Delay(3000);
         await CreateUI();
         await Task.Delay(1200);
+        await EnableMusic();
         StartLevel();
     }
 
     public async void ExitLevel()
     {
-        ShowLoadingPanel();
+        // сохранить настройки
+        // переход на сцену гемплея
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay"); 
+        // остановить музыку
+        _soundsServiceMainMenu.StopSounds();
+        ShowLoadingPanel();
     }
 
     private void ShowLoadingPanel()
@@ -61,6 +66,12 @@ public class BootstrapMainMenu : MonoBehaviour
     private async Task CreateUI()
     {
         _mainUIPanel = _factoryUIMainMenuScene.Get(PrefUINameMainMenu.UIPanel, canvas.transform);
+        await Task.Yield();
+    }
+
+    private async Task EnableMusic()
+    {
+        _soundsServiceMainMenu.SetMusic();
         await Task.Yield();
     }
 

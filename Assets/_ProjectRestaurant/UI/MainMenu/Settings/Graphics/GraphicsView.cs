@@ -34,9 +34,10 @@ public class GraphicsView : MonoBehaviour
         //_saveObj.ShowValue();
         //Debug.Log("OnDestroy GraphicsView");
     }
-
+    
     private void Start()
     {
+        EnabeleSoundSource();
         _graphic.InitializeResolutionDropdown(dropdown);
         
         toggle.toggleObject.onValueChanged.AddListener(SetFullScreen);
@@ -68,19 +69,23 @@ public class GraphicsView : MonoBehaviour
         });
     }
 
+    private void EnabeleSoundSource()
+    {
+        nextButton.soundSource = _soundsService.SourceSfx;
+        backButton.soundSource = _soundsService.SourceSfx;
+        dropdown.soundSource = _soundsService.SourceSfx;
+    }
+    
     private void EnabeleSounds()
     {
-        //nextButton.soundSource = _soundsService.SFX;
         nextButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
         nextButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        //backButton.soundSource = _soundsService.SFX;
+        
         backButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton] ;
         backButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-
-        //dropdown.soundSource = _soundsService.SFX;
+        
         dropdown.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
         dropdown.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        
     }
     
     private void SetFullScreen(bool isFullScreen)

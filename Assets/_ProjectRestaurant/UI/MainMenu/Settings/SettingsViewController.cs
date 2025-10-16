@@ -1,5 +1,6 @@
 using Michsky.MUIP;
 using UnityEngine;
+using Zenject;
 
 public class SettingsViewController : MonoBehaviour
 {
@@ -7,13 +8,28 @@ public class SettingsViewController : MonoBehaviour
     private const string CLOSE = "Close";
     
     [SerializeField] private ButtonManager buttonBack;
+    [SerializeField] private ButtonManager buttonAudio;
+    [SerializeField] private ButtonManager buttonGraphic;
+    [SerializeField] private ButtonManager buttonControls;
     [SerializeField] private Animator animator;
     
     private bool _isPlayAnim;
 
+    private SoundsServiceMainMenu _soundsService;
+
+    [Inject]
+    private void ConstructZenject(SoundsServiceMainMenu soundsService)
+    {
+        _soundsService = soundsService;
+    }
     private void OnEnable()
     {
         buttonBack.onClick.AddListener(ClosePanel);
+        
+        buttonBack.soundSource = _soundsService.SourceSfx;
+        buttonAudio.soundSource = _soundsService.SourceSfx;
+        buttonGraphic.soundSource = _soundsService.SourceSfx;
+        buttonControls.soundSource = _soundsService.SourceSfx;
     }
 
     private void OnDisable()

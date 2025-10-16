@@ -15,11 +15,15 @@ public class MenuViewController : MonoBehaviour
     [SerializeField] private SocialNetViewController _socialNetViewController;
 
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    private BootstrapMainMenu _bootstrapMainMenu;
+    private SoundsServiceMainMenu _soundsService;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene)
+    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene,BootstrapMainMenu bootstrapMainMenu,SoundsServiceMainMenu soundsService)
     {
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
+        _bootstrapMainMenu = bootstrapMainMenu;
+        _soundsService = soundsService;
     }
     private void OnEnable()
     {
@@ -32,6 +36,13 @@ public class MenuViewController : MonoBehaviour
         buttonStart.onClick.AddListener(StartOnClick);
         buttonChoiceLevel.onClick.AddListener(ChoiceLevelOnClick);
         buttonExit.onClick.AddListener(ExitOnClick);
+        
+        buttonSettings.soundSource = _soundsService.SourceSfx;
+        buttonSocialNetworks.soundSource = _soundsService.SourceSfx;
+        buttonStart.soundSource = _soundsService.SourceSfx;
+        buttonChoiceLevel.soundSource = _soundsService.SourceSfx;
+        buttonExit.soundSource = _soundsService.SourceSfx;
+        
         //buttonStart.clickSound;
         //buttonStart.hoverSound;
         //buttonStart.soundSource;
@@ -52,10 +63,7 @@ public class MenuViewController : MonoBehaviour
     
     private void StartOnClick()
     {
-        // остановить музыку
-        // сохранить настройки
-        // переход на сцену гемплея
-        _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay");
+        _bootstrapMainMenu.ExitLevel();
     }
     
     private void ChoiceLevelOnClick()
