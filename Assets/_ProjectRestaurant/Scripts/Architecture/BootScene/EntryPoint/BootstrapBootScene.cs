@@ -11,7 +11,9 @@ public class BootstrapBootScene : MonoBehaviour
     }
     private async void Start()
     {
-        await _loadReleaseGlobalScene.LoadSceneAsync("SceneGamePlay");
+        //Debug.Log("запуск сцены");
+        await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
+        //Debug.Log("загрузил сцену");
     }
 
 }

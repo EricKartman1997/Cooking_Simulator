@@ -36,9 +36,8 @@ public class LoadReleaseGlobalScene : IDisposable
     
     public async Task LoadSceneAsync(string address)
     {
-        await Addressables.LoadAssetAsync<Scene>(address).Task; // дописать
+        //await Addressables.LoadAssetAsync<Scene>(address).Task; // дописать
         
-        // Загружаем сцену по адресу (названию ключа в Addressables)
         AsyncOperationHandle<SceneInstance> handle = 
             Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single);
 
