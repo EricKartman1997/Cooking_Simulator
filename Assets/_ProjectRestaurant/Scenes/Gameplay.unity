@@ -1685,6 +1685,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06592dce15de1f745a7b654ce05c1182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  poinPlayer: {fileID: 0}
+  parentPlayer: {fileID: 0}
 --- !u!4 &1782935899
 Transform:
   m_ObjectHideFlags: 0
@@ -2814,6 +2817,10 @@ PrefabInstance:
     - target: {fileID: 4741710037606462696, guid: 995c86288e23e7a4cb11bc24b1881906, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741710037606462696, guid: 995c86288e23e7a4cb11bc24b1881906, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

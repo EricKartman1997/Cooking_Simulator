@@ -13,7 +13,7 @@ public class FactoryPlayerGameplay : IDisposable
 
     public GameObject CreatePlayer(Transform point, Transform parent)
     {
-        return _container.InstantiatePrefab(_loadReleaseGameplay.PrefDic[PrefPlayerNameMainMenu.Default], point.position, Quaternion.identity, parent);
+        return _container.InstantiatePrefab(_loadReleaseGameplay.PrefDic[PrefPlayerNameGameplay.Default], point.position, Quaternion.identity, parent);
     }
     
     

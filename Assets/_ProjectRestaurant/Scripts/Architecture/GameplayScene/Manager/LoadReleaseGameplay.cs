@@ -11,13 +11,13 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     
-    private Dictionary<PrefPlayerNameMainMenu, GameObject> _playerDic;
+    private Dictionary<PrefPlayerNameGameplay, GameObject> _playerDic;
     private List<GameObject> _loadedPrefabs;
     
     private bool _isLoaded;
     
     public IReadOnlyDictionary<GlobalPref, GameObject> GlobalPrefDic => _loadReleaseGlobalScene.GlobalPrefDic;
-    public IReadOnlyDictionary<PrefPlayerNameMainMenu, GameObject> PrefDic => _playerDic;
+    public IReadOnlyDictionary<PrefPlayerNameGameplay, GameObject> PrefDic => _playerDic;
     public bool IsLoaded => _isLoaded;
 
     public LoadReleaseGameplay(LoadReleaseGlobalScene loadReleaseGlobalScene)
@@ -35,12 +35,16 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     public async void Initialize()
     {
         await Task.WhenAll(
-            InitMenuPrefabsAsync()
+            InitPlayerPrefabsAsync()
+            //InitEnvironmentPrefabsAsync()
+            //InitFurniturePrefabsAsync()
+            //InitFoodPrefabsAsync()
+            //InitUIPrefabsAsync()
         );
         _isLoaded = true;
     }
     
-    private async Task InitMenuPrefabsAsync()
+    private async Task InitPlayerPrefabsAsync()
     {
         var loadTasks = new List<Task<GameObject>>
         {
@@ -49,7 +53,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
 
         var results = await Task.WhenAll(loadTasks);
         
-        _playerDic.Add(PrefPlayerNameMainMenu.Default, results[0]);
+        _playerDic.Add(PrefPlayerNameGameplay.Default, results[0]);
     }
     
     private async Task<GameObject> LoadPrefabAsync(string address)
@@ -71,7 +75,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     }
 }
 
-public enum PrefPlayerNameMainMenu
+public enum PrefPlayerNameGameplay
 {
     Default
 }
