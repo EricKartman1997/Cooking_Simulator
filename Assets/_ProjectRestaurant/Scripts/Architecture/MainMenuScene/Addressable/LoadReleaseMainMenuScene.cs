@@ -115,6 +115,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable
         _loadedPrefabs.Clear();
         _prefDic.Clear();
     }
+    
 }
 
 public enum AudioNameMainMenu

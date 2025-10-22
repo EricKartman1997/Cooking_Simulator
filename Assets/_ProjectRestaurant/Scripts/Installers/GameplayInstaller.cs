@@ -10,6 +10,7 @@ public class GameplayInstaller : MonoInstaller
     {
         Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
         Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
+        
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
