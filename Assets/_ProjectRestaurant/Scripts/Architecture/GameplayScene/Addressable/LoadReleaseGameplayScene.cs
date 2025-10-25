@@ -8,9 +8,9 @@ using Zenject;
 public class LoadReleaseGameplayScene : IInitializable, IDisposable
 {
     // Словари для хранения загруженных объектов
-    private Dictionary<RawIngredientName, GameObject> _rawIngredientDic;
-    private Dictionary<CookedIngredientName, GameObject> _cookedIngredientDic;
-    private Dictionary<CookedFoodName, GameObject> _cookedFoodDic;
+    // private Dictionary<RawIngredientName, GameObject> _rawIngredientDic;
+    // private Dictionary<CookedIngredientName, GameObject> _cookedIngredientDic;
+    // private Dictionary<CookedFoodName, GameObject> _cookedFoodDic;
     //private Dictionary<FurnitureName, GameObject> _furnitureDic;
     private Dictionary<OtherObjsName, GameObject> _otherObjsDic;
     private Dictionary<PlayerName, GameObject> _playerDic;
@@ -32,9 +32,9 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
     private List<GameObject> _loadedViewDish;
 
     // Публичные свойства для доступа к словарям
-    public IReadOnlyDictionary<RawIngredientName, GameObject> RawIngredientDic => _rawIngredientDic;
-    public IReadOnlyDictionary<CookedIngredientName, GameObject> CookedIngredientDic => _cookedIngredientDic;
-    public IReadOnlyDictionary<CookedFoodName, GameObject> CookedFoodDic => _cookedFoodDic;
+    // public IReadOnlyDictionary<RawIngredientName, GameObject> RawIngredientDic => _rawIngredientDic;
+    // public IReadOnlyDictionary<CookedIngredientName, GameObject> CookedIngredientDic => _cookedIngredientDic;
+    // public IReadOnlyDictionary<CookedFoodName, GameObject> CookedFoodDic => _cookedFoodDic;
     //public IReadOnlyDictionary<FurnitureName, GameObject> FurnitureDic => _furnitureDic;
     public IReadOnlyDictionary<OtherObjsName, GameObject> OtherObjsDic => _otherObjsDic;
     public IReadOnlyDictionary<PlayerName, GameObject> PlayerDic => _playerDic;
@@ -46,9 +46,9 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
     public LoadReleaseGameplayScene()
     {
         // Инициализация словарей
-        _rawIngredientDic = new Dictionary<RawIngredientName, GameObject>();
-        _cookedIngredientDic = new Dictionary<CookedIngredientName, GameObject>();
-        _cookedFoodDic = new Dictionary<CookedFoodName, GameObject>();
+        // _rawIngredientDic = new Dictionary<RawIngredientName, GameObject>();
+        // _cookedIngredientDic = new Dictionary<CookedIngredientName, GameObject>();
+        // _cookedFoodDic = new Dictionary<CookedFoodName, GameObject>();
         //_furnitureDic = new Dictionary<FurnitureName, GameObject>();
         _otherObjsDic = new Dictionary<OtherObjsName, GameObject>();
         _playerDic = new Dictionary<PlayerName, GameObject>();
@@ -123,15 +123,15 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
 
         var results = await Task.WhenAll(loadTasks);
         
-        _rawIngredientDic.Add(RawIngredientName.Apple, results[0]);
-        _rawIngredientDic.Add(RawIngredientName.Orange, results[1]);
-        _rawIngredientDic.Add(RawIngredientName.Meat, results[2]);
-        _rawIngredientDic.Add(RawIngredientName.Fish, results[3]);
-        _rawIngredientDic.Add(RawIngredientName.RawCutlet, results[4]);
-        _rawIngredientDic.Add(RawIngredientName.Strawberry, results[5]);
-        _rawIngredientDic.Add(RawIngredientName.Lime, results[6]);
-        _rawIngredientDic.Add(RawIngredientName.Cherry, results[7]);
-        _rawIngredientDic.Add(RawIngredientName.Blueberry, results[8]);
+        // _rawIngredientDic.Add(RawIngredientName.Apple, results[0]);
+        // _rawIngredientDic.Add(RawIngredientName.Orange, results[1]);
+        // _rawIngredientDic.Add(RawIngredientName.Meat, results[2]);
+        // _rawIngredientDic.Add(RawIngredientName.Fish, results[3]);
+        // _rawIngredientDic.Add(RawIngredientName.RawCutlet, results[4]);
+        // _rawIngredientDic.Add(RawIngredientName.Strawberry, results[5]);
+        // _rawIngredientDic.Add(RawIngredientName.Lime, results[6]);
+        // _rawIngredientDic.Add(RawIngredientName.Cherry, results[7]);
+        // _rawIngredientDic.Add(RawIngredientName.Blueberry, results[8]);
     }
 
     private async Task LoadCookedIngredientsAsync()
@@ -144,8 +144,8 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
 
         var results = await Task.WhenAll(loadTasks);
         
-        _cookedIngredientDic.Add(CookedIngredientName.BakedApple, results[0]);
-        _cookedIngredientDic.Add(CookedIngredientName.BakedOrange, results[1]);
+        // _cookedIngredientDic.Add(CookedIngredientName.BakedApple, results[0]);
+        // _cookedIngredientDic.Add(CookedIngredientName.BakedOrange, results[1]);
     }
 
     private async Task LoadCookedFoodAsync()
@@ -166,16 +166,16 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
 
         var results = await Task.WhenAll(loadTasks);
         
-        _cookedFoodDic.Add(CookedFoodName.FreshSalad, results[0]);
-        _cookedFoodDic.Add(CookedFoodName.BakedSalad, results[1]);
-        _cookedFoodDic.Add(CookedFoodName.BakedMeat, results[2]);
-        _cookedFoodDic.Add(CookedFoodName.BakedFish, results[3]);
-        _cookedFoodDic.Add(CookedFoodName.BurnCutlet, results[4]);
-        _cookedFoodDic.Add(CookedFoodName.FreshnessCocktail, results[5]);
-        _cookedFoodDic.Add(CookedFoodName.FruitSalad, results[6]);
-        _cookedFoodDic.Add(CookedFoodName.MediumCutlet, results[7]);
-        _cookedFoodDic.Add(CookedFoodName.MixBakedFruit, results[8]);
-        _cookedFoodDic.Add(CookedFoodName.WildBerryCocktail, results[9]);
+        // _cookedFoodDic.Add(CookedFoodName.FreshSalad, results[0]);
+        // _cookedFoodDic.Add(CookedFoodName.BakedSalad, results[1]);
+        // _cookedFoodDic.Add(CookedFoodName.BakedMeat, results[2]);
+        // _cookedFoodDic.Add(CookedFoodName.BakedFish, results[3]);
+        // _cookedFoodDic.Add(CookedFoodName.BurnCutlet, results[4]);
+        // _cookedFoodDic.Add(CookedFoodName.FreshnessCocktail, results[5]);
+        // _cookedFoodDic.Add(CookedFoodName.FruitSalad, results[6]);
+        // _cookedFoodDic.Add(CookedFoodName.MediumCutlet, results[7]);
+        // _cookedFoodDic.Add(CookedFoodName.MixBakedFruit, results[8]);
+        // _cookedFoodDic.Add(CookedFoodName.WildBerryCocktail, results[9]);
     }
 
     // private async Task LoadFurnitureAsync()
@@ -294,15 +294,15 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
 
         var results = await Task.WhenAll(loadTasks);
         
-        _viewDishDic.Add(ViewDishName.AppleDish, results[0]);
-        _viewDishDic.Add(ViewDishName.OrangeDish, results[1]);
-        _viewDishDic.Add(ViewDishName.MeatDish, results[2]);
-        _viewDishDic.Add(ViewDishName.FishDish, results[3]);
-        _viewDishDic.Add(ViewDishName.RawCutletDish, results[4]);
-        _viewDishDic.Add(ViewDishName.StrawberryDish, results[5]);
-        _viewDishDic.Add(ViewDishName.LimeDish, results[6]);
-        _viewDishDic.Add(ViewDishName.CherryDish, results[7]);
-        _viewDishDic.Add(ViewDishName.BlueberryDish, results[8]);
+        // _viewDishDic.Add(ViewDishName.AppleDish, results[0]);
+        // _viewDishDic.Add(ViewDishName.OrangeDish, results[1]);
+        // _viewDishDic.Add(ViewDishName.MeatDish, results[2]);
+        // _viewDishDic.Add(ViewDishName.FishDish, results[3]);
+        // _viewDishDic.Add(ViewDishName.RawCutletDish, results[4]);
+        // _viewDishDic.Add(ViewDishName.StrawberryDish, results[5]);
+        // _viewDishDic.Add(ViewDishName.LimeDish, results[6]);
+        // _viewDishDic.Add(ViewDishName.CherryDish, results[7]);
+        // _viewDishDic.Add(ViewDishName.BlueberryDish, results[8]);
     }
     #endregion
 
@@ -350,9 +350,9 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
         //ReleaseAudioClips(_loadedClips);
 
         // Очистка словарей
-        _rawIngredientDic.Clear();
-        _cookedIngredientDic.Clear();
-        _cookedFoodDic.Clear();
+        // _rawIngredientDic.Clear();
+        // _cookedIngredientDic.Clear();
+        // _cookedFoodDic.Clear();
         //_furnitureDic.Clear();
         _otherObjsDic.Clear();
         _playerDic.Clear();
@@ -388,92 +388,3 @@ public class LoadReleaseGameplayScene : IInitializable, IDisposable
     #endregion
 }
 
-// Перечисления (добавьте в отдельный файл или в конец этого файла)
-public enum RawIngredientName
-{
-    Apple,
-    Orange,
-    Meat,
-    Fish,
-    RawCutlet,
-    Strawberry,
-    Lime,
-    Cherry,
-    Blueberry
-}
-
-public enum CookedIngredientName
-{
-    BakedApple,
-    BakedOrange
-}
-
-public enum CookedFoodName
-{
-    FreshSalad,
-    BakedSalad,
-    BakedMeat,
-    BakedFish,
-    BurnCutlet,
-    FreshnessCocktail,
-    FruitSalad,
-    MediumCutlet,
-    MixBakedFruit,
-    WildBerryCocktail
-}
-
-public enum FurnitureName
-{
-    Blender,
-    CuttingTable,
-    GetTable,
-    GiveTable,
-    Suvide,
-    Distribution,
-    Garbage,
-    Oven,
-    Stove
-}
-
-public enum OtherObjsName
-{
-    Floor
-}
-
-public enum PlayerName
-{
-    RobotPlayer
-}
-
-public enum AudioNameGamePlay
-{
-    ClickButton,
-    HoverButton,
-    SwipePanel,
-    Background
-}
-
-public enum MenuName
-{
-    DefaultMenu
-}
-
-public enum CustomFurnitureName
-{
-    TurnOff,
-    NewYear,
-    Crock
-}
-
-public enum ViewDishName
-{
-    AppleDish,
-    OrangeDish,
-    MeatDish,
-    FishDish,
-    RawCutletDish,
-    StrawberryDish,
-    LimeDish,
-    CherryDish,
-    BlueberryDish
-}

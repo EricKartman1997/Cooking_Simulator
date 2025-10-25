@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class BootstrapGameplay : MonoBehaviour
 {
@@ -6,22 +7,24 @@ public class BootstrapGameplay : MonoBehaviour
     [SerializeField] private Transform poinPlayer;
     [SerializeField] private Transform parentPlayer;
     
-    
     private LoadReleaseGameplay _loadReleaseGameplay;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIGameplay _factoryUIGameplay;
     private FactoryPlayerGameplay _factoryPlayerGameplay;
+    private FactoryEnvironment _factoryEnvironment;
     private SoundsServiceGameplay _soundsServiceGameplay;
     
     private GameObject _loadingPanel;
     
-    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceGameplay soundsServiceGameplay)
+    [Inject]
+    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, FactoryUIGameplay factoryUIGameplay,FactoryEnvironment factoryEnvironment, FactoryPlayerGameplay factoryPlayerGameplay,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceGameplay soundsServiceGameplay)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _factoryUIGameplay = factoryUIGameplay;
         _factoryPlayerGameplay = factoryPlayerGameplay;
         _soundsServiceGameplay = soundsServiceGameplay;
+        _factoryEnvironment = factoryEnvironment;
     }
     
     private void Start()
@@ -30,7 +33,7 @@ public class BootstrapGameplay : MonoBehaviour
         ShowLoadingPanel();
         // создать игрока
         _factoryPlayerGameplay.CreatePlayer(poinPlayer,parentPlayer);
-        // создать окружения
+        // создать окружения (furniture, other environment,)
         // создание сервисов
         // создать UI
         // включить музыку
