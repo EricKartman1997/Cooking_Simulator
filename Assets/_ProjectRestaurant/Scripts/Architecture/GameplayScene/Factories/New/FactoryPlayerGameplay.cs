@@ -4,10 +4,10 @@ using Zenject;
 
 public class FactoryPlayerGameplay : IDisposable
 {
-    private IInstantiator _container;
+    private DiContainer _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
 
-    public FactoryPlayerGameplay(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay)
+    public FactoryPlayerGameplay(DiContainer container, LoadReleaseGameplay loadReleaseGameplay)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
@@ -18,9 +18,10 @@ public class FactoryPlayerGameplay : IDisposable
         Debug.Log("FactoryPlayerGameplay.Dispose");
     }
 
-    public GameObject CreatePlayer(Transform point, Transform parent)
+    public void CreatePlayer(Transform point, Transform parent)
     {
-        return _container.InstantiatePrefab(_loadReleaseGameplay.PrefDic[PlayerName.RobotPlayer], point.position, Quaternion.identity, parent);
+        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PrefDic[PlayerName.RobotPlayer], point.position, Quaternion.identity, parent);
+        _container.Rebind<Heroik>().FromInstance(player.GetComponent<Heroik>()).AsSingle();
     }
     
     
