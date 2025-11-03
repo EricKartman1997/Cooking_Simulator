@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class DecorationFurniture : MonoBehaviour
 {
-    [SerializeField] private DecorationTableConfig config;
     [SerializeField] private Transform positionViewTableTop;
     [SerializeField] private Transform positionViewLowerSurface;
 
-    private GameObject _decorationTableTop;
-    private GameObject _decorationLowerSurface;
+    private EnumDecorationTableTop _decorationTableTop;
+    private EnumDecorationLowerSurface _decorationLowerSurface;
+    private GameObject _decorationTableTopObj;
+    private GameObject _decorationLowerSurfaceObj;
     private GameManager _gameManager;
     private bool _isInit;
 
-    public DecorationTableConfig Config => config;
+    public EnumDecorationTableTop DecorationTableTop => _decorationTableTop;
     public bool IsInit => _isInit;
 
     private IEnumerator Start()
@@ -23,10 +24,16 @@ public class DecorationFurniture : MonoBehaviour
             yield return null;
         }
         
-        _decorationLowerSurface = _gameManager.ViewFactory.GetDecorationLowerSurface(config.DecorationLowerSurface,positionViewLowerSurface);
-        _decorationTableTop = _gameManager.ViewFactory.GetDecorationTableTop(config.DecorationTableTop,positionViewTableTop);
+        _decorationLowerSurfaceObj = _gameManager.ViewFactory.GetDecorationLowerSurface(_decorationLowerSurface,positionViewLowerSurface);
+        _decorationTableTopObj = _gameManager.ViewFactory.GetDecorationTableTop(_decorationTableTop,positionViewTableTop);
         
         _isInit = true;
         //Debug.Log("DecorationFurniture Init");
+    }
+    
+    public void Init(EnumDecorationTableTop decorationTableTop, EnumDecorationLowerSurface decorationLowerSurface)
+    {
+        _decorationTableTop = decorationTableTop;
+        _decorationLowerSurface = decorationLowerSurface;
     }
 }

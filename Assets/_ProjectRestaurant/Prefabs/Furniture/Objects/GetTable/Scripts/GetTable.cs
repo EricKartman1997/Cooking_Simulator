@@ -3,17 +3,21 @@ using UnityEngine;
 
 public class GetTable : MonoBehaviour, IUseFurniture
 {
-    [SerializeField] private GetTableConfig getTableConfig;
     [SerializeField] private Transform parentViewDish;
     
     private Outline _outline;
+    private DecorationFurniture _decorationFurniture;
+    
     private GameObject _objectOnTheTable;
     private GameObject _objectFoodView;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;
     private bool _isInit;
+    
+    private EnumGiveFood _giveFood;
+    private EnumViewFood _viewFood;
+    
     private GameManager _gameManager;
-    private DecorationFurniture _decorationFurniture;
 
     private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
     
@@ -33,13 +37,13 @@ public class GetTable : MonoBehaviour, IUseFurniture
         
         while (_objectFoodView == null)
         {
-            _objectFoodView = _gameManager.ViewFactory.GetProduct(getTableConfig.FoodView,parentViewDish);
+            _objectFoodView = _gameManager.ViewFactory.GetProduct(_viewFood,parentViewDish);
             yield return null;
         }
         
         while (_objectOnTheTable == null)
         {
-            _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(getTableConfig.GiveFood);
+            _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(_giveFood);
             //_gameManager.ProductsFactory.GetProduct(_objectOnTheTable, Transform transform,Transform parent, bool setActive = true)
             yield return null;
         }
@@ -61,7 +65,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             EnterTrigger();
             return;
@@ -83,7 +87,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             ExitTrigger();
             return;
@@ -105,6 +109,11 @@ public class GetTable : MonoBehaviour, IUseFurniture
     // {
     //     EventBus.PressE -= CookingProcess;
     // }
+    public void Init(EnumGiveFood giveFood, EnumViewFood viewFood)
+    {
+        _giveFood = giveFood;
+        _viewFood = viewFood;
+    }
     
     public void UpdateCondition()
     {
@@ -165,7 +174,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             return false;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             Debug.LogWarning("Стол не работает");
             return false;

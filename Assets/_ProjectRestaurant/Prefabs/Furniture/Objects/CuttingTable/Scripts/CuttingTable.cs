@@ -89,7 +89,7 @@ namespace CuttingTableFurniture
                 return;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 EnterTrigger();
                 return;
@@ -110,7 +110,7 @@ namespace CuttingTableFurniture
                 return;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 ExitTrigger();
                 return;
@@ -244,7 +244,7 @@ namespace CuttingTableFurniture
                 return;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 Debug.LogWarning("Стол не работает");
                 return;

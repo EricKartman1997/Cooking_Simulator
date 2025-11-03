@@ -68,7 +68,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             EnterTrigger();
             return;
@@ -89,7 +89,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             ExitTrigger();
             return;
@@ -228,7 +228,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             return false;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             Debug.LogWarning("Раздача не работает");
             return false;

@@ -1,7 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using System.Threading;
 
 public class BootstrapGameplay : MonoBehaviour
 {
@@ -32,13 +32,13 @@ public class BootstrapGameplay : MonoBehaviour
     
     private void Start()
     {
-        _ = InitializeAsync();
+        InitializeAsync().Forget();
     }
     
-    private async Task InitializeAsync()
+    private async UniTaskVoid InitializeAsync()
     {
-        // экран зарузка
         ShowLoadingPanel();
+        
         // загрузить все ресурсы
         await WaitForResourcesLoaded();
         // создать игрока
@@ -48,9 +48,11 @@ public class BootstrapGameplay : MonoBehaviour
         // создание сервисов
         // создать UI
         // включить музыку
+        // выключить экран зарузка (удаляется)
+        HideLoadingPanel();
     }
     
-    public async Task ExitLevel()
+    public async UniTask ExitLevel()
     {
         // остановить музыку
         // сохранить настройки
@@ -60,32 +62,30 @@ public class BootstrapGameplay : MonoBehaviour
     private void ShowLoadingPanel()
     {
         _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
-        //Debug.Log(" панель Загрузки");
+    }
+
+    private void HideLoadingPanel()
+    {
+        if (_loadingPanel != null)
+            Destroy(_loadingPanel);
     }
     
-    private async Task WaitForResourcesLoaded()
+    private async UniTask WaitForResourcesLoaded()
     {
-        // Рекомендуемый паттерн — если загрузчик может дать Task, использовать его.
-        // Но если нет — опрашиваем:
-        while (!_loadReleaseGameplay.IsLoaded)
-        {
-            //ct.ThrowIfCancellationRequested();
-            await Task.Yield(); // ожидаем 1 кадр
-        }
+        // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
+        await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
     }
     
-    private async Task CreatePlayerAsync()
+    private async UniTask CreatePlayerAsync()
     {
-        _factoryPlayerGameplay.CreatePlayer(poinPlayer,parentPlayer);
-        await Task.Yield();
-        //Debug.Log("Игрок создан");
+        _factoryPlayerGameplay.CreatePlayer(poinPlayer, parentPlayer);
+        await UniTask.Yield(); // отдаём управление кадру
     }
     
-    private async Task CreateEnvironmentAsync()
+    private async UniTask CreateEnvironmentAsync()
     {
-        _factoryEnvironment.CreateFurnitureGamePlay(parentFurniture);
-        await Task.Yield();
-        //Debug.Log("Игрок создан");
+        await _factoryEnvironment.CreateFurnitureGamePlayAsync(parentFurniture);
+        await UniTask.Yield();
     }
  
     

@@ -22,7 +22,7 @@ public enum EnumGiveFood
     Strawberry,
     Fish,
     Meat,
-    RawCutlet
+    Cutlet
 }
 
 public enum EnumViewFood
@@ -35,5 +35,5 @@ public enum EnumViewFood
     Strawberry,
     Fish,
     Meat,
-    RawCutlet
+    Cutlet
 }

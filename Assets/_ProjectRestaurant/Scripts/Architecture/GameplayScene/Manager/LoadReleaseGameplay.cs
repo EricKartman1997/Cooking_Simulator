@@ -9,15 +9,15 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     
-    private Dictionary<PlayerName, GameObject> _playerDic;
-    private Dictionary<OtherObjsName, GameObject> _environmentDic;
-    private Dictionary<FurnitureName, GameObject> _furnitureDic;
-    private Dictionary<IngredientName, GameObject> _ingredientDic;
-    private Dictionary<ViewDishName, GameObject> _viewDishDic;
-    private Dictionary<UIName, GameObject> _uiDic;
-    private Dictionary<CustomFurnitureName, GameObject> _customDic;
+    private Dictionary<PlayerName, GameObject> _playerDic = new Dictionary<PlayerName, GameObject>();
+    private Dictionary<OtherObjsName, GameObject> _environmentDic = new Dictionary<OtherObjsName, GameObject>();
+    private Dictionary<FurnitureName, GameObject> _furnitureDic = new Dictionary<FurnitureName, GameObject>();
+    private Dictionary<IngredientName, GameObject> _ingredientDic = new Dictionary<IngredientName, GameObject>();
+    private Dictionary<ViewDishName, GameObject> _viewDishDic = new Dictionary<ViewDishName, GameObject>();
+    private Dictionary<UIName, GameObject> _uiDic = new Dictionary<UIName, GameObject>();
+    private Dictionary<CustomFurnitureName, GameObject> _customDic = new Dictionary<CustomFurnitureName, GameObject>();
     
-    private List<GameObject> _loadedPrefabs;
+    private List<GameObject> _loadedPrefabs = new List<GameObject>();
     
     private bool _isLoaded;
     
@@ -53,7 +53,9 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             LoadViewDishPrefabsAsync(),
             LoadUIPrefabsAsync(),
             LoadCustomPrefabsAsync()
+            
         );
+        Debug.Log("Загружены все ресурсы для Gameplay");
         _isLoaded = true;
     }
     
@@ -68,6 +70,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         var results = await Task.WhenAll(loadTasks);
         
         _playerDic.Add(PlayerName.RobotPlayer, results[0]);
+        Debug.Log("прошел LoadPlayerPrefabsAsync");
     }
     
     private async Task LoadEnvironmentPrefabsAsync()
@@ -80,6 +83,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         var results = await Task.WhenAll(loadTasks);
         
         _environmentDic.Add(OtherObjsName.Floor, results[0]);
+        Debug.Log("прошел LoadEnvironmentPrefabsAsync");
     }
     
     private async Task LoadFurniturePrefabsAsync()
@@ -108,6 +112,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         _furnitureDic.Add(FurnitureName.Distribution, results[6]);
         _furnitureDic.Add(FurnitureName.Blender, results[7]);
         _furnitureDic.Add(FurnitureName.Stove, results[8]);
+        
+        Debug.Log("прошел LoadFurniturePrefabsAsync");
     }
     
     private async Task LoadFoodPrefabsAsync()
@@ -157,6 +163,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         _ingredientDic.Add(IngredientName.Cherry, results[17]);
         _ingredientDic.Add(IngredientName.Lime, results[18]);
         
+        Debug.Log("прошел LoadFoodPrefabsAsync");
+        
     }
     
     private async Task LoadViewDishPrefabsAsync()
@@ -185,6 +193,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         _viewDishDic.Add(ViewDishName.LimeViewDish, results[6]);
         _viewDishDic.Add(ViewDishName.CherryViewDish, results[7]);
         _viewDishDic.Add(ViewDishName.BlueberryViewDish, results[8]);
+        
+        Debug.Log("прошел LoadViewDishPrefabsAsync");
     }
     
     private async Task LoadUIPrefabsAsync()
@@ -199,6 +209,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         
         _uiDic.Add(UIName.GameWindow, results[0]);
         _uiDic.Add(UIName.GameOverWindow, results[1]);
+        
+        Debug.Log("прошел LoadUIPrefabsAsync");
     }
     
     private async Task LoadCustomPrefabsAsync()
@@ -217,6 +229,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         _customDic.Add(CustomFurnitureName.Default, results[1]);
         _customDic.Add(CustomFurnitureName.NewYear, results[2]);
         _customDic.Add(CustomFurnitureName.Crock, results[3]);
+        
+        Debug.Log("прошел LoadCustomPrefabsAsync");
     }
     #endregion
     
@@ -225,8 +239,13 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     {
         var operation = Addressables.LoadAssetAsync<GameObject>(address);
         var prefab = await operation.Task;
-        _loadedPrefabs.Add(prefab);
-        return prefab;
+        if (prefab != null)
+        {
+            _loadedPrefabs.Add(prefab);
+            return prefab;
+        }
+        Debug.Log("Ошибка загрузки LoadGameObjectAsync");
+        return null;
     }
     
     #endregion

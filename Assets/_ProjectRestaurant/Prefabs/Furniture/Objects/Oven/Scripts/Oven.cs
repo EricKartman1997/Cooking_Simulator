@@ -94,7 +94,7 @@ namespace OvenFurniture
                 return;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 EnterTrigger();
                 return;
@@ -116,7 +116,7 @@ namespace OvenFurniture
                 return;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 ExitTrigger();
                 return;
@@ -276,7 +276,7 @@ namespace OvenFurniture
                 return false;
             }
             
-            if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
             {
                 Debug.LogWarning("Печка не работает");
                 return false;

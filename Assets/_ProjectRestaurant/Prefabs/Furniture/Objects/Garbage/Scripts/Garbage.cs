@@ -53,7 +53,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             EnterTrigger();
             return;
@@ -75,7 +75,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             ExitTrigger();
             return;
@@ -154,7 +154,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.Config.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             Debug.LogWarning("Мусорка не работает");
             return;

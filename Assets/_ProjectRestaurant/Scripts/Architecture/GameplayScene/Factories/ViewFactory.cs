@@ -63,7 +63,7 @@ public class ViewFactory: IDisposable
                 return Object.Instantiate(_productsContainer.FishDish, parent);
             case EnumViewFood.Meat:
                 return Object.Instantiate(_productsContainer.MeatDish, parent);
-            case EnumViewFood.RawCutlet:
+            case EnumViewFood.Cutlet:
                 return Object.Instantiate(_productsContainer.RawCutletDish, parent);
             default:
                 Debug.LogWarning($"Unknown product type: {enumViewFood}");

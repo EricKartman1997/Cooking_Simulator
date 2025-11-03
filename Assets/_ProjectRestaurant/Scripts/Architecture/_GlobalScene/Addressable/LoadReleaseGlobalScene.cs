@@ -19,7 +19,7 @@ public class LoadReleaseGlobalScene : IDisposable
         _globalPrefDic = new Dictionary<GlobalPref, GameObject>();
         _loadedPrefabs = new List<GameObject>();
         InitGlobal();
-        //Debug.Log("вошел в конструктор LoadReleaseGlobalScene");
+        Debug.Log("завершил инициализацию LoadReleaseGlobalScene");
     }
 
     public void Dispose()
@@ -58,8 +58,7 @@ public class LoadReleaseGlobalScene : IDisposable
     {
         
         // Синхронная загрузка через Addressables (блокирующий вызов)
-        var loadingPanelOperation = Addressables.LoadAssetAsync<GameObject>(
-            "Assets/_ProjectRestaurant/UI/_Prefabs/Global/LoadingPanel/LoadingPanel.prefab");
+        var loadingPanelOperation = Addressables.LoadAssetAsync<GameObject>("LoadingPanel");
         
         // Ожидаем завершения операции
         var loadingPanelPrefab = loadingPanelOperation.WaitForCompletion();
