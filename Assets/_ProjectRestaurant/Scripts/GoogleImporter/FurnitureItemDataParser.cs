@@ -37,7 +37,7 @@ namespace GoogleSpreadsheets
                     break;
                 
                 case "Rotation": 
-                    _currentItemData.Position = ParseVector3(token);
+                    _currentItemData.Rotation = ParseVector3(token);
                     break;
 
                 case "DecorationTableTop":
@@ -64,21 +64,29 @@ namespace GoogleSpreadsheets
         private Vector3 ParseVector3(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
+            {
+                Debug.Log("ZERO-1");
                 return Vector3.zero;
+            }
 
             token = token.Replace(',', '.'); // если в Google Sheets числа через запятую
 
             var parts = token.Split(';');
             if (parts.Length != 3)
+            {
+                Debug.Log("ZERO-2");
                 return Vector3.zero;
+            }
+                
 
             if (float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
                 float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
             {
+                //Debug.Log($"X = {x}, Y = {y}, Z = {z}");
                 return new Vector3(x, y, z);
             }
-
+            Debug.Log("ZERO-3");
             return Vector3.zero;
         }
     }

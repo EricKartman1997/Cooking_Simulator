@@ -1,14 +1,15 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
-using System.Threading;
+using Cinemachine;
 
 public class BootstrapGameplay : MonoBehaviour
 {
     [SerializeField] private GameObject canvas;
-    [SerializeField] private Transform poinPlayer;
+    [SerializeField] private Transform pointPlayer;
     [SerializeField] private Transform parentPlayer;
     [SerializeField] private Transform parentFurniture;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
     
     private LoadReleaseGameplay _loadReleaseGameplay;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
@@ -48,8 +49,11 @@ public class BootstrapGameplay : MonoBehaviour
         // создание сервисов
         // создать UI
         // включить музыку
+
         // выключить экран зарузка (удаляется)
         HideLoadingPanel();
+        // подключить камеру к игроку
+        //_factoryPlayerGameplay.EnableCamera(virtualCamera);
     }
     
     public async UniTask ExitLevel()
@@ -78,7 +82,7 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTask CreatePlayerAsync()
     {
-        _factoryPlayerGameplay.CreatePlayer(poinPlayer, parentPlayer);
+       _factoryPlayerGameplay.CreatePlayer(pointPlayer, parentPlayer, virtualCamera);
         await UniTask.Yield(); // отдаём управление кадру
     }
     

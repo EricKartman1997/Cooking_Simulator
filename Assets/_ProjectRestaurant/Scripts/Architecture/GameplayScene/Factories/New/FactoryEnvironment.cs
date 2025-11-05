@@ -26,6 +26,7 @@ public class FactoryEnvironment : IDisposable
     {
         ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
         await importSheetsGoogle.LoadItemsSettings(this);
+        //Debug.Log($"Count  {_itemsList.Count}");
 
         foreach (var item in _itemsList)
         {
@@ -124,6 +125,7 @@ public class FactoryEnvironment : IDisposable
 
     public GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
     {
+        //itemData.Show();
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Distribution], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
@@ -141,6 +143,14 @@ public class FurnitureItemData
     public EnumDecorationLowerSurface DecorationLowerSurface;
     public EnumGiveFood GiveFood;
     public EnumViewFood ViewFood;
+
+    public void Show()
+    {
+        Debug.Log($"ID = {Id}, Name = {Name}, Position = {Position}, Rotation = {Rotation}," +
+                  $" DecorationTableTop = {DecorationTableTop}," +
+                  $" DecorationLowerSurface = {DecorationLowerSurface}, GiveFood = {GiveFood}," +
+                  $" ViewFood = {ViewFood}");
+    }
 }
 
 

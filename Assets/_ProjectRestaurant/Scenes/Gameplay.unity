@@ -1071,8 +1071,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 0
-  m_LookAt: {fileID: 1049176868031069703}
-  m_Follow: {fileID: 1049176868031069703}
+  m_LookAt: {fileID: 0}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
@@ -1799,9 +1799,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1948005329}
-  poinPlayer: {fileID: 1692615280}
+  pointPlayer: {fileID: 1692615280}
   parentPlayer: {fileID: 1692615280}
   parentFurniture: {fileID: 1669265691}
+  virtualCamera: {fileID: 1059653527}
 --- !u!4 &1782935899
 Transform:
   m_ObjectHideFlags: 0
@@ -2353,11 +2354,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 231ab1c74b267de4ab2725297b32c09c, type: 3}
---- !u!4 &1049176868031069703 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 50005064949421288, guid: 995c86288e23e7a4cb11bc24b1881906, type: 3}
-  m_PrefabInstance: {fileID: 7736861815786387320}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1249629573668006420
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class Heroik : MonoBehaviour
     
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
+    [SerializeField] private Transform pointCamera;
     private IUseFurniture _useFurniture;
     private GameManager _gameManager;
     private IngredientHandler _ingredientHandler;
@@ -30,6 +31,7 @@ public class Heroik : MonoBehaviour
         }
     }
     public GameObject CurrentTakenObjects => _ingredientHandler.CurrentTakenObjects;
+    public Transform PointCamera => pointCamera;
     public bool IsBusyHands => _ingredientHandler.IsBusyHands;
 
     private void Awake()
