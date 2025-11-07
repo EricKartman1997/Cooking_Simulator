@@ -6,9 +6,6 @@ using Cinemachine;
 public class BootstrapGameplay : MonoBehaviour
 {
     [SerializeField] private GameObject canvas;
-    [SerializeField] private Transform pointPlayer;
-    [SerializeField] private Transform parentPlayer;
-    [SerializeField] private Transform parentFurniture;
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     
     private LoadReleaseGameplay _loadReleaseGameplay;
@@ -38,8 +35,8 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTaskVoid InitializeAsync()
     {
+        // вкл загрузку
         ShowLoadingPanel();
-        
         // загрузить все ресурсы
         await WaitForResourcesLoaded();
         // создать игрока
@@ -47,13 +44,13 @@ public class BootstrapGameplay : MonoBehaviour
         // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
         // создание сервисов
-        // создать UI
+        // создание UI
+        CreateUI();
         // включить музыку
-
-        // выключить экран зарузка (удаляется)
+        // выключить экран загрузки (удаляется)
         HideLoadingPanel();
-        // подключить камеру к игроку
-        //_factoryPlayerGameplay.EnableCamera(virtualCamera);
+
+
     }
     
     public async UniTask ExitLevel()
@@ -61,6 +58,11 @@ public class BootstrapGameplay : MonoBehaviour
         // остановить музыку
         // сохранить настройки
         // переход на сцену меню
+    }
+
+    private void CreateUI()
+    {
+        _factoryUIGameplay.CreateUI(canvas.transform);
     }
     
     private void ShowLoadingPanel()
@@ -82,15 +84,16 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTask CreatePlayerAsync()
     {
-       _factoryPlayerGameplay.CreatePlayer(pointPlayer, parentPlayer, virtualCamera);
+       _factoryPlayerGameplay.CreatePlayer(virtualCamera);
         await UniTask.Yield(); // отдаём управление кадру
     }
     
     private async UniTask CreateEnvironmentAsync()
     {
-        await _factoryEnvironment.CreateFurnitureGamePlayAsync(parentFurniture);
+        await _factoryEnvironment.CreateFurnitureGamePlayAsync();
+        await UniTask.Yield();
+        _factoryEnvironment.CreateOtherEnvironmentGamePlayAsync();
         await UniTask.Yield();
     }
- 
     
 }

@@ -88,6 +88,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1837044734347881379}
     m_Modifications:
+    - target: {fileID: 1483165392099743385, guid: 645652a58d65edd4a8141ae2e4738d75, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e9a4e73f6abe34e458486bb0b7fb8e71, type: 2}
+    - target: {fileID: 1483165392099743385, guid: 645652a58d65edd4a8141ae2e4738d75, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2171222323951423493, guid: e9a4e73f6abe34e458486bb0b7fb8e71, type: 2}
     - target: {fileID: 3835848519815882080, guid: 645652a58d65edd4a8141ae2e4738d75, type: 3}
       propertyPath: m_Name
       value: Orders
@@ -285,6 +293,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4380510042747776503, guid: d2a88f6d2e427e5448c6d7498e5b7d69, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380510042747776503, guid: d2a88f6d2e427e5448c6d7498e5b7d69, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e9a4e73f6abe34e458486bb0b7fb8e71, type: 2}
+    - target: {fileID: 4380510042747776503, guid: d2a88f6d2e427e5448c6d7498e5b7d69, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2171222323951423493, guid: e9a4e73f6abe34e458486bb0b7fb8e71, type: 2}
     m_RemovedComponents:
     - {fileID: 9112174017148631612, guid: d2a88f6d2e427e5448c6d7498e5b7d69, type: 3}
     m_RemovedGameObjects: []

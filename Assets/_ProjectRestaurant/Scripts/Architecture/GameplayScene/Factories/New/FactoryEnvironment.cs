@@ -22,8 +22,10 @@ public class FactoryEnvironment : IDisposable
         Debug.Log("FactoryEnvironment.Dispose");
     }
 
-    public async UniTask CreateFurnitureGamePlayAsync(Transform parentFurniture)
+    public async UniTask CreateFurnitureGamePlayAsync()
     {
+        GameObject empty = new GameObject("Furniture_Test");
+        
         ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
         await importSheetsGoogle.LoadItemsSettings(this);
         //Debug.Log($"Count  {_itemsList.Count}");
@@ -33,31 +35,31 @@ public class FactoryEnvironment : IDisposable
             switch (item.Name)
             {
                 case "GetTable":
-                    CreateGetTable(item, parentFurniture);
+                    CreateGetTable(item, empty.transform);
                     break;
                 case "GiveTable":
-                    CreateGiveTable(item, parentFurniture);
+                    CreateGiveTable(item, empty.transform);
                     break;
                 case "CuttingTable":
-                    CreateCuttingTable(item, parentFurniture);
+                    CreateCuttingTable(item, empty.transform);
                     break;
                 case "Garbage":
-                    CreateGarbage(item, parentFurniture);
+                    CreateGarbage(item, empty.transform);
                     break;
                 case "Stove":
-                    CreateStove(item, parentFurniture);
+                    CreateStove(item, empty.transform);
                     break;
                 case "Distribution":
-                    CreateDistribution(item, parentFurniture);
+                    CreateDistribution(item, empty.transform);
                     break;
                 case "Oven":
-                    CreateOven(item, parentFurniture);
+                    CreateOven(item, empty.transform);
                     break;
                 case "Blender":
-                    CreateBlender(item, parentFurniture);
+                    CreateBlender(item, empty.transform);
                     break;
                 case "Suvide":
-                    CreateSuvide(item, parentFurniture);
+                    CreateSuvide(item, empty.transform);
                     break;
             }
             await UniTask.Yield();
@@ -65,8 +67,14 @@ public class FactoryEnvironment : IDisposable
         // ждать окончание операции
         
     }
+
+    public void CreateOtherEnvironmentGamePlayAsync()
+    {
+        GameObject empty = new GameObject("Environment_Test");
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.Floor], empty.transform.position, Quaternion.identity, empty.transform);
+    }
     
-    public GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GetTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<GetTable>().Init(itemData.GiveFood, itemData.ViewFood);
@@ -74,56 +82,56 @@ public class FactoryEnvironment : IDisposable
         return obj;
     }
     
-    public GameObject CreateGiveTable(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateGiveTable(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GiveTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
     
-        public GameObject CreateCuttingTable(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateCuttingTable(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.CuttingTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateGarbage(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateGarbage(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Garbage], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateOven(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateOven(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Oven], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateBlender(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateBlender(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Blender], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateSuvide(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateSuvide(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Suvide], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateStove(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateStove(FurnitureItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Stove], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
-    public GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
+    private GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
     {
         //itemData.Show();
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Distribution], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
