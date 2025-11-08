@@ -16,6 +16,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     private Dictionary<ViewDishName, GameObject> _viewDishDic = new Dictionary<ViewDishName, GameObject>();
     private Dictionary<UIName, GameObject> _uiDic = new Dictionary<UIName, GameObject>();
     private Dictionary<CustomFurnitureName, GameObject> _customDic = new Dictionary<CustomFurnitureName, GameObject>();
+    private Dictionary<CamerasName, GameObject> _camerasDic = new Dictionary<CamerasName, GameObject>();
     
     private List<GameObject> _loadedPrefabs = new List<GameObject>();
     
@@ -28,6 +29,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     public IReadOnlyDictionary<IngredientName, GameObject> IngredientDic => _ingredientDic;
     public IReadOnlyDictionary<ViewDishName, GameObject> ViewDishDic => _viewDishDic;
     public IReadOnlyDictionary<UIName, GameObject> UINameDic => _uiDic;
+    public IReadOnlyDictionary<CamerasName, GameObject> CamerasDic => _camerasDic;
     public IReadOnlyDictionary<CustomFurnitureName, GameObject> CustomDic => _customDic;
     public bool IsLoaded => _isLoaded;
 
@@ -52,6 +54,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             LoadFoodPrefabsAsync(),
             LoadViewDishPrefabsAsync(),
             LoadUIPrefabsAsync(),
+            LoadCamerasPrefabsAsync(),
             LoadCustomPrefabsAsync()
             
         );
@@ -77,12 +80,15 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     {
         var loadTasks = new List<Task<GameObject>>
         {
-            LoadGameObjectAsync("Floor")
+            LoadGameObjectAsync("Floor"),
+            LoadGameObjectAsync("LightMain")
+            
         };
 
         var results = await Task.WhenAll(loadTasks);
         
         _environmentDic.Add(OtherObjsName.Floor, results[0]);
+        _environmentDic.Add(OtherObjsName.LightMain, results[1]);
         //Debug.Log("прошел LoadEnvironmentPrefabsAsync");
     }
     
@@ -203,7 +209,6 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         {
             LoadGameObjectAsync("GameWindow"),
             LoadGameObjectAsync("GameOverWindow"),
-            LoadGameObjectAsync("Cameras"),
             LoadGameObjectAsync("MainFrameCanvas")
         };
 
@@ -211,8 +216,23 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         
         _uiDic.Add(UIName.GameWindow, results[0]);
         _uiDic.Add(UIName.GameOverWindow, results[1]);
-        _uiDic.Add(UIName.Cameras, results[2]);
-        _uiDic.Add(UIName.MainFrameCanvas, results[3]);
+        _uiDic.Add(UIName.MainFrameCanvas, results[2]);
+        
+        //Debug.Log("прошел LoadUIPrefabsAsync");
+    }
+    
+    private async Task LoadCamerasPrefabsAsync()
+    {
+        var loadTasks = new List<Task<GameObject>>
+        {
+            LoadGameObjectAsync("MainCamera"),
+            LoadGameObjectAsync("TopDownCamera"),
+        };
+
+        var results = await Task.WhenAll(loadTasks);
+        
+        _camerasDic.Add(CamerasName.MainCamera, results[0]);
+        _camerasDic.Add(CamerasName.TopDownCamera, results[1]);
         
         //Debug.Log("прошел LoadUIPrefabsAsync");
     }
@@ -306,7 +326,8 @@ public enum FurnitureName
 
 public enum OtherObjsName
 {
-    Floor
+    Floor,
+    LightMain
 }
 
 public enum PlayerName
@@ -326,8 +347,13 @@ public enum UIName
 {
     GameWindow,
     GameOverWindow,
-    Cameras,
     MainFrameCanvas
+}
+
+public enum CamerasName
+{
+    MainCamera,
+    TopDownCamera,
 }
 
 public enum CustomFurnitureName

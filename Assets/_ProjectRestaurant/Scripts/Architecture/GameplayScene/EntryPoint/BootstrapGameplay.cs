@@ -5,20 +5,23 @@ using Cinemachine;
 
 public class BootstrapGameplay : MonoBehaviour
 {
-    [SerializeField] private GameObject canvas;
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    //[SerializeField] private GameObject canvas;
+    //[SerializeField] private CinemachineVirtualCamera virtualCamera;
+    private GameObject _canvas;
+    private CinemachineVirtualCamera _virtualCamera;
     
     private LoadReleaseGameplay _loadReleaseGameplay;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIGameplay _factoryUIGameplay;
     private FactoryPlayerGameplay _factoryPlayerGameplay;
     private FactoryEnvironment _factoryEnvironment;
+    private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
     
     private GameObject _loadingPanel;
     
     [Inject]
-    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, FactoryUIGameplay factoryUIGameplay,FactoryEnvironment factoryEnvironment, FactoryPlayerGameplay factoryPlayerGameplay,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceGameplay soundsServiceGameplay)
+    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, FactoryUIGameplay factoryUIGameplay,FactoryEnvironment factoryEnvironment, FactoryPlayerGameplay factoryPlayerGameplay,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceGameplay soundsServiceGameplay,FactoryCamerasGameplay factoryCamerasGameplay)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -26,6 +29,7 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryPlayerGameplay = factoryPlayerGameplay;
         _soundsServiceGameplay = soundsServiceGameplay;
         _factoryEnvironment = factoryEnvironment;
+        _factoryCamerasGameplay = factoryCamerasGameplay;
     }
     
     private void Start()
@@ -35,17 +39,19 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTaskVoid InitializeAsync()
     {
+        // ждем загрузки всех ресурсов
+        await WaitForResourcesLoaded();
+        // создать камеры
+        CreateCameras();
+        //создать UI
+        CreateUI();
         // вкл загрузку
         ShowLoadingPanel();
-        // загрузить все ресурсы
-        await WaitForResourcesLoaded();
-        // создать игрока
-        await CreatePlayerAsync();
         // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
+        // создать игрока
+        await CreatePlayerAsync();
         // создание сервисов
-        // создание UI
-        CreateUI();
         // включить музыку
         // выключить экран загрузки (удаляется)
         HideLoadingPanel();
@@ -60,14 +66,19 @@ public class BootstrapGameplay : MonoBehaviour
         // переход на сцену меню
     }
 
+    private void CreateCameras()
+    {
+        _factoryCamerasGameplay.CreateMainCamera();
+        _virtualCamera = _factoryCamerasGameplay.CreateTopDownCamera();
+    }
     private void CreateUI()
     {
-        _factoryUIGameplay.CreateUI(canvas.transform);
+        _canvas = _factoryUIGameplay.CreateUI();
     }
     
     private void ShowLoadingPanel()
     {
-        _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
+        _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], _canvas.transform);
     }
 
     private void HideLoadingPanel()
@@ -80,11 +91,12 @@ public class BootstrapGameplay : MonoBehaviour
     {
         // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
+        Debug.Log("Загружены все ресурсы для Gameplay");
     }
     
     private async UniTask CreatePlayerAsync()
     {
-       _factoryPlayerGameplay.CreatePlayer(virtualCamera);
+       _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
         await UniTask.Yield(); // отдаём управление кадру
     }
     
@@ -92,8 +104,9 @@ public class BootstrapGameplay : MonoBehaviour
     {
         await _factoryEnvironment.CreateFurnitureGamePlayAsync();
         await UniTask.Yield();
-        _factoryEnvironment.CreateOtherEnvironmentGamePlayAsync();
+        _factoryEnvironment.CreateOtherEnvironmentGamePlay();
         await UniTask.Yield();
+        _factoryEnvironment.CreateLightsGamePlay();
     }
     
 }

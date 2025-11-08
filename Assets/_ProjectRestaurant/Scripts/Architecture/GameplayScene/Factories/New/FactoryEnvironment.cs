@@ -68,10 +68,19 @@ public class FactoryEnvironment : IDisposable
         
     }
 
-    public void CreateOtherEnvironmentGamePlayAsync()
+    public void CreateOtherEnvironmentGamePlay()
     {
         GameObject empty = new GameObject("Environment_Test");
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.Floor], empty.transform.position, Quaternion.identity, empty.transform);
+    }
+    
+    public void CreateLightsGamePlay()
+    {
+        GameObject empty = new GameObject("Lights_Test");
+        GameObject obj = _container.InstantiatePrefab(
+            _loadReleaseGameplay.EnvironmentDic[OtherObjsName.LightMain],
+            empty.transform
+        );
     }
     
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
