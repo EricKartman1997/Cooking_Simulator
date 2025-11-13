@@ -23,7 +23,7 @@ public class FactoryPlayerGameplay : IDisposable
     public void CreatePlayer(CinemachineVirtualCamera camera)
     {
         GameObject empty = new GameObject("Player_Test");
-        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PrefDic[PlayerName.RobotPlayer], empty.transform.position, Quaternion.identity, empty.transform);
+        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], empty.transform.position, Quaternion.identity, empty.transform);
         _heroik = player.GetComponent<Heroik>();
         EnableCamera(camera, player);
         _container.Rebind<Heroik>().FromInstance(_heroik).AsSingle();

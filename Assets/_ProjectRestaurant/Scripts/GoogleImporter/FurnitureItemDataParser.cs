@@ -49,11 +49,11 @@ namespace GoogleSpreadsheets
                     break;
                 
                 case "GiveFood":
-                    _currentItemData.GiveFood = (EnumGiveFood)Enum.Parse(typeof(EnumGiveFood), token, true);
+                    _currentItemData.GiveFood = (IngredientName)Enum.Parse(typeof(IngredientName), token, true);
                     break;
 
                 case "ViewFood":
-                    _currentItemData.ViewFood = (EnumViewFood)Enum.Parse(typeof(EnumViewFood), token, true);
+                    _currentItemData.ViewFood = (ViewDishName)Enum.Parse(typeof(ViewDishName), token, true);
                     break;
 
                 default:

@@ -14,8 +14,8 @@ public class GetTable : MonoBehaviour, IUseFurniture
     private bool _isHeroikTrigger;
     private bool _isInit;
     
-    private EnumGiveFood _giveFood;
-    private EnumViewFood _viewFood;
+    private IngredientName _giveFood;
+    private ViewDishName _viewFood;
     
     private GameManager _gameManager;
 
@@ -109,7 +109,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
     // {
     //     EventBus.PressE -= CookingProcess;
     // }
-    public void Init(EnumGiveFood giveFood, EnumViewFood viewFood)
+    public void Init(IngredientName giveFood, ViewDishName viewFood)
     {
         _giveFood = giveFood;
         _viewFood = viewFood;

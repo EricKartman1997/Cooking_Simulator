@@ -3,13 +3,15 @@ using Zenject;
 
 public class GameplayInstaller : MonoInstaller
 {
+    [SerializeField] private FoodsForFurnitureContainer foodsForFurnitureContainer;
+    
     [SerializeField] private BootstrapGameplay bootstrapGameplay;
-    [SerializeField] private AudioSource sFX;
-    [SerializeField] private AudioSource music;
+    //[SerializeField] private AudioSource sFX;
+    //[SerializeField] private AudioSource music;
     public override void InstallBindings()
     {
-        Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
-        Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
+        // Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
+        // Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
         
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
         
@@ -20,6 +22,11 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<FactoryEnvironment>().AsSingle();
         Container.BindInterfacesAndSelfTo<FactoryUIGameplay>().AsSingle();
         Container.BindInterfacesAndSelfTo<FactoryCamerasGameplay>().AsSingle();
+        
+        Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
+        
+        Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
+        
         Debug.Log("завершил инициализацию GameplayInstaller");
     }
 }

@@ -43,27 +43,27 @@ public class ViewFactory: IDisposable
         _isInit = true;
     }
 
-    public GameObject GetProduct(EnumViewFood enumViewFood,Transform parent)
+    public GameObject GetProduct(ViewDishName enumViewFood,Transform parent)
     {
         switch (enumViewFood)
         {
-            case EnumViewFood.Apple:
+            case ViewDishName.AppleViewDish:
                 return Object.Instantiate(_productsContainer.AppleDish,parent);
-            case EnumViewFood.Orange:
+            case ViewDishName.OrangeViewDish:
                 return Object.Instantiate(_productsContainer.OrangeDish, parent);
-            case EnumViewFood.Lime:
+            case ViewDishName.LimeViewDish:
                 return Object.Instantiate(_productsContainer.LimeDish, parent);
-            case EnumViewFood.Cherry:
+            case ViewDishName.CherryViewDish:
                 return Object.Instantiate(_productsContainer.CherryDish, parent);
-            case EnumViewFood.Blueberry:
+            case ViewDishName.BlueberryViewDish:
                 return Object.Instantiate(_productsContainer.BlueberryDish, parent);
-            case EnumViewFood.Strawberry:
+            case ViewDishName.StrawberryViewDish:
                 return Object.Instantiate(_productsContainer.StrawberryDish, parent);
-            case EnumViewFood.Fish:
+            case ViewDishName.FishViewDish:
                 return Object.Instantiate(_productsContainer.FishDish, parent);
-            case EnumViewFood.Meat:
+            case ViewDishName.MeatViewDish:
                 return Object.Instantiate(_productsContainer.MeatDish, parent);
-            case EnumViewFood.Cutlet:
+            case ViewDishName.RawCutletViewDish:
                 return Object.Instantiate(_productsContainer.RawCutletDish, parent);
             default:
                 Debug.LogWarning($"Unknown product type: {enumViewFood}");

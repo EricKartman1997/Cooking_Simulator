@@ -1,23 +1,14 @@
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using System.Collections;
 
 public class ProductsFactory: IDisposable
 {
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
-    private ProductsContainer _productsContainer;
-    private bool _isInit;
-    
-    public bool IsInit => _isInit;
+    private LoadReleaseGameplay _loadReleaseGameplay;
 
-    public ProductsFactory(ProductsContainer productsContainer,MonoBehaviour coroutineMonoBehaviour)
+    public ProductsFactory(LoadReleaseGameplay loadReleaseGameplay)
     {
-        _productsContainer = productsContainer;
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-
-        _coroutineMonoBehaviour.StartCoroutine(Init());
+        _loadReleaseGameplay = loadReleaseGameplay;
     }
     
     public void Dispose()
@@ -25,25 +16,6 @@ public class ProductsFactory: IDisposable
         Debug.Log("У объекта вызван Dispose : ProductsFactory");
     }
     
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        // while (_timeGame == null)
-        // {
-        //     _timeGame = _gameManager.TimeGame;
-        //     yield return null;
-        // }
-        
-        Debug.Log("Создать объект: ProductsFactory");
-        _isInit = true;
-    }
-
-
     public GameObject GetCutlet(EnumRoasting roasting)
     {
         switch (roasting)
@@ -90,54 +62,54 @@ public class ProductsFactory: IDisposable
          return obj;
      }
 
-     public GameObject GetProduct(EnumGiveFood enumGiveFood)
-     {
-         switch (enumGiveFood)
-         {
-             case EnumGiveFood.Apple:
-                 return Object.Instantiate(_productsContainer.Apple.gameObject);
-             case EnumGiveFood.Orange:
-                 return Object.Instantiate(_productsContainer.Orange.gameObject);
-             case EnumGiveFood.Lime:
-                 return Object.Instantiate(_productsContainer.Lime);
-             case EnumGiveFood.Cherry:
-                 return Object.Instantiate(_productsContainer.Cherry);
-             case EnumGiveFood.Blueberry:
-                 return Object.Instantiate(_productsContainer.Blueberry);
-             case EnumGiveFood.Strawberry:
-                 return Object.Instantiate(_productsContainer.Strawberry);
-             case EnumGiveFood.Fish:
-                 return Object.Instantiate(_productsContainer.Fish.gameObject);
-             case EnumGiveFood.Meat:
-                 return Object.Instantiate(_productsContainer.Meat.gameObject);
-             default:
-                 Debug.LogWarning($"Unknown product type: {enumGiveFood}");
-                 return null;
-         }
-     }
+     // public GameObject GetProduct(EnumGiveFood enumGiveFood)
+     // {
+     //     switch (enumGiveFood)
+     //     {
+     //         case EnumGiveFood.Apple:
+     //             return Object.Instantiate(_productsContainer.Apple.gameObject);
+     //         case EnumGiveFood.Orange:
+     //             return Object.Instantiate(_productsContainer.Orange.gameObject);
+     //         case EnumGiveFood.Lime:
+     //             return Object.Instantiate(_productsContainer.Lime);
+     //         case EnumGiveFood.Cherry:
+     //             return Object.Instantiate(_productsContainer.Cherry);
+     //         case EnumGiveFood.Blueberry:
+     //             return Object.Instantiate(_productsContainer.Blueberry);
+     //         case EnumGiveFood.Strawberry:
+     //             return Object.Instantiate(_productsContainer.Strawberry);
+     //         case EnumGiveFood.Fish:
+     //             return Object.Instantiate(_productsContainer.Fish.gameObject);
+     //         case EnumGiveFood.Meat:
+     //             return Object.Instantiate(_productsContainer.Meat.gameObject);
+     //         default:
+     //             Debug.LogWarning($"Unknown product type: {enumGiveFood}");
+     //             return null;
+     //     }
+     // }
      
-     public GameObject GetProductRef(EnumGiveFood enumGiveFood)
+     public GameObject GetProductRef(IngredientName enumGiveFood)
      {
          switch (enumGiveFood)
          {
-             case EnumGiveFood.Apple:
-                 return _productsContainer.Apple.gameObject;
-             case EnumGiveFood.Orange:
-                 return _productsContainer.Orange.gameObject;
-             case EnumGiveFood.Lime:
-                 return _productsContainer.Lime;
-             case EnumGiveFood.Cherry:
-                 return _productsContainer.Cherry;
-             case EnumGiveFood.Blueberry:
-                 return _productsContainer.Blueberry;
-             case EnumGiveFood.Strawberry:
-                 return _productsContainer.Strawberry;
-             case EnumGiveFood.Fish:
-                 return _productsContainer.Fish.gameObject;
-             case EnumGiveFood.Meat:
-                 return _productsContainer.Meat.gameObject;
-             case EnumGiveFood.Cutlet:
-                 return _productsContainer.RawCutlet.gameObject;
+             case IngredientName.Apple:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Apple];
+             case IngredientName.Orange:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Orange];
+             case IngredientName.Lime:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Lime];
+             case IngredientName.Cherry:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Cherry];
+             case IngredientName.Blueberry:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Blueberry];
+             case IngredientName.Strawberry:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Strawberry];
+             case IngredientName.Fish:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Fish];
+             case IngredientName.Meat:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.Meat];
+             case IngredientName.RawCutlet:
+                 return _loadReleaseGameplay.IngredientDic[IngredientName.RawCutlet];
              default:
                  Debug.LogWarning($"Unknown product type: {enumGiveFood}");
                  return null;
@@ -228,17 +200,17 @@ public class ProductsFactory: IDisposable
     // {
     //     return Object.Instantiate(_rubbish, transform.position, Quaternion.identity, parent);
     // }
-    public GameObject GetRawCutlet()
+    private GameObject GetRawCutlet()
     {
-        return Object.Instantiate(_productsContainer.RawCutlet).gameObject;
+        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.RawCutlet]);
     }
-    public GameObject GetMediumCutlet()
+    private GameObject GetMediumCutlet()
     {
-        return Object.Instantiate(_productsContainer.MediumCutlet).gameObject;
+        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.MediumCutlet]);
     }
-    public GameObject GetBurnCutlet()
+    private GameObject GetBurnCutlet()
     {
-        return Object.Instantiate(_productsContainer.BurnCutlet).gameObject;
+        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.BurnCutlet]);
     }
     
 }

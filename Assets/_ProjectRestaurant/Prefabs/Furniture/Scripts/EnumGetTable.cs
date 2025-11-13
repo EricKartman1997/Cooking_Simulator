@@ -12,28 +12,4 @@ public enum EnumDecorationLowerSurface
     Crock
 }
 
-public enum EnumGiveFood
-{
-    Apple,
-    Orange,
-    Lime,
-    Cherry,
-    Blueberry,
-    Strawberry,
-    Fish,
-    Meat,
-    Cutlet
-}
 
-public enum EnumViewFood
-{
-    Apple,
-    Orange,
-    Lime,
-    Cherry,
-    Blueberry,
-    Strawberry,
-    Fish,
-    Meat,
-    Cutlet
-}

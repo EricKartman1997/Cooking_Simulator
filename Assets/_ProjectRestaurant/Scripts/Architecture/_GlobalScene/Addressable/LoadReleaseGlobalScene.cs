@@ -9,15 +9,13 @@ using UnityEngine.SceneManagement;
 
 public class LoadReleaseGlobalScene : IDisposable
 {
-    private Dictionary<GlobalPref, GameObject> _globalPrefDic;
-    private List<GameObject> _loadedPrefabs;
+    private Dictionary<GlobalPref, GameObject> _globalPrefDic = new Dictionary<GlobalPref, GameObject>();
+    private List<GameObject> _loadedPrefabs = new List<GameObject>();
 
     public IReadOnlyDictionary<GlobalPref, GameObject> GlobalPrefDic => _globalPrefDic;
 
     public LoadReleaseGlobalScene()
     {
-        _globalPrefDic = new Dictionary<GlobalPref, GameObject>();
-        _loadedPrefabs = new List<GameObject>();
         InitGlobal();
         Debug.Log("завершил инициализацию LoadReleaseGlobalScene");
     }

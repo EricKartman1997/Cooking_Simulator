@@ -65,7 +65,7 @@ public class BootstrapLVL2 : MonoBehaviour
         _gameOver = new GameOver(this);
         
         _viewFactory = new ViewFactory(_productsContainer,this);
-        _productsFactory = new ProductsFactory(_productsContainer,this);
+        //_productsFactory = new ProductsFactory(_productsContainer,this);
         _helperScriptFactory = new HelperScriptFactory(this);
         
         _gameManager = new GameManager(this,_productsContainer,_uiContainer,_gameManagerUpdate,
@@ -92,7 +92,7 @@ public class BootstrapLVL2 : MonoBehaviour
         yield return new WaitUntil(() => _gameOver.IsInit);
         yield return new WaitUntil(() => _uiManager.IsInit);
         yield return new WaitUntil(() => _viewFactory.IsInit);
-        yield return new WaitUntil(() => _productsFactory.IsInit);
+        //yield return new WaitUntil(() => _productsFactory.IsInit);
         yield return new WaitUntil(() => _helperScriptFactory.IsInit);
         yield return new WaitUntil(() => _recipeService.IsInit);
         _isAllInit = true;

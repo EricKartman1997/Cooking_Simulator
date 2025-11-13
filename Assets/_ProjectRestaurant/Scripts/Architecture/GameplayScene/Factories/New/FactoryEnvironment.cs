@@ -158,8 +158,8 @@ public class FurnitureItemData
     public Vector3 Rotation;
     public EnumDecorationTableTop DecorationTableTop;
     public EnumDecorationLowerSurface DecorationLowerSurface;
-    public EnumGiveFood GiveFood;
-    public EnumViewFood ViewFood;
+    public IngredientName GiveFood;
+    public ViewDishName ViewFood;
 
     public void Show()
     {

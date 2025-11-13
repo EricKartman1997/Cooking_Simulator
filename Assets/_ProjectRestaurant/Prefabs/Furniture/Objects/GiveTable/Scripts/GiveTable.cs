@@ -1,60 +1,44 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GiveTable : MonoBehaviour,IUseFurniture
 {
     [SerializeField] private Transform ingredientPoint;
     [SerializeField] private Transform parentFood;
+    
     private GameObject _ingredient;
     private bool _isHeroikTrigger;
     private Heroik _heroik;
+    
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
-    private GameManager _gameManager;
-    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-    private bool _isInit;
     
-    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
-    
-    private List<Product> ListProduct => _foodsForFurnitureContainer.GiveTable.ListForFurniture;
+    private List<Product> _productsList;
+    private ProductsFactory _productsFactory;
+
+    [Inject]
+    private void ConstructZenject(
+        FoodsForFurnitureContainer foodsForFurnitureContainer,
+        ProductsFactory productsFactory)
+    {
+        _productsFactory = productsFactory;
+        _productsList = foodsForFurnitureContainer.GiveTable.ListForFurniture;
+    }
 
     private void Awake()
     {
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
-
-    private IEnumerator Start()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        while (_foodsForFurnitureContainer== null)
-        {
-            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-            yield return null;
-        }
-        
-        while (IsAllInit == false)
-        {
-            yield return null;
-        }
-        
-        _isInit = true;
-        Debug.Log("GiveTable Init");
-
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
+        // if (_isInit == false)
+        // {
+        //     Debug.Log("Инициализация не закончена");
+        //     return;
+        // }
         
         if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
@@ -72,12 +56,6 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 
     private void OnTriggerExit(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
         if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
         {
             ExitTrigger();
@@ -108,7 +86,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             Debug.Log("Объект не передался");
             return false;
         }
-        _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
+        _ingredient = _productsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
         _heroik.CleanObjOnHands();
         return true;
     }
@@ -175,7 +153,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         {
             if (_ingredient == null) // ни одного активного объекта
             {
-                if (!AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
+                if (!AcceptObject(_heroik.TryGiveIngredient(_productsList)))
                 {
                     Debug.Log("с предметом что-то пошло не так");
                 }
@@ -194,12 +172,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 
     private bool CheckCookingProcess()
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return false;
-        }
-        
+
         if(_isHeroikTrigger == false)
         {
             return false;

@@ -47,16 +47,19 @@ public class BootstrapGameplay : MonoBehaviour
         CreateUI();
         // вкл загрузку
         ShowLoadingPanel();
+        // инициализация музыки
+        await InitAudioAsync();
+        // создание сервисов
+        
         // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
         // создать игрока
         await CreatePlayerAsync();
-        // создание сервисов
-        // включить музыку
         // выключить экран загрузки (удаляется)
         HideLoadingPanel();
-
-
+        // вкл музыку
+        //await EnableAudioAsync();
+        
     }
     
     public async UniTask ExitLevel()
@@ -66,6 +69,13 @@ public class BootstrapGameplay : MonoBehaviour
         // переход на сцену меню
     }
 
+    private async UniTask WaitForResourcesLoaded()
+    {
+        // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
+        await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
+        Debug.Log("Загружены все ресурсы для Gameplay");
+    }
+    
     private void CreateCameras()
     {
         _factoryCamerasGameplay.CreateMainCamera();
@@ -87,13 +97,6 @@ public class BootstrapGameplay : MonoBehaviour
             Destroy(_loadingPanel);
     }
     
-    private async UniTask WaitForResourcesLoaded()
-    {
-        // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
-        await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
-        Debug.Log("Загружены все ресурсы для Gameplay");
-    }
-    
     private async UniTask CreatePlayerAsync()
     {
        _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
@@ -107,6 +110,20 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryEnvironment.CreateOtherEnvironmentGamePlay();
         await UniTask.Yield();
         _factoryEnvironment.CreateLightsGamePlay();
+    }
+    
+    private async UniTask InitAudioAsync()
+    {
+        _soundsServiceGameplay.CreateSounds();
+        await UniTask.Yield();
+
+    }
+    
+    private async UniTask EnableAudioAsync()
+    {
+        _soundsServiceGameplay.SetMusic();
+        await UniTask.Yield();
+
     }
     
 }

@@ -17,13 +17,16 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     private Dictionary<UIName, GameObject> _uiDic = new Dictionary<UIName, GameObject>();
     private Dictionary<CustomFurnitureName, GameObject> _customDic = new Dictionary<CustomFurnitureName, GameObject>();
     private Dictionary<CamerasName, GameObject> _camerasDic = new Dictionary<CamerasName, GameObject>();
+    private Dictionary<AudioNameGamePlay, AudioClip> _audioDic = new Dictionary<AudioNameGamePlay, AudioClip>();
+    private Dictionary<ServiceNameGamePlay, GameObject> _seviceDic = new Dictionary<ServiceNameGamePlay, GameObject>();
     
     private List<GameObject> _loadedPrefabs = new List<GameObject>();
+    private List<AudioClip> _loadedClips = new List<AudioClip>();
     
     private bool _isLoaded;
     
     public IReadOnlyDictionary<GlobalPref, GameObject> GlobalPrefDic => _loadReleaseGlobalScene.GlobalPrefDic;
-    public IReadOnlyDictionary<PlayerName, GameObject> PrefDic => _playerDic;
+    public IReadOnlyDictionary<PlayerName, GameObject> PlayerDic => _playerDic;
     public IReadOnlyDictionary<OtherObjsName, GameObject> EnvironmentDic => _environmentDic;
     public IReadOnlyDictionary<FurnitureName, GameObject> FurnitureDic => _furnitureDic;
     public IReadOnlyDictionary<IngredientName, GameObject> IngredientDic => _ingredientDic;
@@ -31,6 +34,9 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     public IReadOnlyDictionary<UIName, GameObject> UINameDic => _uiDic;
     public IReadOnlyDictionary<CamerasName, GameObject> CamerasDic => _camerasDic;
     public IReadOnlyDictionary<CustomFurnitureName, GameObject> CustomDic => _customDic;
+    public IReadOnlyDictionary<AudioNameGamePlay, AudioClip> AudioDic => _audioDic;
+    public IReadOnlyDictionary<ServiceNameGamePlay, GameObject> ServiceDic => _seviceDic;
+    
     public bool IsLoaded => _isLoaded;
 
     public LoadReleaseGameplay(LoadReleaseGlobalScene loadReleaseGlobalScene)
@@ -55,7 +61,9 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             LoadViewDishPrefabsAsync(),
             LoadUIPrefabsAsync(),
             LoadCamerasPrefabsAsync(),
-            LoadCustomPrefabsAsync()
+            LoadCustomPrefabsAsync(),
+            SoundsPrefabsAsync(),
+            ServicePrefabsAsync()
             
         );
         //Debug.Log("Загружены все ресурсы для Gameplay");
@@ -256,6 +264,44 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         
         //Debug.Log("прошел LoadCustomPrefabsAsync");
     }
+    
+    private async Task SoundsPrefabsAsync()
+    {
+
+        var loadTasks = new List<Task<AudioClip>>
+        {
+            //TODO: изменить названия на более краткие
+            //TODO: Проверить были ли она удалены в MainScene
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav"), 
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav"),
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3"),
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3")
+        };
+
+        var results = await Task.WhenAll(loadTasks);
+        
+        _audioDic.Add(AudioNameGamePlay.ClickButton, results[0]);
+        _audioDic.Add(AudioNameGamePlay.HoverButton, results[1]);
+        _audioDic.Add(AudioNameGamePlay.SwipePanel, results[2]);
+        _audioDic.Add(AudioNameGamePlay.Background, results[3]);
+        
+        //Debug.Log("прошел LoadCustomPrefabsAsync");
+    }
+    
+    private async Task ServicePrefabsAsync()
+    {
+        var loadTasks = new List<Task<GameObject>>
+        {
+            LoadGameObjectAsync("SoundsObject"),
+        };
+
+        var results = await Task.WhenAll(loadTasks);
+        
+        _seviceDic.Add(ServiceNameGamePlay.SoundsObject, results[0]);
+        
+        //Debug.Log("прошел LoadCustomPrefabsAsync");
+    }
+    
     #endregion
     
     #region Helper Methods
@@ -270,6 +316,14 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         }
         Debug.Log("Ошибка загрузки LoadGameObjectAsync");
         return null;
+    }
+    
+    private async Task<AudioClip> LoadAudioClipAsync(string address)
+    {
+        var operation = Addressables.LoadAssetAsync<AudioClip>(address);
+        var audioClip = await operation.Task;
+        _loadedClips.Add(audioClip);
+        return audioClip;
     }
     
     #endregion
@@ -340,7 +394,12 @@ public enum AudioNameGamePlay
     ClickButton,
     HoverButton,
     SwipePanel,
-    Background
+    Background,
+}
+
+public enum ServiceNameGamePlay
+{
+    SoundsObject
 }
 
 public enum UIName

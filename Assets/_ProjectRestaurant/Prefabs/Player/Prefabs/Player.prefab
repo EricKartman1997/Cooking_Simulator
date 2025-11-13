@@ -4442,6 +4442,7 @@ GameObject:
   - component: {fileID: 2056080038299465067}
   - component: {fileID: 7654941628668711999}
   - component: {fileID: 5816499406149802805}
+  - component: {fileID: 3718403776568942986}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -4535,7 +4536,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionObj: {fileID: 5112937068353670694}
   currentTakenObjects: {fileID: 1321223938344553272}
-  pointCamera: {fileID: 0}
 --- !u!114 &5816499406149802805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4574,6 +4574,14 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!81 &3718403776568942986
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4741710037606462696}
+  m_Enabled: 1
 --- !u!1 &4748527251250951223
 GameObject:
   m_ObjectHideFlags: 0
