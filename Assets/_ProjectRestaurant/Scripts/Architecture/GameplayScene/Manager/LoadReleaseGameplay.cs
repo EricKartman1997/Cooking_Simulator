@@ -153,6 +153,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             LoadGameObjectAsync("FruitSalad"),
             LoadGameObjectAsync("Cherry"),
             LoadGameObjectAsync("Lime"),
+            LoadGameObjectAsync("Rubbish"),
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -176,6 +177,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         _ingredientDic.Add(IngredientName.FruitSalad, results[16]);
         _ingredientDic.Add(IngredientName.Cherry, results[17]);
         _ingredientDic.Add(IngredientName.Lime, results[18]);
+        _ingredientDic.Add(IngredientName.Rubbish, results[19]);
         
         //Debug.Log("прошел LoadFoodPrefabsAsync");
         
@@ -362,7 +364,8 @@ public enum IngredientName
     FruitSalad,
     MediumCutlet,
     MixBakedFruit,
-    WildBerryCocktail
+    WildBerryCocktail,
+    Rubbish
 }
 
 public enum FurnitureName

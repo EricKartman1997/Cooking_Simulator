@@ -96,7 +96,7 @@ namespace BlenderFurniture
                 return;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 EnterTrigger();
                 return;
@@ -117,7 +117,7 @@ namespace BlenderFurniture
                 return;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 ExitTrigger();
                 return;
@@ -341,7 +341,7 @@ namespace BlenderFurniture
                 return false;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 Debug.LogWarning("Блендер не работает");
                 return false;

@@ -1,37 +1,33 @@
-using System.Collections;
 using UnityEngine;
+using Zenject;
 
 public class DecorationFurniture : MonoBehaviour
 {
     [SerializeField] private Transform positionViewTableTop;
     [SerializeField] private Transform positionViewLowerSurface;
 
-    private EnumDecorationTableTop _decorationTableTop;
-    private EnumDecorationLowerSurface _decorationLowerSurface;
+    private CustomFurnitureName _decorationTableTop;
+    private CustomFurnitureName _decorationLowerSurface;
     private GameObject _decorationTableTopObj;
     private GameObject _decorationLowerSurfaceObj;
-    private GameManager _gameManager;
-    private bool _isInit;
+    
+    private ViewFactory _viewFactory;
 
-    public EnumDecorationTableTop DecorationTableTop => _decorationTableTop;
-    public bool IsInit => _isInit;
+    public CustomFurnitureName DecorationTableTop => _decorationTableTop;
 
-    private IEnumerator Start()
+    [Inject]
+    private void ConstructZenject(ViewFactory viewFactory)
     {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        _decorationLowerSurfaceObj = _gameManager.ViewFactory.GetDecorationLowerSurface(_decorationLowerSurface,positionViewLowerSurface);
-        _decorationTableTopObj = _gameManager.ViewFactory.GetDecorationTableTop(_decorationTableTop,positionViewTableTop);
-        
-        _isInit = true;
-        //Debug.Log("DecorationFurniture Init");
+        _viewFactory = viewFactory;
+    }
+
+    private void Start()
+    {
+        _decorationLowerSurfaceObj = _viewFactory.GetDecorationLowerSurface(_decorationLowerSurface,positionViewLowerSurface);
+        _decorationTableTopObj = _viewFactory.GetDecorationTableTop(_decorationTableTop,positionViewTableTop);
     }
     
-    public void Init(EnumDecorationTableTop decorationTableTop, EnumDecorationLowerSurface decorationLowerSurface)
+    public void Init(CustomFurnitureName decorationTableTop, CustomFurnitureName decorationLowerSurface)
     {
         _decorationTableTop = decorationTableTop;
         _decorationLowerSurface = decorationLowerSurface;

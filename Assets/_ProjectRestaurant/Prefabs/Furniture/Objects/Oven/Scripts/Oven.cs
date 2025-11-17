@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using Zenject;
 
 namespace OvenFurniture
 {
@@ -22,19 +21,19 @@ namespace OvenFurniture
         private GameObject _result;
         private bool _isWork;
         private bool _isHeroikTrigger;
-        private bool _isInit;
+        //private bool _isInit;
         private Heroik _heroik; // только для объекта героя, а надо и другие...
         private OvenView _ovenView;
         private OvenPoints _ovenPoints;
         private Animator _animator;
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
-        private GameManager _gameManager;
+        //private GameManager _gameManager;
         private RecipeService _recipeService;
-        private ProductsContainer _productsContainer;
+        private ProductsFactory _productsFactory;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
 
-        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        //private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Oven.ListForFurniture;
         
@@ -45,57 +44,24 @@ namespace OvenFurniture
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        private IEnumerator Start()
+        private void Start()
         {
-            while (_gameManager == null)
-            {
-                _gameManager = StaticManagerWithoutZenject.GameManager;
-                yield return null;
-            }
-            
-            while (_productsContainer == null)
-            {
-                _productsContainer = _gameManager.ProductsContainer;
-                yield return null;
-            }
-            
-            while (_foodsForFurnitureContainer== null)
-            {
-                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-                yield return null;
-            }
-            
-            while (_recipeService== null)
-            {
-                _recipeService = _gameManager.RecipeService;
-                yield return null;
-            }
-            
-            while (IsAllInit == false)
-            {
-                yield return null;
-            }
-            
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
             
-            _isInit = true;
+            //_isInit = true;
             Debug.Log("Oven Init");
         }
         
         private void OnTriggerEnter(Collider other)
         {
-            if (_isInit == false)
+
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-            {
+                _heroik = other.GetComponent<Heroik>();
                 EnterTrigger();
                 return;
             }
@@ -103,21 +69,16 @@ namespace OvenFurniture
             if (other.GetComponent<Heroik>())
             {
                 _heroik = other.GetComponent<Heroik>();
-                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
             }
         }
         
         private void OnTriggerExit(Collider other)
         {
-            if (_isInit == false)
+
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-            {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
                 return;
             }
@@ -127,6 +88,17 @@ namespace OvenFurniture
                 _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
+        }
+        
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer)
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
         }
         
         // private void OnEnable()
@@ -150,7 +122,7 @@ namespace OvenFurniture
                 Debug.Log("Объект не передался");
                 return false;
             }
-            _ingredient = _gameManager.ProductsFactory.GetProduct(acceptObj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
+            _ingredient = _productsFactory.GetProduct(acceptObj,_ovenPoints.PositionIngredient,_ovenPoints.PositionIngredient, true);
             _heroik.CleanObjOnHands();
             return true;
         }
@@ -179,6 +151,7 @@ namespace OvenFurniture
     
         private void EnterTrigger()
         {
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             _outline.OutlineWidth = 2f;
             _isHeroikTrigger = true;
             _heroik.CurrentUseFurniture = this;
@@ -257,6 +230,7 @@ namespace OvenFurniture
         }
         private IEnumerator ContinueWorkCoroutine()
         {
+            //TODO переделать на UniTask
             StartCoroutine(_ovenView.Timer.StartTimer());
             yield return new WaitWhile(() => _ovenView.Timer.IsWork);
             CreateResult();
@@ -265,18 +239,12 @@ namespace OvenFurniture
         
         private bool CheckCookingProcess()
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return false;
-            }
-            
             if(_isHeroikTrigger == false)
             {
                 return false;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 Debug.LogWarning("Печка не работает");
                 return false;
@@ -296,7 +264,9 @@ namespace OvenFurniture
             Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
             if (readyObj != null)
             {
-                _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
+                //TODO переделать на тип объкта
+                _result = _productsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
+                //Destroy(readyObj);
             }
             else
             {

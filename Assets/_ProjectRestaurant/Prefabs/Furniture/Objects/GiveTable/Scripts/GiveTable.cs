@@ -40,9 +40,10 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         //     return;
         // }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            EnterTrigger();
+            _outline.OutlineWidth = 2f;
+            _isHeroikTrigger = true;
             return;
         }
         
@@ -56,9 +57,10 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 
     private void OnTriggerExit(Collider other)
     {
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            ExitTrigger();
+            _outline.OutlineWidth = 0f;
+            _isHeroikTrigger = false;
             return;
         }
         
@@ -178,7 +180,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             return false;
         }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             Debug.LogWarning("Стол не работает");
             return false;

@@ -7,52 +7,44 @@ using System.Linq;
 
 public class IngredientHandler: IDisposable
 {
-    private GameManager _gameManager;
     private Transform _ingredientPosition;
     private Transform _ingredientParent;
     private GameObject _currentTakenObjects;
     private bool _isBusyHands;
+
+    private ProductsFactory _productsFactory;
     
     public GameObject CurrentTakenObjects => _currentTakenObjects;
     public bool IsBusyHands => _isBusyHands;
     
-    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects,MonoBehaviour monoBehaviour)
+    public IngredientHandler(Transform ingredientPosition, Transform ingredientParent, GameObject currentTakenObjects, ProductsFactory  productsFactory)
     {
         _ingredientPosition = ingredientPosition;
         _ingredientParent = ingredientParent;
         _currentTakenObjects = currentTakenObjects;
+        _productsFactory = productsFactory;
         
-        monoBehaviour.StartCoroutine(Init());
-        
+        Debug.Log("Создан объект: IngredientHandler");
     }
     
     public void Dispose()
     {
         Debug.Log("У объекта вызван Dispose : IngredientHandler");
     }
-
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        Debug.Log("Создан объект: IngredientHandler");
-    }
+    
 
     // взять объект в руки
     public bool TryPickUp(GameObject objTable) 
     {
         if (_isBusyHands == true)
         {
-            Debug.LogWarning("Руки заняты");
+            Debug.LogWarning("Руки заняты (_isBusyHands)");
             return false;
         }
         
         if (_currentTakenObjects != null)
         {
-            Debug.LogWarning("Руки заняты");
+            Debug.LogWarning("Руки заняты (_currentTakenObjects)");
             return false;
         }
         
@@ -119,7 +111,7 @@ public class IngredientHandler: IDisposable
     
     private void CreateObj(GameObject obj)
     {
-        _currentTakenObjects = _gameManager.ProductsFactory.GetProduct(obj, _ingredientPosition, _ingredientParent, true);
+        _currentTakenObjects = _productsFactory.GetProduct(obj, _ingredientPosition, _ingredientParent, true);
         _isBusyHands = true;
     }
 }  

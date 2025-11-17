@@ -1,4 +1,5 @@
 
+
 public enum EnumDecorationTableTop
 {
     Default,
@@ -11,5 +12,6 @@ public enum EnumDecorationLowerSurface
     Default,
     Crock
 }
+//TODO удалить
 
 

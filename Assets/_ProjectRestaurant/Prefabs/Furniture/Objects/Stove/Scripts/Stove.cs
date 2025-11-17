@@ -66,7 +66,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             EnterTrigger();
             return;
@@ -88,7 +88,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             return;
         }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             ExitTrigger();
             return;
@@ -238,7 +238,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             return false;
         }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             Debug.LogWarning("Плита не работает");
             return false;

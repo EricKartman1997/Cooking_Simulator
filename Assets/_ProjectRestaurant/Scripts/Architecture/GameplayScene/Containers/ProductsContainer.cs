@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ProductsContainer: MonoBehaviour
 {
+    //TODO не используем , удалить
+    //TODO использовать ProductsFactory
     private void Start()
     {
         InitializeDictionaries();

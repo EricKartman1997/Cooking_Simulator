@@ -106,7 +106,7 @@ namespace SuvideFurniture
                 return;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 EnterTrigger();
                 return;
@@ -128,7 +128,7 @@ namespace SuvideFurniture
                 return;
             }
             
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 ExitTrigger();
                 return;
@@ -467,7 +467,7 @@ namespace SuvideFurniture
                 return false;
             }
                 
-            if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 Debug.LogWarning("Сувид не работает");
                 return false;

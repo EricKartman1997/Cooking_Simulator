@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 public class GetTable : MonoBehaviour, IUseFurniture
 {
@@ -12,14 +13,12 @@ public class GetTable : MonoBehaviour, IUseFurniture
     private GameObject _objectFoodView;
     private Heroik _heroik; // только для объекта героя, а надо и другие...
     private bool _isHeroikTrigger;
-    private bool _isInit;
     
     private IngredientName _giveFood;
     private ViewDishName _viewFood;
-    
-    private GameManager _gameManager;
 
-    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    private ViewFactory _viewFactory;
+    private ProductsFactory _productsFactory;
     
     private void Awake()
     {
@@ -27,47 +26,24 @@ public class GetTable : MonoBehaviour, IUseFurniture
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        while (_objectFoodView == null)
-        {
-            _objectFoodView = _gameManager.ViewFactory.GetProduct(_viewFood,parentViewDish);
-            yield return null;
-        }
-        
-        while (_objectOnTheTable == null)
-        {
-            _objectOnTheTable = _gameManager.ProductsFactory.GetProductRef(_giveFood);
-            //_gameManager.ProductsFactory.GetProduct(_objectOnTheTable, Transform transform,Transform parent, bool setActive = true)
-            yield return null;
-        }
-        
-        while (IsAllInit == false)
-        {
-            yield return null;
-        }
+        _objectFoodView = _viewFactory.GetProduct(_viewFood,parentViewDish);
+        _objectOnTheTable = _productsFactory.GetProductRef(_giveFood);
         
         Debug.Log("GetTable Init");
-        _isInit = true;
+        //_isInit = true;
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (_isInit == false)
+
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
-        {
+            _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
+            Debug.Log("зашел");
             return;
         }
         
@@ -81,14 +57,16 @@ public class GetTable : MonoBehaviour, IUseFurniture
 
     private void OnTriggerExit(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
+        // if (_isInit == false)
+        // {
+        //     Debug.Log("Инициализация не закончена");
+        //     return;
+        // }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            // Debug.Log("Вышел");
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
             return;
         }
@@ -109,6 +87,15 @@ public class GetTable : MonoBehaviour, IUseFurniture
     // {
     //     EventBus.PressE -= CookingProcess;
     // }
+    
+    [Inject]
+    private void ConstructZenject(
+        ViewFactory viewFactory,
+        ProductsFactory productsFactory)
+    {
+        _productsFactory = productsFactory;
+        _viewFactory = viewFactory;
+    }
     public void Init(IngredientName giveFood, ViewDishName viewFood)
     {
         _giveFood = giveFood;
@@ -153,8 +140,10 @@ public class GetTable : MonoBehaviour, IUseFurniture
     
     private void CookingProcess()
     {
+        //Debug.Log("Зашел");
         if (CheckCookingProcess() == false)
         {
+            //Debug.Log("Зашел1");
             return;
         }
 
@@ -163,25 +152,21 @@ public class GetTable : MonoBehaviour, IUseFurniture
     
     private bool CheckCookingProcess()
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return false;
-        }
-        
         if(_isHeroikTrigger == false)
         {
+            //Debug.Log("Зашел2");
             return false;
         }
         
-        if (_decorationFurniture.DecorationTableTop == EnumDecorationTableTop.TurnOff )
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            Debug.LogWarning("Стол не работает");
+            Debug.Log("Стол не работает");
             return false;
         }
         
         if (CheckUseFurniture() == false)
         {
+            //Debug.Log("Зашел4");
             return false;
         }
 

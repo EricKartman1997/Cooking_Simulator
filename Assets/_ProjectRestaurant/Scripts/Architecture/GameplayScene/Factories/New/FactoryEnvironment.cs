@@ -156,8 +156,8 @@ public class FurnitureItemData
     public string Name;
     public Vector3 Position;
     public Vector3 Rotation;
-    public EnumDecorationTableTop DecorationTableTop;
-    public EnumDecorationLowerSurface DecorationLowerSurface;
+    public CustomFurnitureName DecorationTableTop;
+    public CustomFurnitureName DecorationLowerSurface;
     public IngredientName GiveFood;
     public ViewDishName ViewFood;
 

@@ -5,42 +5,22 @@ using System.Collections;
 
 public class ViewFactory: IDisposable
 {
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
-    private ProductsContainer _productsContainer;
-    private bool _isInit;
+    //private GameManager _gameManager;
+    //private MonoBehaviour _coroutineMonoBehaviour;
+    //private ProductsContainer _productsContainer;
+    //private bool _isInit;
     
-    public bool IsInit => _isInit;
-
-    public ViewFactory(ProductsContainer productsContainer,MonoBehaviour coroutineMonoBehaviour)
+    //public bool IsInit => _isInit;
+    private LoadReleaseGameplay _loadReleaseGameplay;
+    
+    public ViewFactory(LoadReleaseGameplay loadReleaseGameplay)
     {
-        _productsContainer = productsContainer;
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-
-        _coroutineMonoBehaviour.StartCoroutine(Init());
+        _loadReleaseGameplay = loadReleaseGameplay;
     }
     
     public void Dispose()
     {
         Debug.Log("У объекта вызван Dispose : ViewFactory");
-    }
-    
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        // while (_timeGame == null)
-        // {
-        //     _timeGame = _gameManager.TimeGame;
-        //     yield return null;
-        // }
-        
-        Debug.Log("Создать объект: ViewFactory");
-        _isInit = true;
     }
 
     public GameObject GetProduct(ViewDishName enumViewFood,Transform parent)
@@ -48,53 +28,53 @@ public class ViewFactory: IDisposable
         switch (enumViewFood)
         {
             case ViewDishName.AppleViewDish:
-                return Object.Instantiate(_productsContainer.AppleDish,parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.AppleViewDish],parent);
             case ViewDishName.OrangeViewDish:
-                return Object.Instantiate(_productsContainer.OrangeDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.OrangeViewDish], parent);
             case ViewDishName.LimeViewDish:
-                return Object.Instantiate(_productsContainer.LimeDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.LimeViewDish], parent);
             case ViewDishName.CherryViewDish:
-                return Object.Instantiate(_productsContainer.CherryDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.CherryViewDish], parent);
             case ViewDishName.BlueberryViewDish:
-                return Object.Instantiate(_productsContainer.BlueberryDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.BlueberryViewDish], parent);
             case ViewDishName.StrawberryViewDish:
-                return Object.Instantiate(_productsContainer.StrawberryDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.StrawberryViewDish], parent);
             case ViewDishName.FishViewDish:
-                return Object.Instantiate(_productsContainer.FishDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.FishViewDish], parent);
             case ViewDishName.MeatViewDish:
-                return Object.Instantiate(_productsContainer.MeatDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.MeatViewDish], parent);
             case ViewDishName.RawCutletViewDish:
-                return Object.Instantiate(_productsContainer.RawCutletDish, parent);
+                return Object.Instantiate(_loadReleaseGameplay.ViewDishDic[ViewDishName.RawCutletViewDish], parent);
             default:
                 Debug.LogWarning($"Unknown product type: {enumViewFood}");
                 return null;
         }
     }
     
-    public GameObject GetDecorationTableTop(EnumDecorationTableTop enumView,Transform parent)
+    public GameObject GetDecorationTableTop(CustomFurnitureName enumView,Transform parent)
     {
         switch (enumView)
         {
-            case EnumDecorationTableTop.Default:
-                return Object.Instantiate(_productsContainer.DefaultView,parent);
-            case EnumDecorationTableTop.TurnOff:
-                return Object.Instantiate(_productsContainer.CrossView,parent);
-            case EnumDecorationTableTop.NewYear:
-                return Object.Instantiate(_productsContainer.NewYearView,parent);
+            case CustomFurnitureName.Default:
+                return Object.Instantiate(_loadReleaseGameplay.CustomDic[CustomFurnitureName.Default],parent);
+            case CustomFurnitureName.TurnOff:
+                return Object.Instantiate(_loadReleaseGameplay.CustomDic[CustomFurnitureName.TurnOff],parent);
+            case CustomFurnitureName.NewYear:
+                return Object.Instantiate(_loadReleaseGameplay.CustomDic[CustomFurnitureName.NewYear],parent);
             default:
                 Debug.LogWarning($"Unknown view type: {enumView}");
                 return null;
         }
     }
     
-    public GameObject GetDecorationLowerSurface(EnumDecorationLowerSurface enumView,Transform parent)
+    public GameObject GetDecorationLowerSurface(CustomFurnitureName enumView,Transform parent)
     {
         switch (enumView)
         {
-            case EnumDecorationLowerSurface.Default:
-                return Object.Instantiate(_productsContainer.DefaultView,parent);
-            case EnumDecorationLowerSurface.Crock:
-                return Object.Instantiate(_productsContainer.CrockView,parent);
+            case CustomFurnitureName.Default:
+                return Object.Instantiate(_loadReleaseGameplay.CustomDic[CustomFurnitureName.Default],parent);
+            case CustomFurnitureName.Crock:
+                return Object.Instantiate(_loadReleaseGameplay.CustomDic[CustomFurnitureName.Crock],parent);
             default:
                 Debug.LogWarning($"Unknown view type: {enumView}");
                 return null;

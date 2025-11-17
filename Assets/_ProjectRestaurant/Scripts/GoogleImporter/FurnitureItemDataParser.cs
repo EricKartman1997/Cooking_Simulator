@@ -41,11 +41,11 @@ namespace GoogleSpreadsheets
                     break;
 
                 case "DecorationTableTop":
-                    _currentItemData.DecorationTableTop = (EnumDecorationTableTop)Enum.Parse(typeof(EnumDecorationTableTop), token, true);
+                    _currentItemData.DecorationTableTop = (CustomFurnitureName)Enum.Parse(typeof(CustomFurnitureName), token, true);
                     break;
 
                 case "DecorationLowerSurface":
-                    _currentItemData.DecorationLowerSurface = (EnumDecorationLowerSurface)Enum.Parse(typeof(EnumDecorationLowerSurface), token, true);
+                    _currentItemData.DecorationLowerSurface = (CustomFurnitureName)Enum.Parse(typeof(CustomFurnitureName), token, true);
                     break;
                 
                 case "GiveFood":

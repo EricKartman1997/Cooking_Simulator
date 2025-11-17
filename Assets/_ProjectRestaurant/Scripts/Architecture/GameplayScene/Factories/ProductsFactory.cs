@@ -196,10 +196,10 @@ public class ProductsFactory: IDisposable
     //     return Object.Instantiate(_bakedFish.gameObject, transform.position, Quaternion.identity, parent);
     // }
     //
-    // public GameObject GetRubbish(Transform transform, Transform parent)
-    // {
-    //     return Object.Instantiate(_rubbish, transform.position, Quaternion.identity, parent);
-    // }
+    public GameObject GetRubbish()
+    {
+        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.Rubbish]);
+    }
     private GameObject GetRawCutlet()
     {
         return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.RawCutlet]);

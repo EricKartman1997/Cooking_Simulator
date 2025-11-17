@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ListFoodsForFurniture", menuName = "Container/ListFoodsForFurniture")]
 public class FoodsForFurnitureContainer : ScriptableObject
 {
+    //TODO переделать на Goggle таблицу
     [SerializeField] private FoodsForFurnitureConfig getTable,
         giveTable,
         oven,

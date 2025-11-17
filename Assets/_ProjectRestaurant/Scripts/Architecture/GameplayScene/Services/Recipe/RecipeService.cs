@@ -6,7 +6,8 @@ using UnityEngine;
 public class RecipeService: IDisposable
 {
     private RecipeContainer _recipeContainer;
-    private ProductsContainer _productsContainer;
+    //private ProductsContainer _productsContainer;
+    private ProductsFactory _productsFactory;
     
     // Словари для разных типов станций
     private readonly Dictionary<RecipeKey, Product> _ovenRecipes = new();
@@ -15,12 +16,12 @@ public class RecipeService: IDisposable
     private readonly Dictionary<RecipeKey, Product> _suvideRecipes = new();
     private readonly Dictionary<RecipeKey, Product> _stoveRecipes = new();
     
-    public bool IsInit { get; private set; }
+    //public bool IsInit { get; private set; }
 
-    public RecipeService(RecipeContainer recipeContainer,ProductsContainer productsContainer)
+    public RecipeService(RecipeContainer recipeContainer,ProductsFactory productsFactory)
     {
         _recipeContainer = recipeContainer;
-        _productsContainer = productsContainer;
+        _productsFactory = productsFactory;
         
         InitializeDictionaries();
         Debug.Log("Создать объект: RecipeService");
@@ -32,6 +33,29 @@ public class RecipeService: IDisposable
         Debug.Log("SuvideFurniture Dispose");
     }
     
+    // Метод для получения блюда по типу станции
+    public Product GetDish(StationType stationType, List<Product> providedProducts)
+    {
+        var validIngredients = providedProducts
+            .Where(i => i != null)
+            .ToList();
+    
+        var key = new RecipeKey(validIngredients);
+    
+        // Для отладки
+        Debug.Log($"Searching for: {string.Join(", ", validIngredients.Select(i => i.Type))}");
+    
+        return stationType switch
+        {
+            StationType.Oven => FindInDictionary(_ovenRecipes, key),
+            StationType.CuttingTable => FindInDictionary(_cuttingTableRecipes, key),
+            StationType.Suvide => FindInDictionary(_suvideRecipes, key),
+            StationType.Stove => FindInDictionary(_stoveRecipes, key),
+            StationType.Blender => FindInDictionary(_blenderRecipes, key),
+            _ => null
+        };
+    }
+
     private void InitializeDictionaries()
     {
         // Ждем инициализации контейнера
@@ -48,7 +72,6 @@ public class RecipeService: IDisposable
         FillDictionary(_suvideRecipes, _recipeContainer.ListSuvideRecipes);
         FillDictionary(_stoveRecipes, _recipeContainer.ListStoveRecipes);
         
-        IsInit = true;
         Debug.Log($"RecipeService инициализирован. Рецептов: " +
                   $"Духовка={_ovenRecipes.Count}, " +
                   $"Разделочный стол={_cuttingTableRecipes.Count}, " +
@@ -74,40 +97,17 @@ public class RecipeService: IDisposable
             }
         }
     }
-    
-    // Метод для получения блюда по типу станции
-    public Product GetDish(StationType stationType, List<Product> providedProducts)
-    {
-        if (!IsInit) return null;
-    
-        var validIngredients = providedProducts
-            .Where(i => i != null)
-            .ToList();
-    
-        var key = new RecipeKey(validIngredients);
-    
-        // Для отладки
-        Debug.Log($"Searching for: {string.Join(", ", validIngredients.Select(i => i.Type))}");
-    
-        return stationType switch
-        {
-            StationType.Oven => FindInDictionary(_ovenRecipes, key),
-            StationType.CuttingTable => FindInDictionary(_cuttingTableRecipes, key),
-            StationType.Suvide => FindInDictionary(_suvideRecipes, key),
-            StationType.Stove => FindInDictionary(_stoveRecipes, key),
-            StationType.Blender => FindInDictionary(_blenderRecipes, key),
-            _ => null
-        };
-    }
 
     private Product FindInDictionary(Dictionary<RecipeKey, Product> dictionary, RecipeKey key)
     {
+        //TODO переделать на Enum IngredientName -> return IngredientName
         if (dictionary.TryGetValue(key, out Product result))
         {
             return result;
         }
         Debug.LogWarning($"Recipe not found. Available keys:");
-        return _productsContainer.Rubbish.GetComponent<Rubbish>();
+        return _productsFactory.GetRubbish().GetComponent<Rubbish>();
+        //TODO нахуй переделать 
     }
     
     

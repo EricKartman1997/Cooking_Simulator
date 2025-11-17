@@ -6,3 +6,4 @@ public class DecorationTableConfig : ScriptableObject
     [field: SerializeField] public EnumDecorationTableTop DecorationTableTop { get; private set; }
     [field: SerializeField] public EnumDecorationLowerSurface DecorationLowerSurface { get; private set; }
 }
+//TODO удалить

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
+
 public class Heroik : MonoBehaviour
 {
     public OneSubcribeAction ToInteractAction;
@@ -7,8 +9,8 @@ public class Heroik : MonoBehaviour
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
     private IUseFurniture _useFurniture;
-    private GameManager _gameManager;
     private IngredientHandler _ingredientHandler;
+    private ProductsFactory _productsFactory;
 
     public IUseFurniture CurrentUseFurniture
     {
@@ -32,6 +34,11 @@ public class Heroik : MonoBehaviour
     public GameObject CurrentTakenObjects => _ingredientHandler.CurrentTakenObjects;
     public bool IsBusyHands => _ingredientHandler.IsBusyHands;
 
+    [Inject]
+    private void ConstructZenject(ProductsFactory productsFactory)
+    {
+        _productsFactory = productsFactory;
+    }
     private void Awake()
     {
         ToInteractAction = new OneSubcribeAction();
@@ -39,8 +46,7 @@ public class Heroik : MonoBehaviour
 
     private void Start()
     {
-        _gameManager = StaticManagerWithoutZenject.GameManager;
-        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,this);
+        _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,_productsFactory);
         //_ingredientHandler.CreateObj(currentTakenObjects);
     }
     
