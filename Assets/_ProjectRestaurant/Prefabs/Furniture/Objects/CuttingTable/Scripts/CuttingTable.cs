@@ -218,18 +218,34 @@ namespace CuttingTableFurniture
         
         private void CreateResult()
         {
-            List<Product> listProducts = new List<Product>() {_ingredient1.GetComponent<Product>(),_ingredient2.GetComponent<Product>() };
-            Product readyObj = _recipeService.GetDish(StationType.CuttingTable,listProducts);
-            if (readyObj != null)
+            var ingredients = new List<Product>()
             {
-                _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _cuttingTablePoints.PositionResult,
-                    _cuttingTablePoints.PositionResult,true);
+                _ingredient1.GetComponent<Product>(),
+                _ingredient2.GetComponent<Product>()
+            };
+
+            // Новый универсальный вызов
+            IngredientName result = _recipeService.GetDish(FurnitureName.CuttingTable, ingredients);
+
+            if (result == IngredientName.Rubbish)
+            {
+                _gameManager.ProductsFactory.GetProduct(
+                    result,
+                    _cuttingTablePoints.PositionResult,
+                    _cuttingTablePoints.PositionResult
+                );
+
+                Debug.LogError("произведен мусор");
                 return;
             }
-            Debug.LogError("Ошибка в CreateResult, такого ключа нет");
-            return;
-            
+
+            _result = _gameManager.ProductsFactory.GetProduct(
+                result,
+                _cuttingTablePoints.PositionResult,
+                _cuttingTablePoints.PositionResult
+            );
         }
+
         
         private void CookingProcess()
         {

@@ -210,10 +210,34 @@ namespace BlenderFurniture
         
         private void CreateResult()
         {
-            List<Product> listProducts = new List<Product>() {_ingredient1.GetComponent<Product>(),_ingredient2.GetComponent<Product>(),_ingredient3.GetComponent<Product>(),};
-            Product readyObj = _recipeService.GetDish(StationType.Blender,listProducts);
-            _result = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentReadyFood,true);
+            var ingredients = new List<Product>()
+            {
+                _ingredient1.GetComponent<Product>(),
+                _ingredient2.GetComponent<Product>(),
+                _ingredient3.GetComponent<Product>()
+            };
+
+            IngredientName result = _recipeService.GetDish(FurnitureName.Blender, ingredients);
+
+            if (result == IngredientName.Rubbish)
+            {
+                _gameManager.ProductsFactory.GetProduct(
+                    result,
+                    _blenderPoints.SecondPoint.transform,
+                    _blenderPoints.ParentReadyFood
+                );
+
+                Debug.LogError("произведен мусор");
+                return;
+            }
+
+            _result = _gameManager.ProductsFactory.GetProduct(
+                result,
+                _blenderPoints.SecondPoint.transform,
+                _blenderPoints.ParentReadyFood
+            );
         }
+
     
         private void TurnOn()
         {

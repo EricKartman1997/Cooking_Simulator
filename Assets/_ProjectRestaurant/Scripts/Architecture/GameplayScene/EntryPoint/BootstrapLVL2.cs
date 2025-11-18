@@ -100,9 +100,9 @@ public class BootstrapLVL2 : MonoBehaviour
 
     private IEnumerator AllInitScriptableObject()
     {
-        yield return new WaitUntil(() => recipeContainer.IsInit);
+        //yield return new WaitUntil(() => recipeContainer.IsInit);
         yield return new WaitUntil(() => checksFactory.IsInit);
-        yield return new WaitUntil(() => foodsForFurnitureContainer.IsInit);
+        //yield return new WaitUntil(() => foodsForFurnitureContainer.IsInit);
         _isAllInitScriptableObject = true;
     }
     

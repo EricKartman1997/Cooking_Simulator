@@ -14,9 +14,7 @@ public class FoodsForFurnitureContainer : ScriptableObject
         blender,
         garbage,
         stove;
-
-    private bool _isInit;
-    public bool IsInit => _isInit;
+    
     public FoodsForFurnitureConfig GetTable => getTable;
 
     public FoodsForFurnitureConfig GiveTable => giveTable;
@@ -37,6 +35,6 @@ public class FoodsForFurnitureContainer : ScriptableObject
 
     private void OnEnable()
     {
-        _isInit = true;
+        
     }
 }

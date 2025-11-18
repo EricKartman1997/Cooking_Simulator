@@ -1,124 +1,48 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class RecipeService: IDisposable
+public class RecipeService : IDisposable
 {
-    private RecipeContainer _recipeContainer;
-    //private ProductsContainer _productsContainer;
-    private ProductsFactory _productsFactory;
-    
-    // Словари для разных типов станций
-    private readonly Dictionary<RecipeKey, Product> _ovenRecipes = new();
-    private readonly Dictionary<RecipeKey, Product> _cuttingTableRecipes = new();
-    private readonly Dictionary<RecipeKey, Product> _blenderRecipes = new();
-    private readonly Dictionary<RecipeKey, Product> _suvideRecipes = new();
-    private readonly Dictionary<RecipeKey, Product> _stoveRecipes = new();
-    
-    //public bool IsInit { get; private set; }
+    private readonly Dictionary<FurnitureName,
+        Dictionary<RecipeKey, IngredientName>> _recipes
+        = new();
 
-    public RecipeService(RecipeContainer recipeContainer,ProductsFactory productsFactory)
+    public RecipeService(RecipeContainer recipeContainer)
     {
-        _recipeContainer = recipeContainer;
-        _productsFactory = productsFactory;
-        
-        InitializeDictionaries();
-        Debug.Log("Создать объект: RecipeService");
-        
-    }
-    
-    public void Dispose()
-    {
-        Debug.Log("SuvideFurniture Dispose");
-    }
-    
-    // Метод для получения блюда по типу станции
-    public Product GetDish(StationType stationType, List<Product> providedProducts)
-    {
-        var validIngredients = providedProducts
-            .Where(i => i != null)
-            .ToList();
-    
-        var key = new RecipeKey(validIngredients);
-    
-        // Для отладки
-        Debug.Log($"Searching for: {string.Join(", ", validIngredients.Select(i => i.Type))}");
-    
-        return stationType switch
-        {
-            StationType.Oven => FindInDictionary(_ovenRecipes, key),
-            StationType.CuttingTable => FindInDictionary(_cuttingTableRecipes, key),
-            StationType.Suvide => FindInDictionary(_suvideRecipes, key),
-            StationType.Stove => FindInDictionary(_stoveRecipes, key),
-            StationType.Blender => FindInDictionary(_blenderRecipes, key),
-            _ => null
-        };
+        Initialize(recipeContainer);
     }
 
-    private void InitializeDictionaries()
-    {
-        // Ждем инициализации контейнера
-        if (!_recipeContainer.IsInit)
-        {
-            Debug.LogWarning("RecipeContainer не инициализирован! Выполняем ручную инициализацию...");
-            //_recipeContainer.InitializeManually();
-        }
+    public void Dispose() { }
 
-        // Заполняем словари
-        FillDictionary(_ovenRecipes, _recipeContainer.ListOvenRecipes);
-        FillDictionary(_cuttingTableRecipes, _recipeContainer.ListCuttingTableRecipes);
-        FillDictionary(_blenderRecipes, _recipeContainer.ListBlenderRecipes);
-        FillDictionary(_suvideRecipes, _recipeContainer.ListSuvideRecipes);
-        FillDictionary(_stoveRecipes, _recipeContainer.ListStoveRecipes);
-        
-        Debug.Log($"RecipeService инициализирован. Рецептов: " +
-                  $"Духовка={_ovenRecipes.Count}, " +
-                  $"Разделочный стол={_cuttingTableRecipes.Count}, " +
-                  $"Блендер={_blenderRecipes.Count}");
-    }
-    
-    private void FillDictionary(Dictionary<RecipeKey, Product> targetDictionary, List<RecipeContainerConfig> configs)
+    private void Initialize(RecipeContainer recipeContainer)
     {
-        if (configs == null) return;
-        
-        foreach (var config in configs)
+        foreach (var cfg in recipeContainer.Recipes)
         {
-            if (config == null || config.ListIngredients == null || config.Dish == null)
+            if (!_recipes.ContainsKey(cfg.Station))
+                _recipes[cfg.Station] = new Dictionary<RecipeKey, IngredientName>();
+
+            var key = new RecipeKey(cfg.Ingredients);
+
+            if (!_recipes[cfg.Station].TryAdd(key, cfg.Result))
             {
-                Debug.LogWarning("Пропущен невалидный рецепт");
-                continue;
-            }
-            
-            var key = new RecipeKey(config.ListIngredients);
-            if (!targetDictionary.TryAdd(key, config.Dish))
-            {
-                Debug.LogWarning($"Дубликат рецепта: {key} для {config.Dish.name}");
+                Debug.LogWarning($"Duplicate recipe in {cfg.Station} -> {cfg.Result}");
             }
         }
+
+        Debug.Log($"RecipeService initialized. Stations: {_recipes.Count}");
     }
 
-    private Product FindInDictionary(Dictionary<RecipeKey, Product> dictionary, RecipeKey key)
+    public IngredientName GetDish(FurnitureName station, List<Product> provided)
     {
-        //TODO переделать на Enum IngredientName -> return IngredientName
-        if (dictionary.TryGetValue(key, out Product result))
-        {
+        if (!_recipes.TryGetValue(station, out var dict))
+            return IngredientName.Rubbish;
+
+        var key = new RecipeKey(provided);
+
+        if (dict.TryGetValue(key, out var result))
             return result;
-        }
-        Debug.LogWarning($"Recipe not found. Available keys:");
-        return _productsFactory.GetRubbish().GetComponent<Rubbish>();
-        //TODO нахуй переделать 
-    }
-    
-    
-}
 
-public enum StationType
-{
-    Oven,
-    CuttingTable,
-    Blender,
-    Suvide,
-    Stove,
-    MeatGrinder
+        return IngredientName.Rubbish;
+    }
 }

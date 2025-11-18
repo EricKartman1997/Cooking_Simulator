@@ -52,7 +52,6 @@ namespace OvenFurniture
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
             
-            //_isInit = true;
             Debug.Log("Oven Init");
         }
         
@@ -258,20 +257,41 @@ namespace OvenFurniture
             return true;
         }
         
+        // private void CreateResult()
+        // {
+        //     List<Product> listProducts = new List<Product>() {_ingredient.GetComponent<Product>()};
+        //     Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
+        //     if (readyObj != null)
+        //     {
+        //         //TODO переделать на тип объкта
+        //         _result = _productsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp);
+        //         //Destroy(readyObj);
+        //     }
+        //     else
+        //     {
+        //         Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+        //     }
+        // }
+        
         private void CreateResult()
         {
-            List<Product> listProducts = new List<Product>() {_ingredient.GetComponent<Product>()};
-            Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
-            if (readyObj != null)
+            var ingredients = new List<Product>()
             {
-                //TODO переделать на тип объкта
-                _result = _productsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp,true );
-                //Destroy(readyObj);
-            }
-            else
+                _ingredient.GetComponent<Product>()
+            };
+
+            IngredientName result = _recipeService.GetDish(FurnitureName.Oven, ingredients);
+            Debug.Log("result = " + result.ToString() + "");
+            
+            if (result == IngredientName.Rubbish)
             {
-                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+                _productsFactory.GetProduct(result, _ovenPoints.PointUp,_ovenPoints.PointUp);
+                Debug.LogError("произведен мусор");
+                return;
             }
+            
+
+            _result = _productsFactory.GetProduct(result, _ovenPoints.PointUp,_ovenPoints.PointUp);
         }
         
         private void CleanObjOnTable(GameObject ingredient)

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class Product : MonoBehaviour
 {
-    [SerializeField] private ProductType type;
-    public ProductType Type => type;
+    [SerializeField] private IngredientName type;
+    public IngredientName Name => type;
 }
 
 public enum ProductType 

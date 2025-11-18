@@ -5,36 +5,43 @@ using System.Linq;
 [Serializable]
 public class RecipeKey : IEquatable<RecipeKey>
 {
-    public List<ProductType> ProductTypes { get; }
-    
-    public RecipeKey(List<Product> ingredients)
+    public List<IngredientName> Ingredients;
+
+    public RecipeKey(List<Product> items)
     {
-        // Извлекаем ТИПЫ продуктов и сортируем
-        ProductTypes = ingredients
+        Ingredients = items
             .Where(i => i != null)
-            .Select(i => i.Type) // Используем enum или SO-идентификатор
-            .OrderBy(t => t)
+            .Select(i => i.Name)
+            .OrderBy(n => n)
             .ToList();
     }
-    
+
+    public RecipeKey(List<IngredientName> names)
+    {
+        Ingredients = names
+            .OrderBy(n => n)
+            .ToList();
+    }
+
     public bool Equals(RecipeKey other)
     {
-        if (other is null) return false;
-        return ProductTypes.SequenceEqual(other.ProductTypes);
+        if (other == null) return false;
+        return Ingredients.SequenceEqual(other.Ingredients);
     }
-    
-    public override bool Equals(object obj) => Equals(obj as RecipeKey);
-    
+
+    public override bool Equals(object obj) =>
+        Equals(obj as RecipeKey);
+
     public override int GetHashCode()
     {
         unchecked
         {
-            int hash = 19;
-            foreach (var type in ProductTypes)
-            {
-                hash = hash * 31 + type.GetHashCode();
-            }
+            int hash = 17;
+            foreach (var ingredient in Ingredients)
+                hash = hash * 23 + ingredient.GetHashCode();
+
             return hash;
         }
     }
 }
+

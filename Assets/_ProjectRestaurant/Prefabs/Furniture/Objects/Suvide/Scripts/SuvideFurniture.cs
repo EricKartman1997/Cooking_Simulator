@@ -221,48 +221,55 @@ namespace SuvideFurniture
             return false;
         }
     
-        private void CreateResult(GameObject obj,string TOKEN)
+        private void CreateResult(GameObject obj, string TOKEN)
         {
-            List<Product> listProducts = new List<Product>() {obj.GetComponent<Product>() };// временное решение
+            var ingredients = new List<Product>()
+            {
+                obj.GetComponent<Product>()
+            };
+
+            IngredientName result = _recipeService.GetDish(FurnitureName.Suvide, ingredients);
+
+            // --- определение позиции и ссылки на ячейку ---
+            Transform spawnPoint = null;
+            ref GameObject targetDish = ref _dish1;
+
             if (TOKEN == DISH1)
             {
-                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                if (readyObj != null)
-                {
-                    Destroy(_dish1);
-                    _dish1 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult1, _suvidePoints.PointResult1, true,true);
-                    return;
-                }
-                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+                spawnPoint = _suvidePoints.PointResult1;
+                targetDish = ref _dish1;
+            }
+            else if (TOKEN == DISH2)
+            {
+                spawnPoint = _suvidePoints.PointResult2;
+                targetDish = ref _dish2;
+            }
+            else if (TOKEN == DISH3)
+            {
+                spawnPoint = _suvidePoints.PointResult3;
+                targetDish = ref _dish3;
+            }
+            else
+            {
+                Debug.LogError("Некорректный TOKEN в CreateResult");
                 return;
             }
 
-            if (TOKEN == DISH2)
+            // --- если нет рецепта — создаём мусор ---
+            if (result == IngredientName.Rubbish)
             {
-                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                if (readyObj != null)
-                {
-                    Destroy(_dish2);
-                    _dish2 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult2, _suvidePoints.PointResult2, true,true);
-                    return;
-                }
-                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
+                _gameManager.ProductsFactory.GetProduct(result, spawnPoint, spawnPoint);
+                Debug.LogError("Произведён мусор");
                 return;
             }
 
-            if (TOKEN == DISH3)
-            {
-                Product readyObj = _recipeService.GetDish(StationType.Suvide,listProducts);
-                if (readyObj != null)
-                {
-                    Destroy(_dish3);
-                    _dish3 = _gameManager.ProductsFactory.GetProduct(readyObj.gameObject, _suvidePoints.PointResult3, _suvidePoints.PointResult3, true,true);
-                    return;
-                }
-                Debug.LogError("Ошибка в CreateResult, такого ключа нет");
-                return;
-            }
+            // --- создаём новый правильный продукт ---
+            if (targetDish != null)
+                Destroy(targetDish);
+
+            targetDish = _gameManager.ProductsFactory.GetProduct(result, spawnPoint, spawnPoint);
         }
+
     
         private void TurnOff(string TOKEN)
         {
