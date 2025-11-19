@@ -32,7 +32,6 @@ public class GetTable : MonoBehaviour, IUseFurniture
         _objectOnTheTable = _productsFactory.GetProductRef(_giveFood);
         
         Debug.Log("GetTable Init");
-        //_isInit = true;
     }
     
     private void OnTriggerEnter(Collider other)
@@ -57,12 +56,6 @@ public class GetTable : MonoBehaviour, IUseFurniture
 
     private void OnTriggerExit(Collider other)
     {
-        // if (_isInit == false)
-        // {
-        //     Debug.Log("Инициализация не закончена");
-        //     return;
-        // }
-        
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             // Debug.Log("Вышел");

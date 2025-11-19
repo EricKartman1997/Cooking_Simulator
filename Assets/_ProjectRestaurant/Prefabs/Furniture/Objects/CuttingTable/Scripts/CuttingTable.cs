@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace CuttingTableFurniture
@@ -12,8 +13,7 @@ namespace CuttingTableFurniture
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
         [SerializeField] private Transform positionResult;
-
-        private bool _isInit;
+        
         private bool _isWork = false;
         private bool _isHeroikTrigger = false;
         private GameObject _ingredient1 = null;
@@ -26,12 +26,11 @@ namespace CuttingTableFurniture
         private Animator _animator;
         private CuttingTablePoints _cuttingTablePoints;
         private CuttingTableView _cuttingTableView;
-        private ProductsContainer _productsContainer;
+        
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private RecipeService _recipeService;
-        private GameManager _gameManager;
+        private ProductsFactory _productsFactory;
         
-        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
         private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
     
         private void Awake()
@@ -41,56 +40,22 @@ namespace CuttingTableFurniture
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        private IEnumerator Start()
+        private void Start()
         {
-            while (_gameManager == null)
-            {
-                _gameManager = StaticManagerWithoutZenject.GameManager;
-                yield return null;
-            }
-            
-            while (_productsContainer == null)
-            {
-                _productsContainer = _gameManager.ProductsContainer;
-                yield return null;
-            }
-            
-            while (_foodsForFurnitureContainer== null)
-            {
-                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-                yield return null;
-            }
-            
-            while (_recipeService== null)
-            {
-                _recipeService = _gameManager.RecipeService;
-                yield return null;
-            }
-            
-            while (IsAllInit == false)
-            {
-                yield return null;
-            }
-            
             _animator.SetBool("Work", false);
             TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
             _cuttingTableView = new CuttingTableView(_animator,timerFurniture);
             
-            _isInit = true;
             Debug.Log("CuttingTable Init");
         }
         
         private void OnTriggerEnter(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
                 return;
             }
@@ -104,14 +69,9 @@ namespace CuttingTableFurniture
         }
         private void OnTriggerExit(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
                 return;
             }
@@ -121,6 +81,14 @@ namespace CuttingTableFurniture
                 _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
+        }
+        
+        [Inject]
+        private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,ProductsFactory productsFactory)
+        {
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _recipeService = recipeService;
+            _productsFactory = productsFactory;
         }
         
         // private void OnEnable()
@@ -178,14 +146,14 @@ namespace CuttingTableFurniture
             }
             if (_ingredient1 == null)
             {
-                _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
+                _ingredient1 = _productsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
                     _cuttingTablePoints.PositionIngredient1,true);
                 _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient2 == null)
             {
-                 _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
+                 _ingredient2 = _productsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
                     _cuttingTablePoints.PositionIngredient2,true);
                  _heroik.CleanObjOnHands();
                  return true;
@@ -229,7 +197,7 @@ namespace CuttingTableFurniture
 
             if (result == IngredientName.Rubbish)
             {
-                _gameManager.ProductsFactory.GetProduct(
+                _productsFactory.GetProduct(
                     result,
                     _cuttingTablePoints.PositionResult,
                     _cuttingTablePoints.PositionResult
@@ -239,7 +207,7 @@ namespace CuttingTableFurniture
                 return;
             }
 
-            _result = _gameManager.ProductsFactory.GetProduct(
+            _result = _productsFactory.GetProduct(
                 result,
                 _cuttingTablePoints.PositionResult,
                 _cuttingTablePoints.PositionResult
@@ -249,12 +217,6 @@ namespace CuttingTableFurniture
         
         private void CookingProcess()
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if(_isHeroikTrigger == false)
             {
                 return;

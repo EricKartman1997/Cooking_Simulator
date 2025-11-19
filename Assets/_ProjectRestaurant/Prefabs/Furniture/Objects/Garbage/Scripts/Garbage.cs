@@ -1,18 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
+
 public class Garbage : MonoBehaviour,IUseFurniture
 {
     private Heroik _heroik;
     private bool _isHeroikTrigger;
-    private bool _isInit;
     private GameObject _obj;
     private Outline _outline;
-    private GameManager _gameManager;
     private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private DecorationFurniture _decorationFurniture;
-    
-    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
     
     private List<Product> ListProduct => _foodsForFurnitureContainer.Garbage.ListForFurniture;
 
@@ -22,39 +19,17 @@ public class Garbage : MonoBehaviour,IUseFurniture
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        while (_foodsForFurnitureContainer== null)
-        {
-            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-            yield return null;
-        }
-        
-        while (IsAllInit == false)
-        {
-            yield return null;
-        }
-        
-        _isInit = true;
         Debug.Log("Garbage Init");
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
             return;
         }
@@ -69,14 +44,9 @@ public class Garbage : MonoBehaviour,IUseFurniture
     
     private void OnTriggerExit(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
             return;
         }
@@ -96,6 +66,12 @@ public class Garbage : MonoBehaviour,IUseFurniture
     private void OnDisable()
     {
         //EventBus.PressE -= CookingProcess;
+    }
+    
+    [Inject]
+    private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer)
+    {
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
     }
     
     public void UpdateCondition()
@@ -143,12 +119,6 @@ public class Garbage : MonoBehaviour,IUseFurniture
     
     private void CookingProcess()
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
         if (_isHeroikTrigger == false)
         {
             return;
