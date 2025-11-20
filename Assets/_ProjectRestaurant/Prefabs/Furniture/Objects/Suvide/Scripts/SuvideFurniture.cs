@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace SuvideFurniture
@@ -276,21 +277,21 @@ namespace SuvideFurniture
             if (TOKEN == DISH1)
             {
                 _cookingdish1 = false;
-                _suvideView.TurnOff();
+                //_suvideView.TurnOff();
                 return;
             }
             
             if (TOKEN == DISH2)
             {
                 _cookingdish2 = false;
-                _suvideView.TurnOff();
+                //_suvideView.TurnOff();
                 return;
             }
             
             if (TOKEN == DISH3)
             {
                 _cookingdish3 = false;
-                _suvideView.TurnOff();
+                //_suvideView.TurnOff();
                 return;
             }
             
@@ -301,21 +302,21 @@ namespace SuvideFurniture
         {
             if (TOKEN == DISH1)
             {
-                _suvideView.TurnOn();
+                //_suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
             
             if (TOKEN == DISH2)
             {
-                _suvideView.TurnOn();
+                //_suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
             
             if (TOKEN == DISH3)
             {
-                _suvideView.TurnOn();
+                //_suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
@@ -373,7 +374,7 @@ namespace SuvideFurniture
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH1))
                     {
                         TurnOn(DISH1);
-                        StartCoroutine(ContinueWorkCoroutine(_dish1,DISH1));
+                        ContinueWorkAsync(_dish1,DISH1).Forget();
                         ChangeView();
                     }
                     else
@@ -388,7 +389,7 @@ namespace SuvideFurniture
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH2))
                     {
                         TurnOn(DISH2);
-                        StartCoroutine(ContinueWorkCoroutine(_dish2,DISH2));
+                        ContinueWorkAsync(_dish2,DISH2).Forget();
                         ChangeView();
                     }
                     else
@@ -403,7 +404,7 @@ namespace SuvideFurniture
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH3))
                     {
                         TurnOn(DISH3);
-                        StartCoroutine(ContinueWorkCoroutine(_dish3,DISH3));
+                        ContinueWorkAsync(_dish3,DISH3).Forget();
                         ChangeView();
                     }
                     else
@@ -419,35 +420,30 @@ namespace SuvideFurniture
             }
         }
         
-        private IEnumerator ContinueWorkCoroutine(GameObject obj, string TOKEN)
+        private async UniTask ContinueWorkAsync(GameObject obj, string TOKEN)
         {
-            if (TOKEN == DISH1)
+            switch (TOKEN)
             {
-                StartCoroutine(_suvideView.Timer1.StartTimer());
-                yield return new WaitWhile(() => _suvideView.Timer1.IsWork);
-                TurnOff(TOKEN);
-                CreateResult(obj,TOKEN);
-                ChangeView();
+                case DISH1:
+                    await _suvideView.StartSuvideFirstTimerAsync();
+                    break;
+
+                case DISH2:
+                    await _suvideView.StartSuvideSecondTimerAsync();
+                    break;
+
+                case DISH3:
+                    await _suvideView.StartSuvideThirdTimerAsync();
+                    break;
             }
 
-            if (TOKEN == DISH2)
-            {
-                StartCoroutine(_suvideView.Timer2.StartTimer());
-                yield return new WaitWhile(() => _suvideView.Timer2.IsWork);
-                TurnOff(TOKEN);
-                CreateResult(obj,TOKEN);
-                ChangeView();
-            }
+            TurnOff(TOKEN);
+            CreateResult(obj, TOKEN);
+            ChangeView();
 
-            if (TOKEN == DISH3)
-            {
-                StartCoroutine(_suvideView.Timer3.StartTimer());
-                yield return new WaitWhile(() => _suvideView.Timer3.IsWork);
-                TurnOff(TOKEN);
-                CreateResult(obj,TOKEN);
-                ChangeView();
-            }
+            await UniTask.Yield(); // пропускаем один кадр
         }
+
         
         private void ChangeView()
         {

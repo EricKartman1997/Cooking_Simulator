@@ -1,6 +1,6 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace BlenderFurniture
 {
@@ -8,33 +8,29 @@ namespace BlenderFurniture
     {
         private TimerFurniture _timer;
         private Animator _animator;
-    
+
         public TimerFurniture Timer => _timer;
-        
+
         internal BlenderView(TimerFurniture timer, Animator animator)
         {
             _timer = timer;
             _animator = animator;
-            
-            Debug.Log("Создал объект: BlenderView");
         }
-    
-        public void Dispose()
-        {
-            Debug.Log("У объекта вызван Dispose : BlenderView");
-        }
-        
-        public void TurnOn()
+
+        public async UniTask StartBlendAsync()
         {
             _animator.SetBool("Work", true);
-        }
-    
-        public void TurnOff()
-        {
+
+            await _timer.StartTimerAsync(); // ждём завершения таймера
+
             _animator.SetBool("Work", false);
         }
-    
-    
+
+        public void Dispose()
+        {
+            Debug.Log("BlenderView.Dispose");
+        }
     }
+
 }
 

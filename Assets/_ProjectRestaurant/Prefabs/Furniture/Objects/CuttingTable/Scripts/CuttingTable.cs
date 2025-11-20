@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
@@ -107,6 +108,7 @@ namespace CuttingTableFurniture
             {
                 _outline.OutlineWidth = 0f;
             }
+            
         }
     
         private void EnterTrigger()
@@ -171,7 +173,7 @@ namespace CuttingTableFurniture
             _isWork = true;
             _ingredient1.SetActive(false);
             _ingredient2.SetActive(false);
-            _cuttingTableView.TurnOn();
+            //_cuttingTableView.TurnOn();
         }
         
         private void TurnOff()
@@ -181,7 +183,7 @@ namespace CuttingTableFurniture
             Object.Destroy(_ingredient2);
             _ingredient1 = null;
             _ingredient2 = null;
-            _cuttingTableView.TurnOff();
+            //_cuttingTableView.TurnOff();
         }
         
         private void CreateResult()
@@ -284,7 +286,7 @@ namespace CuttingTableFurniture
                             if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                             {
                                 TurnOn(); 
-                                StartCoroutine(ContinueWorkCoroutine());
+                                ContinueWorkAsync().Forget();
                             }
                             else
                             {
@@ -302,10 +304,9 @@ namespace CuttingTableFurniture
             }
         }
         
-        private IEnumerator ContinueWorkCoroutine()
+        private async UniTask ContinueWorkAsync()
         {
-            StartCoroutine(_cuttingTableView.Timer.StartTimer());
-            yield return new WaitWhile(() => _cuttingTableView.Timer.IsWork);
+            await _cuttingTableView.StartCuttingTableAsync();
             CreateResult();
             TurnOff();
         }

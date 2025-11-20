@@ -1,10 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace BlenderFurniture
-{
+{ 
     public class Blender : MonoBehaviour, IUseFurniture
     {
         [SerializeField] private TimerView timerPref;
@@ -25,17 +26,14 @@ namespace BlenderFurniture
         private GameObject _result = null;
         private bool _isWork;
         private bool _isHeroikTrigger;
-        private bool _isInit;
         
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
         private Animator _animator;
-        private ProductsContainer _productsContainer;
-        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-        private GameManager _gameManager;
-        private RecipeService _recipeService;
         
-        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        private ProductsFactory _productsFactory;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
+        private RecipeService _recipeService;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Blender.ListForFurniture;
         
@@ -47,57 +45,22 @@ namespace BlenderFurniture
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
     
-        private IEnumerator Start()
+        private void Start()
         {
-            while (_gameManager == null)
-            {
-                _gameManager = StaticManagerWithoutZenject.GameManager;
-                yield return null;
-            }
-            
-            while (_productsContainer == null)
-            {
-                _productsContainer = _gameManager.ProductsContainer;
-                yield return null;
-            }
-            
-            while (_foodsForFurnitureContainer== null)
-            {
-                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-                yield return null;
-            }
-            
-            while (_recipeService== null)
-            {
-                _recipeService = _gameManager.RecipeService;
-                yield return null;
-            }
-            
-            while (IsAllInit == false)
-            {
-                yield return null;
-            }
-            
             //_animator.SetBool("Work", false);
             TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
             _blenderView = new BlenderView(_timerFurniture, _animator);
             
-            _isInit = true;
             Debug.Log("Blender Init");
-
         }
         
         private void OnTriggerEnter(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
                 return;
             }
@@ -111,14 +74,9 @@ namespace BlenderFurniture
         }
         private void OnTriggerExit(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
                 return;
             }
@@ -139,6 +97,17 @@ namespace BlenderFurniture
         // {
         //     EventBus.PressE -= CookingProcess;
         // }
+        
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer)
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        }
         
         public void UpdateCondition()
         {
@@ -185,19 +154,19 @@ namespace BlenderFurniture
             }
             if (_ingredient1 == null)
             {
-                _ingredient1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient1 = _productsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient2 == null)
             {
-                _ingredient2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient2 = _productsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
                 return true;
             }
             else if (_ingredient3 == null)
             {
-                _ingredient3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
+                _ingredient3 = _productsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
                 return true;
             }
@@ -221,17 +190,17 @@ namespace BlenderFurniture
 
             if (result == IngredientName.Rubbish)
             {
-                _gameManager.ProductsFactory.GetProduct(
+                _result = _productsFactory.GetProduct(
                     result,
                     _blenderPoints.SecondPoint.transform,
                     _blenderPoints.ParentReadyFood
                 );
 
-                Debug.LogError("произведен мусор");
+                Debug.Log("произведен мусор");
                 return;
             }
 
-            _result = _gameManager.ProductsFactory.GetProduct(
+            _result = _productsFactory.GetProduct(
                 result,
                 _blenderPoints.SecondPoint.transform,
                 _blenderPoints.ParentReadyFood
@@ -245,7 +214,7 @@ namespace BlenderFurniture
             _ingredient2.SetActive(false);
             _ingredient3.SetActive(false);
             _isWork = true;
-            _blenderView.TurnOn();
+            //_blenderView.TurnOn();
         }
     
         private void TurnOff()
@@ -257,109 +226,92 @@ namespace BlenderFurniture
             _ingredient1 = null;
             _ingredient2 = null;
             _ingredient3 = null;
-            _blenderView.TurnOff();
+            //_blenderView.TurnOff();
         }
         
         private void CookingProcess()
         {
-            if (CheckCookingProcess() == false)
+            if (!CheckCookingProcess())
+                return;
+
+            // ===============================
+            // РУКИ СВОБОДНЫ
+            // ===============================
+            if (_heroik.IsBusyHands == false)
             {
+                if (_isWork)
+                {
+                    Debug.Log("Ждите, блендер готовится");
+                    return;
+                }
+
+                // Есть готовый результат → забираем
+                if (_result != null)
+                {
+                    if (_heroik.TryPickUp(GiveObj(_result)))
+                        CleanObjOnTable(_result);
+                    return;
+                }
+
+                // Нет результата и нет ингредиентов
+                if (_ingredient1 == null && _ingredient2 == null)
+                {
+                    Debug.Log("Руки пусты, ингредиентов нет");
+                    return;
+                }
+
+                // Забрать 1-й ингредиент
+                if (_ingredient1 != null)
+                {
+                    if (_heroik.TryPickUp(GiveObj(_ingredient1)))
+                        CleanObjOnTable(_ingredient1);
+                    return;
+                }
+
+                // Забрать 2-й ингредиент
+                if (_ingredient2 != null)
+                {
+                    if (_heroik.TryPickUp(GiveObj(_ingredient2)))
+                        CleanObjOnTable(_ingredient2);
+                    return;
+                }
+
                 return;
             }
-            
-            if(_heroik.IsBusyHands == false) // руки не заняты
+
+            // ===============================
+            // РУКИ ЗАНЯТЫ
+            // ===============================
+            if (_isWork)
             {
-                if (_isWork)
-                {
-                    Debug.Log("ждите блендер готовится");
-                }
-                else
-                {
-                    if (_result == null)
-                    {
-                        if (_ingredient1 == null)
-                        {
-                            Debug.Log("Руки пусты ингредиентов нет");
-                        }
-                        else
-                        {
-                            if (_ingredient2 == null)
-                            {
-                                if (_heroik.TryPickUp(GiveObj(_ingredient1)))
-                                {
-                                    CleanObjOnTable(_ingredient1);
-                                }
-                            }
-                            else
-                            {
-                                if (_heroik.TryPickUp(GiveObj(_ingredient2)))
-                                {
-                                    CleanObjOnTable(_ingredient2);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (_heroik.TryPickUp(GiveObj(_result)))
-                        {
-                            CleanObjOnTable(_result);
-                        }
-                    }
-                            
-                }
-                        
+                Debug.Log("Ждите, блендер готовится");
+                return;
             }
-            else // руки заняты
+
+            // Если результат уже есть — кладём некуда
+            if (_result != null)
             {
-                if (_isWork)
-                {
-                    Debug.Log("ждите блендер готовится");
-                }
-                else
-                {
-                    if (_result == null)
-                    {
-                        if (_ingredient1 == null)
-                        {
-                            AcceptObject(_heroik.TryGiveIngredient(ListProduct));
-                        }
-                        else
-                        {
-                            if (_ingredient2 == null)
-                            {
-                                AcceptObject(_heroik.TryGiveIngredient(ListProduct));
-                            }
-                            else
-                            {
-                                if(AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
-                                {
-                                    TurnOn(); 
-                                    StartCoroutine(ContinueWorkCoroutine());
-                                }
-                                else
-                                {
-                                    Debug.Log("с предметом что-то пошло не так");
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Руки полные уберите предмет");
-                    }
-                }
+                Debug.Log("Руки полные, уберите предмет");
+                return;
+            }
+
+            // Пытаемся принять предмет
+            if (!AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
+            {
+                Debug.Log("С предметом что-то пошло не так");
+                return;
+            }
+
+            // Если все слоты заполнены — запускаем работу
+            if (_ingredient1 != null && _ingredient2 != null && _ingredient3 != null)
+            {
+                TurnOn();
+                ContinueWorkAsync().Forget(); 
             }
         }
-
+        
         private bool CheckCookingProcess()
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return false;
-            }
-            
             if(_isHeroikTrigger == false)
             {
                 return false;
@@ -378,10 +330,9 @@ namespace BlenderFurniture
             return true;
         }
 
-        private IEnumerator ContinueWorkCoroutine()
+        private async UniTask ContinueWorkAsync()
         {
-            StartCoroutine(_blenderView.Timer.StartTimer());
-            yield return new WaitWhile(() => _blenderView.Timer.IsWork);
+            await _blenderView.StartBlendAsync();
             CreateResult();
             TurnOff();
         }

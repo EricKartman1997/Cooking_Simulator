@@ -1,6 +1,6 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace OvenFurniture
 {
@@ -10,16 +10,16 @@ namespace OvenFurniture
         private const string ANIMATIONOPEN = "Open";
         private GameObject _switchFirst;
         private GameObject _switchSecond;
-        private TimerFurniture _timerFurniture;
+        private TimerFurniture _timer;
         private Animator _animator;
 
-        public TimerFurniture Timer => _timerFurniture;
+        public TimerFurniture Timer => _timer;
          
         internal OvenView(GameObject switchFirst, GameObject switchSecond,TimerFurniture timerFurniture, Animator animator)
         {
             _switchFirst = switchFirst;
             _switchSecond = switchSecond;
-            _timerFurniture = timerFurniture;
+            _timer = timerFurniture;
             _animator = animator;
              
             _animator.SetBool(ANIMATIONCLOSE,false);
@@ -30,6 +30,15 @@ namespace OvenFurniture
         public void Dispose()
         {
             Debug.Log("У объекта вызван Dispose : OvenView");
+        }
+        
+        public async UniTask StartOvenAsync()
+        {
+            ActiveView();
+
+            await _timer.StartTimerAsync(); // ждём завершения таймера
+
+            PassiveView();
         }
          
         public void TurnOn()

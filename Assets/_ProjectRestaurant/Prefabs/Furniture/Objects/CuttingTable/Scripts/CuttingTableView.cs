@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,14 +24,13 @@ namespace CuttingTableFurniture
         {
             Debug.Log("У объекта вызван Dispose : CuttingTableView");
         }
-    
-        public void TurnOn()
+        
+        public async UniTask StartCuttingTableAsync()
         {
             _animator.SetBool("Work", true);
-        }
-        
-        public void TurnOff()
-        {
+
+            await _timer.StartTimerAsync(); // ждём завершения таймера
+
             _animator.SetBool("Work", false);
         }
     }

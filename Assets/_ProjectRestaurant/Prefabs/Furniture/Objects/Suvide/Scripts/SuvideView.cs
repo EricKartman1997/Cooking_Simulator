@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -13,10 +14,6 @@ namespace SuvideFurniture
         private TimerFurniture _secondTimer;
         private TimerFurniture _thirdTimer;
         private Animator _animator; // добавить анимацию
-        
-        internal TimerFurniture Timer1 => _firstTimer;
-        internal TimerFurniture Timer2 => _secondTimer;
-        internal TimerFurniture Timer3 => _thirdTimer;
     
         internal SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab,
             TimerFurniture firstTimer, TimerFurniture secondTimer, TimerFurniture thirdTimer, Animator animator)
@@ -45,6 +42,33 @@ namespace SuvideFurniture
         public void TurnOff() 
         {
             //_animator.SetBool("Work", false);
+        }
+        
+        public async UniTask StartSuvideFirstTimerAsync()
+        {
+            WorkingSuvide();
+
+            await _firstTimer.StartTimerAsync(); // ждём завершения таймера
+
+            NotWorkingSuvide();
+        }
+        
+        public async UniTask StartSuvideSecondTimerAsync()
+        {
+            WorkingSuvide();
+
+            await _secondTimer.StartTimerAsync(); // ждём завершения таймера
+
+            NotWorkingSuvide();
+        }
+        
+        public async UniTask StartSuvideThirdTimerAsync()
+        {
+            WorkingSuvide();
+
+            await _thirdTimer.StartTimerAsync(); // ждём завершения таймера
+
+            NotWorkingSuvide();
         }
         
         public void WorkingSuvide()

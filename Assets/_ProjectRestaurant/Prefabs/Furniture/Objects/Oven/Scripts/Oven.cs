@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -129,13 +130,13 @@ namespace OvenFurniture
         private void TurnOn()
         {
             _isWork = true;
-            _ovenView.TurnOn();
+            //_ovenView.TurnOn();
         }
     
         private void TurnOff()
         {
             _isWork = false;
-            _ovenView.TurnOff();
+            //_ovenView.TurnOff();
             Destroy(_ingredient);
             _ingredient = null;
         }
@@ -217,7 +218,7 @@ namespace OvenFurniture
                         if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                         {
                             TurnOn();
-                            StartCoroutine(ContinueWorkCoroutine());
+                            ContinueWorkAsync().Forget();
                         }
                         else
                         {
@@ -227,11 +228,9 @@ namespace OvenFurniture
                 }
             }
         }
-        private IEnumerator ContinueWorkCoroutine()
+        private async UniTask ContinueWorkAsync()
         {
-            //TODO переделать на UniTask
-            StartCoroutine(_ovenView.Timer.StartTimer());
-            yield return new WaitWhile(() => _ovenView.Timer.IsWork);
+            await _ovenView.StartOvenAsync();
             CreateResult();
             TurnOff();
         }
