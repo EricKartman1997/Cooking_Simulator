@@ -1,43 +1,18 @@
 using System;
 using UnityEngine;
-using System.Collections;
 
 public class HelperScriptFactory: IDisposable
 {
-    private GameManager _gameManager;
     private MonoBehaviour _coroutineMonoBehaviour;
-    private bool _isInit;
-    
-    public bool IsInit => _isInit;
 
-    public HelperScriptFactory(MonoBehaviour coroutineMonoBehaviour)
+    public HelperScriptFactory()
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-        
-        _coroutineMonoBehaviour.StartCoroutine(Init());
+        Debug.Log("Инициализация HelperScriptFactory");
     }
 
     public void Dispose()
     {
         Debug.Log("У объекта вызван Dispose : HelperScriptFactory");
-    }
-    
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        // while (_timeGame == null)
-        // {
-        //     _timeGame = _gameManager.TimeGame;
-        //     yield return null;
-        // }
-        
-        Debug.Log("Создать объект: HelperScriptFactory");
-        _isInit = true;
     }
     
     // Blender

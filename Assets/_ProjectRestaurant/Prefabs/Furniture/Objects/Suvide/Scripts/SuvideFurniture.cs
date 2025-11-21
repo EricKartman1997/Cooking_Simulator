@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace SuvideFurniture
 {
@@ -35,7 +36,7 @@ namespace SuvideFurniture
         private bool _cookingdish1;
         private bool _cookingdish2;
         private bool _cookingdish3;
-        private bool _isInit;
+        //private bool _isInit;
     
         private Outline _outline;
         private DecorationFurniture _decorationFurniture;
@@ -43,12 +44,10 @@ namespace SuvideFurniture
         private SuvidePoints _suvidePoints;
         private Heroik _heroik;
         private Animator _animator;
-        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-        private GameManager _gameManager;
-        private ProductsContainer _productsContainer;
-        private RecipeService _recipeService;
         
-        private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        private FoodsForFurnitureContainer _foodsForFurnitureContainer;
+        private ProductsFactory _productsFactory;
+        private RecipeService _recipeService;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Suvide.ListForFurniture;
         
@@ -59,56 +58,22 @@ namespace SuvideFurniture
             _decorationFurniture = GetComponent<DecorationFurniture>();
         }
         
-        private IEnumerator Start()
+        private void Start()
         {
-            while (_gameManager == null)
-            {
-                _gameManager = StaticManagerWithoutZenject.GameManager;
-                yield return null;
-            }
-            
-            while (_productsContainer == null)
-            {
-                _productsContainer = _gameManager.ProductsContainer;
-                yield return null;
-            }
-            
-            while (_foodsForFurnitureContainer== null)
-            {
-                _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-                yield return null;
-            }
-            
-            while (_recipeService== null)
-            {
-                _recipeService = _gameManager.RecipeService;
-                yield return null;
-            }
-            
-            while (IsAllInit == false)
-            {
-                yield return null;
-            }
-            
             TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
             TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
             TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
             _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator);
-
-            _isInit = true;
+            
             Debug.Log("SuvideFurniture Init");
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik = other.GetComponent<Heroik>();
+                _heroik.ToInteractAction.Subscribe(CookingProcess);
                 EnterTrigger();
                 return;
             }
@@ -123,14 +88,9 @@ namespace SuvideFurniture
             
         private void OnTriggerExit(Collider other)
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return;
-            }
-            
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
                 return;
             }
@@ -172,6 +132,17 @@ namespace SuvideFurniture
             _outline.OutlineWidth = 0f;
             _isHeroikTrigger = false;
         }
+        
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer)
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        }
     
         private bool CheckUseFurniture()
         {
@@ -197,7 +168,7 @@ namespace SuvideFurniture
             }
             if (TOKEN == DISH1)
             {
-                _dish1 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
+                _dish1 = _productsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient1, _suvidePoints.PointIngredient1, true,true);
                 _heroik.CleanObjOnHands();
                 _cookingdish1 = true;
                 return true;
@@ -205,7 +176,7 @@ namespace SuvideFurniture
             
             if (TOKEN == DISH2)
             {
-                _dish2 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
+                _dish2 = _productsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient2, _suvidePoints.PointIngredient2, true,true);
                 _heroik.CleanObjOnHands();
                 _cookingdish2 = true;
                 return true;
@@ -213,7 +184,7 @@ namespace SuvideFurniture
             
             if (TOKEN == DISH3)
             {
-                _dish3 = _gameManager.ProductsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
+                _dish3 = _productsFactory.GetProduct(acceptObj, _suvidePoints.PointIngredient3, _suvidePoints.PointIngredient3, true,true);
                 _heroik.CleanObjOnHands();
                 _cookingdish3 = true;
                 return true;
@@ -259,7 +230,7 @@ namespace SuvideFurniture
             // --- если нет рецепта — создаём мусор ---
             if (result == IngredientName.Rubbish)
             {
-                _gameManager.ProductsFactory.GetProduct(result, spawnPoint, spawnPoint);
+                _productsFactory.GetProduct(result, spawnPoint, spawnPoint);
                 Debug.LogError("Произведён мусор");
                 return;
             }
@@ -268,7 +239,7 @@ namespace SuvideFurniture
             if (targetDish != null)
                 Destroy(targetDish);
 
-            targetDish = _gameManager.ProductsFactory.GetProduct(result, spawnPoint, spawnPoint);
+            targetDish = _productsFactory.GetProduct(result, spawnPoint, spawnPoint);
         }
 
     
@@ -316,7 +287,7 @@ namespace SuvideFurniture
             
             if (TOKEN == DISH3)
             {
-                //_suvideView.TurnOn();
+                // _suvideView.TurnOn();
                 ChangeView(); 
                 return;
             }
@@ -459,12 +430,6 @@ namespace SuvideFurniture
 
         private bool CheckCookingProcess()
         {
-            if (_isInit == false)
-            {
-                Debug.Log("Инициализация не закончена");
-                return false;
-            }
-            
             if(_isHeroikTrigger == false)
             {
                 return false;

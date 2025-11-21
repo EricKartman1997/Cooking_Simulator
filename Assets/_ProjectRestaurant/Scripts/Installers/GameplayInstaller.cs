@@ -31,6 +31,8 @@ public class GameplayInstaller : MonoInstaller
         
         Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
+        Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
+        
         
         
         
