@@ -1895,7 +1895,7 @@
         </member>
         <member name="M:Google.Apis.Util.Utilities.CheckEnumValue``1(``0,System.String)">
             <summary>
-            Checks that the given value is in fact defined in the enum used as the type argument of the method.
+            ChecksManager that the given value is in fact defined in the enum used as the type argument of the method.
             </summary>
             <typeparam name="T">The enum type to check the value within.</typeparam>
             <param name="value">The value to check.</param>
@@ -1904,7 +1904,7 @@
         </member>
         <member name="M:Google.Apis.Util.Utilities.CheckArgument``2(System.Boolean,System.String,System.String,``0,``1)">
             <summary>
-            Checks that given argument-based condition is met, throwing an <see cref="T:System.ArgumentException"/> otherwise.
+            ChecksManager that given argument-based condition is met, throwing an <see cref="T:System.ArgumentException"/> otherwise.
             </summary>
             <param name="condition">The (already evaluated) condition to check.</param>
             <param name="paramName">The name of the parameter whose value is being tested.</param>

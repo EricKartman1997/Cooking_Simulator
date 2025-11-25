@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChecksPanalUI : MonoBehaviour
 {
     [SerializeField] private GameObject content;
+    
     private Dictionary<Check,GameObject> _dictionaryChecks = new Dictionary<Check, GameObject>();
 
     public void AddCheck(Check check, ChecksFactory checksFactory, CheckType type)

@@ -23,6 +23,10 @@ public class DecorationFurniture : MonoBehaviour
 
     private void Start()
     {
+        if (_decorationLowerSurface == CustomFurnitureName.TurnOff)
+        {
+            Debug.LogError("Ошибка установки нижней поверхности - TurnOff быть не может");
+        }
         _decorationLowerSurfaceObj = _viewFactory.GetDecorationLowerSurface(_decorationLowerSurface,positionViewLowerSurface);
         _decorationTableTopObj = _viewFactory.GetDecorationTableTop(_decorationTableTop,positionViewTableTop);
     }

@@ -21,7 +21,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
 
     private void Start()
     {
-        Debug.Log("Garbage Init");
+        //Debug.Log("Garbage Init");
     }
     
     private void OnTriggerEnter(Collider other)

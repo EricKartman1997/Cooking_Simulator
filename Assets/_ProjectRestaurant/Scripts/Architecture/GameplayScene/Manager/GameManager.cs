@@ -15,14 +15,14 @@ public class GameManager : IDisposable
     private BootstrapLVL2 _bootstrapLvl2;
     private GameManagerUpdate _gameManagerUpdate;
     private DataManager _dataManager;
-    private UIManager _uiManager;
+    private ManagerMediator _managerMediator;
     
     // Scripts
-    private Checks _checks;
+    private ChecksManager _checksManager;
     private Score _score;
     private UpdateChecks _updateChecks;
     private Orders _orders;
-    private EventBus _eventBus;
+    //private EventBus _eventBus;
     private TimeGame _timeGame;
     private RecipeService _recipeService;
     private GameOver _gameOver;
@@ -46,13 +46,13 @@ public class GameManager : IDisposable
     
     public DataManager DataManager => _dataManager;
     
-    public UIManager UIManager => _uiManager;
-    public Checks Checks => _checks;
+    public ManagerMediator ManagerMediator => _managerMediator;
+    public ChecksManager Checks => _checksManager;
     public Score Score => _score;
     public UpdateChecks UpdateChecks => _updateChecks;
     public Orders Orders => _orders;
     //public OrdersUI OrdersUI => _ordersUI;
-    public EventBus EventBus => _eventBus;
+    //public EventBus EventBus => _eventBus;
     public TimeGame TimeGame => _timeGame;
     public RecipeService RecipeService => _recipeService;
     public GameOver GameOver => _gameOver;
@@ -62,41 +62,41 @@ public class GameManager : IDisposable
     public HelperScriptFactory HelperScriptFactory => _helperScriptFactory;
     public ChecksFactory ChecksFactory => _checksFactory;
 
-    public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, UIContainer uiContainer,
-        GameManagerUpdate gameManagerUpdate, DataManager dataManager,UIManager uiManager,
-        Checks checks, Score score, UpdateChecks updateChecks, Orders orders, EventBus eventBus,
-        TimeGame timeGame,RecipeService recipeService, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory,
-        HelperScriptFactory helperScriptFactory,ChecksFactory checksFactory,
-        FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeContainer recipeContainer,
-        MonoBehaviour coroutineMonoBehaviour)
-    {
-        _bootstrapLvl2 = bootstrapLvl2;
-        _productsContainer = productsContainer;
-        _uiContainer = uiContainer;
-        _foodsForFurnitureContainer = foodsForFurnitureContainer;
-        _recipeContainer = recipeContainer;
-        _gameManagerUpdate = gameManagerUpdate;
-        _dataManager = dataManager;
-        _uiManager = uiManager;
-        
-        _checks = checks;
-        _score = score;
-        _updateChecks = updateChecks;
-        _orders = orders;
-        _eventBus = eventBus;
-        _timeGame = timeGame;
-        _recipeService = recipeService;
-        _gameOver = gameOver;
-        
-        _viewFactory = viewFactory;
-        _productsFactory = productsFactory;
-        _helperScriptFactory = helperScriptFactory;
-        _checksFactory = checksFactory;
-        _coroutineMonoBehaviour = coroutineMonoBehaviour; // End
-
-        Init();
-        Debug.Log("Создать объект: GameManager");
-    }
+    // public GameManager(BootstrapLVL2 bootstrapLvl2, ProductsContainer productsContainer, UIContainer uiContainer,
+    //     GameManagerUpdate gameManagerUpdate, DataManager dataManager,ManagerMediator managerMediator,
+    //     ChecksManager checksManager, Score score, UpdateChecks updateChecks, Orders orders, ,
+    //     TimeGame timeGame,RecipeService recipeService, GameOver gameOver, ViewFactory viewFactory, ProductsFactory productsFactory,
+    //     HelperScriptFactory helperScriptFactory,ChecksFactory checksFactory,
+    //     FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeContainer recipeContainer,
+    //     MonoBehaviour coroutineMonoBehaviour)
+    // {
+    //     _bootstrapLvl2 = bootstrapLvl2;
+    //     _productsContainer = productsContainer;
+    //     _uiContainer = uiContainer;
+    //     _foodsForFurnitureContainer = foodsForFurnitureContainer;
+    //     _recipeContainer = recipeContainer;
+    //     _gameManagerUpdate = gameManagerUpdate;
+    //     _dataManager = dataManager;
+    //     _managerMediator = managerMediator;
+    //     
+    //     _checksManager = checksManager;
+    //     _score = score;
+    //     _updateChecks = updateChecks;
+    //     _orders = orders;
+    //     _eventBus = eventBus;
+    //     _timeGame = timeGame;
+    //     _recipeService = recipeService;
+    //     _gameOver = gameOver;
+    //     
+    //     _viewFactory = viewFactory;
+    //     _productsFactory = productsFactory;
+    //     _helperScriptFactory = helperScriptFactory;
+    //     _checksFactory = checksFactory;
+    //     _coroutineMonoBehaviour = coroutineMonoBehaviour; // End
+    //
+    //     Init();
+    //     Debug.Log("Создать объект: GameManager");
+    // }
 
     public void Dispose()
     {

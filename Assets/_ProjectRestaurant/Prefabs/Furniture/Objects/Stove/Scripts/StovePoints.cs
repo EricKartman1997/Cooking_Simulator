@@ -10,7 +10,7 @@ public class StovePoints: IDisposable
     {
         _positionRawFood = positionRawFood;
         
-        Debug.Log("Создал объект: StovePoints");
+        //Debug.Log("Создал объект: StovePoints");
     }
     
     public void Dispose()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class Distribution : MonoBehaviour, IUseFurniture
 { 
@@ -8,20 +9,20 @@ public class Distribution : MonoBehaviour, IUseFurniture
     
     [SerializeField] private Transform pointDish;
 
-    private Checks _checks;
-    private Check _currentCheck;
     private Animator _animator;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
+    
+    private GameObject _currentDish;
+    private Check _currentCheck;
     private Heroik _heroik;
     private bool _isWork;
     private bool _isHeroikTrigger;
-    private bool _isInit;
-    private GameObject _currentDish;
-    private GameManager _gameManager;
-    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     
-    private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+    private ProductsFactory _productsFactory;
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
+    private ChecksManager _checksManager;
+
     private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
     private void Awake()
@@ -31,45 +32,18 @@ public class Distribution : MonoBehaviour, IUseFurniture
         _decorationFurniture = GetComponent<DecorationFurniture>();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-            
-        while (_checks == null)
-        {
-            _checks = _gameManager.Checks;
-            yield return null;
-        }
-        
-        while (_foodsForFurnitureContainer== null)
-        {
-            _foodsForFurnitureContainer = _gameManager.FoodsForFurnitureContainer;
-            yield return null;
-        }
-        
-        while (IsAllInit == false)
-        {
-            yield return null;
-        }
-        
-        _isInit = true;
         Debug.Log("Distribution Init");
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
+
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik = other.GetComponent<Heroik>();
+            _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
             return;
         }
@@ -83,14 +57,9 @@ public class Distribution : MonoBehaviour, IUseFurniture
     }
     private void OnTriggerExit(Collider other)
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return;
-        }
-        
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
             return;
         }
@@ -111,6 +80,17 @@ public class Distribution : MonoBehaviour, IUseFurniture
     // {
     //     EventBus.PressE -= CookingProcess;
     // }
+
+    [Inject]
+    private void ConstructZenject( 
+        ProductsFactory productsFactory,
+        ChecksManager checksManager,
+        FoodsForFurnitureContainer foodsForFurnitureContainer)
+    {
+        _productsFactory = productsFactory;
+        _checksManager = checksManager;
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
+    }
     
     public void UpdateCondition()
     {
@@ -150,7 +130,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             Debug.Log("Объект не передался");
             return false;
         }
-        _currentDish = _gameManager.ProductsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
+        _currentDish = _productsFactory.GetProduct(acceptObj, pointDish, pointDish,true);
         _heroik.CleanObjOnHands();
         return true;
     }
@@ -164,7 +144,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
     {
         _animator.SetTrigger(AnimAcceptDish);
         _isWork = true;
-        _currentCheck.StopUpdateTime();
+        _currentCheck.IsStop = true;
     }
     
     private void CookingProcess()
@@ -186,13 +166,13 @@ public class Distribution : MonoBehaviour, IUseFurniture
             }
             else
             {
-                _currentCheck = _checks.CheckTheCheck(_heroik.CurrentTakenObjects);
+                _currentCheck = _checksManager.CheckTheCheck(_heroik.CurrentTakenObjects);
                 if (_currentCheck!= null)
                 {
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                     {
                         TurnOn();
-                        StartCoroutine(ContinueWorkCoroutine());
+                        //StartCoroutine(ContinueWorkCoroutine());
                     }
                     else
                     {
@@ -210,19 +190,13 @@ public class Distribution : MonoBehaviour, IUseFurniture
     private void TakeToTheHall()
     {
         _currentDish.SetActive(false);
-        _checks.DeleteCheck(_currentCheck);
+        _checksManager.DeleteCheck(_currentCheck);
         Destroy(_currentDish);
         _currentDish = null;
     }
     
     private bool CheckCookingProcess()
     {
-        if (_isInit == false)
-        {
-            Debug.Log("Инициализация не закончена");
-            return false;
-        }
-        
         if(_isHeroikTrigger == false)
         {
             return false;
@@ -253,6 +227,12 @@ public class Distribution : MonoBehaviour, IUseFurniture
         {
             yield return null;
         }
+        TakeToTheHall();
+        TurnOff();
+    }
+
+    private void EndCook() // для вызова аниматором
+    {
         TakeToTheHall();
         TurnOff();
     }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -66,7 +65,7 @@ namespace SuvideFurniture
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
             _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator);
             
-            Debug.Log("SuvideFurniture Init");
+            //Debug.Log("SuvideFurniture Init");
         }
         private void OnTriggerEnter(Collider other)
         {

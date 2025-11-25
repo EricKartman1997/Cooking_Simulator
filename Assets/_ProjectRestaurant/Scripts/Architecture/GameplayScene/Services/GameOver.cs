@@ -6,23 +6,18 @@ public class GameOver : IDisposable
 {
     public event Action<Score,TimeGame> ShowAction;
     public event Action HideAction;
-    
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
-    
-    private bool _isInit;
-    
-    public bool IsInit => _isInit;
-    
-    private TimeGame TimeGame => StaticManagerWithoutZenject.GameManager.TimeGame;
-    private Score Score => StaticManagerWithoutZenject.GameManager.Score;
 
-    public GameOver(MonoBehaviour coroutineMonoBehaviour)
+    private Score _score;
+    private TimeGame _timeGame;
+
+    public GameOver(Score score, TimeGame timeGame)
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-
-        _coroutineMonoBehaviour.StartCoroutine(Init());
-        Init();
+        _score = score;
+        _timeGame = timeGame;
+        
+        EventBus.GameOver += OnGameOverMethod;
+        //HideAction?.Invoke();
+        Debug.Log("Создать объект: GameOver");
     }
 
     public void Dispose()
@@ -31,26 +26,10 @@ public class GameOver : IDisposable
         Debug.Log("У объекта вызван Dispose : GameOver");
     }
     
-    private IEnumerator Init()
-    {
-        EventBus.GameOver += OnGameOverMethod;
-        
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        HideAction?.Invoke();
-        
-        Debug.Log("Создать объект: GameOver");
-        _isInit = true;
-    }
-    
     private void OnGameOverMethod()
     {
         Debug.Log("Игра закончена, время больше не идет");
-        ShowAction?.Invoke(Score,TimeGame);
+        ShowAction?.Invoke(_score,_timeGame);
             
         Time.timeScale = 0f;
         AudioListener.pause = true;

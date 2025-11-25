@@ -7,25 +7,18 @@ public class Orders : IDisposable
 {
     public event Action<byte,byte> UpdateOrders;
     public event Action ShowOrders;
-    
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
+
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
     private byte _stayedOrders; // осталось сделать заказов
-    private bool _isInit;
-
-    public bool IsInit => _isInit;
-
-    public Orders(MonoBehaviour coroutineMonoBehaviour)
+    
+    public Orders()
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
         EventBus.AddOrder += OnAddMakeOrder;
         EventBus.UpdateOrder += OnUpdateOrder;
         
-        _coroutineMonoBehaviour.StartCoroutine(Init());
         CreateOrders();
-        //Debug.Log("Создать объект: Orders");
+        Debug.Log("Создать объект: Orders");
     }
 
     public void Dispose()
@@ -33,24 +26,6 @@ public class Orders : IDisposable
         EventBus.AddOrder -= OnAddMakeOrder;
         EventBus.UpdateOrder -= OnUpdateOrder;
         Debug.Log("У объекта вызван Dispose : Orders");
-    }
-    
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        // while (_timeGame == null)
-        // {
-        //     _timeGame = _gameManager.TimeGame;
-        //     yield return null;
-        // }
-        
-        Debug.Log("Создать объект: Orders");
-        _isInit = true;
     }
     
     private void CreateOrders()

@@ -3,25 +3,25 @@ using System;
 public class CheckPanelMediator : IDisposable
 {
     private ChecksPanalUI _checksPanalUI;
-    private Checks _checks;
+    private ChecksManager _checksManager;
 
-    public CheckPanelMediator(Checks checks, ChecksPanalUI checksPanalUI )
+    public CheckPanelMediator(ChecksManager checksManager, ChecksPanalUI checksPanalUI )
     {
         _checksPanalUI = checksPanalUI;
-        _checks = checks;
-        _checks.AddCheckAction += OnAddCheck;
-        _checks.RemoveCheckAction += OnRemoveCheck;
+        _checksManager = checksManager;
+        _checksManager.AddCheckAction += OnAddCheckManager;
+        _checksManager.RemoveCheckAction += OnRemoveCheckManager;
     }
 
     public void Dispose()
     {
-        _checks.AddCheckAction -= OnAddCheck;
-        _checks.RemoveCheckAction -= OnRemoveCheck;
+        _checksManager.AddCheckAction -= OnAddCheckManager;
+        _checksManager.RemoveCheckAction -= OnRemoveCheckManager;
     }
 
-    private void OnAddCheck(Check check, ChecksFactory checksFactory, CheckType type) =>
+    private void OnAddCheckManager(Check check, ChecksFactory checksFactory, CheckType type) =>
         _checksPanalUI.AddCheck(check, checksFactory, type);
 
 
-    private void OnRemoveCheck(Check check) => _checksPanalUI.RemoveCheck(check);
+    private void OnRemoveCheckManager(Check check) => _checksPanalUI.RemoveCheck(check);
 }

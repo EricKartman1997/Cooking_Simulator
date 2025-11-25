@@ -8,6 +8,13 @@ public class FactoryUIGameplay: IDisposable
     private LoadReleaseGameplay _loadReleaseGameplay;
     private GameObject empty = new GameObject("UI_Test");
 
+    private GameObject _gameWindow;
+    private GameObject _gameOverWindow;
+
+    public GameObject GameWindow => _gameWindow;
+
+    public GameObject GameOverWindow => _gameOverWindow;
+
     public FactoryUIGameplay(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay)
     {
         _container = container;
@@ -44,13 +51,12 @@ public class FactoryUIGameplay: IDisposable
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.MainFrameCanvas], empty.transform);
         obj.GetComponent<Canvas>().worldCamera = Camera.main;
-        GameObject GameOverWindow = obj.GetComponentInChildren<GameOverUI>(true).gameObject;
-        GameObject GameWindow = obj.GetComponentInChildren<TimeGameUI>(true).gameObject;
-        GameWindow.SetActive(true);
-        GameOverWindow.SetActive(false);
+        _gameOverWindow = obj.GetComponentInChildren<GameOverUI>(true).gameObject;
+        _gameWindow = obj.GetComponentInChildren<TimeGameUI>(true).gameObject;
+        _gameWindow.SetActive(true);
+        _gameOverWindow.SetActive(false);
         return obj;
         
     }
-
-
+    
 }

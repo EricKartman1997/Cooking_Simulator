@@ -34,7 +34,7 @@ namespace SuvideFurniture
             _secondPointResult = secondPointResult;
             _thirdPointResult = thirdPointResult;
             
-            Debug.Log("Создал объект: SuvidePoints");
+            //Debug.Log("Создал объект: SuvidePoints");
         }
     
         public void Dispose()

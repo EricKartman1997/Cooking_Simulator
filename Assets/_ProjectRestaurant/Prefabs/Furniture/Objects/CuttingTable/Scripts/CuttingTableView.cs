@@ -17,7 +17,7 @@ namespace CuttingTableFurniture
             _animator = animator;
             _timer = timer;
             
-            Debug.Log("Создать объект: CuttingTableView");
+            //Debug.Log("Создать объект: CuttingTableView");
         }
         
         public void Dispose()

@@ -2,18 +2,14 @@ using System;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Collections;
+using Zenject;
 
-public class TimeGame : IDisposable
+public class TimeGame : IDisposable, ITickable
 {
     public event Action<float,float> UpdateTime;
     public event Action ShowTime;
-    public bool IsInit;
     
-    private GameManager _gameManager;
-    private UIManager _uiManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
-    
+    public bool Work;
     private TextMeshProUGUI _timeText;
     
     private float[] _timeLevel;
@@ -21,18 +17,15 @@ public class TimeGame : IDisposable
     private float _currentMinutes;
     private float _secondsLevel;
     private float _minutesLevel;
-
+    
     public float[] TimeLevel => _timeLevel;
     public float CurrentSeconds => _currentSeconds;
 
     public float CurrentMinutes => _currentMinutes;
 
-    public TimeGame(MonoBehaviour coroutineMonoBehaviour)
+    public TimeGame()
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-        
-        _coroutineMonoBehaviour.StartCoroutine(Init());
-        //Debug.Log("Создать объект: TimeGame");
+        CreateTimeLevel();
     }
     
     public void Dispose()
@@ -40,7 +33,7 @@ public class TimeGame : IDisposable
         Debug.Log("У объекта вызван Dispose : TimeGame");
     }
 
-    private IEnumerator Init()
+    private void CreateTimeLevel()
     {
         _secondsLevel = Random.Range(45, 60);
         _minutesLevel = Random.Range(1, 2);
@@ -48,25 +41,14 @@ public class TimeGame : IDisposable
         _currentMinutes = _minutesLevel;
         _timeLevel = new float[]{_secondsLevel,_minutesLevel};
         
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        // while (_uiManager == null)
-        // {
-        //     _uiManager = _gameManager.UIManager;
-        //     yield return null;
-        // }
-
-        // _timeText = _uiManager.TimeText;
-        IsInit = true;    
         Debug.Log("Создать объект: TimeGame");
     }
 
-    public void Update()
+    public void Tick()
     {
+        if(Work == false)
+            return;
+        
         _currentSeconds -= Time.deltaTime;
         
         if (_currentMinutes <= 0f && _currentSeconds <= 0f)

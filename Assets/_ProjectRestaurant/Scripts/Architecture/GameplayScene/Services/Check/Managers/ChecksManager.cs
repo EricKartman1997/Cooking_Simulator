@@ -1,73 +1,37 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Object = UnityEngine.Object;
 
-public class Checks : IDisposable
+public class ChecksManager : IDisposable, IDeleteCheck
 {
     public event Action<Check, ChecksFactory, CheckType> AddCheckAction;
     public event Action<Check> RemoveCheckAction;
     
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
-    private UIManager _uiManager;
     private ChecksFactory _checksFactory;
 
     private Check _check1;
     private Check _check2;
     private Check _check3;
-    // private GameObject _cloneCheck1;
-    // private GameObject _cloneCheck2;
-    // private GameObject _cloneCheck3;
-    private bool _isInit;
 
     public Check Check1 => _check1;
 
     public Check Check2 => _check2;
 
     public Check Check3 => _check3;
-
-    public bool IsInit => _isInit;
     
-    public Checks(MonoBehaviour coroutineMonoBehaviour)
+    public ChecksManager(ChecksFactory checksFactory)
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
-        
-        EventBus.DeleteCheck += DeleteOverdueCheck;
-        _coroutineMonoBehaviour.StartCoroutine(Init());
-        //Debug.Log("Создать объект: Checks");
+        _checksFactory = checksFactory;
+        //EventBus.DeleteCheck += DeleteOverdueCheck;
+
+        Debug.Log("Создать объект: ChecksManager");
     }
     
     public void Dispose()
     {
-        EventBus.DeleteCheck -= DeleteOverdueCheck;
-        Debug.Log("У объекта вызван Dispose : Checks");
-    }
-    
-    private IEnumerator Init()
-    {
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        while (_uiManager == null)
-        {
-            _uiManager = _gameManager.UIManager;
-            yield return null;
-        }
-        
-        while (_checksFactory == null)
-        {
-            _checksFactory = _gameManager.ChecksFactory;
-            yield return null;
-        }
-        
-        Debug.Log("Создать объект: Checks");
-        _isInit = true;
+        //EventBus.DeleteCheck -= DeleteOverdueCheck;
+        Debug.Log("У объекта вызван Dispose : ChecksManager");
     }
 
     public void AddCheck() // добавление чека

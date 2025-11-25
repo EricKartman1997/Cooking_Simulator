@@ -26,8 +26,8 @@ public class GameManagerUpdate : MonoBehaviour
         
         if (_gameManager.BootstrapLvl2.IsAllInit == true)
         {
-            _gameManager.TimeGame.Update();
-            _gameManager.UpdateChecks.Update();
+            //_gameManager.TimeGame.Update();
+            //_gameManager.UpdateChecks.Update();
         }
     }
 }

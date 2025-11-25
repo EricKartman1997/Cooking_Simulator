@@ -14,6 +14,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     private Dictionary<FurnitureName, GameObject> _furnitureDic = new Dictionary<FurnitureName, GameObject>();
     private Dictionary<IngredientName, GameObject> _ingredientDic = new Dictionary<IngredientName, GameObject>();
     private Dictionary<ViewDishName, GameObject> _viewDishDic = new Dictionary<ViewDishName, GameObject>();
+    private Dictionary<ChecksName, GameObject> _checksDic = new Dictionary<ChecksName, GameObject>();
     private Dictionary<UIName, GameObject> _uiDic = new Dictionary<UIName, GameObject>();
     private Dictionary<CustomFurnitureName, GameObject> _customDic = new Dictionary<CustomFurnitureName, GameObject>();
     private Dictionary<CamerasName, GameObject> _camerasDic = new Dictionary<CamerasName, GameObject>();
@@ -31,6 +32,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     public IReadOnlyDictionary<FurnitureName, GameObject> FurnitureDic => _furnitureDic;
     public IReadOnlyDictionary<IngredientName, GameObject> IngredientDic => _ingredientDic;
     public IReadOnlyDictionary<ViewDishName, GameObject> ViewDishDic => _viewDishDic;
+    public IReadOnlyDictionary<ChecksName, GameObject> ChecksDic => _checksDic;
     public IReadOnlyDictionary<UIName, GameObject> UINameDic => _uiDic;
     public IReadOnlyDictionary<CamerasName, GameObject> CamerasDic => _camerasDic;
     public IReadOnlyDictionary<CustomFurnitureName, GameObject> CustomDic => _customDic;
@@ -59,6 +61,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             LoadFurniturePrefabsAsync(), 
             LoadFoodPrefabsAsync(),
             LoadViewDishPrefabsAsync(),
+            LoadChecksPrefabsAsync(),
             LoadUIPrefabsAsync(),
             LoadCamerasPrefabsAsync(),
             LoadCustomPrefabsAsync(),
@@ -66,7 +69,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             ServicePrefabsAsync()
             
         );
-        //Debug.Log("Загружены все ресурсы для Gameplay");
+        Debug.Log("Загружены все ресурсы для Gameplay");
         _isLoaded = true;
     }
     
@@ -213,6 +216,33 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
         //Debug.Log("прошел LoadViewDishPrefabsAsync");
     }
     
+    private async Task LoadChecksPrefabsAsync()
+    {
+        var loadTasks = new List<Task<GameObject>>
+        {
+            LoadGameObjectAsync("BakedMeatCheck"),
+            LoadGameObjectAsync("BakedFishCheck"),
+            LoadGameObjectAsync("FreshnessCocktailCheck"),
+            LoadGameObjectAsync("FruitSaladCheck"),
+            LoadGameObjectAsync("CutletMediumCheck"),
+            LoadGameObjectAsync("BakedSaladCheck"),
+            LoadGameObjectAsync("WildBerryCocktailCheck"),
+        };
+
+        var results = await Task.WhenAll(loadTasks);
+        
+        _checksDic.Add(ChecksName.BakedMeatCheck, results[0]);
+        _checksDic.Add(ChecksName.BakedFishCheck, results[1]);
+        _checksDic.Add(ChecksName.FreshnessCocktailCheck, results[2]);
+        _checksDic.Add(ChecksName.FruitSaladCheck, results[3]);
+        _checksDic.Add(ChecksName.CutletMediumCheck, results[4]);
+        _checksDic.Add(ChecksName.BakedSaladCheck, results[5]);
+        _checksDic.Add(ChecksName.WildBerryCocktailCheck, results[6]);
+
+        
+        //Debug.Log("прошел LoadViewDishPrefabsAsync");
+    }
+    
     private async Task LoadUIPrefabsAsync()
     {
         var loadTasks = new List<Task<GameObject>>
@@ -316,7 +346,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             _loadedPrefabs.Add(prefab);
             return prefab;
         }
-        Debug.Log("Ошибка загрузки LoadGameObjectAsync");
+        Debug.LogError("Ошибка загрузки LoadGameObjectAsync");
         return null;
     }
     
@@ -437,4 +467,15 @@ public enum ViewDishName
     LimeViewDish,
     CherryViewDish,
     BlueberryViewDish
+}
+
+public enum ChecksName
+{
+    BakedMeatCheck,
+    BakedFishCheck,
+    FreshnessCocktailCheck,
+    FruitSaladCheck,
+    CutletMediumCheck,
+    BakedSaladCheck,
+    WildBerryCocktailCheck,
 }

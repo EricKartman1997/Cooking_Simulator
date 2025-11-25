@@ -26,7 +26,7 @@ namespace SuvideFurniture
             _thirdTimer = thirdTimer;
             _animator = animator;
             
-            Debug.Log("Создал объект: SuvideView");
+            //Debug.Log("Создал объект: SuvideView");
         }
     
         public void Dispose()

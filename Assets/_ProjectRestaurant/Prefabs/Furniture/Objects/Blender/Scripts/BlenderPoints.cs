@@ -19,7 +19,7 @@ namespace BlenderFurniture
             _parentFood = parentFood;
             _parentReadyFood = parentReadyFood;
             
-            Debug.Log("Создал объект: BlenderPoints");
+            //Debug.Log("Создал объект: BlenderPoints");
         }
         
         public void Dispose()

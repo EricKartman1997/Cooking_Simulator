@@ -1,22 +1,27 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckContainer: MonoBehaviour
+[CreateAssetMenu(fileName = "ChecksContainer", menuName = "Container/ChecksContainer")]
+public class CheckContainer: ScriptableObject
 {
-    [SerializeField] private Check checkBakedMeat;
-    [SerializeField] private Check checkBakedFish;
-    [SerializeField] private Check checkFreshnessCocktail;
-    [SerializeField] private Check checkWildBerryCocktail;
-    [SerializeField] private Check checkFruitSalad;
-    [SerializeField] private Check checkMixBakedFruit;
-    [SerializeField] private List<Check> allPrefChecks;
-
-    public Check CheckBakedMeat => checkBakedMeat;
-    public Check CheckBakedFish => checkBakedFish;
-    public Check CheckFreshnessCocktail => checkFreshnessCocktail;
-    public Check CheckWildBerryCocktail => checkWildBerryCocktail;
-    public Check CheckFruitSalad => checkFruitSalad;
-    public Check CheckMixBakedFruit => checkMixBakedFruit;
+    [SerializeField] private CheckConfig bakedFish,
+        bakedMeat,
+        bakedSalad,
+        fruitSalad,
+        cutletMedium,
+        wildBerryCocktail,
+        freshnessCocktail;
     
-    public List<Check> AllPrefChecks => allPrefChecks;
+    public CheckConfig BakedFish => bakedFish;
+
+    public CheckConfig BakedMeat => bakedMeat;
+
+    public CheckConfig BakedSalad => bakedSalad;
+
+    public CheckConfig FruitSalad => fruitSalad;
+
+    public CheckConfig CutletMedium => cutletMedium;
+
+    public CheckConfig WildBerryCocktail => wildBerryCocktail;
+
+    public CheckConfig FreshnessCocktail => freshnessCocktail;
 }

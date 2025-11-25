@@ -1,60 +1,30 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class Score : IDisposable
 {
-    private GameManager _gameManager;
-    private MonoBehaviour _coroutineMonoBehaviour;
     private TimeGame _timeGame;
     private float _score;
-    private bool _isInit;
     private ScoreCheckVisitore _checkVisitore;
-    private ChecksFactory _checksFactory;
+    private CheckContainer _checkContainer;
     
-    public bool IsInit => _isInit;
-    // public float ScorePlayer => _score => _checkVisitore.Score;
     public float ScorePlayer => _checkVisitore.Score ;
 
-    public Score(MonoBehaviour coroutineMonoBehaviour)
+    public Score(TimeGame timeGame,CheckContainer checkContainer)
     {
-        _coroutineMonoBehaviour = coroutineMonoBehaviour;
+        _timeGame = timeGame;
+        _checkContainer = checkContainer;
         
-        _coroutineMonoBehaviour.StartCoroutine(Init());
+        EventBus.AddScore += AddScore;
+        
+        _checkVisitore = new ScoreCheckVisitore(_checkContainer); // создать медиатор
+        
     }
 
     public void Dispose()
     {
         EventBus.AddScore -= AddScore;
         Debug.Log("У объекта вызван Dispose : Score");
-    }
-
-    private IEnumerator Init()
-    {
-        EventBus.AddScore += AddScore;
-        
-        while (_gameManager == null)
-        {
-            _gameManager = StaticManagerWithoutZenject.GameManager;
-            yield return null;
-        }
-        
-        while (_timeGame == null)
-        {
-            _timeGame = _gameManager.TimeGame;
-            yield return null;
-        }
-        
-        while (_checksFactory == null)
-        {
-            _checksFactory = _gameManager.ChecksFactory;
-            yield return null;
-        }
-        
-        _checkVisitore = new ScoreCheckVisitore(_checksFactory); // создать медиатор
-        
-        Debug.Log("Создать объект: Score");
-        _isInit = true;
     }
 
     // public void AddScore(int score)
@@ -79,47 +49,47 @@ public class Score : IDisposable
     private class ScoreCheckVisitore: ICheckVisitor
     {
         public float Score;
-        private ChecksFactory _checksFactory;
+        private CheckContainer _checkContainer;
 
-        public ScoreCheckVisitore(ChecksFactory checksFactory)
+        public ScoreCheckVisitore(CheckContainer checkContainer)
         {
-            _checksFactory = checksFactory;
+            _checkContainer = checkContainer;
             Debug.Log("Создать объект: ScoreCheckVisitore");
         }
 
         public void Visit(BakedFishCheck bakedFish)
         {
-            Score += _checksFactory.BakedFish;
+            Score += _checkContainer.BakedFish.Score;
         }
 
         public void Visit(BakedMeatCheck bakedMeat)
         {
-            Score += _checksFactory.BakedMeat;
+            Score += _checkContainer.BakedMeat.Score;
         }
 
         public void Visit(BakedSaladCheck bakedSalad)
         {
-            Score += _checksFactory.BakedSalad;
+            Score += _checkContainer.BakedSalad.Score;
         }
 
         public void Visit(FruitSaladCheck fruitSalad)
         {
-            Score += _checksFactory.FruitSalad;
+            Score += _checkContainer.FruitSalad.Score;
         }
 
         public void Visit(CutletMediumCheck cutletMedium)
         {
-            Score += _checksFactory.CutletMedium;
+            Score += _checkContainer.CutletMedium.Score;
         }
 
         public void Visit(WildBerryCocktailCheck wildBerryCocktail)
         {
-            Score += _checksFactory.WildBerryCocktail;
+            Score += _checkContainer.WildBerryCocktail.Score;
         }
 
         public void Visit(FreshnessCocktailCheck freshnessCocktail)
         {
-            Score += _checksFactory.FreshnessCocktail;
+            Score += _checkContainer.FreshnessCocktail.Score;
         }
     }
     

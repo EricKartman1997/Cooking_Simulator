@@ -52,7 +52,7 @@ namespace BlenderFurniture
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
             _blenderView = new BlenderView(_timerFurniture, _animator);
             
-            Debug.Log("Blender Init");
+            //Debug.Log("Blender Init");
         }
         
         private void OnTriggerEnter(Collider other)

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -38,7 +37,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         _stovePoints = _helperScriptFactory.GetStovePoints(positionRawFood);
         _stoveView = _helperScriptFactory.GetStoveView();
         
-        Debug.Log("Stove Init");
+        //Debug.Log("Stove Init");
     }
 
     private void OnTriggerEnter(Collider other)

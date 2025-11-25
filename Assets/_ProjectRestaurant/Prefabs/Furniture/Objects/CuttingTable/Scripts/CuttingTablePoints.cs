@@ -15,7 +15,7 @@ namespace CuttingTableFurniture
             _positionIngredient2 = positionIngredient2;
             _positionResult = positionResult;
             
-            Debug.Log("Создать объект: CuttingTablePoints");
+            //Debug.Log("Создать объект: CuttingTablePoints");
         }
         
         public void Dispose()

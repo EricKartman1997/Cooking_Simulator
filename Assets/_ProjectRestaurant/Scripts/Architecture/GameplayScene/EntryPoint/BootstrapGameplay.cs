@@ -17,19 +17,33 @@ public class BootstrapGameplay : MonoBehaviour
     private FactoryEnvironment _factoryEnvironment;
     private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
+    private TimeGame _timeGame;
+    private Orders _orders;
+    private GameOver _gameOver;
+    private ChecksManager _checksManager;
+    private UpdateChecks _updateChecks;
     
     private GameObject _loadingPanel;
-    
+
     [Inject]
-    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, FactoryUIGameplay factoryUIGameplay,FactoryEnvironment factoryEnvironment, FactoryPlayerGameplay factoryPlayerGameplay,LoadReleaseGlobalScene loadReleaseGlobalScene,SoundsServiceGameplay soundsServiceGameplay,FactoryCamerasGameplay factoryCamerasGameplay)
+    public void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, LoadReleaseGlobalScene loadReleaseGlobalScene,
+        FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
+        FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
+        SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame, Orders orders, GameOver gameOver,
+        ChecksManager checksManager, UpdateChecks updateChecks)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _factoryUIGameplay = factoryUIGameplay;
         _factoryPlayerGameplay = factoryPlayerGameplay;
-        _soundsServiceGameplay = soundsServiceGameplay;
         _factoryEnvironment = factoryEnvironment;
         _factoryCamerasGameplay = factoryCamerasGameplay;
+        _soundsServiceGameplay = soundsServiceGameplay;
+        _timeGame = timeGame;
+        _orders = orders;
+        _gameOver = gameOver;
+        _checksManager = checksManager;
+        _updateChecks = updateChecks;
     }
     
     private void Start()
@@ -50,7 +64,7 @@ public class BootstrapGameplay : MonoBehaviour
         // инициализация музыки
         await InitAudioAsync();
         // создание сервисов
-        
+        await CreateServiceAsync();
         // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
         // создать игрока
@@ -59,7 +73,8 @@ public class BootstrapGameplay : MonoBehaviour
         HideLoadingPanel();
         // вкл музыку
         //await EnableAudioAsync();
-        
+        StartGame();
+
     }
     
     public async UniTask ExitLevel()
@@ -119,11 +134,29 @@ public class BootstrapGameplay : MonoBehaviour
 
     }
     
+    private async UniTask CreateServiceAsync()
+    {
+        //timeGame сделал
+        //Order сделал
+        //GameOver
+        //UpdateCheck
+        //ChecksManager сделал
+        new ManagerMediator(_timeGame, _orders, _checksManager, _gameOver, _factoryUIGameplay.GameOverWindow, _factoryUIGameplay.GameWindow);
+        await UniTask.Yield();
+    }
+    
     private async UniTask EnableAudioAsync()
     {
         _soundsServiceGameplay.SetMusic();
         await UniTask.Yield();
 
     }
+    
+    private void StartGame()
+    {
+        _timeGame.Work = true;
+        _updateChecks.Work = true;
+    }
+
     
 }

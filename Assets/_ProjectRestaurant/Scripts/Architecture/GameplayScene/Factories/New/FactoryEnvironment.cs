@@ -85,6 +85,7 @@ public class FactoryEnvironment : IDisposable
     
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
+        //itemData.Show();
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GetTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<GetTable>().Init(itemData.GiveFood, itemData.ViewFood);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);

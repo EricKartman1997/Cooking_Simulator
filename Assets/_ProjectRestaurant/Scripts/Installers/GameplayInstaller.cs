@@ -6,6 +6,7 @@ public class GameplayInstaller : MonoInstaller
     // ScriptableObject
     [SerializeField] private FoodsForFurnitureContainer foodsForFurnitureContainer;
     [SerializeField] private RecipeContainer recipeContainer;
+    [SerializeField] private CheckContainer checkContainer;
     
     [SerializeField] private BootstrapGameplay bootstrapGameplay;
     //[SerializeField] private AudioSource sFX;
@@ -17,6 +18,7 @@ public class GameplayInstaller : MonoInstaller
         
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);
+        Container.Bind<CheckContainer>().FromInstance(checkContainer);
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
@@ -32,8 +34,15 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ChecksFactory>().AsSingle();
         
+        Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
+        Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
         
+        Container.BindInterfacesAndSelfTo<TimeGame>().AsSingle();
+        Container.BindInterfacesAndSelfTo<Orders>().AsSingle();
+        Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
+        Container.BindInterfacesAndSelfTo<Score>().AsSingle();
         
         
         
