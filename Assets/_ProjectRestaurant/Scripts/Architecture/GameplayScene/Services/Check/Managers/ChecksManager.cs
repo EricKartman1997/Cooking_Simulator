@@ -9,7 +9,7 @@ public class ChecksManager : IDisposable, IDeleteCheck
     public event Action<Check, ChecksFactory, CheckType> AddCheckAction;
     public event Action<Check> RemoveCheckAction;
     
-    private readonly LazyInject<ChecksFactory> _checksFactory;
+    private ChecksFactory _checksFactory;
 
     private Check _check1;
     private Check _check2;
@@ -21,7 +21,7 @@ public class ChecksManager : IDisposable, IDeleteCheck
 
     public Check Check3 => _check3;
     
-    public ChecksManager(LazyInject<ChecksFactory> checksFactory)
+    public ChecksManager(ChecksFactory checksFactory)
     {
         _checksFactory = checksFactory;
         //EventBus.DeleteCheck += DeleteOverdueCheck;
@@ -41,20 +41,20 @@ public class ChecksManager : IDisposable, IDeleteCheck
         CheckType type = (CheckType)Random.Range(0, 0); // поменять
         if (_check1 == null)
         {
-            _check1 = _checksFactory.Value.GetCheck(type);
-            AddCheckAction?.Invoke(_check1, _checksFactory.Value, type);
+            _check1 = _checksFactory.GetCheck(type);
+            AddCheckAction?.Invoke(_check1, _checksFactory, type);
             //_cloneCheck1 = _checksFactory.GetCheckPrefab(type, _check1, _contentTransform);
         }
         else if (_check2 == null)
         {
-            _check2 = _checksFactory.Value.GetCheck(type);
-            AddCheckAction?.Invoke(_check2, _checksFactory.Value, type);
+            _check2 = _checksFactory.GetCheck(type);
+            AddCheckAction?.Invoke(_check2, _checksFactory, type);
             // _cloneCheck2 = _checksFactory.GetCheckPrefab(type, _check2, _contentTransform);
         }
         else if (_check3 == null)
         {
-            _check3 = _checksFactory.Value.GetCheck(type);
-            AddCheckAction?.Invoke(_check3, _checksFactory.Value, type);
+            _check3 = _checksFactory.GetCheck(type);
+            AddCheckAction?.Invoke(_check3, _checksFactory, type);
             // _cloneCheck3 = _checksFactory.GetCheckPrefab(type, _check3, _contentTransform);
         }
         else

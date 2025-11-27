@@ -12,7 +12,6 @@ public abstract class Check: IDisposable, ITickable
 
     public bool IsStop;
     
-    
     public GameObject Prefab => _prefab;
     public float StartTime => _startTime;
     public float Score => _score;

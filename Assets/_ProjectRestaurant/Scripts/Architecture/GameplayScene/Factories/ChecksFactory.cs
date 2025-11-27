@@ -7,9 +7,10 @@ public class ChecksFactory: IDisposable
     private CheckContainer _checkContainer;
     private LoadReleaseGameplay _loadReleaseGameplay; // префабы чеков
     private DiContainer _installer;
-    private readonly LazyInject<ChecksManager> _checksManager;
+    private ChecksManager _checksManager;
 
-    public ChecksFactory(CheckContainer checkContainer, LoadReleaseGameplay loadReleaseGameplay, DiContainer installer, LazyInject<ChecksManager> checksManager)
+    public ChecksFactory(CheckContainer checkContainer, LoadReleaseGameplay loadReleaseGameplay, DiContainer installer,
+        ChecksManager checksManager)
     {
         _checkContainer = checkContainer;
         _loadReleaseGameplay = loadReleaseGameplay;
@@ -66,19 +67,19 @@ public class ChecksFactory: IDisposable
         switch (type)
         {
             case CheckType.BakedFish:
-                return new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.BakedMeat:
-                return new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.BakedSalad:
-                return new BakedSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new BakedSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.FruitSalad:
-                return new FruitSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new FruitSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.CutletMedium:
-                return new CutletMediumCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new CutletMediumCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.WildBerryCocktail:
-                return new WildBerryCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new WildBerryCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             case CheckType.FreshnessCocktail:
-                return new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager.Value);
+                return new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, _checksManager);
             default:
                 throw new System.ArgumentException($"Не известный Check: {type}");
         }
