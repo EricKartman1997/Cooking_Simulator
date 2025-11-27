@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -34,7 +35,9 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ChecksFactory>().AsSingle();
+        //Container.BindInterfacesAndSelfTo<ChecksFactory>().AsSingle();
+        BindCheckFactory();
+        BindCheckPrefabFactory();
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
         
@@ -43,8 +46,65 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
         Container.BindInterfacesAndSelfTo<Score>().AsSingle();
         
-        
-        
         Debug.Log("завершил инициализацию GameplayInstaller");
+    }
+
+    private void BindCheckFactory()
+    {
+        Container.BindFactory<CheckType, Check, CheckFactory>()
+            .FromMethod((container, type) =>
+            {
+                var checkContainer = container.Resolve<CheckContainer>();
+                var checksManager = container.Resolve<ChecksManager>();
+
+                CheckConfig config = type switch
+                {
+                    CheckType.BakedFish        => checkContainer.BakedFish,
+                    CheckType.BakedMeat        => checkContainer.BakedMeat,
+                    CheckType.BakedSalad       => checkContainer.BakedSalad,
+                    CheckType.FruitSalad       => checkContainer.FruitSalad,
+                    CheckType.CutletMedium     => checkContainer.CutletMedium,
+                    CheckType.WildBerryCocktail => checkContainer.WildBerryCocktail,
+                    CheckType.FreshnessCocktail => checkContainer.FreshnessCocktail,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+
+                return type switch
+                {
+                    CheckType.BakedFish        => new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.BakedMeat        => new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.BakedSalad       => new BakedSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.FruitSalad       => new FruitSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.CutletMedium     => new CutletMediumCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.WildBerryCocktail => new WildBerryCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            });
+    }
+
+    private void BindCheckPrefabFactory()
+    {
+        Container.BindFactory<CheckType, Check, Transform, GameObject, CheckPrefabFactory>()
+            .FromMethod((container, type, check, parent) =>
+            {
+                var checkContainer = container.Resolve<CheckContainer>();
+
+                CheckConfig config = type switch
+                {
+                    CheckType.BakedFish => checkContainer.BakedFish,
+                    CheckType.BakedMeat => checkContainer.BakedMeat,
+                    CheckType.BakedSalad => checkContainer.BakedSalad,
+                    CheckType.FruitSalad => checkContainer.FruitSalad,
+                    CheckType.CutletMedium => checkContainer.CutletMedium,
+                    CheckType.WildBerryCocktail => checkContainer.WildBerryCocktail,
+                    CheckType.FreshnessCocktail => checkContainer.FreshnessCocktail,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                GameObject instance = container.InstantiatePrefab(config.Prefab, parent);
+                CheckUI checkUI = instance.GetComponent<CheckUI>();
+                checkUI.Init(check);
+                return instance;
+            });
     }
 }

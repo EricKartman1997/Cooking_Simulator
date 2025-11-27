@@ -8,7 +8,7 @@ public class ChecksPanalUI : MonoBehaviour
     
     private Dictionary<Check,GameObject> _dictionaryChecks = new Dictionary<Check, GameObject>();
 
-    public void AddCheck(Check check, ChecksFactory checksFactory, CheckType type)
+    public void AddCheck(Check check, CheckPrefabFactory checksFactory, CheckType type)
     {
         // Проверка 1: null-объект
         if (check == null)
@@ -34,7 +34,7 @@ public class ChecksPanalUI : MonoBehaviour
             throw new InvalidOperationException("Content reference is not set in inspector");
         }
 
-        GameObject checkPrefab = checksFactory.GetCheckPrefab(type, check, content.transform);
+        GameObject checkPrefab = checksFactory.Create(type, check, content.transform);
         _dictionaryChecks.Add(check, checkPrefab);
     }
     

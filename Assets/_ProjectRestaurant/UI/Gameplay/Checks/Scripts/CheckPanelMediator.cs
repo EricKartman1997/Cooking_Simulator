@@ -19,7 +19,7 @@ public class CheckPanelMediator : IDisposable
         _checksManager.RemoveCheckAction -= OnRemoveCheckManager;
     }
 
-    private void OnAddCheckManager(Check check, ChecksFactory checksFactory, CheckType type) =>
+    private void OnAddCheckManager(Check check, CheckPrefabFactory checksFactory, CheckType type) =>
         _checksPanalUI.AddCheck(check, checksFactory, type);
 
 
