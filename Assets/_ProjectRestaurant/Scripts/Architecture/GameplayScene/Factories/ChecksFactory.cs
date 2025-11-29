@@ -4,6 +4,7 @@ using Zenject;
 
 public class ChecksFactory: IDisposable
 {
+    //TODO не работает заменено на фабрики Zenject
     private CheckContainer _checkContainer;
     private LoadReleaseGameplay _loadReleaseGameplay; // префабы чеков
     private DiContainer _installer;

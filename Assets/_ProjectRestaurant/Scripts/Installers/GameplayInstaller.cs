@@ -36,8 +36,6 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
         //Container.BindInterfacesAndSelfTo<ChecksFactory>().AsSingle();
-        BindCheckFactory();
-        BindCheckPrefabFactory();
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
         
@@ -45,7 +43,10 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<Orders>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
         Container.BindInterfacesAndSelfTo<Score>().AsSingle();
+        //Container.BindInterfacesAndSelfTo<ManagerMediator>().AsSingle();
         
+        BindCheckFactory();
+        BindCheckPrefabFactory();
         Debug.Log("завершил инициализацию GameplayInstaller");
     }
 
@@ -69,7 +70,7 @@ public class GameplayInstaller : MonoInstaller
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
-                return type switch
+                Check instance = type switch
                 {
                     CheckType.BakedFish        => new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
                     CheckType.BakedMeat        => new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
@@ -80,7 +81,13 @@ public class GameplayInstaller : MonoInstaller
                     CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
                     _ => throw new ArgumentOutOfRangeException()
                 };
+
+                //container.Inject(instance);
+                //Debug.Log("Сделал инджект в объект");
+
+                return instance;
             });
+
     }
 
     private void BindCheckPrefabFactory()

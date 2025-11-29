@@ -42,7 +42,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             _heroik = other.GetComponent<Heroik>();
             _heroik.ToInteractAction.Subscribe(CookingProcess);
             EnterTrigger();
-            Debug.Log("зашел");
+            //Debug.Log("зашел");
             return;
         }
         

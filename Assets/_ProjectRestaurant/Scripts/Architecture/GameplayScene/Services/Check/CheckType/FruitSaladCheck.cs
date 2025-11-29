@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FruitSaladCheck: Check
 {
-    public FruitSaladCheck(GameObject prefab, float startTime, float score, GameObject dish, IDeleteCheck deleteCheck)
+    public FruitSaladCheck(GameObject prefab, float startTime, float score, GameObject dish, IDeleteOverdueCheck deleteCheck)
         : base(prefab, startTime, score, dish, deleteCheck)
     {
     }

@@ -36,6 +36,7 @@ public class Orders : IDisposable
 
     private void OnAddMakeOrder()
     {
+        Debug.Log("+ заказ");
         OnUpdateOrder();
         ++_makeOrders;
     }

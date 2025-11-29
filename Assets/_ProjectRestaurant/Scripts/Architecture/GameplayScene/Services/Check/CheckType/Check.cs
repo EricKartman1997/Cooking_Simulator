@@ -8,7 +8,7 @@ public abstract class Check: IDisposable, ITickable
     private float _startTime;
     private float _score;
     private GameObject _dish;
-    private IDeleteCheck _deleteCheck;
+    private IDeleteOverdueCheck _deleteCheck;
 
     public bool IsStop;
     
@@ -17,13 +17,14 @@ public abstract class Check: IDisposable, ITickable
     public float Score => _score;
     public GameObject Dish => _dish;
 
-    protected Check(GameObject prefab, float startTime, float score, GameObject dish, IDeleteCheck deleteCheck)
+    protected Check(GameObject prefab, float startTime, float score, GameObject dish, IDeleteOverdueCheck deleteCheck)
     {
         _prefab = prefab;
         _startTime = startTime;
         _score = score;
         _dish = dish;
         _deleteCheck = deleteCheck;
+        //Debug.Log($"Check created: {GetType().Name}, startTime={_startTime}");
     }
     
     public void Dispose()
@@ -33,13 +34,12 @@ public abstract class Check: IDisposable, ITickable
     
     public void Tick()
     {
+        //Debug.Log("я работаю 3");
         if (IsStop == true)
             return;
         UpdateTime();
     }
 
-    public abstract void Accept(ICheckVisitor checkVisitor);
-    
     private void UpdateTime()
     {
         if (_startTime > 0)
@@ -47,7 +47,9 @@ public abstract class Check: IDisposable, ITickable
             _startTime -= Time.deltaTime;
             return;
         }
-        _deleteCheck.DeleteCheck(this);
+        _deleteCheck.DeleteOverdueCheck(this);
         Debug.Log("Чек удален");
     }
+    public abstract void Accept(ICheckVisitor checkVisitor);
+    
 }

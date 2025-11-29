@@ -231,8 +231,9 @@ public class Distribution : MonoBehaviour, IUseFurniture
         TurnOff();
     }
 
-    private void EndCook() // для вызова аниматором
+    public void EndCook() // для вызова аниматором
     {
+        Debug.Log("EndCook");
         TakeToTheHall();
         TurnOff();
     }

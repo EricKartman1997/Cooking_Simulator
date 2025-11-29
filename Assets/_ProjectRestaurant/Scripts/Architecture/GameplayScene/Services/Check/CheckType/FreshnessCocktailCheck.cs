@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class FreshnessCocktailCheck: Check
 {
-    public FreshnessCocktailCheck(GameObject prefab, float startTime, float score, GameObject dish, IDeleteCheck deleteCheck) : base(prefab, startTime, score, dish, deleteCheck)
+    public FreshnessCocktailCheck(GameObject prefab, float startTime, float score, GameObject dish, IDeleteOverdueCheck deleteCheck)
+        : base(prefab, startTime, score, dish, deleteCheck)
     {
     }
     

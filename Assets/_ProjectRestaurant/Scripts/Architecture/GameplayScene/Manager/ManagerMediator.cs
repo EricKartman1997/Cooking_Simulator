@@ -15,7 +15,6 @@ public class ManagerMediator : IDisposable
     private GameObject _windowGameOver;
     private GameObject _windowGame;
     
-    
     public ManagerMediator(TimeGame timeGame, Orders orders, ChecksManager checksManager, GameOver gameOver,
         GameObject windowGameOver,
         GameObject windowGame)

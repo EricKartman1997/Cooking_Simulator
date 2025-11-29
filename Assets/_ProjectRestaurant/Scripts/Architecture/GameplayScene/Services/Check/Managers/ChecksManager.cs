@@ -4,7 +4,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class ChecksManager : IDisposable, IDeleteCheck
+public class ChecksManager : IDisposable, IDeleteCheck, IDeleteOverdueCheck, ITickable
 {
     public event Action<Check, CheckPrefabFactory, CheckType> AddCheckAction;
     public event Action<Check> RemoveCheckAction;
@@ -35,6 +35,11 @@ public class ChecksManager : IDisposable, IDeleteCheck
     {
         //EventBus.DeleteCheck -= DeleteOverdueCheck;
         Debug.Log("У объекта вызван Dispose : ChecksManager");
+    }
+    
+    public void Tick()
+    {
+        TickChecks();
     }
 
     public void AddCheck() // добавление чека
@@ -182,7 +187,7 @@ public class ChecksManager : IDisposable, IDeleteCheck
         //Debug.Log("удалил третий чек");
     }
     
-    private void DeleteOverdueCheck(Check check) // удаление просроченного чека
+    public void DeleteOverdueCheck(Check check) // удаление просроченного чека
     {
         if (_check1 != null && _check1.StartTime <= 0f)
         {
@@ -217,5 +222,12 @@ public class ChecksManager : IDisposable, IDeleteCheck
             throw new Exception("ошибка DeleteOverdueCheck");
         }
         
+    }
+    
+    private void TickChecks()
+    {
+        _check1?.Tick();
+        _check2?.Tick();
+        _check3?.Tick();
     }
 }
