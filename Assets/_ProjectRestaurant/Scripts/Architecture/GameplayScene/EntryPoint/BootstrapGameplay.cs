@@ -20,7 +20,7 @@ public class BootstrapGameplay : MonoBehaviour
     private TimeGame _timeGame;
     private Orders _orders;
     private GameOver _gameOver;
-    private ChecksManager _checksManager;
+    private IActionCheck _checksManager;
     private UpdateChecks _updateChecks;
     
     private GameObject _loadingPanel;
@@ -30,7 +30,7 @@ public class BootstrapGameplay : MonoBehaviour
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame, Orders orders, GameOver gameOver,
-        ChecksManager checksManager, UpdateChecks updateChecks)
+        IActionCheck checksManager, UpdateChecks updateChecks)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;

@@ -4,13 +4,13 @@ using Zenject;
 
 public class UpdateChecks : IDisposable, ITickable
 {
-    private ChecksManager _checksManager;
+    private IAddCheck _checksManager;
     private float _timeAddNewCheck = 3f;
     private float _timeUpdateCheck;
 
     public bool Work;
 
-    public UpdateChecks(ChecksManager checksManager)
+    public UpdateChecks(IAddCheck checksManager)
     {
         _checksManager = checksManager;
         Debug.Log("Создать объект: UpdateChecks");
@@ -18,7 +18,7 @@ public class UpdateChecks : IDisposable, ITickable
 
     public void Dispose()
     {
-        _checksManager?.Dispose();
+        
     }
 
     public void Tick()

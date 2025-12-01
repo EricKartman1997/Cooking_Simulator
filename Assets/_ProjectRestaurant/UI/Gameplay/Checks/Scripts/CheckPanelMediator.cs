@@ -3,9 +3,9 @@ using System;
 public class CheckPanelMediator : IDisposable
 {
     private ChecksPanalUI _checksPanalUI;
-    private ChecksManager _checksManager;
+    private IActionCheck _checksManager;
 
-    public CheckPanelMediator(ChecksManager checksManager, ChecksPanalUI checksPanalUI )
+    public CheckPanelMediator(IActionCheck checksManager, ChecksPanalUI checksPanalUI )
     {
         _checksPanalUI = checksPanalUI;
         _checksManager = checksManager;

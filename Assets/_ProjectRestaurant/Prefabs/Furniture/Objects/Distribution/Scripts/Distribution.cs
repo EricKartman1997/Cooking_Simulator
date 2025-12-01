@@ -21,7 +21,8 @@ public class Distribution : MonoBehaviour, IUseFurniture
     
     private ProductsFactory _productsFactory;
     private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-    private ChecksManager _checksManager;
+    private ICheckTheCheck _checkCheck;
+    private IDeleteCheck _checkDelete;
 
     private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
@@ -84,11 +85,13 @@ public class Distribution : MonoBehaviour, IUseFurniture
     [Inject]
     private void ConstructZenject( 
         ProductsFactory productsFactory,
-        ChecksManager checksManager,
+        ICheckTheCheck checkCheck,
+        IDeleteCheck checkDelete,
         FoodsForFurnitureContainer foodsForFurnitureContainer)
     {
         _productsFactory = productsFactory;
-        _checksManager = checksManager;
+        _checkCheck = checkCheck;
+        _checkDelete = checkDelete;
         _foodsForFurnitureContainer = foodsForFurnitureContainer;
     }
     
@@ -166,7 +169,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
             }
             else
             {
-                _currentCheck = _checksManager.CheckTheCheck(_heroik.CurrentTakenObjects);
+                _currentCheck = _checkCheck.CheckTheCheck(_heroik.CurrentTakenObjects);
                 if (_currentCheck!= null)
                 {
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
@@ -190,7 +193,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
     private void TakeToTheHall()
     {
         _currentDish.SetActive(false);
-        _checksManager.DeleteCheck(_currentCheck);
+        _checkDelete.DeleteCheck(_currentCheck);
         Destroy(_currentDish);
         _currentDish = null;
     }

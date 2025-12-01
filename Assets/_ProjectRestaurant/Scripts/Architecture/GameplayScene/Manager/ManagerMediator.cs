@@ -10,12 +10,12 @@ public class ManagerMediator : IDisposable
     
     private TimeGame _timeGame;
     private Orders _orders;
-    private ChecksManager _checksManager;
+    private IActionCheck _checksManager;
     private GameOver _gameOver;
     private GameObject _windowGameOver;
     private GameObject _windowGame;
     
-    public ManagerMediator(TimeGame timeGame, Orders orders, ChecksManager checksManager, GameOver gameOver,
+    public ManagerMediator(TimeGame timeGame, Orders orders, IActionCheck checksManager, GameOver gameOver,
         GameObject windowGameOver,
         GameObject windowGame)
     {

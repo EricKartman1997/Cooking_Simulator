@@ -4,7 +4,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class ChecksManager : IDisposable, IDeleteCheck, IDeleteOverdueCheck, ITickable
+public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCheck, IActionCheck, ICheckTheCheck
 {
     public event Action<Check, CheckPrefabFactory, CheckType> AddCheckAction;
     public event Action<Check> RemoveCheckAction;
