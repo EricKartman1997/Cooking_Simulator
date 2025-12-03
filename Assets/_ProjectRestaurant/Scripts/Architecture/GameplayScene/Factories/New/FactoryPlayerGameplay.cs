@@ -17,7 +17,7 @@ public class FactoryPlayerGameplay : IDisposable
 
     public void Dispose()
     {
-        Debug.Log("FactoryPlayerGameplay.Dispose");
+        //Debug.Log("FactoryPlayerGameplay.Dispose");
     }
 
     public void CreatePlayer(CinemachineVirtualCamera camera)
@@ -33,7 +33,7 @@ public class FactoryPlayerGameplay : IDisposable
     {
         if (target == null || camera == null)
         {
-            Debug.Log("Camera not enabled");
+            //Debug.Log("Camera not enabled");
             return;
         }
 
@@ -43,7 +43,7 @@ public class FactoryPlayerGameplay : IDisposable
         
         camera.Follow = empty.transform;
         camera.LookAt = empty.transform;
-        Debug.Log($"Camera enabled -> Follow: {camera.Follow}, LookAt: {camera.LookAt}");
+        //Debug.Log($"Camera enabled -> Follow: {camera.Follow}, LookAt: {camera.LookAt}");
     }
     
     

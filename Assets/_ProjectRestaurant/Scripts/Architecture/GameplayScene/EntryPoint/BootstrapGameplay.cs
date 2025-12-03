@@ -17,11 +17,12 @@ public class BootstrapGameplay : MonoBehaviour
     private FactoryEnvironment _factoryEnvironment;
     private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
-    private TimeGame _timeGame;
-    private Orders _orders;
-    private GameOver _gameOver;
-    private IActionCheck _checksManager;
+    
+    private DiContainer _container;
+    
+    //ВКЛ игры
     private UpdateChecks _updateChecks;
+    private TimeGame _timeGame;
     
     private GameObject _loadingPanel;
 
@@ -29,8 +30,8 @@ public class BootstrapGameplay : MonoBehaviour
     public void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, LoadReleaseGlobalScene loadReleaseGlobalScene,
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
-        SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame, Orders orders, GameOver gameOver,
-        IActionCheck checksManager, UpdateChecks updateChecks)
+        SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame,
+        UpdateChecks updateChecks,DiContainer container)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -40,10 +41,8 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryCamerasGameplay = factoryCamerasGameplay;
         _soundsServiceGameplay = soundsServiceGameplay;
         _timeGame = timeGame;
-        _orders = orders;
-        _gameOver = gameOver;
-        _checksManager = checksManager;
         _updateChecks = updateChecks;
+        _container = container;
     }
     
     private void Start()
@@ -83,12 +82,19 @@ public class BootstrapGameplay : MonoBehaviour
         // сохранить настройки
         // переход на сцену меню
     }
-
+    
+    // private async UniTask EnableAudioAsync()
+    // {
+    //     _soundsServiceGameplay.SetMusic();
+    //     await UniTask.Yield();
+    //
+    // }
+    
     private async UniTask WaitForResourcesLoaded()
     {
         // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
-        Debug.Log("Загружены все ресурсы для Gameplay");
+        //Debug.Log("Загружены все ресурсы для Gameplay");
     }
     
     private void CreateCameras()
@@ -96,6 +102,7 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryCamerasGameplay.CreateMainCamera();
         _virtualCamera = _factoryCamerasGameplay.CreateTopDownCamera();
     }
+    
     private void CreateUI()
     {
         _canvas = _factoryUIGameplay.CreateUI();
@@ -104,27 +111,6 @@ public class BootstrapGameplay : MonoBehaviour
     private void ShowLoadingPanel()
     {
         _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], _canvas.transform);
-    }
-
-    private void HideLoadingPanel()
-    {
-        if (_loadingPanel != null)
-            Destroy(_loadingPanel);
-    }
-    
-    private async UniTask CreatePlayerAsync()
-    {
-       _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
-        await UniTask.Yield(); // отдаём управление кадру
-    }
-    
-    private async UniTask CreateEnvironmentAsync()
-    {
-        await _factoryEnvironment.CreateFurnitureGamePlayAsync();
-        await UniTask.Yield();
-        _factoryEnvironment.CreateOtherEnvironmentGamePlay();
-        await UniTask.Yield();
-        _factoryEnvironment.CreateLightsGamePlay();
     }
     
     private async UniTask InitAudioAsync()
@@ -141,22 +127,34 @@ public class BootstrapGameplay : MonoBehaviour
         //GameOver
         //UpdateCheck
         //ChecksManager сделал
-        new ManagerMediator(_timeGame, _orders, _checksManager, _gameOver, _factoryUIGameplay.GameOverWindow, _factoryUIGameplay.GameWindow);
+        _container.Resolve<ManagerMediator>(); // ← Создаётся прямо здесь!
         await UniTask.Yield();
     }
     
-    private async UniTask EnableAudioAsync()
+    private async UniTask CreateEnvironmentAsync()
     {
-        _soundsServiceGameplay.SetMusic();
+        await _factoryEnvironment.CreateFurnitureGamePlayAsync();
         await UniTask.Yield();
-
+        _factoryEnvironment.CreateOtherEnvironmentGamePlay();
+        await UniTask.Yield();
+        _factoryEnvironment.CreateLightsGamePlay();
     }
     
+    private async UniTask CreatePlayerAsync()
+    {
+       _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
+        await UniTask.Yield(); // отдаём управление кадру
+    }
+
+    private void HideLoadingPanel()
+    {
+        if (_loadingPanel != null)
+            Destroy(_loadingPanel);
+    }
     private void StartGame()
     {
         _timeGame.Work = true;
         _updateChecks.Work = true;
     }
-
     
 }

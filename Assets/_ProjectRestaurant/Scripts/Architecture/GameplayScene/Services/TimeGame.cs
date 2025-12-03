@@ -30,7 +30,7 @@ public class TimeGame : IDisposable, ITickable
     
     public void Dispose()
     {
-        Debug.Log("У объекта вызван Dispose : TimeGame");
+        //Debug.Log("У объекта вызван Dispose : TimeGame");
     }
 
     private void CreateTimeLevel()
@@ -41,7 +41,7 @@ public class TimeGame : IDisposable, ITickable
         _currentMinutes = _minutesLevel;
         _timeLevel = new float[]{_secondsLevel,_minutesLevel};
         
-        Debug.Log("Создать объект: TimeGame");
+        //Debug.Log("Создать объект: TimeGame");
     }
 
     public void Tick()

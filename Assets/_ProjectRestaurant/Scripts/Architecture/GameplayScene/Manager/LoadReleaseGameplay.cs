@@ -69,7 +69,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
             ServicePrefabsAsync()
             
         );
-        Debug.Log("Загружены все ресурсы для Gameplay");
+        //Debug.Log("Загружены все ресурсы для Gameplay");
         _isLoaded = true;
     }
     

@@ -35,7 +35,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
 
     private void Start()
     {
-        Debug.Log("Distribution Init");
+        //Debug.Log("Distribution Init");
     }
     
     private void OnTriggerEnter(Collider other)

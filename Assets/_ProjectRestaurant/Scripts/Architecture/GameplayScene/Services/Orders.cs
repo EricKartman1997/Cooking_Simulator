@@ -18,14 +18,14 @@ public class Orders : IDisposable
         EventBus.UpdateOrder += OnUpdateOrder;
         
         CreateOrders();
-        Debug.Log("Создать объект: Orders");
+        //Debug.Log("Создать объект: Orders");
     }
 
     public void Dispose()
     {
         EventBus.AddOrder -= OnAddMakeOrder;
         EventBus.UpdateOrder -= OnUpdateOrder;
-        Debug.Log("У объекта вызван Dispose : Orders");
+        //Debug.Log("У объекта вызван Dispose : Orders");
     }
     
     private void CreateOrders()

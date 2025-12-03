@@ -53,7 +53,7 @@ namespace OvenFurniture
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
             
-            Debug.Log("Oven Init");
+            //Debug.Log("Oven Init");
         }
         
         private void OnTriggerEnter(Collider other)

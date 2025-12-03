@@ -43,11 +43,14 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<Orders>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
         Container.BindInterfacesAndSelfTo<Score>().AsSingle();
-        //Container.BindInterfacesAndSelfTo<ManagerMediator>().AsSingle();
+        Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
+        
+        //Container.Bind<TimeGameUI>().AsSingle();
+        Container.Bind<ManagerMediator>().AsSingle().Lazy();
         
         BindCheckFactory();
         BindCheckPrefabFactory();
-        Debug.Log("завершил инициализацию GameplayInstaller");
+        //Debug.Log("завершил инициализацию GameplayInstaller");
     }
 
     private void BindCheckFactory()

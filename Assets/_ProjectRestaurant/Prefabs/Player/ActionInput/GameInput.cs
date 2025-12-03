@@ -37,6 +37,8 @@ public class GameInput : MonoBehaviour
     private void OnPressEcs(InputAction.CallbackContext context)
     {
         Debug.Log("Вызов меню");
+        // поставить паузу
+        // вкл меня настроек
         //EventBus.PressE?.Invoke();
     }
     

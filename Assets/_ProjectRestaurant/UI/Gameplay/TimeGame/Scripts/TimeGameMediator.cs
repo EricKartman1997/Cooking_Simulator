@@ -12,14 +12,14 @@ public class TimeGameMediator : IDisposable
         _timeGame.UpdateTime += OnUpdateTime;
         _timeGame.ShowTime += OnShow;
         _timeGameUI = timeGameUI;
-        Debug.Log("Создать объект: TimeGameMediator");
+        //Debug.Log("Создать объект: TimeGameMediator");
     }
 
     public void Dispose()
     {
         _timeGame.UpdateTime -= OnUpdateTime;
         _timeGame.ShowTime -= OnShow;
-        Debug.Log("У объекта вызван Dispose : TimeGameMediator");
+        //Debug.Log("У объекта вызван Dispose : TimeGameMediator");
     }
 
     private void OnShow()

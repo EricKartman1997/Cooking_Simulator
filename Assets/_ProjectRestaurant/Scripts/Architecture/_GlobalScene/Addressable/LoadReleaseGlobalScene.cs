@@ -17,7 +17,7 @@ public class LoadReleaseGlobalScene : IDisposable
     public LoadReleaseGlobalScene()
     {
         InitGlobal();
-        Debug.Log("завершил инициализацию LoadReleaseGlobalScene");
+        //Debug.Log("завершил инициализацию LoadReleaseGlobalScene");
     }
 
     public void Dispose()

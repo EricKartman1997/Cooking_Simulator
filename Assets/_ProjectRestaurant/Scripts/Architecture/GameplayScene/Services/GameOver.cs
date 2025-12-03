@@ -17,13 +17,13 @@ public class GameOver : IDisposable
         
         EventBus.GameOver += OnGameOverMethod;
         //HideAction?.Invoke();
-        Debug.Log("Создать объект: GameOver");
+        //Debug.Log("Создать объект: GameOver");
     }
 
     public void Dispose()
     {
         EventBus.GameOver -= OnGameOverMethod;
-        Debug.Log("У объекта вызван Dispose : GameOver");
+        //Debug.Log("У объекта вызван Dispose : GameOver");
     }
     
     private void OnGameOverMethod()

@@ -24,12 +24,12 @@ public class IngredientHandler: IDisposable
         _currentTakenObjects = currentTakenObjects;
         _productsFactory = productsFactory;
         
-        Debug.Log("Создан объект: IngredientHandler");
+        //Debug.Log("Создан объект: IngredientHandler");
     }
     
     public void Dispose()
     {
-        Debug.Log("У объекта вызван Dispose : IngredientHandler");
+        //Debug.Log("У объекта вызван Dispose : IngredientHandler");
     }
     
 

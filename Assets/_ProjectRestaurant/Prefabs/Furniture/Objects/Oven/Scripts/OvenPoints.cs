@@ -16,7 +16,7 @@ namespace OvenFurniture
             _pointUp = pointUp;
             _positionIngredient = positionIngredient;
             
-            Debug.Log("Создан объект: OvenPoints");
+            //Debug.Log("Создан объект: OvenPoints");
         }
     
         public void Dispose()

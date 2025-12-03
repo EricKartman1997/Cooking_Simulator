@@ -28,13 +28,13 @@ public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdu
         _checkPrefabFactory = checkPrefabFactory;
         //EventBus.DeleteCheck += DeleteOverdueCheck;
 
-        Debug.Log("Создать объект: ChecksManager");
+        //Debug.Log("Создать объект: ChecksManager");
     }
     
     public void Dispose()
     {
         //EventBus.DeleteCheck -= DeleteOverdueCheck;
-        Debug.Log("У объекта вызван Dispose : ChecksManager");
+        //Debug.Log("У объекта вызван Dispose : ChecksManager");
     }
     
     public void Tick()

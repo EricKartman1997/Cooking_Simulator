@@ -7,12 +7,12 @@ public class HelperScriptFactory: IDisposable
 
     public HelperScriptFactory()
     {
-        Debug.Log("Инициализация HelperScriptFactory");
+        //Debug.Log("Инициализация HelperScriptFactory");
     }
 
     public void Dispose()
     {
-        Debug.Log("У объекта вызван Dispose : HelperScriptFactory");
+        //Debug.Log("У объекта вызван Dispose : HelperScriptFactory");
     }
     
     // Blender

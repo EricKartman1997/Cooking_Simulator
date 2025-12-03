@@ -48,7 +48,7 @@ namespace CuttingTableFurniture
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
             _cuttingTableView = new CuttingTableView(_animator,timerFurniture);
             
-            Debug.Log("CuttingTable Init");
+            //Debug.Log("CuttingTable Init");
         }
         
         private void OnTriggerEnter(Collider other)

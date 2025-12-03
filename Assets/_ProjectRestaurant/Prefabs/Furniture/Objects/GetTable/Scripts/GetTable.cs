@@ -31,7 +31,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
         _objectFoodView = _viewFactory.GetProduct(_viewFood,parentViewDish);
         _objectOnTheTable = _productsFactory.GetProductRef(_giveFood);
         
-        Debug.Log("GetTable Init");
+        //Debug.Log("GetTable Init");
     }
     
     private void OnTriggerEnter(Collider other)

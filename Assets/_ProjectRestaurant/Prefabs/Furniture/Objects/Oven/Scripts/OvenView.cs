@@ -24,7 +24,7 @@ namespace OvenFurniture
              
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
-            Debug.Log("Создан объект: OvenView");
+            //Debug.Log("Создан объект: OvenView");
         }
     
         public void Dispose()

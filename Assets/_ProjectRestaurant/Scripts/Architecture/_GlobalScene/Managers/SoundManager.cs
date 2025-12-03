@@ -25,7 +25,7 @@ public class SoundManager: IDisposable, IInitializable
 
     public void Dispose()
     {
-        Debug.Log("Dispose SoundManager");
+        //Debug.Log("Dispose SoundManager");
     }
     
     private float VolumeToDecibelLogarithmic(float volume)

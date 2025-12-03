@@ -13,7 +13,7 @@ public class UpdateChecks : IDisposable, ITickable
     public UpdateChecks(IAddCheck checksManager)
     {
         _checksManager = checksManager;
-        Debug.Log("Создать объект: UpdateChecks");
+        //Debug.Log("Создать объект: UpdateChecks");
     }
 
     public void Dispose()

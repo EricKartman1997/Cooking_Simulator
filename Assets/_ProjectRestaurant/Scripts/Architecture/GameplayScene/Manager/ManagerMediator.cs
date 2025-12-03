@@ -7,24 +7,36 @@ public class ManagerMediator : IDisposable
     private OrdersMediator _ordersMediator;
     private CheckPanelMediator _checkPanelMediator;
     private GameOverMediator _gameOverMediator;
+    private MenuMediator _menuMediator;
     
     private TimeGame _timeGame;
     private Orders _orders;
     private IActionCheck _checksManager;
     private GameOver _gameOver;
-    private GameObject _windowGameOver;
-    private GameObject _windowGame;
+    private Menu _menu;
     
-    public ManagerMediator(TimeGame timeGame, Orders orders, IActionCheck checksManager, GameOver gameOver,
-        GameObject windowGameOver,
-        GameObject windowGame)
+    private TimeGameUI _timeGameUI;
+    private OrdersUI _ordersUI;
+    private ChecksPanalUI _checksPanalUI;
+    private GameOverUI _gameOverUI;
+    private MenuUI _menuUI;
+    
+    
+    public ManagerMediator(TimeGame timeGame, Orders orders, IActionCheck checksManager, GameOver gameOver, Menu menu,
+        TimeGameUI timeGameUI, OrdersUI ordersUI, ChecksPanalUI checksPanalUI, GameOverUI gameOverUI, MenuUI menuUI
+        )
     {
         _timeGame = timeGame;
         _orders = orders;
         _checksManager = checksManager;
         _gameOver = gameOver;
-        _windowGameOver = windowGameOver;
-        _windowGame = windowGame;
+        _menu = menu;
+        
+        _timeGameUI = timeGameUI;
+        _ordersUI = ordersUI;
+        _checksPanalUI = checksPanalUI;
+        _gameOverUI = gameOverUI ;
+        _menuUI = menuUI;;
         
         CreateMediator();
         
@@ -38,14 +50,16 @@ public class ManagerMediator : IDisposable
 
     private void CreateMediator()
     {
-        _timeGameMediator = new TimeGameMediator(_timeGame, _windowGame.GetComponent<TimeGameUI>() );
+        _timeGameMediator = new TimeGameMediator(_timeGame, _timeGameUI);
 
-        _ordersMediator = new OrdersMediator(_orders, _windowGame.GetComponent<OrdersUI>());
+        _ordersMediator = new OrdersMediator(_orders, _ordersUI);
 
-        _checkPanelMediator = new CheckPanelMediator(_checksManager, _windowGame.GetComponent<ChecksPanalUI>());
+        _checkPanelMediator = new CheckPanelMediator(_checksManager, _checksPanalUI);
         
-        _gameOverMediator = new GameOverMediator(_gameOver,_windowGameOver.GetComponent<GameOverUI>());
+        _gameOverMediator = new GameOverMediator(_gameOver,_gameOverUI);
         
-        Debug.Log("Создать объект: ManagerMediator");
+        _menuMediator = new MenuMediator(_menu,_menuUI);
+        
+        //Debug.Log("Создать объект: ManagerMediator");
     }
 }
