@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Menu : IDisposable
 {
+    public event Action ShowAction;
+    public event Action HideAction;
+    
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private GameObject _panelSettings;
 
@@ -44,7 +47,11 @@ public class Menu : IDisposable
 
     public void Show()
     {
-        Time.timeScale = 0f;
-        AudioListener.pause = true;
+        ShowAction?.Invoke();
+    }
+    
+    public void Hide()
+    {
+        HideAction?.Invoke();
     }
 }

@@ -7,7 +7,6 @@ public class MenuUI : MonoBehaviour
 {
     public event Action ContinueAction;
     public event Action SettingsAction;
-    public event Action ShowAction;
     public event Func<UniTask> ExitAction;
     
     [SerializeField] private Button continueButton;
@@ -42,9 +41,12 @@ public class MenuUI : MonoBehaviour
     
     public void Show()
     {
-        ShowAction?.Invoke();
         gameObject.SetActive(true);
-        
+    }
+    
+    public void Hide()
+    {
+        gameObject.SetActive(false);
     }
 
 

@@ -16,7 +16,9 @@ public class MenuMediator : IDisposable
         _menuUI.ContinueAction += _menu.ContinueButton;
         _menuUI.SettingsAction += _menu.SettingsButton;
         _menuUI.ExitAction += _menu.ExitButton;
-        _menuUI.ShowAction += _menu.Show;
+        
+        _menu.ShowAction += _menuUI.Show;
+        _menu.HideAction += _menuUI.Hide;
     }
 
     public void Dispose()
@@ -24,6 +26,9 @@ public class MenuMediator : IDisposable
         _menuUI.ContinueAction -= _menu.ContinueButton;
         _menuUI.SettingsAction -= _menu.SettingsButton;
         _menuUI.ExitAction -= _menu.ExitButton;
+        
+        _menu.HideAction -= _menuUI.Hide;
+        _menu.ShowAction -= _menuUI.Show;
     }
     
     // private void ContinueButton()

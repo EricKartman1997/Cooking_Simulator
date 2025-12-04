@@ -16,11 +16,14 @@ public class GameplayInstaller : MonoInstaller
     {
         // Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
         // Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
+        Container.BindInterfacesAndSelfTo<PauseHandler>().AsSingle();
         
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
+
+        Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
@@ -35,7 +38,7 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
         Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
-        //Container.BindInterfacesAndSelfTo<ChecksFactory>().AsSingle();
+
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
         
@@ -45,7 +48,6 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<Score>().AsSingle();
         Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
         
-        //Container.Bind<TimeGameUI>().AsSingle();
         Container.Bind<ManagerMediator>().AsSingle().Lazy();
         
         BindCheckFactory();

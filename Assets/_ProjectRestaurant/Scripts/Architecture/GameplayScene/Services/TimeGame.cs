@@ -4,7 +4,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class TimeGame : IDisposable, ITickable
+public class TimeGame : IDisposable, ITickable, IPause
 {
     public event Action<float,float> UpdateTime;
     public event Action ShowTime;
@@ -18,18 +18,24 @@ public class TimeGame : IDisposable, ITickable
     private float _secondsLevel;
     private float _minutesLevel;
     
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
+    
     public float[] TimeLevel => _timeLevel;
     public float CurrentSeconds => _currentSeconds;
 
     public float CurrentMinutes => _currentMinutes;
 
-    public TimeGame()
+    public TimeGame(IHandlerPause pauseHandler)
     {
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
         CreateTimeLevel();
     }
     
     public void Dispose()
     {
+        _pauseHandler.Remove(this);
         //Debug.Log("У объекта вызван Dispose : TimeGame");
     }
 
@@ -48,6 +54,10 @@ public class TimeGame : IDisposable, ITickable
     {
         if(Work == false)
             return;
+        
+        if(_isPause)
+            return;
+        Debug.Log("Пауза не вызвана");
         
         _currentSeconds -= Time.deltaTime;
         
@@ -69,4 +79,7 @@ public class TimeGame : IDisposable, ITickable
         ShowTime?.Invoke();
         UpdateTime?.Invoke(_currentMinutes, _currentSeconds);
     }
+
+    public void SetPause(bool isPaused) => _isPause = isPaused;
+
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class GameInput : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class GameInput : MonoBehaviour
     private InputAction _interactableAction;
     private InputAction _moveAction;
     private InputAction _menuAction;
+    
+    private GameManager _gameManager;
+    //private Menu _menu;
     
     private void Awake()
     {
@@ -28,6 +32,12 @@ public class GameInput : MonoBehaviour
         _interactableAction.performed -= OnPressE;
         _menuAction.performed -= OnPressEcs;
     }
+
+    [Inject]
+    private void ConstructZenject(GameManager gameManager)
+    {
+        _gameManager = gameManager;
+    }
     
     private void OnPressE(InputAction.CallbackContext context)
     {
@@ -37,9 +47,13 @@ public class GameInput : MonoBehaviour
     private void OnPressEcs(InputAction.CallbackContext context)
     {
         Debug.Log("Вызов меню");
-        // поставить паузу
-        // вкл меня настроек
-        //EventBus.PressE?.Invoke();
+        if (_gameManager.IsPause == false)
+        {
+            _gameManager.ShowMenu();
+            return;
+        }
+        _gameManager.HideMenu();
+        
     }
     
     public Vector3 GetMovementVectorNormalized()
