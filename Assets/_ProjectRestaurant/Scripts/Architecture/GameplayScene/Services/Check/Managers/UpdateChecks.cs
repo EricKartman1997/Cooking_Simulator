@@ -2,28 +2,36 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class UpdateChecks : IDisposable, ITickable
+public class UpdateChecks : IDisposable, ITickable,IPause
 {
     private IAddCheck _checksManager;
     private float _timeAddNewCheck = 3f;
     private float _timeUpdateCheck;
 
     public bool Work;
+    
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
 
-    public UpdateChecks(IAddCheck checksManager)
+    public UpdateChecks(IAddCheck checksManager,IHandlerPause pauseHandler)
     {
         _checksManager = checksManager;
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
         //Debug.Log("Создать объект: UpdateChecks");
     }
 
     public void Dispose()
     {
-        
+        _pauseHandler.Remove(this);
     }
 
     public void Tick()
     {
         if(Work == false)
+            return;
+        
+        if (_isPause == true)
             return;
         
         _timeUpdateCheck += Time.deltaTime;
@@ -60,5 +68,6 @@ public class UpdateChecks : IDisposable, ITickable
             return;
         }
     }
-    
+
+    public void SetPause(bool isPaused) => _isPause = isPaused;
 }

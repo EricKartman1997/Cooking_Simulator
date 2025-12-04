@@ -8,10 +8,16 @@ public class Menu : IDisposable
     public event Action HideAction;
     
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    private PauseHandler _pauseHandler;
+    
     private GameObject _panelSettings;
+    
+    public bool IsPause => _pauseHandler.IsPause;
+    
 
-    public Menu(LoadReleaseGlobalScene loadReleaseGlobalScene)
+    public Menu(LoadReleaseGlobalScene loadReleaseGlobalScene,PauseHandler pauseHandler)
     {
+        _pauseHandler = pauseHandler;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
     }
 
@@ -23,9 +29,9 @@ public class Menu : IDisposable
     public void ContinueButton()
     {
         // выкл паузу
-        Time.timeScale = 1f;
-        AudioListener.pause = false;
-        
+        // Time.timeScale = 1f;
+        // AudioListener.pause = false;
+        Hide();
     }
     
     public void SettingsButton()
@@ -47,11 +53,13 @@ public class Menu : IDisposable
 
     public void Show()
     {
+        _pauseHandler.SetPause(true);
         ShowAction?.Invoke();
     }
     
     public void Hide()
     {
+        _pauseHandler.SetPause(false);
         HideAction?.Invoke();
     }
 }

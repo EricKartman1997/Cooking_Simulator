@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class Distribution : MonoBehaviour, IUseFurniture
+public class Distribution : MonoBehaviour, IUseFurniture, IPause
 { 
     private const string AnimAcceptDish = "AcceptDish";
     
     [SerializeField] private Transform pointDish;
 
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
     
@@ -23,6 +23,7 @@ public class Distribution : MonoBehaviour, IUseFurniture
     private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private ICheckTheCheck _checkCheck;
     private IDeleteCheck _checkDelete;
+    private IHandlerPause _pauseHandler;
 
     private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
@@ -77,22 +78,25 @@ public class Distribution : MonoBehaviour, IUseFurniture
     //     EventBus.PressE += CookingProcess;
     // }
     //
-    // private void OnDisable()
-    // {
-    //     EventBus.PressE -= CookingProcess;
-    // }
+    private void OnDisable()
+    {
+        _pauseHandler.Remove(this);
+    }
 
     [Inject]
     private void ConstructZenject( 
         ProductsFactory productsFactory,
         ICheckTheCheck checkCheck,
         IDeleteCheck checkDelete,
-        FoodsForFurnitureContainer foodsForFurnitureContainer)
+        FoodsForFurnitureContainer foodsForFurnitureContainer,
+        IHandlerPause handlerPause)
     {
         _productsFactory = productsFactory;
         _checkCheck = checkCheck;
         _checkDelete = checkDelete;
         _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        _pauseHandler = handlerPause;
+        _pauseHandler.Add(this);
     }
     
     public void UpdateCondition()
@@ -101,6 +105,22 @@ public class Distribution : MonoBehaviour, IUseFurniture
         {
             _outline.OutlineWidth = 0f;
         }
+    }
+    
+    public void SetPause(bool isPaused)
+    {
+        // if (_animator == null)
+        // {
+        //     Debug.Log("Ошибка в SetPause");
+        //     return;
+        // }
+        if (isPaused == true)
+        {
+            _animator.speed = 0f;
+            return;
+        }
+        _animator.speed = 1;
+            
     }
     
     private void EnterTrigger()
@@ -219,20 +239,20 @@ public class Distribution : MonoBehaviour, IUseFurniture
         return true;
     }
     
-    private IEnumerator ContinueWorkCoroutine()
-    {
-        while (!_animator.GetCurrentAnimatorStateInfo(0).IsName(AnimAcceptDish))
-        {
-            yield return null;
-        }
-        
-        while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-        {
-            yield return null;
-        }
-        TakeToTheHall();
-        TurnOff();
-    }
+    // private IEnumerator ContinueWorkCoroutine()
+    // {
+    //     while (!_animator.GetCurrentAnimatorStateInfo(0).IsName(AnimAcceptDish))
+    //     {
+    //         yield return null;
+    //     }
+    //     
+    //     while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+    //     {
+    //         yield return null;
+    //     }
+    //     TakeToTheHall();
+    //     TurnOff();
+    // }
 
     public void EndCook() // для вызова аниматором
     {
@@ -240,5 +260,6 @@ public class Distribution : MonoBehaviour, IUseFurniture
         TakeToTheHall();
         TurnOff();
     }
+    
     
 }

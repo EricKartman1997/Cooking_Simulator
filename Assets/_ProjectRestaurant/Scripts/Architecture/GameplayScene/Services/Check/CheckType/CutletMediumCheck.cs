@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class CutletMediumCheck: Check
 {
-    public CutletMediumCheck(GameObject prefab, float startTime, float score, GameObject dish, IDeleteOverdueCheck deleteCheck)
-        : base(prefab, startTime, score, dish, deleteCheck)
+    public CutletMediumCheck(GameObject prefab, float startTime, float score,
+        GameObject dish, IDeleteOverdueCheck deleteCheck,IHandlerPause pauseHandler)
+        : base(prefab, startTime, score, dish, deleteCheck,pauseHandler)
     {
     }
     

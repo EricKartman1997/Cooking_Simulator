@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public abstract class Check: IDisposable, ITickable
+public abstract class Check: IDisposable, ITickable, IPause
 {
     private GameObject _prefab;
     private float _startTime;
@@ -12,24 +12,30 @@ public abstract class Check: IDisposable, ITickable
 
     public bool IsStop;
     
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
+    
     public GameObject Prefab => _prefab;
     public float StartTime => _startTime;
     public float Score => _score;
     public GameObject Dish => _dish;
 
-    protected Check(GameObject prefab, float startTime, float score, GameObject dish, IDeleteOverdueCheck deleteCheck)
+    protected Check(GameObject prefab, float startTime, float score, GameObject dish,
+        IDeleteOverdueCheck deleteCheck,IHandlerPause pauseHandler)
     {
         _prefab = prefab;
         _startTime = startTime;
         _score = score;
         _dish = dish;
         _deleteCheck = deleteCheck;
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
         //Debug.Log($"Check created: {GetType().Name}, startTime={_startTime}");
     }
     
     public void Dispose()
     {
-        
+        _pauseHandler.Remove(this);
     }
     
     public void Tick()
@@ -37,6 +43,10 @@ public abstract class Check: IDisposable, ITickable
         //Debug.Log("я работаю 3");
         if (IsStop == true)
             return;
+        
+        if (_isPause == true)
+            return;
+        
         UpdateTime();
     }
 
@@ -51,5 +61,7 @@ public abstract class Check: IDisposable, ITickable
         Debug.Log("Чек удален");
     }
     public abstract void Accept(ICheckVisitor checkVisitor);
-    
+
+    public void SetPause(bool isPaused) => _isPause = isPaused;
+
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OvenFurniture
 {
-    public class OvenView : IDisposable
+    public class OvenView : IDisposable, IPause
     {
         private const string ANIMATIONCLOSE = "Close";
         private const string ANIMATIONOPEN = "Open";
@@ -13,14 +13,19 @@ namespace OvenFurniture
         private TimerFurniture _timer;
         private Animator _animator;
 
+        private IHandlerPause _pauseHandler;
+
         public TimerFurniture Timer => _timer;
          
-        internal OvenView(GameObject switchFirst, GameObject switchSecond,TimerFurniture timerFurniture, Animator animator)
+        internal OvenView(GameObject switchFirst, GameObject switchSecond,
+            TimerFurniture timerFurniture, Animator animator, IHandlerPause pauseHandler)
         {
             _switchFirst = switchFirst;
             _switchSecond = switchSecond;
             _timer = timerFurniture;
             _animator = animator;
+            _pauseHandler = pauseHandler;
+            _pauseHandler.Add(this);
              
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
@@ -29,6 +34,7 @@ namespace OvenFurniture
     
         public void Dispose()
         {
+            _pauseHandler.Remove(this);
             Debug.Log("У объекта вызван Dispose : OvenView");
         }
         
@@ -50,6 +56,17 @@ namespace OvenFurniture
         {
             PassiveView();
         }
+        
+        public void SetPause(bool isPaused)
+        {
+            if (isPaused == true)
+            {
+                _animator.speed = 0f;
+                return;
+            }
+            _animator.speed = 1;
+            
+        }
     
         private void ActiveView()
         {
@@ -66,6 +83,8 @@ namespace OvenFurniture
             _switchFirst.transform.localRotation = Quaternion.Euler(0, 0, 0);
             _switchSecond.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
+
+        
     }
 
 }

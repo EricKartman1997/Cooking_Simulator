@@ -32,6 +32,8 @@ namespace CuttingTableFurniture
         private RecipeService _recipeService;
         private ProductsFactory _productsFactory;
         
+        private IHandlerPause _pauseHandler;
+        
         private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
     
         private void Awake()
@@ -44,7 +46,7 @@ namespace CuttingTableFurniture
         private void Start()
         {
             _animator.SetBool("Work", false);
-            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult);
+            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,positionResult,_pauseHandler);
             _cuttingTablePoints = new CuttingTablePoints(positionIngredient1,positionIngredient2,positionResult);
             _cuttingTableView = new CuttingTableView(_animator,timerFurniture);
             
@@ -85,11 +87,13 @@ namespace CuttingTableFurniture
         }
         
         [Inject]
-        private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,ProductsFactory productsFactory)
+        private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,
+            ProductsFactory productsFactory,IHandlerPause pauseHandler)
         {
             _foodsForFurnitureContainer = foodsForFurnitureContainer;
             _recipeService = recipeService;
             _productsFactory = productsFactory;
+            _pauseHandler = pauseHandler;
         }
         
         // private void OnEnable()

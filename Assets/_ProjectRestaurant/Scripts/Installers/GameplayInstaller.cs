@@ -62,6 +62,7 @@ public class GameplayInstaller : MonoInstaller
             {
                 var checkContainer = container.Resolve<CheckContainer>();
                 var checksManager = container.Resolve<ChecksManager>();
+                var pauseHandler = container.Resolve<PauseHandler>();
 
                 CheckConfig config = type switch
                 {
@@ -77,13 +78,13 @@ public class GameplayInstaller : MonoInstaller
 
                 Check instance = type switch
                 {
-                    CheckType.BakedFish        => new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.BakedMeat        => new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.BakedSalad       => new BakedSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.FruitSalad       => new FruitSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.CutletMedium     => new CutletMediumCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.WildBerryCocktail => new WildBerryCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
-                    CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager),
+                    CheckType.BakedFish        => new BakedFishCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.BakedMeat        => new BakedMeatCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.BakedSalad       => new BakedSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.FruitSalad       => new FruitSaladCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.CutletMedium     => new CutletMediumCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.WildBerryCocktail => new WildBerryCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
+                    CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
                     _ => throw new ArgumentOutOfRangeException()
                 };
 

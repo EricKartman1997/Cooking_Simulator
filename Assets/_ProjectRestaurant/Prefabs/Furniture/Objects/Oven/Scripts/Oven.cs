@@ -29,12 +29,11 @@ namespace OvenFurniture
         private Animator _animator;
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
-        //private GameManager _gameManager;
         private RecipeService _recipeService;
         private ProductsFactory _productsFactory;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-
-        //private bool IsAllInit => _gameManager.BootstrapLvl2.IsAllInit;
+        
+        private IHandlerPause _pauseHandler;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Oven.ListForFurniture;
         
@@ -47,8 +46,8 @@ namespace OvenFurniture
     
         private void Start()
         {
-            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
-            _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator);
+            TimerFurniture timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp,_pauseHandler);
+            _ovenView = new OvenView(switchFirst, switchSecond,timerFurniture, _animator,_pauseHandler);
             _ovenPoints = new OvenPoints(pointUp,positionIngredient);
             _animator.SetBool(ANIMATIONCLOSE,false);
             _animator.SetBool(ANIMATIONOPEN,true);
@@ -94,11 +93,13 @@ namespace OvenFurniture
         private void ConstructZenject( 
             RecipeService recipeService,
             ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer)
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause handlerPause)
         {
             _productsFactory = productsFactory;
             _recipeService = recipeService;
             _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _pauseHandler = handlerPause;
         }
         
         // private void OnEnable()

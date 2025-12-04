@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace SuvideFurniture
 {
-    public class SuvideView : IDisposable
+    public class SuvideView : IDisposable, IPause
     {
         private GameObject _waterPrefab;
         private GameObject _switchTimePrefab;
@@ -14,9 +14,10 @@ namespace SuvideFurniture
         private TimerFurniture _secondTimer;
         private TimerFurniture _thirdTimer;
         private Animator _animator; // добавить анимацию
+        private IHandlerPause _pauseHandler;
     
         internal SuvideView(GameObject waterPrefab, GameObject switchTimePrefab, GameObject switchTemperPrefab,
-            TimerFurniture firstTimer, TimerFurniture secondTimer, TimerFurniture thirdTimer, Animator animator)
+            TimerFurniture firstTimer, TimerFurniture secondTimer, TimerFurniture thirdTimer, Animator animator, IHandlerPause pauseHandler)
         {
             _waterPrefab = waterPrefab;
             _switchTimePrefab = switchTimePrefab;
@@ -25,6 +26,8 @@ namespace SuvideFurniture
             _secondTimer = secondTimer;
             _thirdTimer = thirdTimer;
             _animator = animator;
+            _pauseHandler = pauseHandler;
+            _pauseHandler.Add(this);
             
             //Debug.Log("Создал объект: SuvideView");
         }
@@ -82,6 +85,17 @@ namespace SuvideFurniture
             _waterPrefab.SetActive(false);
             _switchTemperPrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
             _switchTimePrefab.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        
+        public void SetPause(bool isPaused)
+        {
+            if (isPaused == true)
+            {
+                _animator.speed = 0f;
+                return;
+            }
+            _animator.speed = 1;
+            
         }
     }
 

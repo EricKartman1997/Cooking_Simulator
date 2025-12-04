@@ -48,6 +48,8 @@ namespace SuvideFurniture
         private ProductsFactory _productsFactory;
         private RecipeService _recipeService;
         
+        private IHandlerPause _pauseHandler;
+        
         private List<Product> ListProduct => _foodsForFurnitureContainer.Suvide.ListForFurniture;
         
         private void Awake()
@@ -59,11 +61,11 @@ namespace SuvideFurniture
         
         private void Start()
         {
-            TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1);
-            TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2);
-            TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3);
+            TimerFurniture timerFurniture1 = new TimerFurniture(timerPref,timeTimer,pointTimer1,_pauseHandler);
+            TimerFurniture timerFurniture2 = new TimerFurniture(timerPref,timeTimer,pointTimer2,_pauseHandler);
+            TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3,_pauseHandler);
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
-            _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator);
+            _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator,_pauseHandler);
             
             //Debug.Log("SuvideFurniture Init");
         }
@@ -99,6 +101,12 @@ namespace SuvideFurniture
                 _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
+        }
+
+        [Inject]
+        private void ConstructZenject(IHandlerPause pauseHandler)
+        {
+            _pauseHandler = pauseHandler;
         }
             
         // private void OnEnable()
@@ -360,6 +368,7 @@ namespace SuvideFurniture
                     {
                         TurnOn(DISH2);
                         ContinueWorkAsync(_dish2,DISH2).Forget();
+                        //ждать пока
                         ChangeView();
                     }
                     else

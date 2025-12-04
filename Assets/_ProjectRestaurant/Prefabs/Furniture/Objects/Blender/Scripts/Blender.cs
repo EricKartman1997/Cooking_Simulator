@@ -35,6 +35,8 @@ namespace BlenderFurniture
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private RecipeService _recipeService;
         
+        private IHandlerPause _pauseHandler;
+        
         private List<Product> ListProduct => _foodsForFurnitureContainer.Blender.ListForFurniture;
         
     
@@ -48,9 +50,9 @@ namespace BlenderFurniture
         private void Start()
         {
             //_animator.SetBool("Work", false);
-            TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp);
+            TimerFurniture _timerFurniture = new TimerFurniture(timerPref,timeTimer,pointUp,_pauseHandler);
             _blenderPoints = new BlenderPoints(firstPoint, secondPoint, thirdPoint, pointUp, pointUp);
-            _blenderView = new BlenderView(_timerFurniture, _animator);
+            _blenderView = new BlenderView(_timerFurniture, _animator,_pauseHandler);
             
             //Debug.Log("Blender Init");
         }
@@ -102,11 +104,14 @@ namespace BlenderFurniture
         private void ConstructZenject( 
             RecipeService recipeService,
             ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer)
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause pauseHandler
+            )
         {
             _productsFactory = productsFactory;
             _recipeService = recipeService;
             _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _pauseHandler = pauseHandler;
         }
         
         public void UpdateCondition()

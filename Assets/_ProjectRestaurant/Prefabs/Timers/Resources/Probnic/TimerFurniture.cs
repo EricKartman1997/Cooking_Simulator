@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
-public class TimerFurniture : System.IDisposable
+public class TimerFurniture : IDisposable, IPause
 {
     private TimerView _timerView;
     private float _time;
@@ -15,16 +13,27 @@ public class TimerFurniture : System.IDisposable
     private GameObject _timerObject;
     private float _currentTime;
     private bool _isWork;
+    
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
 
     public bool IsWork => _isWork;
 
-    public TimerFurniture(TimerView timerView, float time, Transform pointTimer)
+    public TimerFurniture(TimerView timerView, float time, Transform pointTimer,IHandlerPause pauseHandler)
     {
         _timerView = timerView;
         _time = time;
         _pointTimer = pointTimer;
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
 
         Initialization();
+    }
+    
+    public void Dispose()
+    {
+        _pauseHandler.Remove(this);
+        Debug.Log("У объекта вызван Dispose : TimerFurniture");
     }
 
     public async UniTask StartTimerAsync()
@@ -36,6 +45,7 @@ public class TimerFurniture : System.IDisposable
         // Пока не прошло всё время
         while (_currentTime < _time)
         {
+
             _currentTime += Time.deltaTime;
 
             float progress = _currentTime / _time;
@@ -43,18 +53,16 @@ public class TimerFurniture : System.IDisposable
 
             _arrowRect.localEulerAngles = new Vector3(0, 0, angle);
 
+            await UniTask.WaitUntil(() => _isPause == false);
             await UniTask.Yield(); // ждём кадр
         }
 
         _isWork = false;
         _timerObject.SetActive(false);
     }
-
-    public void Dispose()
-    {
-        Debug.Log("У объекта вызван Dispose : TimerFurniture");
-    }
-
+    
+    public void SetPause(bool isPaused) => _isPause = isPaused;
+    
     private void Initialization()
     {
         _timerObject = Object.Instantiate(_timerView.gameObject, _pointTimer);
