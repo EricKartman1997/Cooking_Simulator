@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Menu : IDisposable
 {
-    public event Action ShowAction;
-    public event Action HideAction;
+    public event Action ShowMenuAction;
+    public event Action HideMenuAction;
+    public event Action HideSettingsAction;
+    public event Func<bool> IsOpenSettingsAction;
     
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private PauseHandler _pauseHandler;
@@ -54,12 +56,18 @@ public class Menu : IDisposable
     public void Show()
     {
         _pauseHandler.SetPause(true);
-        ShowAction?.Invoke();
+        ShowMenuAction?.Invoke();
     }
     
     public void Hide()
     {
+        if (IsOpenSettingsAction != null && IsOpenSettingsAction.Invoke())
+        {
+            HideSettingsAction?.Invoke();
+            return;
+        }
         _pauseHandler.SetPause(false);
-        HideAction?.Invoke();
+        HideMenuAction?.Invoke();
+        EventBus.PauseOff.Invoke();
     }
 }

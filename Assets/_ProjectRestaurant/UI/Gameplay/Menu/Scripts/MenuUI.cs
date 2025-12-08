@@ -13,8 +13,12 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private SettingsViewController settingsViewController;
+    
+    private ICloseOpenSettingsPanel _settingsViewController;
+    public bool IsOpen => _settingsViewController.IsOpen;
     void Start()
     {
+        _settingsViewController = settingsViewController;
         continueButton.onClick.AddListener(ContinueButton);
         settingsButton.onClick.AddListener(SettingsButton);
         exitButton.onClick.AddListener(ExitButton);
@@ -31,7 +35,7 @@ public class MenuUI : MonoBehaviour
     private void SettingsButton()
     {
         // открыть настройки
-        settingsViewController.OpenPanel();
+        OpenSettingsPanel();
         SettingsAction?.Invoke();
     }
     
@@ -49,6 +53,21 @@ public class MenuUI : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+    
+    public void HideSettingsPanel()
+    {
+        _settingsViewController.ClosePanel();
+    }
+    
+    private void OpenSettingsPanel()
+    {
+        _settingsViewController.OpenPanel();
+    }
+    
+    public bool IsOpenSettingsPanel()
+    {
+        return IsOpen;
     }
 
 

@@ -2,7 +2,7 @@ using Michsky.MUIP;
 using UnityEngine;
 using Zenject;
 
-public class SettingsViewController : MonoBehaviour
+public class SettingsViewController : MonoBehaviour, ICloseOpenSettingsPanel
 {
     private const string OPEN = "Open";
     private const string CLOSE = "Close";
@@ -12,10 +12,14 @@ public class SettingsViewController : MonoBehaviour
     [SerializeField] private ButtonManager buttonGraphic;
     [SerializeField] private ButtonManager buttonControls;
     [SerializeField] private Animator animator;
-    
+
+    private bool _isOpen;
     private bool _isPlayAnim;
 
     private ISoundsService _soundsService;
+        
+    public bool IsOpen => _isOpen;
+
 
     [Inject]
     private void ConstructZenject(ISoundsService soundsService)
@@ -44,6 +48,7 @@ public class SettingsViewController : MonoBehaviour
         
         animator.SetTrigger(OPEN);
         _isPlayAnim = true;
+        _isOpen = true;
     }
     
     public void ClosePanel()
@@ -53,6 +58,7 @@ public class SettingsViewController : MonoBehaviour
         
         animator.SetTrigger(CLOSE);
         _isPlayAnim = true;
+        _isOpen = false;
     }
     
     public void FinishAnim()

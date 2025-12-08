@@ -73,7 +73,6 @@ public class GameInput : MonoBehaviour, IPause
             return;
         }
         _menu.Hide();
-        EventBus.PauseOff.Invoke();
     }
     
     public Vector3 GetMovementVectorNormalized()
