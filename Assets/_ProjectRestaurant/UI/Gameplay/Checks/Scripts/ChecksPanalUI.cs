@@ -8,6 +8,18 @@ public class ChecksPanalUI : MonoBehaviour
     
     private Dictionary<Check,GameObject> _dictionaryChecks = new Dictionary<Check, GameObject>();
 
+    private void Awake()
+    {
+        EventBus.PauseOn += HideChecks;
+        EventBus.PauseOff += ShowChecks;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.PauseOn -= HideChecks;
+        EventBus.PauseOff -= ShowChecks;
+    }
+
     public void AddCheck(Check check, CheckPrefabFactory checksFactory, CheckType type)
     {
         // Проверка 1: null-объект
@@ -61,5 +73,15 @@ public class ChecksPanalUI : MonoBehaviour
         {
             Debug.LogWarning($"Check {check} not found in dictionary");
         }
+    }
+
+    private void HideChecks()
+    {
+        content.SetActive(false);
+    }
+    
+    private void ShowChecks()
+    {
+        content.SetActive(true);
     }
 }

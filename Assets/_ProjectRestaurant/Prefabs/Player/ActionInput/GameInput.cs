@@ -69,10 +69,11 @@ public class GameInput : MonoBehaviour, IPause
         if (_menu.IsPause == false)
         {
             _menu.Show();
+            EventBus.PauseOn.Invoke();
             return;
         }
         _menu.Hide();
-        
+        EventBus.PauseOff.Invoke();
     }
     
     public Vector3 GetMovementVectorNormalized()

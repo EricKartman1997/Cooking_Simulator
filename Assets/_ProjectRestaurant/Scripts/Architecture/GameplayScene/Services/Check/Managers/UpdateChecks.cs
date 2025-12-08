@@ -18,7 +18,6 @@ public class UpdateChecks : IDisposable, ITickable,IPause
         _checksManager = checksManager;
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
-        //Debug.Log("Создать объект: UpdateChecks");
     }
 
     public void Dispose()

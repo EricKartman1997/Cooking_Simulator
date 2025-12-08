@@ -50,19 +50,16 @@ public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdu
         {
             _check1 = _checkFactoryScript.Create(type);
             AddCheckAction?.Invoke(_check1, _checkPrefabFactory, type);
-            //_cloneCheck1 = _checksFactory.GetCheckPrefab(type, _check1, _contentTransform);
         }
         else if (_check2 == null)
         {
             _check2 = _checkFactoryScript.Create(type);
             AddCheckAction?.Invoke(_check2, _checkPrefabFactory, type);
-            // _cloneCheck2 = _checksFactory.GetCheckPrefab(type, _check2, _contentTransform);
         }
         else if (_check3 == null)
         {
             _check3 = _checkFactoryScript.Create(type);
             AddCheckAction?.Invoke(_check3, _checkPrefabFactory, type);
-            // _cloneCheck3 = _checksFactory.GetCheckPrefab(type, _check3, _contentTransform);
         }
         else
         {
@@ -78,8 +75,6 @@ public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdu
             RemoveCheckAction?.Invoke(_check1);
             _check1.Dispose();
             _check1 = null;
-            // Object.Destroy(_cloneCheck1);
-            // _cloneCheck1 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
             return;
@@ -91,8 +86,6 @@ public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdu
             RemoveCheckAction?.Invoke(_check2);
             _check2.Dispose();
             _check2 = null;
-            // Object.Destroy(_cloneCheck2);
-            // _cloneCheck2 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
             return;
@@ -104,14 +97,12 @@ public class ChecksManager : IDisposable, ITickable, IDeleteCheck, IDeleteOverdu
             RemoveCheckAction?.Invoke(_check3);
             _check3.Dispose();
             _check3 = null;
-            // Object.Destroy(_cloneCheck3);
-            // _cloneCheck3 = null;
             EventBus.AddOrder.Invoke();
             EventBus.UpdateOrder.Invoke();
             return;
         }
         
-        throw new System.ArgumentException($"Такого чека нет: {check}");
+        throw new ArgumentException($"Такого чека нет: {check}");
         
     }
 
