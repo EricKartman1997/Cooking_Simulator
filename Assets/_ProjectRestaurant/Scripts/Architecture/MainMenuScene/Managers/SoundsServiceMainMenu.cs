@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class SoundsServiceMainMenu : IDisposable
+public class SoundsServiceMainMenu //: ISoundsService
 {
     private SoundManager _soundManager;
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
@@ -36,10 +35,5 @@ public class SoundsServiceMainMenu : IDisposable
     {
         _sourceSFX.Stop();
         _sourceMusic.Stop();
-    }
-    
-    public void Dispose()
-    {
-        Debug.Log(" Dispose SoundsServiceMainMenu");
     }
 }

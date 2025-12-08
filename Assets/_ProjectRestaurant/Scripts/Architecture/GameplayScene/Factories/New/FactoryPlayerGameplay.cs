@@ -24,9 +24,11 @@ public class FactoryPlayerGameplay : IDisposable
     {
         GameObject empty = new GameObject("Player_Test");
         GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], empty.transform.position, Quaternion.identity, empty.transform);
-        _heroik = player.GetComponent<Heroik>();
+        Heroik heroik = player.GetComponent<Heroik>();
+        AudioListener audioListener = player.GetComponent<AudioListener>();
         EnableCamera(camera, player);
-        _container.Rebind<Heroik>().FromInstance(_heroik).AsSingle();
+        _container.Rebind<Heroik>().FromInstance(heroik).AsSingle();
+        _container.Rebind<AudioListener>().FromInstance(audioListener).AsSingle();
     }
     
     private void EnableCamera(CinemachineVirtualCamera camera, GameObject target)

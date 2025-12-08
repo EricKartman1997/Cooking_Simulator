@@ -12,6 +12,7 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private SettingsViewController settingsViewController;
     void Start()
     {
         continueButton.onClick.AddListener(ContinueButton);
@@ -30,6 +31,7 @@ public class MenuUI : MonoBehaviour
     private void SettingsButton()
     {
         // открыть настройки
+        settingsViewController.OpenPanel();
         SettingsAction?.Invoke();
     }
     

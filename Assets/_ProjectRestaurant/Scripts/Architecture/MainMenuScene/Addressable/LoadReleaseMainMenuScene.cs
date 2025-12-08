@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-public class LoadReleaseMainMenuScene : IInitializable, IDisposable
+public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRelease<AudioNameMainMenu>
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     

@@ -1,24 +1,27 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class SoundsServiceGameplay : IDisposable
+public class SoundsServiceGameplay //: ISoundsService
 {
+    private SoundManager _soundManager;
     private DiContainer _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
     private GameObject empty = new GameObject("Sounds_Test");
     private AudioSource _sourceSFX;
     private AudioSource _sourceMusic;
+    
+    public AudioSource SourceSfx => _sourceSFX;
 
-    public SoundsServiceGameplay(DiContainer container, LoadReleaseGameplay loadReleaseGameplay)
+    public AudioSource SourceMusic => _sourceMusic;
+    public SoundManager SoundManager => _soundManager;
+    public IReadOnlyDictionary<AudioNameGamePlay, AudioClip> AudioDictionary => _loadReleaseGameplay.AudioDic;
+    
+    public SoundsServiceGameplay(SoundManager soundManager,DiContainer container, LoadReleaseGameplay loadReleaseGameplay)
     {
+        _soundManager = soundManager;
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
-    }
-
-    public void Dispose()
-    {
-        Debug.Log("Dispose SoundsServiceGameplay");
     }
 
     public void CreateSounds()

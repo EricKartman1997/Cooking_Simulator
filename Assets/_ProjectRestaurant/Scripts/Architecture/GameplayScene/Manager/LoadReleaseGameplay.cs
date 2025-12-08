@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
 
-public class LoadReleaseGameplay : IDisposable, IInitializable
+public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<AudioNameGamePlay>
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     
