@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class SoundsServiceMainMenu //: ISoundsService
+public class SoundsServiceMainMenu : ISoundsService
 {
     private SoundManager _soundManager;
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;

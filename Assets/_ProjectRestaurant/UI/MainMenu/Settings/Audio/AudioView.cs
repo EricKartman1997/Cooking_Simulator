@@ -8,7 +8,7 @@ public class AudioView: MonoBehaviour
     [SerializeField] private SliderManager musicSlider;
     [SerializeField] private SliderManager sfxSlider;
 
-    private SoundsServiceMainMenu _soundService;
+    private ISoundsService _soundService;
     private JsonHandler _jsonHandler;
 
     private AudioSettings _saveObj = new AudioSettings();
@@ -16,7 +16,7 @@ public class AudioView: MonoBehaviour
     private SoundManager SoundManager => _soundService.SoundManager;
 
     [Inject]
-    private void ConstructZenject(SoundsServiceMainMenu soundService, JsonHandler jsonHandler)
+    private void ConstructZenject(ISoundsService soundService, JsonHandler jsonHandler)
     {
         _soundService = soundService;
         _jsonHandler = jsonHandler;

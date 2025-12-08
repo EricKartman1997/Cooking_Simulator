@@ -15,10 +15,10 @@ public class SettingsViewController : MonoBehaviour
     
     private bool _isPlayAnim;
 
-    private SoundsServiceMainMenu _soundsService;
+    private ISoundsService _soundsService;
 
     [Inject]
-    private void ConstructZenject(SoundsServiceMainMenu soundsService)
+    private void ConstructZenject(ISoundsService soundsService)
     {
         _soundsService = soundsService;
     }

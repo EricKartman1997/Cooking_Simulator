@@ -12,12 +12,12 @@ public class GraphicsView : MonoBehaviour
 
     private Graphic _graphic;
     private IStorageJson _jsonHandler;
-    private SoundsServiceMainMenu _soundsService;
+    private ISoundsService _soundsService;
 
     private GraphicSettings _saveObj = new GraphicSettings();
 
     [Inject]
-    private void ConstructZenject(Graphic graphic,IStorageJson jsonHandler,SoundsServiceMainMenu serviceMainMenu)
+    private void ConstructZenject(Graphic graphic,IStorageJson jsonHandler,ISoundsService serviceMainMenu)
     {
         _graphic = graphic;
         _jsonHandler = jsonHandler;
@@ -50,7 +50,7 @@ public class GraphicsView : MonoBehaviour
 
         //JsonDownload
         DownloadSettings();
-        EnabeleSounds();
+        //EnabeleSounds();
     }
 
     private void DownloadSettings()
@@ -78,14 +78,14 @@ public class GraphicsView : MonoBehaviour
     
     private void EnabeleSounds()
     {
-        nextButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
-        nextButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        
-        backButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton] ;
-        backButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        
-        dropdown.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
-        dropdown.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
+        // nextButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
+        // nextButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
+        //
+        // backButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton] ;
+        // backButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
+        //
+        // dropdown.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
+        // dropdown.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
     }
     
     private void SetFullScreen(bool isFullScreen)

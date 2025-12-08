@@ -54,14 +54,14 @@ public class BootstrapGameplay : MonoBehaviour
     {
         // ждем загрузки всех ресурсов
         await WaitForResourcesLoaded();
+        // инициализация музыки
+        await InitAudioAsync();
         // создать камеры
         CreateCameras();
         //создать UI
         CreateUI();
         // вкл загрузку
         ShowLoadingPanel();
-        // инициализация музыки
-        await InitAudioAsync();
         // создание сервисов
         await CreateServiceAsync();
         // создать окружения (furniture, other environment,)

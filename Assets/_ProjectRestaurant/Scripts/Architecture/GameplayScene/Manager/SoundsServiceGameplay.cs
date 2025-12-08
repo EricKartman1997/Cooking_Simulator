@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class SoundsServiceGameplay //: ISoundsService
+public class SoundsServiceGameplay : ISoundsService
 {
     private SoundManager _soundManager;
     private DiContainer _container;
@@ -12,7 +12,6 @@ public class SoundsServiceGameplay //: ISoundsService
     private AudioSource _sourceMusic;
     
     public AudioSource SourceSfx => _sourceSFX;
-
     public AudioSource SourceMusic => _sourceMusic;
     public SoundManager SoundManager => _soundManager;
     public IReadOnlyDictionary<AudioNameGamePlay, AudioClip> AudioDictionary => _loadReleaseGameplay.AudioDic;
@@ -35,7 +34,7 @@ public class SoundsServiceGameplay //: ISoundsService
         _sourceMusic = obj1.GetComponent<AudioSource>();
         
         _container.Bind<AudioSource>().WithId("SFX").FromInstance(_sourceSFX);
-        //_container.Bind<AudioSource>().WithId("Music").FromInstance(_sourceMusic);
+        _container.Bind<AudioSource>().WithId("Music").FromInstance(_sourceMusic);
     }
     
     public void SetMusic()

@@ -27,8 +27,8 @@ public class GameplayInstaller : MonoInstaller
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
+        Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
         //Container.Bind<ISoundsService>().To<SoundsServiceGameplay>().AsSingle();
-        Container.Bind<SoundsServiceGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<FactoryPlayerGameplay>().AsSingle();
         Container.BindInterfacesAndSelfTo<FactoryEnvironment>().AsSingle();
