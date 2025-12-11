@@ -48,4 +48,16 @@ public class SoundsServiceGameplay : ISoundsService
         _sourceSFX.Stop();
         _sourceMusic.Stop();
     }
+    
+    public void MuteSources()
+    {
+        _sourceSFX.mute = true;
+        //_sourceMusic.mute = true;
+    }
+
+    public void UnMuteSources()
+    {
+        _sourceSFX.mute = false;
+        //_sourceMusic.mute = false;
+    }
 }

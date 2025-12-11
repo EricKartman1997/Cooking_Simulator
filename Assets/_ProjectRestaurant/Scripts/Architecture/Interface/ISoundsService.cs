@@ -7,4 +7,8 @@ public interface ISoundsService
     AudioSource SourceMusic {get;}
 
     SoundManager SoundManager {get;}
+
+    public void MuteSources();
+    
+    public void UnMuteSources();
 }

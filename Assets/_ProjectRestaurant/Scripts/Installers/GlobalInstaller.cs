@@ -15,5 +15,6 @@ public class GlobalInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<LoadReleaseGlobalScene>().AsSingle();
         Container.BindInterfacesAndSelfTo<SoundManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<Graphic>().AsSingle();
+        Container.BindInterfacesAndSelfTo<StorageData>().AsSingle();
     }
 }

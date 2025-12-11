@@ -51,6 +51,8 @@ public class GraphicsView : MonoBehaviour
         //JsonDownload
         DownloadSettings();
         //EnabeleSounds();
+        //_soundsService.UnMuteSources();
+        
     }
 
     private void DownloadSettings()

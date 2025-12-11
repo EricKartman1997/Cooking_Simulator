@@ -43,6 +43,7 @@ public class BootstrapMainMenu : MonoBehaviour
 
     private async Task InitializeAsync(CancellationToken ct)
     {
+        //_soundsServiceMainMenu.MuteSources();
         try
         {
             ShowLoadingPanel();
@@ -73,6 +74,7 @@ public class BootstrapMainMenu : MonoBehaviour
             SafeHideLoadingPanel();
             // показать уведомление пользователю или fallback UI
         }
+        //_soundsServiceMainMenu.UnMuteSources();
     }
 
     private void ShowLoadingPanel()
