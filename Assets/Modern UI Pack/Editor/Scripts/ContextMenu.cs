@@ -158,7 +158,7 @@ namespace Michsky.MUIP
             catch { ShowErrorDialog(); }
         }
 
-        [MenuItem("Tools/Modern UI Pack/Show UI Manager %#M")]
+        [MenuItem("Tools/Modern UI Pack/ShowConnectionTheInternet UI Manager %#M")]
         static void ShowManager()
         {
             Selection.activeObject = Resources.Load("MUIP Manager");

@@ -22,12 +22,12 @@ public class FactoryCamerasGameplay : IDisposable
     
     public void CreateMainCamera()
     {
-        _container.InstantiatePrefab(_loadReleaseGameplay.CamerasDic[CamerasName.MainCamera], empty.transform);
+        _container.InstantiatePrefab(_loadReleaseGameplay.CamerasDic[CamerasNameGameplay.MainCamera], empty.transform);
     }
     
     public CinemachineVirtualCamera CreateTopDownCamera()
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.CamerasDic[CamerasName.TopDownCamera], empty.transform);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.CamerasDic[CamerasNameGameplay.TopDownCamera], empty.transform);
         return obj.GetComponent<CinemachineVirtualCamera>();;
         //CinemachineVirtualCamera _topDownCamera = obj.GetComponent<CinemachineVirtualCamera>();
         //_container.Rebind<CinemachineVirtualCamera>().FromInstance(_topDownCamera).AsSingle();

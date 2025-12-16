@@ -10,12 +10,13 @@ public class FactoryEnvironment : IDisposable
     private IInstantiator _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
     
-    public List<FurnitureItemData> _itemsList;
+    private List<FurnitureItemData> _itemsList;
 
-    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay)
+    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
+        _itemsList = storageData.ItemsEnvironmentListRead;
     }
     public void Dispose()
     {
@@ -26,9 +27,9 @@ public class FactoryEnvironment : IDisposable
     {
         GameObject empty = new GameObject("Furniture_Test");
         
-        ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
-        await importSheetsGoogle.LoadItemsSettings(this);
-        //Debug.Log($"Count  {_itemsList.Count}");
+        // ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
+        // await importSheetsGoogle.LoadItemsSettings(this);
+        // //Debug.Log($"Count  {_itemsList.Count}");
 
         foreach (var item in _itemsList)
         {
@@ -85,7 +86,7 @@ public class FactoryEnvironment : IDisposable
     
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
-        //itemData.Show();
+        //itemData.ShowConnectionTheInternet();
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GetTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<GetTable>().Init(itemData.GiveFood, itemData.ViewFood);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
@@ -143,7 +144,7 @@ public class FactoryEnvironment : IDisposable
 
     private GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
     {
-        //itemData.Show();
+        //itemData.ShowConnectionTheInternet();
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Distribution], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;

@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public static class GameUtils
 {
@@ -20,4 +22,48 @@ public static class GameUtils
         // Если указано имя - проверяем именно эту анимацию
         return stateInfo.IsName(animationName) && stateInfo.normalizedTime < 1f && !animator.IsInTransition(0);
     }
+    
+    // Этот метод выполняет реальную проверку доступности Google Sheets,
+    // отправляя HEAD-запрос к API Google Sheets.
+    //
+    // Используется для определения, появился ли интернет и доступен ли Google,
+    // а не просто наличие сети (в отличие от Application.internetReachability).
+    //
+    // Метод:
+    // - работает асинхронно (не блокирует главный поток Unity)
+    // - имеет таймаут 5 секунд
+    // - возвращает true, если Google Sheets доступен
+    // - возвращает false при отсутствии интернета, блокировке,
+    //   ошибке сети или таймауте
+    //
+    // Подходит для:
+    // - периодической проверки соединения
+    // - повторных попыток загрузки данных
+    // - логики восстановления после оффлайн-старта игры
+    public static async UniTask<bool> IsGoogleSheetsAvailable()
+    {
+        // Создаём HEAD-запрос (без загрузки тела ответа, быстрее чем GET)
+        using (var request = UnityWebRequest.Head(
+                   "https://sheets.googleapis.com"))
+        {
+            // Таймаут запроса (в секундах)
+            request.timeout = 5;
+
+            try
+            {
+                // Асинхронно отправляем запрос, не блокируя Unity
+                await request.SendWebRequest();
+
+                // Успешный результат означает, что Google Sheets доступен
+                return request.result == UnityWebRequest.Result.Success;
+            }
+            catch
+            {
+                // Любая ошибка (нет интернета, таймаут, сбой сети)
+                // считается отсутствием доступа
+                return false;
+            }
+        }
+    }
+
 }

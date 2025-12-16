@@ -173,7 +173,7 @@ namespace Michsky.MUIP
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
                         if (GUILayout.Button("Open UI Manager", customSkin.button))
-                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/Show UI Manager");
+                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/ShowConnectionTheInternet UI Manager");
 
                         if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {

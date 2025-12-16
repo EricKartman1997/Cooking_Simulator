@@ -9,14 +9,16 @@ public class MenuViewController : MonoBehaviour
     [SerializeField] private ButtonManager buttonExit;
     [SerializeField] private ButtonManager buttonSettings;
     [SerializeField] private ButtonManager buttonSocialNetworks;
-    
-    [SerializeField] private ModalWindowManager _warringWindow;
-    [SerializeField] private SettingsViewController _settingsViewController;
-    [SerializeField] private SocialNetViewController _socialNetViewController;
+
+    [SerializeField] private WarringWindowsViewController warringWindowsViewController;
+    [SerializeField] private SettingsViewController settingsViewController;
+    [SerializeField] private SocialNetViewController socialNetViewController;
 
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private BootstrapMainMenu _bootstrapMainMenu;
     private SoundsServiceMainMenu _soundsService;
+
+    public WarringWindowsViewController WarringWindowsViewController => warringWindowsViewController;
 
     [Inject]
     private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene,BootstrapMainMenu bootstrapMainMenu,SoundsServiceMainMenu soundsService)
@@ -27,11 +29,9 @@ public class MenuViewController : MonoBehaviour
     }
     private void OnEnable()
     {
-        buttonSettings.onClick.AddListener(_socialNetViewController.Close);
-        buttonSettings.onClick.AddListener(_settingsViewController.OpenPanel);
+        buttonSettings.onClick.AddListener(OnClickButtonSettings);
         
-        buttonSocialNetworks.onClick.AddListener(_socialNetViewController.Close);
-        buttonSocialNetworks.onClick.AddListener(_socialNetViewController.Open);
+        buttonSocialNetworks.onClick.AddListener(OnClickButtonSocialNetworks);
         
         buttonStart.onClick.AddListener(StartOnClick);
         buttonChoiceLevel.onClick.AddListener(ChoiceLevelOnClick);
@@ -50,15 +50,19 @@ public class MenuViewController : MonoBehaviour
 
     private void OnDisable()
     {
-        buttonSettings.onClick.RemoveListener(_settingsViewController.OpenPanel);
-        buttonSettings.onClick.AddListener(_socialNetViewController.Close);
+        buttonSettings.onClick.RemoveListener(OnClickButtonSettings);
         
-        buttonSocialNetworks.onClick.RemoveListener(_socialNetViewController.Open);
-        buttonSocialNetworks.onClick.RemoveListener(_socialNetViewController.Close);
+        buttonSocialNetworks.onClick.RemoveListener(OnClickButtonSocialNetworks);
         
         buttonStart.onClick.RemoveListener(StartOnClick);
         buttonChoiceLevel.onClick.RemoveListener(ChoiceLevelOnClick);
         buttonExit.onClick.RemoveListener(ExitOnClick);
+    }
+
+    public void TurnOffButtonsGame()
+    {
+        buttonStart.isInteractable = false;
+        buttonChoiceLevel.isInteractable = false;
     }
     
     private void StartOnClick()
@@ -68,13 +72,26 @@ public class MenuViewController : MonoBehaviour
     
     private void ChoiceLevelOnClick()
     {
-        _warringWindow.Open();
+        warringWindowsViewController.WarringWindow.Open();
     }
     
     private void ExitOnClick()
     {
         Debug.Log("Выход из игры");
         Application.Quit();
+    }
+
+    private void OnClickButtonSettings()
+    {
+        socialNetViewController.Close();
+        settingsViewController.OpenPanel();
+        //warringWindowsViewController.HideConnectionTheInternet();
+    }
+    
+    private void OnClickButtonSocialNetworks()
+    {
+        socialNetViewController.Close();
+        socialNetViewController.Open();
     }
     
 }

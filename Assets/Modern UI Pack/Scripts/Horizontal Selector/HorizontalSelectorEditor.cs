@@ -193,7 +193,7 @@ namespace Michsky.MUIP
                         tempUIM.overrideColors = MUIPEditorHandler.DrawToggle(tempUIM.overrideColors, customSkin, "Override Colors");
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
-                        if (GUILayout.Button("Open UI Manager", customSkin.button)) { EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/Show UI Manager"); }
+                        if (GUILayout.Button("Open UI Manager", customSkin.button)) { EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/ShowConnectionTheInternet UI Manager"); }
                         if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {
                             if (EditorUtility.DisplayDialog("Modern UI Pack", "Are you sure you want to disable UI Manager connection with the object? " +

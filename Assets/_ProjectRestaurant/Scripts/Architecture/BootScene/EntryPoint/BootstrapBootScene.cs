@@ -1,19 +1,65 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using GoogleSpreadsheets;
 
 public class BootstrapBootScene : MonoBehaviour
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    private StorageData _storageData;
+
+    private bool _isLoadSuccessful;
+    
     [Inject]
-    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene)
+    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene, StorageData storageData)
     {
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
+        _storageData = storageData;
     }
-    private async void Start()
+    private void Start()
     {
+        InitializeAsync().Forget();
+    }
+
+    private async UniTaskVoid InitializeAsync()
+    {
+        await LoadGoogleSheets();
+        //await LoadJson();
         //Debug.Log("запуск сцены");
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
         //Debug.Log("загрузил сцену");
     }
 
+    private async UniTask LoadGoogleSheets()
+    {
+        try
+        {
+            throw new System.Exception("Искусственная ошибка");
+
+            ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
+            await importSheetsGoogle.LoadItemsSettingsProbnic(_storageData);
+            Debug.Log($"загрузил из интернета");
+            
+            _storageData.SaveDataJson(); // сохранить данные в Json
+            Debug.Log("(сохранение) Json Environment");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _storageData.DownloadDataJson(); // загрузить данные из Json
+            //throw;
+        }
+        
+    }
+    
+    // private async UniTask LoadJson()
+    // {
+    //     if (_isLoadSuccessful == false)
+    //     {
+    //         // загрузить данные из Json
+    //     }
+    //     // сохранить данные в Json
+    //     await UniTask.Yield();
+    // }
 }

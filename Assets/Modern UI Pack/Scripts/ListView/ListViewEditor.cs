@@ -231,7 +231,7 @@ namespace Michsky.MUIP
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
                     initializeOnAwake.boolValue = MUIPEditorHandler.DrawToggle(initializeOnAwake.boolValue, customSkin, "Initialize On Awake");
-                    showScrollbar.boolValue = MUIPEditorHandler.DrawToggle(showScrollbar.boolValue, customSkin, "Show Scrollbar");
+                    showScrollbar.boolValue = MUIPEditorHandler.DrawToggle(showScrollbar.boolValue, customSkin, "ShowConnectionTheInternet Scrollbar");
                     if (GUILayout.Button("Sort List By Name (A to Z)")) { lvTarget.listItems.Sort(SortByNameAtoZ); }
                     if (GUILayout.Button("Sort List By Name (Z to A)")) { lvTarget.listItems.Sort(SortByNameZtoA); }
                     break;

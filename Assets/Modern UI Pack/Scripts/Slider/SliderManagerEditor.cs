@@ -116,8 +116,8 @@ namespace Michsky.MUIP
                 case 2:
                     MUIPEditorHandler.DrawHeader(customSkin, "Options Header", 6);
                     usePercent.boolValue = MUIPEditorHandler.DrawToggle(usePercent.boolValue, customSkin, "Use Percent");
-                    showValue.boolValue = MUIPEditorHandler.DrawToggle(showValue.boolValue, customSkin, "Show Label");
-                    showPopupValue.boolValue = MUIPEditorHandler.DrawToggle(showPopupValue.boolValue, customSkin, "Show Popup Label");
+                    showValue.boolValue = MUIPEditorHandler.DrawToggle(showValue.boolValue, customSkin, "ShowConnectionTheInternet Label");
+                    showPopupValue.boolValue = MUIPEditorHandler.DrawToggle(showPopupValue.boolValue, customSkin, "ShowConnectionTheInternet Popup Label");
                     useRoundValue.boolValue = MUIPEditorHandler.DrawToggle(useRoundValue.boolValue, customSkin, "Use Round Value");
                     invokeOnAwake.boolValue = MUIPEditorHandler.DrawToggle(invokeOnAwake.boolValue, customSkin, "Invoke On Awake");
                     enableSaving.boolValue = MUIPEditorHandler.DrawToggle(enableSaving.boolValue, customSkin, "Save Value");
@@ -140,7 +140,7 @@ namespace Michsky.MUIP
                         tempUIM.overrideFonts = MUIPEditorHandler.DrawToggle(tempUIM.overrideFonts, customSkin, "Override Fonts");
 
                         if (GUILayout.Button("Open UI Manager", customSkin.button))
-                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/Show UI Manager");
+                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/ShowConnectionTheInternet UI Manager");
 
                         if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {

@@ -153,8 +153,8 @@ namespace Michsky.MUIP
                     useCustomContent.boolValue = MUIPEditorHandler.DrawToggle(useCustomContent.boolValue, customSkin, "Use Custom Content");
                     closeOnCancel.boolValue = MUIPEditorHandler.DrawToggle(closeOnCancel.boolValue, customSkin, "Close Window On Cancel");
                     closeOnConfirm.boolValue = MUIPEditorHandler.DrawToggle(closeOnConfirm.boolValue, customSkin, "Close Window On Confirm");
-                    showCancelButton.boolValue = MUIPEditorHandler.DrawToggle(showCancelButton.boolValue, customSkin, "Show Cancel Button");
-                    showConfirmButton.boolValue = MUIPEditorHandler.DrawToggle(showConfirmButton.boolValue, customSkin, "Show Confirm Button");
+                    showCancelButton.boolValue = MUIPEditorHandler.DrawToggle(showCancelButton.boolValue, customSkin, "ShowConnectionTheInternet Cancel Button");
+                    showConfirmButton.boolValue = MUIPEditorHandler.DrawToggle(showConfirmButton.boolValue, customSkin, "ShowConnectionTheInternet Confirm Button");
 
                     MUIPEditorHandler.DrawHeader(customSkin, "UIM Header", 10);
 
@@ -163,7 +163,7 @@ namespace Michsky.MUIP
                         MUIPEditorHandler.DrawUIManagerConnectedHeader();
 
                         if (GUILayout.Button("Open UI Manager", customSkin.button))
-                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/Show UI Manager");
+                            EditorApplication.ExecuteMenuItem("Tools/Modern UI Pack/ShowConnectionTheInternet UI Manager");
 
                         if (GUILayout.Button("Disable UI Manager Connection", customSkin.button))
                         {

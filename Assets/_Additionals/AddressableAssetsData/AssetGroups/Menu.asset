@@ -22,10 +22,17 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3e97288dd6f33cd429177bf7ed64302f
+  - m_GUID: 1425774fcb950e14c87424942b12f431
     m_Address: UIPanel
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d758cb9286f0cf42bbed2656c358333
+    m_Address: CanvasShowLoading
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94061ae1fea4b90488d59b115103c0d8
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3
@@ -41,6 +48,18 @@ MonoBehaviour:
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd992a8962d39974697d115f42a02b23
+    m_Address: SoundMainMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e471edc4421ca0e49acfcbb0ad527599
+    m_Address: MainCameraMainMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cameras
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 915ff9f9e546e124da65a256acab6e5b, type: 2}

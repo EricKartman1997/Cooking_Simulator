@@ -17,7 +17,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
     private Dictionary<ChecksName, GameObject> _checksDic = new Dictionary<ChecksName, GameObject>();
     private Dictionary<UIName, GameObject> _uiDic = new Dictionary<UIName, GameObject>();
     private Dictionary<CustomFurnitureName, GameObject> _customDic = new Dictionary<CustomFurnitureName, GameObject>();
-    private Dictionary<CamerasName, GameObject> _camerasDic = new Dictionary<CamerasName, GameObject>();
+    private Dictionary<CamerasNameGameplay, GameObject> _camerasDic = new Dictionary<CamerasNameGameplay, GameObject>();
     private Dictionary<AudioNameGamePlay, AudioClip> _audioDic = new Dictionary<AudioNameGamePlay, AudioClip>();
     private Dictionary<ServiceNameGamePlay, GameObject> _seviceDic = new Dictionary<ServiceNameGamePlay, GameObject>();
     
@@ -34,7 +34,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
     public IReadOnlyDictionary<ViewDishName, GameObject> ViewDishDic => _viewDishDic;
     public IReadOnlyDictionary<ChecksName, GameObject> ChecksDic => _checksDic;
     public IReadOnlyDictionary<UIName, GameObject> UINameDic => _uiDic;
-    public IReadOnlyDictionary<CamerasName, GameObject> CamerasDic => _camerasDic;
+    public IReadOnlyDictionary<CamerasNameGameplay, GameObject> CamerasDic => _camerasDic;
     public IReadOnlyDictionary<CustomFurnitureName, GameObject> CustomDic => _customDic;
     public IReadOnlyDictionary<AudioNameGamePlay, AudioClip> AudioDic => _audioDic;
     public IReadOnlyDictionary<ServiceNameGamePlay, GameObject> ServiceDic => _seviceDic;
@@ -271,8 +271,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
 
         var results = await Task.WhenAll(loadTasks);
         
-        _camerasDic.Add(CamerasName.MainCamera, results[0]);
-        _camerasDic.Add(CamerasName.TopDownCamera, results[1]);
+        _camerasDic.Add(CamerasNameGameplay.MainCamera, results[0]);
+        _camerasDic.Add(CamerasNameGameplay.TopDownCamera, results[1]);
         
         //Debug.Log("прошел LoadUIPrefabsAsync");
     }
@@ -442,7 +442,7 @@ public enum UIName
     MainFrameCanvas
 }
 
-public enum CamerasName
+public enum CamerasNameGameplay
 {
     MainCamera,
     TopDownCamera,
