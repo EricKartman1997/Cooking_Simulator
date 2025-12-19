@@ -5,7 +5,7 @@ public class WarringWindowsViewController : MonoBehaviour
 {
     private const string BOOLANIM = "IsShow";
     private const string UPDATEDATE = "Update date";
-    private const string NOCONNECTION = "NO connection";
+    private const string NOCONNECTION = "No connection";
     
     [SerializeField] private ModalWindowManager warringWindow;
     [SerializeField] private GameObject connectionTheInternet;
@@ -36,10 +36,12 @@ public class WarringWindowsViewController : MonoBehaviour
     public void UpdateDateTextButton()
     {
         _button.buttonText = UPDATEDATE;
+        _button.UpdateUI();
     }
     
     public void NoConnectionTextButton()
     {
         _button.buttonText = NOCONNECTION;
+        _button.UpdateUI();
     }
 }

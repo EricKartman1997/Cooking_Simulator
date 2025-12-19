@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GoogleSpreadsheets;
+using Newtonsoft.Json;
 using UnityEngine;
 using Zenject;
 
@@ -87,7 +88,7 @@ public class FactoryEnvironment : IDisposable
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
         //itemData.ShowConnectionTheInternet();
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GetTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GetTable], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<GetTable>().Init(itemData.GiveFood, itemData.ViewFood);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
@@ -95,49 +96,49 @@ public class FactoryEnvironment : IDisposable
     
     private GameObject CreateGiveTable(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GiveTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.GiveTable], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
     
     private GameObject CreateCuttingTable(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.CuttingTable], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.CuttingTable], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
     private GameObject CreateGarbage(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Garbage], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Garbage], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
     private GameObject CreateOven(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Oven], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Oven], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
     private GameObject CreateBlender(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Blender], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Blender], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
     private GameObject CreateSuvide(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Suvide], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Suvide], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 
     private GameObject CreateStove(FurnitureItemData itemData, Transform parent)
     {
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Stove], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Stove], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
@@ -145,31 +146,105 @@ public class FactoryEnvironment : IDisposable
     private GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
     {
         //itemData.ShowConnectionTheInternet();
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Distribution], itemData.Position, Quaternion.Euler(itemData.Rotation), parent);
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.FurnitureDic[FurnitureName.Distribution], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
 }
+
+// [Serializable]
+// public class FurnitureItemData
+// {
+//     public int Id;
+//     public string Name;
+//     public Vector3 Position;
+//     public Vector3 Rotation;
+//     public CustomFurnitureName DecorationTableTop;
+//     public CustomFurnitureName DecorationLowerSurface;
+//     public IngredientName GiveFood;
+//     public ViewDishName ViewFood;
+//
+//     public void Show()
+//     {
+//         Debug.Log($"ID = {Id}, Name = {Name}, Position = {Position}, Rotation = {Rotation}," +
+//                   $" DecorationTableTop = {DecorationTableTop}," +
+//                   $" DecorationLowerSurface = {DecorationLowerSurface}, GiveFood = {GiveFood}," +
+//                   $" ViewFood = {ViewFood}");
+//     }
+// }
+
+
 
 [Serializable]
 public class FurnitureItemData
 {
     public int Id;
     public string Name;
-    public Vector3 Position;
-    public Vector3 Rotation;
+
+    public Vector3Data Position;
+    public Vector3Data Rotation;
+
     public CustomFurnitureName DecorationTableTop;
     public CustomFurnitureName DecorationLowerSurface;
     public IngredientName GiveFood;
     public ViewDishName ViewFood;
 
-    public void Show()
+    [NonSerialized] private Vector3? _cachedPosition;
+    [NonSerialized] private Vector3? _cachedRotation;
+
+    [JsonIgnore] // <= ВАЖНО
+    public Vector3 PositionVector
     {
-        Debug.Log($"ID = {Id}, Name = {Name}, Position = {Position}, Rotation = {Rotation}," +
-                  $" DecorationTableTop = {DecorationTableTop}," +
-                  $" DecorationLowerSurface = {DecorationLowerSurface}, GiveFood = {GiveFood}," +
-                  $" ViewFood = {ViewFood}");
+        get
+        {
+            if (_cachedPosition == null)
+                _cachedPosition = Position.ToVector3();
+            return _cachedPosition.Value;
+        }
+    }
+
+    [JsonIgnore] // <= ВАЖНО
+    public Vector3 RotationVector
+    {
+        get
+        {
+            if (_cachedRotation == null)
+                _cachedRotation = Rotation.ToVector3();
+            return _cachedRotation.Value;
+        }
     }
 }
+
+
+[Serializable]
+public struct Vector3Data
+{
+    public float x;
+    public float y;
+    public float z;
+
+    public Vector3Data(float x, float y, float z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public Vector3Data(Vector3 v)
+    {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    public Vector3 ToVector3()
+    {
+        return new Vector3(x, y, z);
+    }
+}
+
+
+
+
 
 

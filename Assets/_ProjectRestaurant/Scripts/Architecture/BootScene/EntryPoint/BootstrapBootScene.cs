@@ -46,6 +46,7 @@ public class BootstrapBootScene : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log("Ошибка загрузки данных в BootScene");
             Console.WriteLine(e);
             _storageData.DownloadDataJson(); // загрузить данные из Json
             //throw;

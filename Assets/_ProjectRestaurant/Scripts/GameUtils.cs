@@ -40,27 +40,27 @@ public static class GameUtils
     // - периодической проверки соединения
     // - повторных попыток загрузки данных
     // - логики восстановления после оффлайн-старта игры
-    public static async UniTask<bool> IsGoogleSheetsAvailable()
+    public static async UniTask<bool> IsGoogleSheetAvailable(string sheetId)
     {
-        // Создаём HEAD-запрос (без загрузки тела ответа, быстрее чем GET)
-        using (var request = UnityWebRequest.Head(
-                   "https://sheets.googleapis.com"))
+        // URL экспорта CSV для публичной таблицы
+        string url = $"https://docs.google.com/spreadsheets/d/{sheetId}/export?format=csv";
+
+        using (var request = UnityWebRequest.Head(url))
         {
-            // Таймаут запроса (в секундах)
-            request.timeout = 5;
+            request.timeout = 5; // таймаут 5 секунд
 
             try
             {
-                // Асинхронно отправляем запрос, не блокируя Unity
                 await request.SendWebRequest();
 
-                // Успешный результат означает, что Google Sheets доступен
+#if UNITY_2020_2_OR_NEWER
                 return request.result == UnityWebRequest.Result.Success;
+#else
+            return !request.isNetworkError && !request.isHttpError;
+#endif
             }
             catch
             {
-                // Любая ошибка (нет интернета, таймаут, сбой сети)
-                // считается отсутствием доступа
                 return false;
             }
         }

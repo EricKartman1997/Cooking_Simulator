@@ -1,9 +1,11 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
 public class BootstrapMainMenu : MonoBehaviour
 {
+    public Action ThereIsInternetAction;
     //private GameObject _canvas;
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
@@ -15,6 +17,7 @@ public class BootstrapMainMenu : MonoBehaviour
 
     private GameObject _mainUIPanel;
     private GameObject _loadingPanel;
+    private MenuViewController _menuViewController;
 
     [Inject]
     private void ConstructZenject(
@@ -47,20 +50,22 @@ public class BootstrapMainMenu : MonoBehaviour
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay");
     }
     
-    public void HideLoadingPanel()
+    public void HideLoadingPanel(bool isPlaySounds = true)
     {
         if (_loadingPanel != null)
             _loadingPanel.SetActive(false);
         
-        _soundsServiceMainMenu.PlaySounds();
+        if (isPlaySounds)
+            _soundsServiceMainMenu.PlaySounds();
     }
     
-    public void ShowLoadingPanel()
+    public void ShowLoadingPanel(bool isStopSounds = true)
     {
         if (_loadingPanel != null)
             _loadingPanel.SetActive(true);
         
-        _soundsServiceMainMenu.StopSounds();
+        if (isStopSounds)
+            _soundsServiceMainMenu.StopSounds();
     }
 
     private async UniTask InitializeAsync()
@@ -108,7 +113,11 @@ public class BootstrapMainMenu : MonoBehaviour
     private async UniTask CreateUI()
     {
         _mainUIPanel = _factoryUIMainMenuScene.CreateUI();
-
+        
+        await UniTask.Yield();
+        
+        DescribeTheInternet();
+        
         await UniTask.Yield();
     }
 
@@ -120,28 +129,38 @@ public class BootstrapMainMenu : MonoBehaviour
 
     private async UniTask StartLevel()
     {
-        var menuViewController = _mainUIPanel.GetComponentInChildren<MenuViewController>();
-
         _mainUIPanel.SetActive(true);
 
         if (_storageData.OperatingModeMainMenu ==
             OperatingModeMainMenu.WithoutAnInternetConnection)
         {
-            menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
-            menuViewController.WarringWindowsViewController.NoConnectionTextButton();
-            menuViewController.TurnOffButtonsGame();
+            _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
+            _menuViewController.WarringWindowsViewController.NoConnectionTextButton();
+            _menuViewController.TurnOffButtonsGame();
             _internetUpdateService.StartChecking();
         }
 
         if (_storageData.OperatingModeMainMenu ==
             OperatingModeMainMenu.WithoutAnInternetConnectionButOutdatedData)
         {
-            menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
-            menuViewController.WarringWindowsViewController.UpdateDateTextButton();
+            _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
+            _menuViewController.WarringWindowsViewController.UpdateDateTextButton();
             _internetUpdateService.StartChecking();
         }
 
         HideLoadingPanel();
+    }
+
+    private void DescribeTheInternet()
+    {
+        _menuViewController = _mainUIPanel.GetComponentInChildren<MenuViewController>();
+
+        if (_storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithoutAnInternetConnection || _storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithoutAnInternetConnectionButOutdatedData)
+        {
+            Debug.Log("Подписался на событие ThereIsInternetAction");
+            ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
+            ThereIsInternetAction += _menuViewController.TurnOnButtonsGame;
+        }
     }
     
 }

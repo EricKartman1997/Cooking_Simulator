@@ -7,7 +7,7 @@ public class StorageData: IReadStorageData
     private JsonHandler _jsonHandler;
     
     // поля для взаимодействия
-    private List<FurnitureItemData> _itemsEnvironmentList = new List<FurnitureItemData>();
+    public List<FurnitureItemData> _itemsEnvironmentList = new List<FurnitureItemData>();
     private OperatingModeMainMenu _operatingModeMainMenu = OperatingModeMainMenu.WithAnInternetConnection;
 
     // свойства
@@ -21,9 +21,13 @@ public class StorageData: IReadStorageData
 
     public void SaveDataJson()
     {
+        if (_itemsEnvironmentList.Count == 0)
+        {
+            Debug.LogWarning("нет данных для сохранения");
+        }
         EnvironmentItems saveObj = new EnvironmentItems(_itemsEnvironmentList);
         _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj);
-        
+        Debug.Log("Прошел сохранение");
     }
 
     public void DownloadDataJson()
@@ -42,7 +46,18 @@ public class StorageData: IReadStorageData
         }
         
         _operatingModeMainMenu = OperatingModeMainMenu.WithoutAnInternetConnectionButOutdatedData;
+        Debug.Log("данные есть, но игра без интернета");
         
+    }
+
+    // public async void LoadItemsSheet()
+    // {
+    //     
+    // }
+
+    public void ThereIsInternetConnection()
+    {
+        _operatingModeMainMenu = OperatingModeMainMenu.WithAnInternetConnection;
     }
 }
 

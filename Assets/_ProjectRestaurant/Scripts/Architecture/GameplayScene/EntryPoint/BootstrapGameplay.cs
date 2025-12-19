@@ -17,6 +17,7 @@ public class BootstrapGameplay : MonoBehaviour
     private FactoryEnvironment _factoryEnvironment;
     private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
+    private StorageData _storageData;
     
     private DiContainer _container;
     
@@ -31,7 +32,7 @@ public class BootstrapGameplay : MonoBehaviour
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame,
-        UpdateChecks updateChecks,DiContainer container)
+        UpdateChecks updateChecks,DiContainer container,StorageData storageData)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -43,11 +44,13 @@ public class BootstrapGameplay : MonoBehaviour
         _timeGame = timeGame;
         _updateChecks = updateChecks;
         _container = container;
+        _storageData = storageData;
     }
     
     private void Start()
     {
         InitializeAsync().Forget();
+        _storageData.ThereIsInternetConnection();
     }
     
     private async UniTaskVoid InitializeAsync()

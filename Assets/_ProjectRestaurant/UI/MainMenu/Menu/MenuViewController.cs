@@ -65,6 +65,12 @@ public class MenuViewController : MonoBehaviour
         buttonChoiceLevel.isInteractable = false;
     }
     
+    public void TurnOnButtonsGame()
+    {
+        buttonStart.isInteractable = true;
+        buttonChoiceLevel.isInteractable = true;
+    }
+    
     private void StartOnClick()
     {
         _bootstrapMainMenu.ExitLevel();

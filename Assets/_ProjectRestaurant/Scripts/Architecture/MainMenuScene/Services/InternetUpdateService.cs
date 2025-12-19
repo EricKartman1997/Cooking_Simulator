@@ -29,13 +29,13 @@ public class InternetUpdateService
             await UniTask.Delay(TimeSpan.FromSeconds(5));
 
             // реальная проверка доступности Google
-            if (!await GameUtils.IsGoogleSheetsAvailable())
+            if (!await GameUtils.IsGoogleSheetAvailable("1egofOmJAB6kx-TRCUNWvBhR6os8RO5oIzNOYsXNL3t8"))
             {
                 Debug.Log("Google недоступен, ждём...");
                 continue;
             }
 
-            _menu.ShowLoadingPanel();
+            _menu.ShowLoadingPanel(false);
 
             try
             {
@@ -46,13 +46,15 @@ public class InternetUpdateService
 
                 Debug.Log("Данные успешно загружены");
 
-                _menu.HideLoadingPanel();
+                _menu.HideLoadingPanel(false);
                 _isWorking = false;
+                _storageData.ThereIsInternetConnection();
+                _menu.ThereIsInternetAction?.Invoke();
             }
             catch (Exception e)
             {
                 Debug.LogWarning($"Ошибка загрузки: {e.Message}");
-                _menu.HideLoadingPanel();
+                _menu.HideLoadingPanel(false);
             }
         }
     }

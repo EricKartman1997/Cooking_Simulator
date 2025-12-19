@@ -10,61 +10,10 @@ namespace GoogleSpreadsheets
         private readonly StorageData _storageData;
         private FurnitureItemData _currentItemData;
         
-        // public FurnitureItemDataParser(FactoryEnvironment factoryEnvironment)
-        // {
-        //     _factoryEnvironment = factoryEnvironment;
-        //     _factoryEnvironment._itemsList = new List<FurnitureItemData>();
-        // }
-        
         public FurnitureItemDataParser(StorageData storageData)
         {
             _storageData = storageData;
         }
-        
-        // public void Parse(string header, string token)
-        // {
-        //     switch (header)
-        //     {
-        //         case "ID":
-        //             _currentItemData = new FurnitureItemData
-        //             {
-        //                 Id = Convert.ToInt32(token)
-        //             };
-        //             _factoryEnvironment._itemsList.Add(_currentItemData);
-        //             break;
-        //
-        //         case "Name":
-        //             _currentItemData.Name = token;
-        //             break;
-        //
-        //         case "Position":
-        //             _currentItemData.Position = ParseVector3(token);
-        //             break;
-        //         
-        //         case "Rotation": 
-        //             _currentItemData.Rotation = ParseVector3(token);
-        //             break;
-        //
-        //         case "DecorationTableTop":
-        //             _currentItemData.DecorationTableTop = (CustomFurnitureName)Enum.Parse(typeof(CustomFurnitureName), token, true);
-        //             break;
-        //
-        //         case "DecorationLowerSurface":
-        //             _currentItemData.DecorationLowerSurface = (CustomFurnitureName)Enum.Parse(typeof(CustomFurnitureName), token, true);
-        //             break;
-        //         
-        //         case "GiveFood":
-        //             _currentItemData.GiveFood = (IngredientName)Enum.Parse(typeof(IngredientName), token, true);
-        //             break;
-        //
-        //         case "ViewFood":
-        //             _currentItemData.ViewFood = (ViewDishName)Enum.Parse(typeof(ViewDishName), token, true);
-        //             break;
-        //
-        //         default:
-        //             throw new Exception($"Invalid header: {header}");
-        //     }
-        // }
         
         public void Parse(string header, string token)
         {
@@ -75,7 +24,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    _storageData.ItemsEnvironmentListRead.Add(_currentItemData);
+                    _storageData._itemsEnvironmentList.Add(_currentItemData);
                     break;
 
                 case "Name":
@@ -83,12 +32,13 @@ namespace GoogleSpreadsheets
                     break;
 
                 case "Position":
-                    _currentItemData.Position = ParseVector3(token);
+                    _currentItemData.Position = new Vector3Data(ParseVector3(token));
                     break;
                 
-                case "Rotation": 
-                    _currentItemData.Rotation = ParseVector3(token);
+                case "Rotation":
+                    _currentItemData.Rotation = new Vector3Data(ParseVector3(token));
                     break;
+
 
                 case "DecorationTableTop":
                     _currentItemData.DecorationTableTop = (CustomFurnitureName)Enum.Parse(typeof(CustomFurnitureName), token, true);
