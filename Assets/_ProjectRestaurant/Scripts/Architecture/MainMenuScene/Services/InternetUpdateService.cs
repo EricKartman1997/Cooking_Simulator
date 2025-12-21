@@ -35,10 +35,12 @@ public class InternetUpdateService
                 continue;
             }
 
-            _menu.ShowLoadingPanel(false);
+            _menu.ShowPanelWaitTheInternetAction?.Invoke();
+            
 
             try
             {
+                //throw new System.Exception("Искусственная ошибка");
                 var importer = new ImportSheetsGoogle();
                 await importer.LoadItemsSettingsProbnic(_storageData);
 
@@ -46,15 +48,16 @@ public class InternetUpdateService
 
                 Debug.Log("Данные успешно загружены");
 
-                _menu.HideLoadingPanel(false);
+                await UniTask.Delay(TimeSpan.FromSeconds(2.5));
+                _menu.HidePanelWaitTheInternetAction?.Invoke();
                 _isWorking = false;
                 _storageData.ThereIsInternetConnection();
                 _menu.ThereIsInternetAction?.Invoke();
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"Ошибка загрузки: {e.Message}");
-                _menu.HideLoadingPanel(false);
+                Debug.Log($"Ошибка загрузки: {e.Message}");
+                _menu.HidePanelWaitTheInternetAction?.Invoke();
             }
         }
     }

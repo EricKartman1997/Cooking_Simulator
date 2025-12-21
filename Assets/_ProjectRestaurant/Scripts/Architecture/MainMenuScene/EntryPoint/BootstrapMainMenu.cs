@@ -6,7 +6,9 @@ using Zenject;
 public class BootstrapMainMenu : MonoBehaviour
 {
     public Action ThereIsInternetAction;
-    //private GameObject _canvas;
+    public Action ShowPanelWaitTheInternetAction;
+    public Action HidePanelWaitTheInternetAction;
+
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIMainMenuScene _factoryUIMainMenuScene;
@@ -49,8 +51,8 @@ public class BootstrapMainMenu : MonoBehaviour
         ShowLoadingPanel();
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay");
     }
-    
-    public void HideLoadingPanel(bool isPlaySounds = true)
+
+    private void HideLoadingPanel(bool isPlaySounds = true)
     {
         if (_loadingPanel != null)
             _loadingPanel.SetActive(false);
@@ -58,8 +60,8 @@ public class BootstrapMainMenu : MonoBehaviour
         if (isPlaySounds)
             _soundsServiceMainMenu.PlaySounds();
     }
-    
-    public void ShowLoadingPanel(bool isStopSounds = true)
+
+    private void ShowLoadingPanel(bool isStopSounds = true)
     {
         if (_loadingPanel != null)
             _loadingPanel.SetActive(true);
@@ -158,8 +160,18 @@ public class BootstrapMainMenu : MonoBehaviour
         if (_storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithoutAnInternetConnection || _storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithoutAnInternetConnectionButOutdatedData)
         {
             Debug.Log("Подписался на событие ThereIsInternetAction");
+            
+            HidePanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.HideWaitTheInternetConnection;
+            HidePanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet;
+            
+            ShowPanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
+            ShowPanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.ShowWaitTheInternetConnection;
+            
             ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
+            ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideWaitTheInternetConnection;
             ThereIsInternetAction += _menuViewController.TurnOnButtonsGame;
+            
+            //ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
         }
     }
     

@@ -9,7 +9,9 @@ public class WarringWindowsViewController : MonoBehaviour
     
     [SerializeField] private ModalWindowManager warringWindow;
     [SerializeField] private GameObject connectionTheInternet;
+    [SerializeField] private GameObject waitTheInternetConnection;
     private Animator _animatorConnectionTheInternet;
+    private Animator _animatorWaitTheInternetConnection;
     
     private ButtonManager _button;
 
@@ -19,10 +21,25 @@ public class WarringWindowsViewController : MonoBehaviour
 
     private void Awake()
     {
+        _animatorWaitTheInternetConnection = waitTheInternetConnection.GetComponent<Animator>();
         _animatorConnectionTheInternet = connectionTheInternet.GetComponent<Animator>();
         _button = connectionTheInternet.GetComponentInChildren<ButtonManager>();
     }
     
+    //WaitTheInternetConnection
+    public void ShowWaitTheInternetConnection()
+    {
+        waitTheInternetConnection.SetActive(true);
+        _animatorWaitTheInternetConnection.SetBool(BOOLANIM,true);
+    }
+    
+    public void HideWaitTheInternetConnection()
+    {
+        waitTheInternetConnection.SetActive(true);
+        _animatorWaitTheInternetConnection.SetBool(BOOLANIM,false);
+    }
+    
+    //ConnectionTheInternet
     public void ShowConnectionTheInternet()
     {
         _animatorConnectionTheInternet.SetBool(BOOLANIM,true);

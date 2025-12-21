@@ -35,7 +35,7 @@ public class BootstrapBootScene : MonoBehaviour
     {
         try
         {
-            throw new System.Exception("Искусственная ошибка");
+            //throw new System.Exception("Искусственная ошибка");
 
             ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
             await importSheetsGoogle.LoadItemsSettingsProbnic(_storageData);
