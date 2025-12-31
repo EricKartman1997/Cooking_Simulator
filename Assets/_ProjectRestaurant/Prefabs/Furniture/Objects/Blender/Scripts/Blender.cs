@@ -8,6 +8,7 @@ namespace BlenderFurniture
 { 
     public class Blender : MonoBehaviour, IUseFurniture
     {
+        [SerializeField] private SoundsFurniture sounds;
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
@@ -161,25 +162,26 @@ namespace BlenderFurniture
             {
                 _ingredient1 = _productsFactory.GetProduct(acceptObj, _blenderPoints.FirstPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
+                sounds.PlayOneShotClip(AudioNameGamePlay.PutTheBerryBlender);
                 return true;
             }
-            else if (_ingredient2 == null)
+            if (_ingredient2 == null)
             {
                 _ingredient2 = _productsFactory.GetProduct(acceptObj, _blenderPoints.SecondPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
+                sounds.PlayOneShotClip(AudioNameGamePlay.PutTheBerryBlender);
                 return true;
             }
-            else if (_ingredient3 == null)
+            if (_ingredient3 == null)
             {
                 _ingredient3 = _productsFactory.GetProduct(acceptObj, _blenderPoints.ThirdPoint.transform, _blenderPoints.ParentFood,true);
                 _heroik.CleanObjOnHands();
+                sounds.PlayOneShotClip(AudioNameGamePlay.PutTheBerryBlender);
                 return true;
             }
-            else
-            {
-                Debug.LogWarning("В блендере нет места");
-                return false;
-            }
+            
+            Debug.LogWarning("В блендере нет места");
+            return false;
         }
         
         private void CreateResult()
@@ -238,29 +240,34 @@ namespace BlenderFurniture
         {
             if (!CheckCookingProcess())
                 return;
+            
+            if (_isWork)
+            {
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                Debug.Log("Ждите, блендер готовится");
+                return;
+            }
 
             // ===============================
             // РУКИ СВОБОДНЫ
             // ===============================
             if (_heroik.IsBusyHands == false)
             {
-                if (_isWork)
-                {
-                    Debug.Log("Ждите, блендер готовится");
-                    return;
-                }
-
                 // Есть готовый результат → забираем
                 if (_result != null)
                 {
                     if (_heroik.TryPickUp(GiveObj(_result)))
+                    {
                         CleanObjOnTable(_result);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                    }
                     return;
                 }
 
                 // Нет результата и нет ингредиентов
                 if (_ingredient1 == null && _ingredient2 == null)
                 {
+                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                     Debug.Log("Руки пусты, ингредиентов нет");
                     return;
                 }
@@ -269,7 +276,10 @@ namespace BlenderFurniture
                 if (_ingredient1 != null)
                 {
                     if (_heroik.TryPickUp(GiveObj(_ingredient1)))
+                    {
                         CleanObjOnTable(_ingredient1);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                    }
                     return;
                 }
 
@@ -277,7 +287,10 @@ namespace BlenderFurniture
                 if (_ingredient2 != null)
                 {
                     if (_heroik.TryPickUp(GiveObj(_ingredient2)))
+                    {
                         CleanObjOnTable(_ingredient2);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                    }
                     return;
                 }
 
@@ -287,15 +300,11 @@ namespace BlenderFurniture
             // ===============================
             // РУКИ ЗАНЯТЫ
             // ===============================
-            if (_isWork)
-            {
-                Debug.Log("Ждите, блендер готовится");
-                return;
-            }
-
+            
             // Если результат уже есть — кладём некуда
             if (_result != null)
             {
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.Log("Руки полные, уберите предмет");
                 return;
             }
@@ -310,6 +319,7 @@ namespace BlenderFurniture
             // Если все слоты заполнены — запускаем работу
             if (_ingredient1 != null && _ingredient2 != null && _ingredient3 != null)
             {
+                sounds.PlayClip(AudioNameGamePlay.BlenderSound);
                 TurnOn();
                 ContinueWorkAsync().Forget(); 
             }
@@ -324,6 +334,7 @@ namespace BlenderFurniture
             
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.LogWarning("Блендер не работает");
                 return false;
             }
@@ -340,6 +351,7 @@ namespace BlenderFurniture
             await _blenderView.StartBlendAsync();
             CreateResult();
             TurnOff();
+            sounds.StopCurrentClip();
         }
         
         private void CleanObjOnTable(GameObject ingredient)

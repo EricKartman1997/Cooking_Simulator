@@ -27,6 +27,8 @@ namespace SuvideFurniture
         [SerializeField] private Transform pointResult2;
         [SerializeField] private Transform pointResult3;
         
+        [SerializeField] private SoundsFurniture sounds;
+        
         private GameObject _dish1;
         private GameObject _dish2;
         private GameObject _dish3;
@@ -102,13 +104,20 @@ namespace SuvideFurniture
                 ExitTrigger();
             }
         }
-
+        
         [Inject]
-        private void ConstructZenject(IHandlerPause pauseHandler)
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause pauseHandler)
         {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
             _pauseHandler = pauseHandler;
         }
-            
+        
         // private void OnEnable()
         // {
         //     EventBus.PressE += CookingProcess;
@@ -140,17 +149,6 @@ namespace SuvideFurniture
             _isHeroikTrigger = false;
         }
         
-        [Inject]
-        private void ConstructZenject( 
-            RecipeService recipeService,
-            ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer)
-        {
-            _productsFactory = productsFactory;
-            _recipeService = recipeService;
-            _foodsForFurnitureContainer = foodsForFurnitureContainer;
-        }
-    
         private bool CheckUseFurniture()
         {
             if (ReferenceEquals(_heroik.CurrentUseFurniture, this))
@@ -308,12 +306,13 @@ namespace SuvideFurniture
                 return;
             }
     
-            if (_heroik.IsBusyHands == false)
+            if (_heroik.IsBusyHands == false) // руки пусто
             {
                 if (_dish1 != null && _cookingdish1 == false)
                 {
                     if (_heroik.TryPickUp(GiveObj(_dish1)))
                     {
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
                         CleanObjOnTable(_dish1);
                     }
                     ChangeView();
@@ -324,6 +323,7 @@ namespace SuvideFurniture
                 {
                     if (_heroik.TryPickUp(GiveObj(_dish2)))
                     {
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
                         CleanObjOnTable(_dish2);
                     }
                     ChangeView();
@@ -334,23 +334,27 @@ namespace SuvideFurniture
                 {
                     if (_heroik.TryPickUp(GiveObj(_dish3)))
                     {
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
                         CleanObjOnTable(_dish3);
                     }
                     ChangeView();
                     return;
                 }
                 
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.Log("Сувид пуст руки тоже");
                 ChangeView();
                 return;
             }
     
-            if (_heroik.IsBusyHands == true)
+            if (_heroik.IsBusyHands == true) // руки заняты
             {
                 if (_dish1 == null)
                 {
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH1))
                     {
+                        sounds.PlayClip(AudioNameGamePlay.SuvideSound);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.PutTheWater);
                         TurnOn(DISH1);
                         ContinueWorkAsync(_dish1,DISH1).Forget();
                         ChangeView();
@@ -366,6 +370,8 @@ namespace SuvideFurniture
                 {
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH2))
                     {
+                        sounds.PlayClip(AudioNameGamePlay.SuvideSound);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.PutTheWater);
                         TurnOn(DISH2);
                         ContinueWorkAsync(_dish2,DISH2).Forget();
                         //ждать пока
@@ -382,6 +388,8 @@ namespace SuvideFurniture
                 {
                     if (AcceptObject(_heroik.TryGiveIngredient(ListProduct), DISH3))
                     {
+                        sounds.PlayClip(AudioNameGamePlay.SuvideSound);
+                        sounds.PlayOneShotClip(AudioNameGamePlay.PutTheWater);
                         TurnOn(DISH3);
                         ContinueWorkAsync(_dish3,DISH3).Forget();
                         ChangeView();
@@ -393,6 +401,7 @@ namespace SuvideFurniture
                     return;
                 }
                 
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.LogWarning("сувид заполнен");
                 ChangeView();
                 return;
@@ -428,11 +437,13 @@ namespace SuvideFurniture
         {
             if (_cookingdish1 == true || _cookingdish2 == true || _cookingdish3 == true )
             {
+                //sounds.PlayClip(AudioNameGamePlay.SuvideSound);
                 _suvideView.WorkingSuvide();
             }
             else
             {
                 _suvideView.NotWorkingSuvide();
+                sounds.StopCurrentClip();
             }
         }
 
@@ -445,6 +456,7 @@ namespace SuvideFurniture
                 
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.LogWarning("Сувид не работает");
                 return false;
             }

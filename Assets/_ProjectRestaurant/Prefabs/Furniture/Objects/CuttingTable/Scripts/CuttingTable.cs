@@ -14,6 +14,7 @@ namespace CuttingTableFurniture
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
         [SerializeField] private Transform positionResult;
+        [SerializeField] private SoundsFurniture sounds;
         
         private bool _isWork = false;
         private bool _isHeroikTrigger = false;
@@ -223,101 +224,108 @@ namespace CuttingTableFurniture
         
         private void CookingProcess()
         {
-            if(_isHeroikTrigger == false)
+            if (CheckCookingProcess() == false)
             {
                 return;
             }
             
-            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
+            if (_isWork)
             {
-                Debug.LogWarning("Стол не работает");
-                return;
-            }
-            
-            if (CheckUseFurniture() == false)
-            {
+                Debug.Log("ждите блюдо готовится");
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 return;
             }
             
             if(_heroik.IsBusyHands == false) // руки не заняты
             {
-                if (_isWork)
+                if (_result == null)
                 {
-                    Debug.Log("ждите блюдо готовится");
+                    if (_ingredient1 == null)
+                    {
+                        Debug.Log("У вас пустые руки и прилавок пуст");
+                        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                        return;
+                    }
+                         
+                    if (_heroik.TryPickUp(GiveObj(_ingredient1))) //есть первый ингредиент // забираете первый ингредиент 
+                    {
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                        CleanObjOnTable(_ingredient1);
+                    }
+                    return;
                 }
-                else
+                   
+                if (_heroik.TryPickUp(GiveObj(_result)))  //есть результат // забрать результат
                 {
-                    if (_result == null)
-                    {
-                        if (_ingredient1 == null)
-                        {
-                            Debug.Log("У вас пустые руки и прилавок пуст");
-                        }
-                        else //есть первый ингредиент // забираете первый ингредиент 
-                        {
-                            if (_heroik.TryPickUp(GiveObj(_ingredient1)))
-                            {
-                                CleanObjOnTable(_ingredient1);
-                            }
-                        }
-                    }
-                    else //есть результат // забрать результат
-                    {
-                        if (_heroik.TryPickUp(GiveObj(_result)))
-                        {
-                            CleanObjOnTable(_result);
-                        }
-                        Debug.Log("Вы забрали конечный продукт"); 
-                    }
+                    sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                    CleanObjOnTable(_result);
                 }
+                Debug.Log("Вы забрали конечный продукт");
             }
             else // заняты
             {
-                if (_isWork)
+                if (_result == null)
                 {
-                    Debug.Log("ждите блюдо готовится");
-                }
-                else
-                {
-                    if (_result == null)
+                    if (_ingredient1 == null)// ингредиентов нет
                     {
-                        if (_ingredient1 == null)// ингредиентов нет
-                        {
-                            AcceptObject(_heroik.TryGiveIngredient(ListProduct));
-                        }
-                        else// есть первый ингредиент
-                        {
-                            if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
-                            {
-                                TurnOn(); 
-                                ContinueWorkAsync().Forget();
-                            }
-                            else
-                            {
-                                Debug.Log("с предметом что-то пошло не так");
-                            }
-                        }
+                        AcceptObject(_heroik.TryGiveIngredient(ListProduct));
+                        sounds.PlayOneShotClip(AudioNameGamePlay.PutTheBerryBlender);
+                        return;
                     }
-                    else
+                    
+                    if (AcceptObject(_heroik.TryGiveIngredient(ListProduct))) // есть первый ингредиент
                     {
-                        Debug.Log("Сначала уберите предмет из рук");
+                        sounds.PlayOneShotClip(AudioNameGamePlay.PutTheBerryBlender);
+                        TurnOn(); 
+                        ContinueWorkAsync().Forget();
+                        return;
                     }
-                            
+                    
+                    Debug.Log("с предметом что-то пошло не так");
+                    return;
                 }
+                
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                Debug.Log("Сначала уберите предмет из рук");
                         
             }
         }
         
         private async UniTask ContinueWorkAsync()
         {
+            sounds.PlayClip(AudioNameGamePlay.CuttingTableSound);
             await _cuttingTableView.StartCuttingTableAsync();
             CreateResult();
             TurnOff();
+            sounds.StopCurrentClip();
         }
         
         private void CleanObjOnTable(GameObject ingredient)
         {
             Destroy(ingredient);
+        }
+        
+        private bool CheckCookingProcess()
+        {
+            if(_isHeroikTrigger == false)
+            {
+                return false;
+            }
+        
+            if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
+            {
+                Debug.Log("Стол не работает");
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                return false;
+            }
+        
+            if (CheckUseFurniture() == false)
+            {
+                //Debug.Log("Зашел4");
+                return false;
+            }
+
+            return true;
         }
         
     }

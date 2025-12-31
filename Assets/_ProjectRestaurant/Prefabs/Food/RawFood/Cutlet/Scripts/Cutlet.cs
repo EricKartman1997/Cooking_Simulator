@@ -1,7 +1,9 @@
 using UnityEngine;
+using System;
 
 public class Cutlet : MonoBehaviour,IForStove
 {
+    private Action _cutletFire;
     private CutletStateMachine _cutletStateMachine;
     private EnumStateRoasting _stateRoasting;
     
@@ -14,6 +16,12 @@ public class Cutlet : MonoBehaviour,IForStove
     [SerializeField] private bool _isOnStove;        //Debug
     private bool _isFire;
     private TimerCutlet _componentTimerCutlet;
+
+    public Action CutletFire
+    {
+        get => _cutletFire;
+        set => _cutletFire = value;
+    }
     
     public Material Material
     {
@@ -39,7 +47,11 @@ public class Cutlet : MonoBehaviour,IForStove
     public EnumRoasting Roasting
     {
         get => _roasting;
-        set => _roasting = value;
+        set
+        {
+            _roasting = value;
+            _cutletFire?.Invoke();
+        }
     }
 
     public float TimeRemaining

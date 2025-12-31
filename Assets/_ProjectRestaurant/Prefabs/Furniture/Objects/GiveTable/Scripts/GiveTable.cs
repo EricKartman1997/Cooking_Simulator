@@ -6,6 +6,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 {
     [SerializeField] private Transform ingredientPoint;
     [SerializeField] private Transform parentFood;
+    [SerializeField] private SoundsFurniture sounds;
     
     private GameObject _ingredient;
     private bool _isHeroikTrigger;
@@ -142,14 +143,19 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             if (_ingredient == null) // ни одного активного объекта
             {
                 Debug.Log("У вас пустые руки и прилавок пуст");
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
                 return;
             }
             
             // на столе что-то есть
             if (_heroik.TryPickUp(GiveObj(_ingredient)))
             {
+                sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
                 CleanObjOnTable(_ingredient);
-            }
+                return;
+            } 
+            
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
         }
         else // заняты
         {
@@ -157,13 +163,17 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             {
                 if (!AcceptObject(_heroik.TryGiveIngredient(_productsList)))
                 {
+                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
                     Debug.Log("с предметом что-то пошло не так");
+                    return;
                 }
+                
+                sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
+                return;
             }
-            else // активного объект есть
-            {
-                Debug.Log("У вас полные руки и прилавок полон");
-            }
+            
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            Debug.Log("У вас полные руки и прилавок полон");
         }
     }
 
@@ -182,6 +192,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
             Debug.LogWarning("Стол не работает");
             return false;
         }

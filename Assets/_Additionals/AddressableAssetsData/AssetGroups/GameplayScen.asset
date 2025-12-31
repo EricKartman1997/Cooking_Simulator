@@ -29,6 +29,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Cameras
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12b45c5ed20300e42a860befe7c106c6
+    m_Address: SuvideSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1aaabe6a7cad255409d706a57ddb659d
     m_Address: Blueberry
     m_ReadOnly: 0
@@ -88,6 +94,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Furniture
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 433373400e8c9664c9da3fc7fe732488
+    m_Address: NotWorkTableSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47b2a5a1f16ffda409d9a41b8b584e94
+    m_Address: RubbishSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c7fb8145f5ce35428e054afbb689b3b
+    m_Address: StartOvenSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4e08b84e815e1f04ca7620c688eabdca
     m_Address: Strawberry
@@ -185,6 +209,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Furniture
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 874b446caef6d274ba5245a52dea9ab6
+    m_Address: PutTheBerryBlender
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f5cb4fcd4b02dc41bc6f875c0f5d035
     m_Address: Suvide
     m_ReadOnly: 0
@@ -214,6 +244,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a9cdaa341edee9419717e2b9b8d8e40
+    m_Address: ForbiddenSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d605b41378107b4e80060f2a692b6a2
+    m_Address: CuttingTableSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a421f554c5eb3c946b2ce6b05fa4b75a
+    m_Address: WorkOvenSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a83a551a0ee57d14db9b592ca11fcad0
     m_Address: CrockeryCustomizationTable
@@ -257,6 +305,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sound
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b64d85a1f5a9d9240a8bb0d0c329f7db
+    m_Address: StoveSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b810e364d55a77e41976cb8709c02718
     m_Address: Floor
     m_ReadOnly: 0
@@ -275,6 +329,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Food
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8f83fed55be8184b931501c450079e6
+    m_Address: PutOnTheTableSound2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cadf51cf3e76f9d4eb71f4f9a26b14ea
     m_Address: FreshnessCocktail
     m_ReadOnly: 0
@@ -286,6 +346,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Furniture
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd8029c77f6735245a68d1f67f76868a
+    m_Address: BlenderSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce00093afd8f27d408053729560fc2c3
+    m_Address: OvenSecondSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d474ddf75632f2441b5fd3a9e1c24582
     m_Address: BakedSaladCheck
@@ -299,17 +371,35 @@ MonoBehaviour:
     m_SerializedLabels:
     - Food
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d60d1e02a0198a441936fff14602c37d
+    m_Address: DistributionSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dfea82b480542f64b8e5741dbad67f05
     m_Address: MeatViewDish
     m_ReadOnly: 0
     m_SerializedLabels:
     - ViewDish
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0cf06d072e88cf4f873518f8b2311f7
+    m_Address: TimerSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e1599955d7f645a47900b4d20817911b
     m_Address: FishViewDish
     m_ReadOnly: 0
     m_SerializedLabels:
     - ViewDish
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e217166e82be6b642a228c53e23023c1
+    m_Address: TakeOnTheTableSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3c2c6def1435694587a0f91e77022c6
     m_Address: FruitSalad
@@ -352,6 +442,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Check
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f609acf8a89ac2c4791224b73dfa98f7
+    m_Address: PutTheWater
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8fe21133bc00834d80d0386468e57bd
+    m_Address: PutOnTheTableSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb69ed7dd7653254b8b9f58f9bca6853
     m_Address: Lime

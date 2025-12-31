@@ -82,6 +82,12 @@ public class IngredientHandler: IDisposable
     
     public bool CanGiveIngredient(List<Product> products)
     {
+        if (products == null)
+        {
+            Debug.LogWarning("Список продуктов пуст");
+            return false;
+        }
+
         // Получаем все компоненты Product на блюде
         var dishProducts = _currentTakenObjects.GetComponents<Product>();
         

@@ -4,6 +4,7 @@ using Zenject;
 
 public class Stove : MonoBehaviour, IUseFurniture
 {
+    [SerializeField] private SoundsFurniture sounds;
     [SerializeField] private Transform positionRawFood;
     
     private Animator _animator;
@@ -142,6 +143,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         _ingredient = _productsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _heroik.CleanObjOnHands();
         _componentForStove = _ingredient.GetComponent<IForStove>();
+        _componentForStove.CutletFire += CutletBurned;
         return true;
     }
     
@@ -185,29 +187,29 @@ public class Stove : MonoBehaviour, IUseFurniture
         {
             if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
+                sounds.PlayClip(AudioNameGamePlay.StoveSound);
                 _componentForStove.IsOnStove = true;
+                return;
             }
-            else
-            {
-                Debug.Log("с предметом что-то пошло не так");
-            }
+            
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            Debug.Log("ингредиент нельзя положить");
+            return;
         }
-        else
+        
+        if (_ingredient != null)
         {
-            if (_ingredient != null)
+            CreateResult();
+            if (_heroik.TryPickUp(GiveObj(_result)))
             {
-                CreateResult();
-                if (_heroik.TryPickUp(GiveObj(_result)))
-                {
-                    CleanObjOnTable(_result);
-                }
+                sounds.StopCurrentClip();
+                CleanObjOnTable(_result);
             }
-            else
-            {
-                Debug.LogWarning("Забирать нечего");
-            }
-
+            return;
         }
+        
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+        Debug.LogWarning("Забирать нечего");
     }
     
     private bool CheckCookingProcess()
@@ -219,6 +221,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
             Debug.LogWarning("Плита не работает");
             return false;
         }
@@ -234,6 +237,11 @@ public class Stove : MonoBehaviour, IUseFurniture
     private void CleanObjOnTable(GameObject ingredient)
     {
         Destroy(ingredient);
+    }
+
+    private void CutletBurned()
+    {
+        sounds.StopCurrentClip();
     }
     
 }

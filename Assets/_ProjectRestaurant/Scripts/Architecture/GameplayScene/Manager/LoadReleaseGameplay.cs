@@ -307,7 +307,24 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav"), 
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav"),
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3"),
-            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3")
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3"),
+            LoadAudioClipAsync("ForbiddenSound"),
+            LoadAudioClipAsync("NotWorkTableSound"),
+            LoadAudioClipAsync("SuvideSound"),
+            LoadAudioClipAsync("RubbishSound"),
+            LoadAudioClipAsync("StartOvenSound"),
+            LoadAudioClipAsync("CuttingTableSound"),
+            LoadAudioClipAsync("WorkOvenSound"),
+            LoadAudioClipAsync("StoveSound"),
+            LoadAudioClipAsync("BlenderSound"),
+            LoadAudioClipAsync("OvenSecondSound"),
+            LoadAudioClipAsync("TimerSound"),
+            LoadAudioClipAsync("TakeOnTheTableSound"),
+            LoadAudioClipAsync("PutOnTheTableSound"),
+            LoadAudioClipAsync("DistributionSound"),
+            LoadAudioClipAsync("PutOnTheTableSound2"),
+            LoadAudioClipAsync("PutTheBerryBlender"),
+            LoadAudioClipAsync("PutTheWater"),
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -316,6 +333,24 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         _audioDic.Add(AudioNameGamePlay.HoverButton, results[1]);
         _audioDic.Add(AudioNameGamePlay.SwipePanel, results[2]);
         _audioDic.Add(AudioNameGamePlay.Background, results[3]);
+        _audioDic.Add(AudioNameGamePlay.ForbiddenSound, results[4]);
+        _audioDic.Add(AudioNameGamePlay.NotWorkTableSound, results[5]);
+        _audioDic.Add(AudioNameGamePlay.SuvideSound, results[6]);
+        _audioDic.Add(AudioNameGamePlay.RubbishSound, results[7]);
+        _audioDic.Add(AudioNameGamePlay.StartOvenSound, results[8]);
+        _audioDic.Add(AudioNameGamePlay.CuttingTableSound, results[9]);
+        _audioDic.Add(AudioNameGamePlay.WorkOvenSound, results[10]);
+        _audioDic.Add(AudioNameGamePlay.StoveSound, results[11]);
+        _audioDic.Add(AudioNameGamePlay.BlenderSound, results[12]);
+        _audioDic.Add(AudioNameGamePlay.OvenSecondSound, results[13]);
+        _audioDic.Add(AudioNameGamePlay.TimerSound, results[14]);
+        _audioDic.Add(AudioNameGamePlay.TakeOnTheTableSound, results[15]);
+        _audioDic.Add(AudioNameGamePlay.PutOnTheTableSound, results[16]);
+        _audioDic.Add(AudioNameGamePlay.DistributionSound, results[17]);
+        _audioDic.Add(AudioNameGamePlay.PutOnTheTableSound2, results[18]);
+        _audioDic.Add(AudioNameGamePlay.PutTheBerryBlender, results[19]);
+        _audioDic.Add(AudioNameGamePlay.PutTheWater, results[20]);
+
         
         //Debug.Log("прошел LoadCustomPrefabsAsync");
     }
@@ -428,6 +463,24 @@ public enum AudioNameGamePlay
     HoverButton,
     SwipePanel,
     Background,
+    ForbiddenSound,
+    NotWorkTableSound,
+    SuvideSound,
+    RubbishSound,
+    StartOvenSound,
+    CuttingTableSound,
+    WorkOvenSound,
+    StoveSound,
+    BlenderSound,
+    OvenSecondSound,
+    TimerSound,
+    TakeOnTheTableSound,
+    PutOnTheTableSound,
+    PutOnTheTableSound2,
+    DistributionSound,
+    PutTheBerryBlender,
+    PutTheWater,
+
 }
 
 public enum ServiceNameGamePlay

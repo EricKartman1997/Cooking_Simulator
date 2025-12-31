@@ -8,11 +8,13 @@ public class FactoryPlayerGameplay : IDisposable
     private DiContainer _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
     private Heroik _heroik;
+    private ISoundsService _soundsService;
 
-    public FactoryPlayerGameplay(DiContainer container, LoadReleaseGameplay loadReleaseGameplay)
+    public FactoryPlayerGameplay(DiContainer container, LoadReleaseGameplay loadReleaseGameplay,ISoundsService soundsService)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
+        _soundsService = soundsService;
     }
 
     public void Dispose()
@@ -25,10 +27,12 @@ public class FactoryPlayerGameplay : IDisposable
         GameObject empty = new GameObject("Player_Test");
         GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], empty.transform.position, Quaternion.identity, empty.transform);
         Heroik heroik = player.GetComponent<Heroik>();
-        AudioListener audioListener = player.GetComponent<AudioListener>();
+        //AudioListener audioListener = player.GetComponent<AudioListener>();
         EnableCamera(camera, player);
-        _container.Rebind<Heroik>().FromInstance(heroik).AsSingle();
-        _container.Rebind<AudioListener>().FromInstance(audioListener).AsSingle();
+        _container.Rebind<Heroik>().FromInstance(heroik).AsSingle(); //TODO нужно ли
+        //_container.Rebind<AudioListener>().FromInstance(audioListener).AsSingle();
+        
+
     }
     
     private void EnableCamera(CinemachineVirtualCamera camera, GameObject target)

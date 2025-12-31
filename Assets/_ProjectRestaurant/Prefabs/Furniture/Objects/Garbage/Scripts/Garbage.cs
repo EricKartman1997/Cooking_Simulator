@@ -4,6 +4,7 @@ using Zenject;
 
 public class Garbage : MonoBehaviour,IUseFurniture
 {
+    [SerializeField] private SoundsFurniture sounds;
     private Heroik _heroik;
     private bool _isHeroikTrigger;
     private GameObject _obj;
@@ -119,18 +120,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
     
     private void CookingProcess()
     {
-        if (_isHeroikTrigger == false)
-        {
-            return;
-        }
-        
-        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
-        {
-            Debug.LogWarning("Мусорка не работает");
-            return;
-        }
-        
-        if (CheckUseFurniture() == false)
+        if (CheckCookingProcess() == false)
         {
             return;
         }
@@ -139,18 +129,17 @@ public class Garbage : MonoBehaviour,IUseFurniture
         {
             if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
+                sounds.PlayOneShotClip(AudioNameGamePlay.RubbishSound);
                 DeleteObj();
-            }
-            else
-            {
-                Debug.Log("с предметом что-то пошло не так");
+                return;
             }
             
+            Debug.Log("с предметом что-то пошло не так");
+            return;
         }
-        else
-        {
-            Debug.Log("Вам нечего выкидывать");
-        }
+        
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        Debug.Log("Вам нечего выкидывать");
 
     }
     
@@ -159,6 +148,28 @@ public class Garbage : MonoBehaviour,IUseFurniture
         _obj.SetActive(false);
         Destroy(_obj);
         _obj = null;
+    }
+    
+    private bool CheckCookingProcess()
+    {
+        if(_isHeroikTrigger == false)
+        {
+            return false;
+        }
+            
+        if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
+        {
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            Debug.LogWarning("Мусорка не работает");
+            return false;
+        }
+        
+        if (CheckUseFurniture() == false)
+        {
+            return false;
+        }
+
+        return true;
     }
     
 }

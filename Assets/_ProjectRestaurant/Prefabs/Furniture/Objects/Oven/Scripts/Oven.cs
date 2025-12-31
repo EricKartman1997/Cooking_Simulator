@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -14,6 +13,7 @@ namespace OvenFurniture
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;
+        [SerializeField] private SoundsFurniture sounds;
         
         private const string ANIMATIONCLOSE = "Close";
         private const string ANIMATIONOPEN = "Open";
@@ -181,59 +181,57 @@ namespace OvenFurniture
                 return;
             }
             
+            if (_isWork)
+            {
+                Debug.Log("ждите блюдо готовится");
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                return;
+            }
+            
             if (_heroik.IsBusyHands == false) // руки не заняты
             {
-                if (_isWork)
+                if (_result != null)
                 {
-                    Debug.Log("ждите печка работает");
-                }
-                else
-                {
-                    if (_result != null)
+                    if (_heroik.TryPickUp(GiveObj(_result)))
                     {
-                        if (_heroik.TryPickUp(GiveObj(_result)))
-                        {
-                            CleanObjOnTable(_result);
-                        }
+                        sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+                        CleanObjOnTable(_result);
+                        return;
                     }
-                    else
-                    {
-                        Debug.Log("печка пуста руки тоже");
-                    }
+                    
                 }
+                
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                Debug.Log("печка пуста руки тоже");
             }
             else // заняты
             {
-                if (_isWork)
+                if (_result != null)
                 {
-                    Debug.Log("ждите печка работает");
+                    Debug.Log("Сначала заберите предмет");
+                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                    return;
                 }
-                else
+                
+                if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
                 {
-                    if (_result != null)
-                    {
-                        Debug.Log("Сначала заберите предмет");
-                    }
-                    else
-                    {
-                        if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
-                        {
-                            TurnOn();
-                            ContinueWorkAsync().Forget();
-                        }
-                        else
-                        {
-                            Debug.Log("с предметом что-то пошло не так");
-                        }
-                    }
+                    //sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
+                    TurnOn();
+                    ContinueWorkAsync().Forget();
+                    return;
                 }
+                
+                Debug.Log("с предметом что-то пошло не так");
             }
         }
         private async UniTask ContinueWorkAsync()
         {
+            sounds.PlayOneShotClip(AudioNameGamePlay.StartOvenSound);
+            sounds.PlayClip(AudioNameGamePlay.OvenSecondSound);
             await _ovenView.StartOvenAsync();
             CreateResult();
             TurnOff();
+            sounds.StopCurrentClip();
         }
         
         private bool CheckCookingProcess()
@@ -245,6 +243,7 @@ namespace OvenFurniture
             
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
+                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.LogWarning("Печка не работает");
                 return false;
             }

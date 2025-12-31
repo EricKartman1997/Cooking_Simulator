@@ -1,6 +1,8 @@
+using System;
 
 public interface IForStove
 {
+    public Action CutletFire { get; set;}
     public bool IsFire { get; set; }
     
     public bool IsOnStove { get; set; }

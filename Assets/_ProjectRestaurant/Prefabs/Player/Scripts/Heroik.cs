@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 public class Heroik : MonoBehaviour
 {
+    public Action<AudioNameGamePlay> PlayOneShotClip;
     public OneSubcribeAction ToInteractAction;
     
     [SerializeField] private Transform positionObj;
     [SerializeField] private GameObject currentTakenObjects;
+    [SerializeField] private HeroikSoundsControl soundsControl;
     private IUseFurniture _useFurniture;
     private IngredientHandler _ingredientHandler;
     private ProductsFactory _productsFactory;
@@ -41,7 +44,13 @@ public class Heroik : MonoBehaviour
     }
     private void Awake()
     {
+        PlayOneShotClip += soundsControl.PlayOneShotClip;
         ToInteractAction = new OneSubcribeAction();
+    }
+
+    private void OnDestroy()
+    {
+        PlayOneShotClip -= soundsControl.PlayOneShotClip;
     }
 
     private void Start()
@@ -62,6 +71,9 @@ public class Heroik : MonoBehaviour
         {
             return _ingredientHandler.TryGiveIngredient(); 
         }
+        
+        PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+        
         Debug.LogWarning("Объект не подходит для этой furniture");
         return null;
     }

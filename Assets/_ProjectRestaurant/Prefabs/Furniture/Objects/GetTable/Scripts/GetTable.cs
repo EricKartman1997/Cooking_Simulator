@@ -1,10 +1,10 @@
-using System.Collections;
 using UnityEngine;
 using Zenject;
 
 public class GetTable : MonoBehaviour, IUseFurniture
 {
     [SerializeField] private Transform parentViewDish;
+    [SerializeField] private SoundsFurniture sounds;
     
     private Outline _outline;
     private DecorationFurniture _decorationFurniture;
@@ -133,27 +133,32 @@ public class GetTable : MonoBehaviour, IUseFurniture
     
     private void CookingProcess()
     {
-        //Debug.Log("Зашел");
         if (CheckCookingProcess() == false)
         {
-            //Debug.Log("Зашел1");
             return;
         }
 
-        _heroik.TryPickUp(GiveObj(_objectOnTheTable));
+        if (_heroik.TryPickUp(GiveObj(_objectOnTheTable)))
+        {
+            sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
+            return;
+        }
+        
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+        
     }
     
     private bool CheckCookingProcess()
     {
         if(_isHeroikTrigger == false)
         {
-            //Debug.Log("Зашел2");
             return false;
         }
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             Debug.Log("Стол не работает");
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
             return false;
         }
         
