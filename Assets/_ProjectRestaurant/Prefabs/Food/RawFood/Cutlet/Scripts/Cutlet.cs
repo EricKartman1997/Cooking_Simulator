@@ -3,7 +3,8 @@ using System;
 
 public class Cutlet : MonoBehaviour,IForStove
 {
-    private Action _cutletFire;
+    private Action _stopSound;
+    private Action _playSound;
     private CutletStateMachine _cutletStateMachine;
     private EnumStateRoasting _stateRoasting;
     
@@ -17,10 +18,16 @@ public class Cutlet : MonoBehaviour,IForStove
     private bool _isFire;
     private TimerCutlet _componentTimerCutlet;
 
-    public Action CutletFire
+    public Action StopSoundAction
     {
-        get => _cutletFire;
-        set => _cutletFire = value;
+        get => _stopSound;
+        set => _stopSound = value;
+    }
+    
+    public Action PlaySoundAction
+    {
+        get => _playSound;
+        set => _playSound = value;
     }
     
     public Material Material
@@ -50,7 +57,6 @@ public class Cutlet : MonoBehaviour,IForStove
         set
         {
             _roasting = value;
-            _cutletFire?.Invoke();
         }
     }
 
@@ -63,9 +69,19 @@ public class Cutlet : MonoBehaviour,IForStove
     public bool IsOnStove
     {
         get => _isOnStove;
-        set => _isOnStove = value;
+        set
+        {
+            if (value == false)
+            {
+                _stopSound?.Invoke();
+            }
+            
+            _playSound?.Invoke();
+            _isOnStove = value;
+
+        }
     }
-  
+
     public float TimeCooking
     {
         get => _timeCooking;
@@ -75,7 +91,15 @@ public class Cutlet : MonoBehaviour,IForStove
     public bool IsFire
     {
         get => _isFire;
-        set => _isFire = value;
+        set
+        {
+            if (value == true)
+            {
+                _stopSound?.Invoke();
+            }
+            
+            _isFire = value;
+        } 
     }
 
     private void Awake()

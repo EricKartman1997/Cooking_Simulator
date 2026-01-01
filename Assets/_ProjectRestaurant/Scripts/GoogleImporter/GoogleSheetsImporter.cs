@@ -47,6 +47,7 @@ namespace GoogleSpreadsheets
             catch (System.Exception e)
             {
                 Debug.LogError($"Error retrieving Google Sheets data: {e.Message}");
+                throw;
                 return;
             }
 

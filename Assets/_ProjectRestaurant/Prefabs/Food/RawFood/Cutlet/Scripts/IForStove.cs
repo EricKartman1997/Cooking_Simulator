@@ -2,7 +2,8 @@ using System;
 
 public interface IForStove
 {
-    public Action CutletFire { get; set;}
+    public Action PlaySoundAction { get; set; }
+    public Action StopSoundAction { get; set;}
     public bool IsFire { get; set; }
     
     public bool IsOnStove { get; set; }

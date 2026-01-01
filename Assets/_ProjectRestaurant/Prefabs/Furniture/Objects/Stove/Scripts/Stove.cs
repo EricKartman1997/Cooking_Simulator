@@ -143,7 +143,8 @@ public class Stove : MonoBehaviour, IUseFurniture
         _ingredient = _productsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _heroik.CleanObjOnHands();
         _componentForStove = _ingredient.GetComponent<IForStove>();
-        _componentForStove.CutletFire += CutletBurned;
+        _componentForStove.StopSoundAction += StopSoundAction;
+        _componentForStove.PlaySoundAction += PlaySoundAction;
         return true;
     }
     
@@ -187,7 +188,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         {
             if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
-                sounds.PlayClip(AudioNameGamePlay.StoveSound);
+                //sounds.PlayClip(AudioNameGamePlay.StoveSound);
                 _componentForStove.IsOnStove = true;
                 return;
             }
@@ -202,7 +203,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             CreateResult();
             if (_heroik.TryPickUp(GiveObj(_result)))
             {
-                sounds.StopCurrentClip();
+                //sounds.StopCurrentClip();
                 CleanObjOnTable(_result);
             }
             return;
@@ -239,9 +240,14 @@ public class Stove : MonoBehaviour, IUseFurniture
         Destroy(ingredient);
     }
 
-    private void CutletBurned()
+    private void StopSoundAction()
     {
         sounds.StopCurrentClip();
+    }
+    
+    private void PlaySoundAction()
+    {
+        sounds.PlayClip(AudioNameGamePlay.StoveSound);
     }
     
 }

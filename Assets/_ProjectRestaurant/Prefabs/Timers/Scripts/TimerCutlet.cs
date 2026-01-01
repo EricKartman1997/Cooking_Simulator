@@ -26,6 +26,7 @@ public class TimerCutlet : MonoBehaviour
         
             // Применяем вращение (с учетом Z-оси для 2D)
             _arrowRect.localEulerAngles = new Vector3(0, 0, -angle);
+            
         }
     }
 
