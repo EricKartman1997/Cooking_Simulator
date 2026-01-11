@@ -17,17 +17,17 @@ public class PauseHandler: IHandlerPause
     public void Add(IPause handler) => _handlers.Add(handler);
     public void Remove(IPause handler) => _handlers.Remove(handler);
 
-    public void SetPause(bool isPaused)
+    public void SetPause(bool isPaused, InputBlockType type)
     {
         _isPaused = isPaused;
         
         if (isPaused == true)
         {
-            _inputBlocker.Block(this);
+            _inputBlocker.Block(this, type);
         }
         else
         {
-            _inputBlocker.Unblock(this);
+            _inputBlocker.Unblock(this, type);
         }
         
         foreach (IPause item in _handlers)

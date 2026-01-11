@@ -54,7 +54,7 @@ public class Menu : IDisposable
 
     public void Show()
     {
-        _pauseHandler.SetPause(true);
+        _pauseHandler.SetPause(true,InputBlockType.Movement | InputBlockType.OnPressE);
         ShowMenuAction?.Invoke();
     }
     
@@ -65,7 +65,7 @@ public class Menu : IDisposable
             HideSettingsAction?.Invoke();
             return;
         }
-        _pauseHandler.SetPause(false);
+        _pauseHandler.SetPause(false,InputBlockType.Movement | InputBlockType.OnPressE);
         HideMenuAction?.Invoke();
         EventBus.PauseOff.Invoke();
     }

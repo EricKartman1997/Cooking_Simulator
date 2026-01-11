@@ -2,17 +2,34 @@ using System.Collections.Generic;
 
 public class InputBlocker : IInputBlocker
 {
-    private readonly HashSet<object> _blockers = new();
+    private readonly Dictionary<InputBlockType, HashSet<object>> _blocks = new();
 
-    public bool IsBlocked => _blockers.Count > 0;
-
-    public void Block(object source)
+    public bool IsBlocked(InputBlockType type)
     {
-        _blockers.Add(source);
+        foreach (var pair in _blocks)
+        {
+            if ((pair.Key & type) != 0 && pair.Value.Count > 0)
+                return true;
+        }
+        return false;
     }
 
-    public void Unblock(object source)
+    public void Block(object source, InputBlockType type)
     {
-        _blockers.Remove(source);
+        if (!_blocks.TryGetValue(type, out var set))
+        {
+            set = new HashSet<object>();
+            _blocks[type] = set;
+        }
+
+        set.Add(source);
+    }
+
+    public void Unblock(object source, InputBlockType type)
+    {
+        if (_blocks.TryGetValue(type, out var set))
+        {
+            set.Remove(source);
+        }
     }
 }

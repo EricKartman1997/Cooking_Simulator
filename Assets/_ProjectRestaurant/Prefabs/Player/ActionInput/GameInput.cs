@@ -17,12 +17,11 @@ public class GameInput : MonoBehaviour
     
     [Inject]
     private void Construct(
-        Heroik heroik,
         Menu menu,
         IInputBlocker inputBlocker,
         PauseHandler pauseHandler)
     {
-        _heroik = heroik;
+        //_heroik = heroik;
         _menu = menu;
         _inputBlocker = inputBlocker;
         _pauseHandler = pauseHandler;
@@ -30,6 +29,7 @@ public class GameInput : MonoBehaviour
     
     private void Awake()
     {
+        _heroik = GetComponent<Heroik>();
         playerInput.ActivateInput();
         _moveAction = playerInput.actions["Move"];
         _interactableAction = playerInput.actions["interactable"];
@@ -50,7 +50,7 @@ public class GameInput : MonoBehaviour
     
     private void OnPressE(InputAction.CallbackContext context)
     {
-        if (_inputBlocker.IsBlocked)
+        if (_inputBlocker.IsBlocked(InputBlockType.OnPressE))
             return;
 
         _heroik.ToInteractAction?.Invoke();
@@ -58,8 +58,8 @@ public class GameInput : MonoBehaviour
     
     private void OnPressEcs(InputAction.CallbackContext context)
     {
-        // if (_inputBlocker.IsBlocked)
-        //     return;
+        if (_inputBlocker.IsBlocked(InputBlockType.Menu))
+            return;
 
         if (_pauseHandler.IsPause == false)
         {
@@ -74,7 +74,7 @@ public class GameInput : MonoBehaviour
     
     public Vector3 GetMovementVectorNormalized()
     {
-        if (_inputBlocker.IsBlocked)
+        if (_inputBlocker.IsBlocked(InputBlockType.Movement))
             return Vector3.zero;
         
         Vector2 inputVector = _moveAction.ReadValue<Vector2>();

@@ -36,7 +36,7 @@ public class GameOver : IDisposable
     private void OnGameOverMethod()
     {
         Debug.Log("Игра закончена, время больше не идет");
-        _pauseHandler.SetPause(true);
+        _pauseHandler.SetPause(true, InputBlockType.All);
         ShowAction?.Invoke(_score,_timeGame);
         // блокируем Esc
 
