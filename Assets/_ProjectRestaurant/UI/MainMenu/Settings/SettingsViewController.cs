@@ -1,3 +1,4 @@
+using System;
 using Michsky.MUIP;
 using UnityEngine;
 using Zenject;
@@ -6,6 +7,8 @@ public class SettingsViewController : MonoBehaviour, ICloseOpenSettingsPanel
 {
     private const string OPEN = "Open";
     private const string CLOSE = "Close";
+
+    //public Action AnimFinishAction;
     
     [SerializeField] private ButtonManager buttonBack;
     [SerializeField] private ButtonManager buttonAudio;
@@ -65,5 +68,13 @@ public class SettingsViewController : MonoBehaviour, ICloseOpenSettingsPanel
     {
         _isPlayAnim = false;
     }
+
+    public void FinishCloseAnim()
+    {
+        animator.Play(CLOSE, 0, 1f);
+        animator.Update(0f);
+    }
+    
+    
     
 }

@@ -1123,7 +1123,6 @@ GameObject:
   - component: {fileID: 2637214630224068971}
   - component: {fileID: 3974285301952425345}
   - component: {fileID: 6286928476692605077}
-  - component: {fileID: 3932893880881576812}
   m_Layer: 0
   m_Name: Distribution
   m_TagString: Untagged
@@ -1207,20 +1206,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3932893880881576812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7365268926642034353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67e0a2321fe222c49941215c3356deee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _checks: {fileID: 0}
-  pointDish: {fileID: 5558441793513231375}
 --- !u!1 &8010298186069956130
 GameObject:
   m_ObjectHideFlags: 0

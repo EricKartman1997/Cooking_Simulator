@@ -1,7 +1,8 @@
 using UnityEngine;
 using System;
+using Zenject;
 
-public class Cutlet : MonoBehaviour,IForStove
+public class Cutlet : MonoBehaviour,IForStove, IPause
 {
     private Action _stopSound;
     private Action _playSound;
@@ -17,6 +18,9 @@ public class Cutlet : MonoBehaviour,IForStove
     [SerializeField] private bool _isOnStove;        //Debug
     private bool _isFire;
     private TimerCutlet _componentTimerCutlet;
+    
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
 
     public Action StopSoundAction
     {
@@ -65,7 +69,15 @@ public class Cutlet : MonoBehaviour,IForStove
         get => _timeRemaining;
         set => _timeRemaining = value;
     }
-  
+
+    public float TimeCooking
+    {
+        get => _timeCooking;
+        set => _timeCooking = value;
+    }
+
+    public bool IsPause => _isPause;
+
     public bool IsOnStove
     {
         get => _isOnStove;
@@ -78,14 +90,9 @@ public class Cutlet : MonoBehaviour,IForStove
             
             _playSound?.Invoke();
             _isOnStove = value;
+            Debug.Log("прошел");
 
         }
-    }
-
-    public float TimeCooking
-    {
-        get => _timeCooking;
-        set => _timeCooking = value;
     }
   
     public bool IsFire
@@ -114,10 +121,32 @@ public class Cutlet : MonoBehaviour,IForStove
     {
         _cutletStateMachine.Update();
     }
+
+    private void OnDestroy()
+    {
+        _stopSound?.Invoke();
+    }
+
+    // [Inject]
+    // private void ConstructZenject(IHandlerPause pauseHandler)
+    // {
+    //     Debug.Log("ConstructZenject");
+    //     _pauseHandler = pauseHandler;
+    //     
+    // }
     
+    public void Init(PauseHandler pauseHandler)
+    {
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
+    }
+    
+
     public void Delete()
     {
+        _pauseHandler?.Remove(this);
         Destroy(gameObject);
+        //_stopSound?.Invoke();
         Debug.Log("котлета сгорела");
     }
     
@@ -125,4 +154,6 @@ public class Cutlet : MonoBehaviour,IForStove
     {
         _timeRemaining = timeRemaining;
     }
+
+    public void SetPause(bool isPaused) => _isPause = isPaused;
 }

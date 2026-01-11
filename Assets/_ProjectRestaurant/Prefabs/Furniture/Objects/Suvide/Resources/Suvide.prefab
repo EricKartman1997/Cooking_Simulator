@@ -1272,7 +1272,6 @@ GameObject:
   - component: {fileID: 4913515624172191510}
   - component: {fileID: 234590573433567253}
   - component: {fileID: 8276749538721285263}
-  - component: {fileID: 388920364388981955}
   m_Layer: 0
   m_Name: Suvide
   m_TagString: Untagged
@@ -1357,31 +1356,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &388920364388981955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6529638521897343141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7ffa9d89a6c9fe498cb0eb520184aa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waterPrefab: {fileID: 5621622247690136186}
-  switchTimePrefab: {fileID: 5126258500513849385}
-  switchTemperPrefab: {fileID: 4989001976274810088}
-  firstTimer: {fileID: 9215380238358973623}
-  secondTimer: {fileID: 7224286273150866783}
-  thirdTimer: {fileID: 6433381714662217285}
-  productsContainer: {fileID: 0}
-  firstPointIngredient: {fileID: 7748431829603158109}
-  secondPointIngredient: {fileID: 7924247434954566028}
-  thirdPointIngredient: {fileID: 6841046372781382965}
-  firstPointResult: {fileID: 524855669991585591}
-  secondPointResult: {fileID: 5491351505822006951}
-  thirdPointResult: {fileID: 8001908664549392456}
 --- !u!1 &7014194871528652627
 GameObject:
   m_ObjectHideFlags: 0

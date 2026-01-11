@@ -1520,7 +1520,6 @@ GameObject:
   - component: {fileID: 7599324828484636888}
   - component: {fileID: 3246007744612857908}
   - component: {fileID: 6443785191583654126}
-  - component: {fileID: 7815410371563998012}
   m_Layer: 0
   m_Name: Oven
   m_TagString: Untagged
@@ -1584,28 +1583,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &7815410371563998012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4987000192717681980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1ede4a64d5316446b80d9cda2c12362, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  glassOn: {fileID: 1691983430948939779}
-  glassOff: {fileID: 2112019586527008868}
-  switchFirst: {fileID: 1486890203034543486}
-  switchSecond: {fileID: 2475160436438875409}
-  timer: {fileID: 9042140380267599083, guid: 249e019d565eac74faf7c0c7c17c949f, type: 3}
-  timerPoint: {fileID: 1403363898897794632}
-  timerParent: {fileID: 3284897702244176811}
-  positionResult: {fileID: 4563682407347841095}
-  parentResult: {fileID: 5293377988996461170}
-  objectsAndRecipes: {fileID: 0}
 --- !u!1 &5342281204786723490
 GameObject:
   m_ObjectHideFlags: 0

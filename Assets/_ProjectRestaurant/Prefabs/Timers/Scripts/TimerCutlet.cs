@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class TimerCutlet : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class TimerCutlet : MonoBehaviour
     [SerializeField] private Image arrowImage;
     [SerializeField] private Image circleImage;
     private RectTransform _arrowRect;
+
     
     private void Awake()
     {
@@ -30,11 +32,10 @@ public class TimerCutlet : MonoBehaviour
         }
     }
 
-    public void UpdateTimeView()
+    private void UpdateTimeView()
     {
         arrowImage.sprite = config.ArrowPref;
         circleImage.sprite = config.CirclePref;
     }
     
-
 }

@@ -14,6 +14,8 @@ public interface IForStove
     
     public float TimeRemaining { get;}
 
+    public void Init(PauseHandler pauseHandler);
+
 
 
 

@@ -9,18 +9,19 @@ public class GameOverMediator: IDisposable
     {
         _gameOverUI = gameOverUI;
         _gameOver = gameOver;
-        _gameOver.HideAction += Hide;
         _gameOver.ShowAction += Show;
+        _gameOverUI.ExitAction += _gameOver.ExitButton;
+
     }
 
     public void Dispose()
     {
-        _gameOver.HideAction -= Hide;
         _gameOver.ShowAction -= Show;
+        _gameOverUI.ExitAction -= _gameOver.ExitButton;
     }
-    
-    public void Show(Score score,TimeGame timeGame) => _gameOverUI.Show(score,timeGame);
 
-    public void Hide() => _gameOverUI.Hide();
+    private void Show(Score score,TimeGame timeGame) => _gameOverUI.Show(score,timeGame);
+    
+
 
 }

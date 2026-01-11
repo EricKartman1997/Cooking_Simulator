@@ -48,7 +48,6 @@ namespace GoogleSpreadsheets
             {
                 Debug.LogError($"Error retrieving Google Sheets data: {e.Message}");
                 throw;
-                return;
             }
 
             // Parse the received data

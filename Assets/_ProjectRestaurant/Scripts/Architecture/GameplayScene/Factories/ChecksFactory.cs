@@ -1,6 +1,6 @@
 using UnityEngine;
 using Zenject;
 
-public class CheckFactory : Factory<CheckType, Check> { }
+public class CheckFactory : PlaceholderFactory<CheckType, Check> { }
 
-public class CheckPrefabFactory : Factory<CheckType, Check, Transform, GameObject> { }
+public class CheckPrefabFactory : PlaceholderFactory<CheckType, Check, Transform, GameObject> { }

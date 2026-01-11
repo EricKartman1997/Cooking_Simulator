@@ -25,6 +25,11 @@ public abstract class StateRosting : IStateCutlet
 
     public virtual void Update()
     {
+        if(Cutlet.IsPause == true)
+        {
+            return;
+        }
+        
         if (Cutlet.IsOnStove == false)
         {
             Cutlet.Timer.SetActive(false);

@@ -77,12 +77,13 @@ public class BootstrapMainMenu : MonoBehaviour
         CreateLoadingPanel();
         await InitAudioAsync();
         await CreateUI();
-
+        
         // небольшая пауза
         await UniTask.Delay(1200);
+        //await UniTask.Delay(1);
 
         await EnableMusic();
-        StartLevel();
+        await StartLevel();
     }
     
     private async UniTask WaitForResourcesLoaded()
@@ -149,6 +150,8 @@ public class BootstrapMainMenu : MonoBehaviour
             _menuViewController.WarringWindowsViewController.UpdateDateTextButton();
             _internetUpdateService.StartChecking();
         }
+        
+        await UniTask.Yield();
 
         HideLoadingPanel();
     }

@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 8323901795402247150}
   - component: {fileID: 7263443140286644596}
   - component: {fileID: 3066090814268317626}
-  - component: {fileID: 1741471935303501898}
   m_Layer: 0
   m_Name: CuttingTable
   m_TagString: Untagged
@@ -127,27 +126,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7633261, y: 0.66114235, z: 2.9727352}
   m_Center: {x: 0, y: 2.2, z: 1}
---- !u!114 &1741471935303501898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1607525992464586156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96b6e2443f059f64f9f32c015636ce2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 9042140380267599083, guid: 28edc08054981a64aa67195688ad9fa2, type: 3}
-  timerPoint: {fileID: 7198399834310751642}
-  timerParent: {fileID: 7557344045010261232}
-  positionIngredient1: {fileID: 0}
-  positionIngredient2: {fileID: 0}
-  parentIngredient: {fileID: 0}
-  positionResult: {fileID: 0}
-  parentResult: {fileID: 0}
-  productsContainer: {fileID: 0}
 --- !u!1 &1932017815418989888
 GameObject:
   m_ObjectHideFlags: 0

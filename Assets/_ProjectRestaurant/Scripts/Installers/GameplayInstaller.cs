@@ -23,11 +23,12 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
 
-        Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
+        //Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
+        Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
         //Container.Bind<ISoundsService>().To<SoundsServiceGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<FactoryPlayerGameplay>().AsSingle();

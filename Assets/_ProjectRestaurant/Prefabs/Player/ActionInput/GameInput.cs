@@ -10,11 +10,12 @@ public class GameInput : MonoBehaviour, IPause
     private InputAction _moveAction;
     private InputAction _menuAction;
     
-    //private GameManager _gameManager;
     private Menu _menu;
     
     private bool _isPause;
-    private IHandlerPause _pauseHandler;
+    private PauseHandler _pauseHandler;
+
+    private bool _isStopInput;
     
     private void Awake()
     {
@@ -23,16 +24,6 @@ public class GameInput : MonoBehaviour, IPause
         _interactableAction = playerInput.actions["interactable"];
         _menuAction = playerInput.actions["Menu"];
     }
-    
-    // private void Start()
-    // {
-    //     //playerInput.ActivateInput();
-    //     _moveAction = playerInput.actions["Move"];
-    //     _interactableAction = playerInput.actions["interactable"];
-    //     _menuAction = playerInput.actions["Menu"];
-    //
-    //     Debug.Log("Move = " + _moveAction);
-    // }
     
     private void OnEnable()
     {
@@ -48,7 +39,7 @@ public class GameInput : MonoBehaviour, IPause
     }
 
     [Inject]
-    private void ConstructZenject(Menu menu, IHandlerPause pauseHandler)
+    private void ConstructZenject(Menu menu, PauseHandler pauseHandler)
     {
         _menu = menu;
         _pauseHandler = pauseHandler;
@@ -57,6 +48,9 @@ public class GameInput : MonoBehaviour, IPause
     
     private void OnPressE(InputAction.CallbackContext context)
     {
+        if(_isStopInput == true)
+            return;
+        
         if (_isPause == true)
             return;
         
@@ -65,8 +59,10 @@ public class GameInput : MonoBehaviour, IPause
     
     private void OnPressEcs(InputAction.CallbackContext context)
     {
-        Debug.Log("Вызов меню");
-        if (_menu.IsPause == false)
+        if(_isStopInput == true)
+            return;
+        //Debug.Log("Вызов меню");
+        if (_pauseHandler.IsPause == false)
         {
             _menu.Show();
             EventBus.PauseOn.Invoke();
@@ -77,6 +73,9 @@ public class GameInput : MonoBehaviour, IPause
     
     public Vector3 GetMovementVectorNormalized()
     {
+        if(_isStopInput == true)
+            return Vector2.zero;
+        
         if (_isPause == true)
             return Vector2.zero;
         
@@ -90,6 +89,7 @@ public class GameInput : MonoBehaviour, IPause
     }
 
     public void SetPause(bool isPaused) => _isPause = isPaused;
+    public void SetStopInput(bool isStopInput) => _isStopInput = isStopInput;
 
 }
 

@@ -318,7 +318,6 @@ GameObject:
   - component: {fileID: 222869974300152413}
   - component: {fileID: 6011673398583370000}
   - component: {fileID: 1316769930758921715}
-  - component: {fileID: 5621693031845170934}
   m_Layer: 0
   m_Name: Blender
   m_TagString: Untagged
@@ -404,27 +403,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5621693031845170934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3601711475672373242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a493afeda728a34daf2800baa6ec7ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  productsContainer: {fileID: 0}
-  timer: {fileID: 9042140380267599083, guid: c29190d851909c54f94d38644e50dee9, type: 3}
-  timerPoint: {fileID: 8829445281965187243}
-  timerParent: {fileID: 7243042022464269375}
-  firstPoint: {fileID: 2613892305636915487}
-  secondPoint: {fileID: 5531470409595844097}
-  thirdPoint: {fileID: 8844875657772930468}
-  parentFood: {fileID: 0}
-  parentReadyFood: {fileID: 0}
 --- !u!1 &4518251336074870125
 GameObject:
   m_ObjectHideFlags: 0

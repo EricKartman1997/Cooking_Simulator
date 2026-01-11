@@ -7,6 +7,7 @@ public class MenuMediator : IDisposable
 {
     private Menu _menu;
     private MenuUI _menuUI;
+    
 
     public MenuMediator(Menu menu, MenuUI menuUI)
     {
@@ -14,7 +15,7 @@ public class MenuMediator : IDisposable
         _menuUI = menuUI;
         
         _menuUI.ContinueAction += _menu.ContinueButton;
-        _menuUI.SettingsAction += _menu.SettingsButton;
+        //_menuUI.SettingsAction += _menu.SettingsButton;
         _menuUI.ExitAction += _menu.ExitButton;
         
         _menu.ShowMenuAction += _menuUI.Show;
@@ -26,7 +27,7 @@ public class MenuMediator : IDisposable
     public void Dispose()
     {
         _menuUI.ContinueAction -= _menu.ContinueButton;
-        _menuUI.SettingsAction -= _menu.SettingsButton;
+        //_menuUI.SettingsAction -= _menu.SettingsButton;
         _menuUI.ExitAction -= _menu.ExitButton;
         
         _menu.HideMenuAction -= _menuUI.Hide;

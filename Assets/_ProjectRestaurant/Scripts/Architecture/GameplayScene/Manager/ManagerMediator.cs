@@ -26,6 +26,7 @@ public class ManagerMediator : IDisposable
         TimeGameUI timeGameUI, OrdersUI ordersUI, ChecksPanalUI checksPanalUI, GameOverUI gameOverUI, MenuUI menuUI
         )
     {
+        
         _timeGame = timeGame;
         _orders = orders;
         _checksManager = checksManager;

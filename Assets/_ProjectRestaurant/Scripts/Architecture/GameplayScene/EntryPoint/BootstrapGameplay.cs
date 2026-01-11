@@ -81,9 +81,12 @@ public class BootstrapGameplay : MonoBehaviour
     
     public async UniTask ExitLevel()
     {
+        ShowLoadingPanel();
         // остановить музыку
         // сохранить настройки
         // переход на сцену меню
+        await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
+        HideLoadingPanel();
     }
     
     // private async UniTask EnableAudioAsync()

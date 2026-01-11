@@ -87,9 +87,24 @@ public class IngredientHandler: IDisposable
             Debug.LogWarning("Список продуктов пуст");
             return false;
         }
+        
+        if (_currentTakenObjects == null)
+        {
+            Debug.LogWarning("_currentTakenObjects == null");
+            return false;
+        }
 
         // Получаем все компоненты Product на блюде
         var dishProducts = _currentTakenObjects.GetComponents<Product>();
+        
+        foreach (var p in products)
+        {
+            if (p == null)
+            {
+                Debug.LogError("В списке products есть null!");
+                return false;
+            }
+        }
         
         // Получаем уникальные типы из списка продуктов
         var validTypes = products

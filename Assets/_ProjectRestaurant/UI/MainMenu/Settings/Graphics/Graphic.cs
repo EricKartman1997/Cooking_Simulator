@@ -37,7 +37,10 @@ public class Graphic : IDisposable
         // Формирование и добавление вариантов разрешений
         for (int i = 0; i < _resolutions.Length; i++)
         {
-            string option = $"{_resolutions[i].width} x {_resolutions[i].height} {_resolutions[i].refreshRate}Hz";
+            string option =
+                $"{_resolutions[i].width} x {_resolutions[i].height} " +
+                $"{Mathf.RoundToInt((float)_resolutions[i].refreshRateRatio.value)}Hz";
+
         
             // Добавляем элемент непосредственно в список items
             var newItem = new CustomDropdown.Item

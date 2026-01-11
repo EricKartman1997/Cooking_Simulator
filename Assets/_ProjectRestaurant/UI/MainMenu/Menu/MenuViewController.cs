@@ -21,7 +21,8 @@ public class MenuViewController : MonoBehaviour
     public WarringWindowsViewController WarringWindowsViewController => warringWindowsViewController;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene,BootstrapMainMenu bootstrapMainMenu,SoundsServiceMainMenu soundsService)
+    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene,BootstrapMainMenu bootstrapMainMenu,
+        SoundsServiceMainMenu soundsService)
     {
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _bootstrapMainMenu = bootstrapMainMenu;
@@ -71,9 +72,9 @@ public class MenuViewController : MonoBehaviour
         buttonChoiceLevel.isInteractable = true;
     }
     
-    private void StartOnClick()
+    private async void StartOnClick()
     {
-        _bootstrapMainMenu.ExitLevel();
+        await _bootstrapMainMenu.ExitLevel();
     }
     
     private void ChoiceLevelOnClick()

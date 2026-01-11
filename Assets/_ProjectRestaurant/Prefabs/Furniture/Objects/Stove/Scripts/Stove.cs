@@ -24,6 +24,8 @@ public class Stove : MonoBehaviour, IUseFurniture
     private HelperScriptFactory _helperScriptFactory;
     private ProductsFactory _productsFactory;
     
+    private PauseHandler _pauseHandler;
+    
     private List<Product> ListProduct => _foodsForFurnitureContainer.Stove.ListForFurniture;
 
     private void Awake()
@@ -80,11 +82,13 @@ public class Stove : MonoBehaviour, IUseFurniture
     private void ConstructZenject( 
         HelperScriptFactory helperScriptFactory,
         ProductsFactory productsFactory,
-        FoodsForFurnitureContainer foodsForFurnitureContainer)
+        FoodsForFurnitureContainer foodsForFurnitureContainer,
+        PauseHandler pauseHandler)
     {
         _productsFactory = productsFactory;
         _helperScriptFactory = helperScriptFactory;
         _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        _pauseHandler = pauseHandler;
     }
 
     // private void OnEnable()
@@ -143,6 +147,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         _ingredient = _productsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
         _heroik.CleanObjOnHands();
         _componentForStove = _ingredient.GetComponent<IForStove>();
+        _componentForStove.Init(_pauseHandler);
         _componentForStove.StopSoundAction += StopSoundAction;
         _componentForStove.PlaySoundAction += PlaySoundAction;
         return true;

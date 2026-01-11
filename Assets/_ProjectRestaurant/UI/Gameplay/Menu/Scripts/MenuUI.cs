@@ -28,6 +28,7 @@ public class MenuUI : MonoBehaviour
     {
         // выкл паузу
         ContinueAction?.Invoke();
+        
         // скрыть меню
         gameObject.SetActive(false);
     }
@@ -45,6 +46,11 @@ public class MenuUI : MonoBehaviour
         ExitAction?.Invoke().Forget();
     }
     
+    private void OpenSettingsPanel()
+    {
+        _settingsViewController.OpenPanel();
+    }
+    
     public void Show()
     {
         gameObject.SetActive(true);
@@ -52,6 +58,7 @@ public class MenuUI : MonoBehaviour
     
     public void Hide()
     {
+        settingsViewController.FinishCloseAnim();
         gameObject.SetActive(false);
     }
     
@@ -60,16 +67,10 @@ public class MenuUI : MonoBehaviour
         _settingsViewController.ClosePanel();
     }
     
-    private void OpenSettingsPanel()
-    {
-        _settingsViewController.OpenPanel();
-    }
     
     public bool IsOpenSettingsPanel()
     {
         return IsOpen;
     }
-
-
-   
+    
 }
