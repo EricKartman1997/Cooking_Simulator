@@ -12,17 +12,15 @@ public class Menu : IDisposable
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private PauseHandler _pauseHandler;
     private BootstrapGameplay _bootstrapGameplay;
-    private readonly IInputBlocker _inputBlocker;
     
     private GameObject _panelSettings;
     
     public Menu(LoadReleaseGlobalScene loadReleaseGlobalScene,PauseHandler pauseHandler,
-                InputBlocker inputBlocker,BootstrapGameplay bootstrapGameplay)
+                BootstrapGameplay bootstrapGameplay)
     {
         _bootstrapGameplay = bootstrapGameplay;
         _pauseHandler = pauseHandler;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
-        _inputBlocker = inputBlocker;
     }
 
     public void Dispose()
@@ -57,7 +55,6 @@ public class Menu : IDisposable
     public void Show()
     {
         _pauseHandler.SetPause(true);
-        _inputBlocker.Block(this);
         ShowMenuAction?.Invoke();
     }
     
@@ -69,7 +66,6 @@ public class Menu : IDisposable
             return;
         }
         _pauseHandler.SetPause(false);
-        _inputBlocker.Unblock(this);
         HideMenuAction?.Invoke();
         EventBus.PauseOff.Invoke();
     }

@@ -30,16 +30,15 @@ public class GameOver : IDisposable
     public void Dispose()
     {
         EventBus.GameOver -= OnGameOverMethod;
-        _inputBlocker.Unblock(this);
+        
     }
     
     private void OnGameOverMethod()
     {
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true);
-        _inputBlocker.Block(this);
         ShowAction?.Invoke(_score,_timeGame);
-
+        // блокируем Esc
 
     }
 

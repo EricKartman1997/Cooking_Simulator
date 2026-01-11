@@ -2,20 +2,31 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class GameInput : MonoBehaviour, IPause
+public class GameInput : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private Heroik heroik;
-    private InputAction _interactableAction;
-    private InputAction _moveAction;
-    private InputAction _menuAction;
-    
-    private Menu _menu;
-    
-    private bool _isPause;
-    private PauseHandler _pauseHandler;
 
-    private bool _isStopInput;
+    private InputAction _moveAction;
+    private InputAction _interactableAction;
+    private InputAction _menuAction;
+
+    private Heroik _heroik;
+    private Menu _menu;
+    private IInputBlocker _inputBlocker;
+    private PauseHandler _pauseHandler;
+    
+    [Inject]
+    private void Construct(
+        Heroik heroik,
+        Menu menu,
+        IInputBlocker inputBlocker,
+        PauseHandler pauseHandler)
+    {
+        _heroik = heroik;
+        _menu = menu;
+        _inputBlocker = inputBlocker;
+        _pauseHandler = pauseHandler;
+    }
     
     private void Awake()
     {
@@ -35,49 +46,36 @@ public class GameInput : MonoBehaviour, IPause
     {
         _interactableAction.performed -= OnPressE;
         _menuAction.performed -= OnPressEcs;
-        _pauseHandler.Remove(this);
-    }
-
-    [Inject]
-    private void ConstructZenject(Menu menu, PauseHandler pauseHandler)
-    {
-        _menu = menu;
-        _pauseHandler = pauseHandler;
-        _pauseHandler.Add(this);
     }
     
     private void OnPressE(InputAction.CallbackContext context)
     {
-        if(_isStopInput == true)
+        if (_inputBlocker.IsBlocked)
             return;
-        
-        if (_isPause == true)
-            return;
-        
-        heroik.ToInteractAction?.Invoke();
+
+        _heroik.ToInteractAction?.Invoke();
     }
     
     private void OnPressEcs(InputAction.CallbackContext context)
     {
-        if(_isStopInput == true)
-            return;
-        //Debug.Log("Вызов меню");
+        // if (_inputBlocker.IsBlocked)
+        //     return;
+
         if (_pauseHandler.IsPause == false)
         {
             _menu.Show();
             EventBus.PauseOn.Invoke();
-            return;
         }
-        _menu.Hide();
+        else
+        {
+            _menu.Hide();
+        }
     }
     
     public Vector3 GetMovementVectorNormalized()
     {
-        if(_isStopInput == true)
-            return Vector2.zero;
-        
-        if (_isPause == true)
-            return Vector2.zero;
+        if (_inputBlocker.IsBlocked)
+            return Vector3.zero;
         
         Vector2 inputVector = _moveAction.ReadValue<Vector2>();
  
@@ -87,9 +85,6 @@ public class GameInput : MonoBehaviour, IPause
         
         return movement;
     }
-
-    public void SetPause(bool isPaused) => _isPause = isPaused;
-    public void SetStopInput(bool isStopInput) => _isStopInput = isStopInput;
 
 }
 

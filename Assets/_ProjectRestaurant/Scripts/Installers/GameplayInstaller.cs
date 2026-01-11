@@ -16,6 +16,7 @@ public class GameplayInstaller : MonoInstaller
     {
         // Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
         // Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
+        Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
         Container.BindInterfacesAndSelfTo<PauseHandler>().AsSingle();
         
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
@@ -28,7 +29,7 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
-        Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
+        
         //Container.Bind<ISoundsService>().To<SoundsServiceGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<FactoryPlayerGameplay>().AsSingle();
