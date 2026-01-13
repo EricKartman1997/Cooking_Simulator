@@ -57,7 +57,7 @@ public class TimeGame : IDisposable, ITickable, IPause
         
         if(_isPause)
             return;
-        Debug.Log("Пауза не вызвана");
+        //Debug.Log("Пауза не вызвана");
         
         _currentSeconds -= Time.deltaTime;
         

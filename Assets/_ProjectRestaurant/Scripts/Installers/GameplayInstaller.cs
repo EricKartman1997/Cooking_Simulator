@@ -18,6 +18,7 @@ public class GameplayInstaller : MonoInstaller
         // Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
         Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
         Container.BindInterfacesAndSelfTo<PauseHandler>().AsSingle();
+        //Container.Bind<PlayerMovementStateMachine>().AsSingle();
         
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);

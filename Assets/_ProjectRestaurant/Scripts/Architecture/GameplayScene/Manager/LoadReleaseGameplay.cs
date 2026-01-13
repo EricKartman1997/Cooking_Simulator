@@ -325,6 +325,11 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadAudioClipAsync("PutOnTheTableSound2"),
             LoadAudioClipAsync("PutTheBerryBlender"),
             LoadAudioClipAsync("PutTheWater"),
+            LoadAudioClipAsync("FirstStartMoveRobotSound"),
+            LoadAudioClipAsync("ContinueMoveRobotSound"),
+            LoadAudioClipAsync("FinishMoveRobotSound"),
+            LoadAudioClipAsync("IdleMoveRobotSound"),
+            LoadAudioClipAsync("StartMoveRobotSound"),
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -350,7 +355,12 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         _audioDic.Add(AudioNameGamePlay.PutOnTheTableSound2, results[18]);
         _audioDic.Add(AudioNameGamePlay.PutTheBerryBlender, results[19]);
         _audioDic.Add(AudioNameGamePlay.PutTheWater, results[20]);
-
+        _audioDic.Add(AudioNameGamePlay.FirstStartMoveRobotSound, results[21]);
+        _audioDic.Add(AudioNameGamePlay.ContinueMoveRobotSound, results[22]);
+        _audioDic.Add(AudioNameGamePlay.FinishMoveRobotSound, results[23]);
+        _audioDic.Add(AudioNameGamePlay.IdleMoveRobotSound, results[24]);
+        _audioDic.Add(AudioNameGamePlay.StartMoveRobotSound, results[25]);
+        
         
         //Debug.Log("прошел LoadCustomPrefabsAsync");
     }
@@ -480,6 +490,11 @@ public enum AudioNameGamePlay
     DistributionSound,
     PutTheBerryBlender,
     PutTheWater,
+    FirstStartMoveRobotSound,
+    StartMoveRobotSound,
+    FinishMoveRobotSound,
+    ContinueMoveRobotSound,
+    IdleMoveRobotSound,
 
 }
 

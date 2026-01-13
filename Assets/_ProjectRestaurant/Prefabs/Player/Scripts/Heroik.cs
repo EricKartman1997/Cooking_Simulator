@@ -42,21 +42,22 @@ public class Heroik : MonoBehaviour
     {
         _productsFactory = productsFactory;
     }
+    
     private void Awake()
     {
         PlayOneShotClip += soundsControl.PlayOneShotClip;
         ToInteractAction = new OneSubcribeAction();
     }
-
-    private void OnDestroy()
-    {
-        PlayOneShotClip -= soundsControl.PlayOneShotClip;
-    }
-
+    
     private void Start()
     {
         _ingredientHandler = new IngredientHandler(positionObj,positionObj,currentTakenObjects,_productsFactory);
         //_ingredientHandler.CreateObj(currentTakenObjects);
+    }
+    
+    private void OnDestroy()
+    {
+        PlayOneShotClip -= soundsControl.PlayOneShotClip;
     }
     
     public bool TryPickUp(GameObject ingredient) // взять объект в руки

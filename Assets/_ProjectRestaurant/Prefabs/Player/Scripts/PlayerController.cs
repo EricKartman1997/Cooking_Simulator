@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -6,18 +7,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private HeroikConfig heroikConfig;
     [SerializeField] private CharacterController characterController;
     [SerializeField] private GameInput gameInput;
-    //[SerializeField] private Heroik heroik;
     
     private float _currentAttractionCharacter;
     private Vector3 _movement;
+    private bool _isMoving;
     
+    public bool IsMoving => _isMoving;
     private float MoveSpeed => heroikConfig.MoveConfig.MoveSpeed;
     private float RotateSpeed => heroikConfig.MoveConfig.RotateSpeed;
     private float GravityForce => heroikConfig.MoveConfig.GravityForce;
+    
+    
 
     private void Update()
     {
         _movement = gameInput.GetMovementVectorNormalized();
+        _isMoving = _movement.magnitude > 0.01f;
     }
 
     private void FixedUpdate()

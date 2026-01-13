@@ -1,41 +1,68 @@
-using System;
 using UnityEngine;
 using Zenject;
 
-public class HeroikSoundsControl : MonoBehaviour
+public class HeroikSoundsControl : MonoBehaviour, IPause
 {
     [SerializeField] private AudioSource audioSource;
-    private LoadReleaseGameplay _loadReleaseGameplay;
+    
+    private SoundsServiceGameplay _soundsServiceGameplay;
+    private bool _isPause;
+    private IHandlerPause _pauseHandler;
+    private AudioStateMachinePlayer _audioStateMachinePlayer;
+    
+    public bool IsPause => _isPause;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay)
+    private void Construct(
+        SoundsServiceGameplay soundsServiceGameplay,
+        IHandlerPause handlerPause)
     {
-        _loadReleaseGameplay = loadReleaseGameplay;
+        _pauseHandler = handlerPause;
+        _soundsServiceGameplay = soundsServiceGameplay;
+    }
+
+    private void Awake()
+    {
+        _audioStateMachinePlayer = new AudioStateMachinePlayer(this,GetComponent<PlayerController>());
+    }
+
+    private void Update()
+    {
+        _audioStateMachinePlayer.Update();
+    }
+
+    private void OnEnable()
+    {
+        _pauseHandler.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        _pauseHandler.Remove(this);
     }
 
     public void PlayOneShotClip(AudioNameGamePlay nameClip)
     {
-        switch (nameClip)
-        {
-            case AudioNameGamePlay.NotWorkTableSound: PlayOneShotNotWorkTable();
-                break;
-            case AudioNameGamePlay.ForbiddenSound: PlayOneShotForbiddenAction();
-                break;
-            default:
-                Debug.LogError("Клип указан не правильно");
-                break;
-        }
-    }
-
-    private void PlayOneShotForbiddenAction()
-    {
-        AudioClip clip = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.ForbiddenSound];
+        AudioClip clip = _soundsServiceGameplay.AudioDictionary[nameClip];
         audioSource.PlayOneShot(clip);
     }
     
-    private void PlayOneShotNotWorkTable()
+    public void PlayClip(AudioNameGamePlay nameClip)
     {
-        AudioClip clip = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.NotWorkTableSound];
-        audioSource.PlayOneShot(clip);
+        AudioClip clip = _soundsServiceGameplay.AudioDictionary[nameClip];
+        audioSource.clip = clip;
+        audioSource.loop = true;
+        audioSource.Play();
     }
+    
+    public void StopClip()
+    {
+        if(audioSource.clip != null)
+            audioSource.Stop();
+        
+        audioSource.clip = null;
+        audioSource.loop = false;
+    }
+
+    public void SetPause(bool isPaused) => _isPause = isPaused;
 }
