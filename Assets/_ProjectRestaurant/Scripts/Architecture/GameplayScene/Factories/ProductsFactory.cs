@@ -2,18 +2,13 @@ using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class ProductsFactory: IDisposable
+public class ProductsFactory
 {
     private LoadReleaseGameplay _loadReleaseGameplay;
 
     public ProductsFactory(LoadReleaseGameplay loadReleaseGameplay)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
-    }
-    
-    public void Dispose()
-    {
-        Debug.Log("У объекта вызван Dispose : ProductsFactory");
     }
     
     public GameObject GetCutlet(EnumRoasting roasting)

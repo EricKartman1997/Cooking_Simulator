@@ -145,6 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7849514184413252309}
   - component: {fileID: 2575925800337874487}
+  - component: {fileID: 367833771877218961}
   m_Layer: 0
   m_Name: TimerSecond
   m_TagString: Untagged
@@ -183,6 +184,18 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 90ecfd22293201341aa4758ef94f72e8, type: 2}
   arrowImage: {fileID: 5837433658964205072}
   circleImage: {fileID: 4340038424945598712}
+--- !u!114 &367833771877218961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4512051669300471793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810ee17dae725724fbf6b19d84e06e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5103532191364143517
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,6 @@ public class Score : IDisposable
     public void Dispose()
     {
         EventBus.AddScore -= AddScore;
-        //Debug.Log("У объекта вызван Dispose : Score");
     }
 
     // public void AddScore(int score)

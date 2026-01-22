@@ -69,7 +69,8 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav"),
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav"),
             LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3"),
-            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3")
+            LoadAudioClipAsync("Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3"),
+            LoadAudioClipAsync("MenuFonMusic")
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -78,6 +79,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
         _audioDic.Add(AudioNameMainMenu.HoverButton, results[1]);
         _audioDic.Add(AudioNameMainMenu.SwipePanel, results[2]);
         _audioDic.Add(AudioNameMainMenu.Background, results[3]);
+        _audioDic.Add(AudioNameMainMenu.MenuFonMusic, results[4]);
     }
 
     private async Task LoadUIPrefabsAsync()
@@ -180,7 +182,8 @@ public enum AudioNameMainMenu
     ClickButton,
     HoverButton,
     SwipePanel,
-    Background
+    Background,
+    MenuFonMusic
 }
 
 public enum PrefUINameMainMenu

@@ -12,6 +12,7 @@ namespace BlenderFurniture
         [SerializeField] private TimerView timerPref;
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
+        [SerializeField] private Transform pointNotif;
         
         [SerializeField] private Transform firstPoint;
         [SerializeField] private Transform secondPoint;
@@ -35,12 +36,29 @@ namespace BlenderFurniture
         private ProductsFactory _productsFactory;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private RecipeService _recipeService;
+        private INotificationGetter _notificationManager;
         
         private IHandlerPause _pauseHandler;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Blender.ListForFurniture;
         
     
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause pauseHandler,
+            INotificationGetter notificationManager
+        )
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _pauseHandler = pauseHandler;
+            _notificationManager = notificationManager;
+        }
+        
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -89,30 +107,6 @@ namespace BlenderFurniture
                 _heroik.ToInteractAction.Unsubscribe(CookingProcess);
                 ExitTrigger();
             }
-        }
-        
-        // private void OnEnable()
-        // {
-        //     EventBus.PressE += CookingProcess;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     EventBus.PressE -= CookingProcess;
-        // }
-        
-        [Inject]
-        private void ConstructZenject( 
-            RecipeService recipeService,
-            ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer,
-            IHandlerPause pauseHandler
-            )
-        {
-            _productsFactory = productsFactory;
-            _recipeService = recipeService;
-            _foodsForFurnitureContainer = foodsForFurnitureContainer;
-            _pauseHandler = pauseHandler;
         }
         
         public void UpdateCondition()
@@ -243,7 +237,8 @@ namespace BlenderFurniture
             
             if (_isWork)
             {
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
+                //_heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.Log("Ждите, блендер готовится");
                 return;
             }
@@ -267,7 +262,8 @@ namespace BlenderFurniture
                 // Нет результата и нет ингредиентов
                 if (_ingredient1 == null && _ingredient2 == null)
                 {
-                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                    InvokeNotification().Forget();
+                    //_heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                     Debug.Log("Руки пусты, ингредиентов нет");
                     return;
                 }
@@ -304,7 +300,8 @@ namespace BlenderFurniture
             // Если результат уже есть — кладём некуда
             if (_result != null)
             {
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
+                //_heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.Log("Руки полные, уберите предмет");
                 return;
             }
@@ -312,6 +309,7 @@ namespace BlenderFurniture
             // Пытаемся принять предмет
             if (!AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
+                InvokeNotification().Forget();
                 Debug.Log("С предметом что-то пошло не так");
                 return;
             }
@@ -334,7 +332,8 @@ namespace BlenderFurniture
             
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
+                //_heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
                 Debug.LogWarning("Блендер не работает");
                 return false;
             }
@@ -357,6 +356,12 @@ namespace BlenderFurniture
         private void CleanObjOnTable(GameObject ingredient)
         {
             Destroy(ingredient);
+        }
+
+        private async UniTask InvokeNotification(bool isReady = false)
+        {
+            await _notificationManager.GetNotification(pointNotif, isReady);
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
         }
         
     }

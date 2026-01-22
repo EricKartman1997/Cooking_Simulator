@@ -1,18 +1,13 @@
 using System;
 using UnityEngine;
 
-public class HelperScriptFactory: IDisposable
+public class HelperScriptFactory
 {
     private MonoBehaviour _coroutineMonoBehaviour;
 
     public HelperScriptFactory()
     {
         //Debug.Log("Инициализация HelperScriptFactory");
-    }
-
-    public void Dispose()
-    {
-        //Debug.Log("У объекта вызван Dispose : HelperScriptFactory");
     }
     
     // Blender

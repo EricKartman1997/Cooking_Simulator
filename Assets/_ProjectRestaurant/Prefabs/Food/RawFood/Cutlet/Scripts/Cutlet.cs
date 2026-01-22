@@ -112,7 +112,6 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
     private void Awake()
     {
         _stateRoasting = Config.CurrentStateRoasting;
-        //_renderer = GetComponent<Renderer>();
         _cutletStateMachine = new CutletStateMachine(this,_stateRoasting);
         _componentTimerCutlet = timePref.GetComponent<TimerCutlet>();
     }
@@ -126,14 +125,6 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
     {
         _stopSound?.Invoke();
     }
-
-    // [Inject]
-    // private void ConstructZenject(IHandlerPause pauseHandler)
-    // {
-    //     Debug.Log("ConstructZenject");
-    //     _pauseHandler = pauseHandler;
-    //     
-    // }
     
     public void Init(PauseHandler pauseHandler)
     {
@@ -141,7 +132,6 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
         _pauseHandler.Add(this);
     }
     
-
     public void Delete()
     {
         _pauseHandler?.Remove(this);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,7 @@ public class Stove : MonoBehaviour, IUseFurniture
 {
     [SerializeField] private SoundsFurniture sounds;
     [SerializeField] private Transform positionRawFood;
+    [SerializeField] private Transform pointNotif;
     
     private Animator _animator;
     private Outline _outline;
@@ -23,11 +25,27 @@ public class Stove : MonoBehaviour, IUseFurniture
     private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private HelperScriptFactory _helperScriptFactory;
     private ProductsFactory _productsFactory;
-    
     private PauseHandler _pauseHandler;
+    private INotificationGetter _notificationManager;
     
     private List<Product> ListProduct => _foodsForFurnitureContainer.Stove.ListForFurniture;
 
+    
+    [Inject]
+    private void ConstructZenject( 
+        HelperScriptFactory helperScriptFactory,
+        ProductsFactory productsFactory,
+        FoodsForFurnitureContainer foodsForFurnitureContainer,
+        PauseHandler pauseHandler,
+        INotificationGetter notificationManager)
+    {
+        _productsFactory = productsFactory;
+        _helperScriptFactory = helperScriptFactory;
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        _pauseHandler = pauseHandler;
+        _notificationManager = notificationManager;
+    }
+    
     private void Awake()
     {
         _outline = GetComponent<Outline>();
@@ -39,13 +57,10 @@ public class Stove : MonoBehaviour, IUseFurniture
     {
         _stovePoints = _helperScriptFactory.GetStovePoints(positionRawFood);
         _stoveView = _helperScriptFactory.GetStoveView();
-        
-        //Debug.Log("Stove Init");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             _heroik = other.GetComponent<Heroik>();
@@ -77,29 +92,6 @@ public class Stove : MonoBehaviour, IUseFurniture
             ExitTrigger();
         }
     }
-    
-    [Inject]
-    private void ConstructZenject( 
-        HelperScriptFactory helperScriptFactory,
-        ProductsFactory productsFactory,
-        FoodsForFurnitureContainer foodsForFurnitureContainer,
-        PauseHandler pauseHandler)
-    {
-        _productsFactory = productsFactory;
-        _helperScriptFactory = helperScriptFactory;
-        _foodsForFurnitureContainer = foodsForFurnitureContainer;
-        _pauseHandler = pauseHandler;
-    }
-
-    // private void OnEnable()
-    // {
-    //     EventBus.PressE += CookingProcess;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.PressE -= CookingProcess;
-    // }
     
     public void UpdateCondition()
     {
@@ -198,7 +190,7 @@ public class Stove : MonoBehaviour, IUseFurniture
                 return;
             }
             
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            InvokeNotification().Forget();
             Debug.Log("ингредиент нельзя положить");
             return;
         }
@@ -214,7 +206,7 @@ public class Stove : MonoBehaviour, IUseFurniture
             return;
         }
         
-        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+        InvokeNotification().Forget();
         Debug.LogWarning("Забирать нечего");
     }
     
@@ -227,7 +219,7 @@ public class Stove : MonoBehaviour, IUseFurniture
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             Debug.LogWarning("Плита не работает");
             return false;
         }
@@ -253,6 +245,12 @@ public class Stove : MonoBehaviour, IUseFurniture
     private void PlaySoundAction()
     {
         sounds.PlayClip(AudioNameGamePlay.StoveSound);
+    }
+    
+    private async UniTask InvokeNotification(bool isReady = false)
+    {
+        await _notificationManager.GetNotification(pointNotif, isReady);
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
     }
     
 }

@@ -14,7 +14,7 @@ public class StartStateAudioPlayer : StateAudioPlayer
     public override void Update()
     {
         base.Update();
-        if(TimeCurrent <= 1)
+        if(TimeCurrent <= 0.8f)
             return;
         // повторная проверка на движение
         if(PlayerController.IsMoving == false)

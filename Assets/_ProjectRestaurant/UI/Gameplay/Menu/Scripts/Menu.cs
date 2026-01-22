@@ -2,7 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Menu : IDisposable
+public class Menu
 {
     public event Action ShowMenuAction;
     public event Action HideMenuAction;
@@ -21,11 +21,6 @@ public class Menu : IDisposable
         _bootstrapGameplay = bootstrapGameplay;
         _pauseHandler = pauseHandler;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
-    }
-
-    public void Dispose()
-    {
-        
     }
     
     public void ContinueButton()

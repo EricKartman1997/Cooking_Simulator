@@ -20,7 +20,8 @@ MonoBehaviour:
   - m_GUID: 0107623048c9220468e3830765c06f79
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/ClickFlags.wav
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1425774fcb950e14c87424942b12f431
     m_Address: UIPanel
@@ -37,17 +38,20 @@ MonoBehaviour:
   - m_GUID: 94061ae1fea4b90488d59b115103c0d8
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/Swipe.mp3
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a378889b9c0de2c498836f12393051b5
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/Background.mp3
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2f6ca382b82e384a926eefe27ef9aa4
     m_Address: Assets/_ProjectRestaurant/Sounds/Menu/Click-Second.wav
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd992a8962d39974697d115f42a02b23
     m_Address: SoundMainMenu
@@ -60,6 +64,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cameras
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee47ef9d6b6d36140a9f0b706a887bbb
+    m_Address: MenuFonMusic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 915ff9f9e546e124da65a256acab6e5b, type: 2}

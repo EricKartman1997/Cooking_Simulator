@@ -18,7 +18,7 @@ public class FirstStartStateAudioPlayer : StateAudioPlayer
     public override void Update()
     {
         base.Update();
-        if(TimeCurrent <= 1)
+        if(TimeCurrent <= 0.8f)
             return;
         StateSwitcher.SwitchState<IdleStateAudioPlayer>();
 

@@ -401,6 +401,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5846833857264365490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5553995883632614413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 747798038988147714}
+  m_Layer: 0
+  m_Name: Notification
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &747798038988147714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5553995883632614413}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5846833857264365490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5649006570264660720
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,6 +733,7 @@ MonoBehaviour:
   positionIngredient1: {fileID: 4679477401383007732}
   positionIngredient2: {fileID: 319952076356304536}
   positionResult: {fileID: 1112657998730502790}
+  pointNotif: {fileID: 747798038988147714}
   sounds: {fileID: 4907155654628949882}
 --- !u!1 &7652722433623967831
 GameObject:
@@ -883,5 +915,6 @@ Transform:
   - {fileID: 4679477401383007732}
   - {fileID: 319952076356304536}
   - {fileID: 1112657998730502790}
+  - {fileID: 747798038988147714}
   m_Father: {fileID: 7663272386988261410}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}

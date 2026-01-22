@@ -3,7 +3,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Collections;
 
-public class ViewFactory: IDisposable
+public class ViewFactory
 {
     //private GameManager _gameManager;
     //private MonoBehaviour _coroutineMonoBehaviour;
@@ -16,11 +16,6 @@ public class ViewFactory: IDisposable
     public ViewFactory(LoadReleaseGameplay loadReleaseGameplay)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
-    }
-    
-    public void Dispose()
-    {
-        Debug.Log("У объекта вызван Dispose : ViewFactory");
     }
 
     public GameObject GetProduct(ViewDishName enumViewFood,Transform parent)

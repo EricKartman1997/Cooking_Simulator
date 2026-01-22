@@ -1,9 +1,11 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
 public class GetTable : MonoBehaviour, IUseFurniture
 {
     [SerializeField] private Transform parentViewDish;
+    [SerializeField] private Transform pointNotif;
     [SerializeField] private SoundsFurniture sounds;
     
     private Outline _outline;
@@ -19,6 +21,19 @@ public class GetTable : MonoBehaviour, IUseFurniture
 
     private ViewFactory _viewFactory;
     private ProductsFactory _productsFactory;
+    private INotificationGetter _notificationManager;
+    
+    
+    [Inject]
+    private void ConstructZenject(
+        ViewFactory viewFactory,
+        ProductsFactory productsFactory,
+        INotificationGetter notificationManager)
+    {
+        _productsFactory = productsFactory;
+        _viewFactory = viewFactory;
+        _notificationManager = notificationManager;
+    }
     
     private void Awake()
     {
@@ -30,8 +45,6 @@ public class GetTable : MonoBehaviour, IUseFurniture
     {
         _objectFoodView = _viewFactory.GetProduct(_viewFood,parentViewDish);
         _objectOnTheTable = _productsFactory.GetProductRef(_giveFood);
-        
-        //Debug.Log("GetTable Init");
     }
     
     private void OnTriggerEnter(Collider other)
@@ -71,24 +84,6 @@ public class GetTable : MonoBehaviour, IUseFurniture
         }
     }
     
-    // private void OnEnable()
-    // {
-    //     EventBus.PressE += CookingProcess;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.PressE -= CookingProcess;
-    // }
-    
-    [Inject]
-    private void ConstructZenject(
-        ViewFactory viewFactory,
-        ProductsFactory productsFactory)
-    {
-        _productsFactory = productsFactory;
-        _viewFactory = viewFactory;
-    }
     public void Init(IngredientName giveFood, ViewDishName viewFood)
     {
         _giveFood = giveFood;
@@ -144,7 +139,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
             return;
         }
         
-        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+        InvokeNotification().Forget();
         
     }
     
@@ -158,7 +153,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             Debug.Log("Стол не работает");
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             return false;
         }
         
@@ -169,6 +164,12 @@ public class GetTable : MonoBehaviour, IUseFurniture
         }
 
         return true;
+    }
+    
+    private async UniTask InvokeNotification(bool isReady = false)
+    {
+        await _notificationManager.GetNotification(pointNotif, isReady);
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
     }
     
 }

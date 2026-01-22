@@ -5,8 +5,6 @@ using Cinemachine;
 
 public class BootstrapGameplay : MonoBehaviour
 {
-    //[SerializeField] private GameObject canvas;
-    //[SerializeField] private CinemachineVirtualCamera virtualCamera;
     private GameObject _canvas;
     private CinemachineVirtualCamera _virtualCamera;
     
@@ -18,6 +16,7 @@ public class BootstrapGameplay : MonoBehaviour
     private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
     private StorageData _storageData;
+    private NotificationManager _notificationManager;
     
     private DiContainer _container;
     
@@ -32,7 +31,7 @@ public class BootstrapGameplay : MonoBehaviour
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame,
-        UpdateChecks updateChecks,DiContainer container,StorageData storageData)
+        UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -45,6 +44,7 @@ public class BootstrapGameplay : MonoBehaviour
         _updateChecks = updateChecks;
         _container = container;
         _storageData = storageData;
+        _notificationManager = notificationManager;
     }
     
     private void Start()
@@ -62,9 +62,9 @@ public class BootstrapGameplay : MonoBehaviour
         // создать камеры
         CreateCameras();
         //создать UI
-        CreateUI();
+        await CreateUI();
         // вкл загрузку
-        ShowLoadingPanel();
+        await ShowLoadingPanel();
         // создание сервисов
         await CreateServiceAsync();
         // создать окружения (furniture, other environment,)
@@ -74,14 +74,14 @@ public class BootstrapGameplay : MonoBehaviour
         // выключить экран загрузки (удаляется)
         HideLoadingPanel();
         // вкл музыку
-        //await EnableAudioAsync();
-        StartGame();
+        await EnableMusic();
+        await StartGame();
 
     }
     
     public async UniTask ExitLevel()
     {
-        ShowLoadingPanel();
+        await ShowLoadingPanel();
         // остановить музыку
         // сохранить настройки
         // переход на сцену меню
@@ -109,14 +109,16 @@ public class BootstrapGameplay : MonoBehaviour
         _virtualCamera = _factoryCamerasGameplay.CreateTopDownCamera();
     }
     
-    private void CreateUI()
+    private async UniTask CreateUI()
     {
         _canvas = _factoryUIGameplay.CreateUI();
+        await UniTask.Yield();
     }
     
-    private void ShowLoadingPanel()
+    private async UniTask ShowLoadingPanel()
     {
         _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], _canvas.transform);
+        await UniTask.Yield();
     }
     
     private async UniTask InitAudioAsync()
@@ -144,6 +146,7 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryEnvironment.CreateOtherEnvironmentGamePlay();
         await UniTask.Yield();
         _factoryEnvironment.CreateLightsGamePlay();
+        await _notificationManager.CreateNotifications(3,3);
     }
     
     private async UniTask CreatePlayerAsync()
@@ -157,10 +160,18 @@ public class BootstrapGameplay : MonoBehaviour
         if (_loadingPanel != null)
             Destroy(_loadingPanel);
     }
-    private void StartGame()
+    
+    private async UniTask EnableMusic()
+    {
+        _soundsServiceGameplay.SetMusic();
+        await UniTask.Yield();
+    }
+    
+    private async UniTask StartGame()
     {
         _timeGame.Work = true;
         _updateChecks.Work = true;
+        await UniTask.Yield();
     }
     
 }

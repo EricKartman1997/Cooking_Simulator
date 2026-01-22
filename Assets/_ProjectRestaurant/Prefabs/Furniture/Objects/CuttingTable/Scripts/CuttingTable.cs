@@ -14,6 +14,7 @@ namespace CuttingTableFurniture
         [SerializeField] private Transform positionIngredient1; 
         [SerializeField] private Transform positionIngredient2; 
         [SerializeField] private Transform positionResult;
+        [SerializeField] private Transform pointNotif;
         [SerializeField] private SoundsFurniture sounds;
         
         private bool _isWork = false;
@@ -34,9 +35,22 @@ namespace CuttingTableFurniture
         private ProductsFactory _productsFactory;
         
         private IHandlerPause _pauseHandler;
+        private INotificationGetter _notificationManager;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
     
+        
+        [Inject]
+        private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,
+            ProductsFactory productsFactory,IHandlerPause pauseHandler,INotificationGetter notificationManager)
+        {
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _recipeService = recipeService;
+            _productsFactory = productsFactory;
+            _pauseHandler = pauseHandler;
+            _notificationManager = notificationManager;
+        }
+        
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -87,26 +101,6 @@ namespace CuttingTableFurniture
             }
         }
         
-        [Inject]
-        private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,
-            ProductsFactory productsFactory,IHandlerPause pauseHandler)
-        {
-            _foodsForFurnitureContainer = foodsForFurnitureContainer;
-            _recipeService = recipeService;
-            _productsFactory = productsFactory;
-            _pauseHandler = pauseHandler;
-        }
-        
-        // private void OnEnable()
-        // {
-        //     EventBus.PressE += CookingProcess;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     EventBus.PressE -= CookingProcess;
-        // }
-        
         public void UpdateCondition()
         {
             if (CheckUseFurniture() == false)
@@ -148,6 +142,7 @@ namespace CuttingTableFurniture
         {
             if (acceptObj == null)
             {
+                InvokeNotification().Forget();
                 Debug.Log("Объект не передался");
                 return false;
             }
@@ -210,8 +205,7 @@ namespace CuttingTableFurniture
                     _cuttingTablePoints.PositionResult
                 );
 
-                Debug.LogError("произведен мусор");
-                return;
+                Debug.Log("произведен мусор");
             }
 
             _result = _productsFactory.GetProduct(
@@ -220,7 +214,6 @@ namespace CuttingTableFurniture
                 _cuttingTablePoints.PositionResult
             );
         }
-
         
         private void CookingProcess()
         {
@@ -232,7 +225,7 @@ namespace CuttingTableFurniture
             if (_isWork)
             {
                 Debug.Log("ждите блюдо готовится");
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 return;
             }
             
@@ -243,7 +236,7 @@ namespace CuttingTableFurniture
                     if (_ingredient1 == null)
                     {
                         Debug.Log("У вас пустые руки и прилавок пуст");
-                        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                        InvokeNotification().Forget();
                         return;
                     }
                          
@@ -281,11 +274,12 @@ namespace CuttingTableFurniture
                         return;
                     }
                     
+                    InvokeNotification().Forget();
                     Debug.Log("с предметом что-то пошло не так");
                     return;
                 }
                 
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                InvokeNotification().Forget();
                 Debug.Log("Сначала уберите предмет из рук");
                         
             }
@@ -315,7 +309,7 @@ namespace CuttingTableFurniture
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
                 Debug.Log("Стол не работает");
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 return false;
             }
         
@@ -328,5 +322,12 @@ namespace CuttingTableFurniture
             return true;
         }
         
+        private async UniTask InvokeNotification(bool isReady = false)
+        {
+            await _notificationManager.GetNotification(pointNotif, isReady);
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        }
+        
     }
+    
 }

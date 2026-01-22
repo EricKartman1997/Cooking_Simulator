@@ -10,39 +10,35 @@ public class GameplayInstaller : MonoInstaller
     [SerializeField] private CheckContainer checkContainer;
     
     [SerializeField] private BootstrapGameplay bootstrapGameplay;
-    //[SerializeField] private AudioSource sFX;
-    //[SerializeField] private AudioSource music;
     public override void InstallBindings()
     {
-        // Container.Bind<AudioSource>().WithId("SFX").FromInstance(sFX);
-        // Container.Bind<AudioSource>().WithId("Music").FromInstance(music);
         Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
         Container.BindInterfacesAndSelfTo<PauseHandler>().AsSingle();
-        //Container.Bind<PlayerMovementStateMachine>().AsSingle();
         
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
-
-        //Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
+        
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
         
-        //Container.Bind<ISoundsService>().To<SoundsServiceGameplay>().AsSingle();
         
-        Container.BindInterfacesAndSelfTo<FactoryPlayerGameplay>().AsSingle();
-        Container.BindInterfacesAndSelfTo<FactoryEnvironment>().AsSingle();
-        Container.BindInterfacesAndSelfTo<FactoryUIGameplay>().AsSingle();
-        Container.BindInterfacesAndSelfTo<FactoryCamerasGameplay>().AsSingle();
+        Container.Bind<FactoryPlayerGameplay>().AsSingle();
+        Container.Bind<FactoryEnvironment>().AsSingle();
+        Container.Bind<FactoryUIGameplay>().AsSingle();
+        Container.Bind<FactoryCamerasGameplay>().AsSingle();
+        Container.Bind<NotificationFactory>().AsSingle();
+        
+        Container.BindInterfacesAndSelfTo<NotificationManager>().AsSingle();
 
-        Container.BindInterfacesAndSelfTo<RecipeService>().AsSingle();
+        Container.Bind<RecipeService>().AsSingle();
         
-        Container.BindInterfacesAndSelfTo<ProductsFactory>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ViewFactory>().AsSingle();
-        Container.BindInterfacesAndSelfTo<HelperScriptFactory>().AsSingle();
+        Container.Bind<ProductsFactory>().AsSingle();
+        Container.Bind<ViewFactory>().AsSingle();
+        Container.Bind<HelperScriptFactory>().AsSingle();
 
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
@@ -51,7 +47,7 @@ public class GameplayInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<Orders>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
         Container.BindInterfacesAndSelfTo<Score>().AsSingle();
-        Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
+        Container.Bind<Menu>().AsSingle();
         
         Container.Bind<ManagerMediator>().AsSingle().Lazy();
         

@@ -3,7 +3,7 @@ using Cinemachine;
 using UnityEngine;
 using Zenject;
 
-public class FactoryCamerasGameplay : IDisposable
+public class FactoryCamerasGameplay
 {
     private LoadReleaseGameplay _loadReleaseGameplay;
     private DiContainer _container;
@@ -13,11 +13,6 @@ public class FactoryCamerasGameplay : IDisposable
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _container = container;
-    }
-
-    public void Dispose()
-    {
-        Debug.Log("FactoryCamerasGameplay.Dispose");
     }
     
     public void CreateMainCamera()

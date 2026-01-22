@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class FactoryUIGameplay: IDisposable
+public class FactoryUIGameplay
 {
     private DiContainer _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
@@ -22,11 +22,6 @@ public class FactoryUIGameplay: IDisposable
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
-    }
-
-    public void Dispose()
-    {
-        Debug.Log("Dispose : FactoryUIGameplay");
     }
     
     // public void CreateUI(Transform parent)

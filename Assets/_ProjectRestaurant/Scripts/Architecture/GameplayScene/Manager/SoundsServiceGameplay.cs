@@ -39,10 +39,20 @@ public class SoundsServiceGameplay : ISoundsService
     
     public void SetMusic()
     {
-        _sourceMusic.clip = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.Background];
+        _sourceMusic.clip = AudioDictionary[AudioNameGamePlay.GameplayFonMusic1];
         _sourceMusic.Play();
     }
 
+    public void PauseSFX()
+    {
+        _sourceSFX.Stop();
+    }
+    
+    public void UnPauseSFX()
+    {
+        _sourceSFX.Play();
+    }
+    
     public void StopSounds()
     {
         _sourceSFX.Stop();

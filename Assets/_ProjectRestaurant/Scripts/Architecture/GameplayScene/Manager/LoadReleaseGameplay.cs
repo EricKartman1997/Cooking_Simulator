@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
@@ -20,6 +21,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
     private Dictionary<CamerasNameGameplay, GameObject> _camerasDic = new Dictionary<CamerasNameGameplay, GameObject>();
     private Dictionary<AudioNameGamePlay, AudioClip> _audioDic = new Dictionary<AudioNameGamePlay, AudioClip>();
     private Dictionary<ServiceNameGamePlay, GameObject> _seviceDic = new Dictionary<ServiceNameGamePlay, GameObject>();
+    private Dictionary<NotificationEnum, GameObject> _notificationDic = new Dictionary<NotificationEnum, GameObject>();
     
     private List<GameObject> _loadedPrefabs = new List<GameObject>();
     private List<AudioClip> _loadedClips = new List<AudioClip>();
@@ -38,6 +40,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
     public IReadOnlyDictionary<CustomFurnitureName, GameObject> CustomDic => _customDic;
     public IReadOnlyDictionary<AudioNameGamePlay, AudioClip> AudioDic => _audioDic;
     public IReadOnlyDictionary<ServiceNameGamePlay, GameObject> ServiceDic => _seviceDic;
+    public IReadOnlyDictionary<NotificationEnum, GameObject> NotificationDic => _notificationDic;
     
     public bool IsLoaded => _isLoaded;
 
@@ -66,10 +69,13 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadCamerasPrefabsAsync(),
             LoadCustomPrefabsAsync(),
             SoundsPrefabsAsync(),
-            ServicePrefabsAsync()
+            ServicePrefabsAsync(),
+            LoadNotificationPrefabsAsync()
             
         );
-        //Debug.Log("Загружены все ресурсы для Gameplay");
+        
+        await UniTask.Yield();
+        
         _isLoaded = true;
     }
     
@@ -330,6 +336,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadAudioClipAsync("FinishMoveRobotSound"),
             LoadAudioClipAsync("IdleMoveRobotSound"),
             LoadAudioClipAsync("StartMoveRobotSound"),
+            LoadAudioClipAsync("GameplayFonMusic1"),
+            LoadAudioClipAsync("GameplayFonMusic2"),
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -360,6 +368,8 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         _audioDic.Add(AudioNameGamePlay.FinishMoveRobotSound, results[23]);
         _audioDic.Add(AudioNameGamePlay.IdleMoveRobotSound, results[24]);
         _audioDic.Add(AudioNameGamePlay.StartMoveRobotSound, results[25]);
+        _audioDic.Add(AudioNameGamePlay.GameplayFonMusic1, results[26]);
+        _audioDic.Add(AudioNameGamePlay.GameplayFonMusic2, results[27]);
         
         
         //Debug.Log("прошел LoadCustomPrefabsAsync");
@@ -377,6 +387,22 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         _seviceDic.Add(ServiceNameGamePlay.SoundsObject, results[0]);
         
         //Debug.Log("прошел LoadCustomPrefabsAsync");
+    }
+    
+    private async Task LoadNotificationPrefabsAsync()
+    {
+        var loadTasks = new List<Task<GameObject>>
+        {
+            LoadGameObjectAsync("Ready"),
+            LoadGameObjectAsync("Imposible"),
+        };
+
+        var results = await Task.WhenAll(loadTasks);
+        
+        _notificationDic.Add(NotificationEnum.Ready, results[0]);
+        _notificationDic.Add(NotificationEnum.Imposible, results[1]);
+        
+        //Debug.Log("прошел LoadUIPrefabsAsync");
     }
     
     #endregion
@@ -495,6 +521,8 @@ public enum AudioNameGamePlay
     FinishMoveRobotSound,
     ContinueMoveRobotSound,
     IdleMoveRobotSound,
+    GameplayFonMusic1,
+    GameplayFonMusic2,
 
 }
 
@@ -546,4 +574,10 @@ public enum ChecksName
     CutletMediumCheck,
     BakedSaladCheck,
     WildBerryCocktailCheck,
+}
+
+public enum NotificationEnum
+{
+    Ready,
+    Imposible,
 }

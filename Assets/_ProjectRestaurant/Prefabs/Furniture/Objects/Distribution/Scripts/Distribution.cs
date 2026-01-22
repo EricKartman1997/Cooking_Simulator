@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -7,6 +8,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
     private const string AnimAcceptDish = "AcceptDish";
     
     [SerializeField] private Transform pointDish;
+    [SerializeField] private Transform pointNotif;
     [SerializeField] private SoundsFurniture sounds;
     [SerializeField] private Animator _animator;
     private Outline _outline;
@@ -23,19 +25,34 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
     private ICheckTheCheck _checkCheck;
     private IDeleteCheck _checkDelete;
     private IHandlerPause _pauseHandler;
+    private INotificationGetter _notificationManager;
 
     private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
+    
+    [Inject]
+    private void ConstructZenject( 
+        ProductsFactory productsFactory,
+        ICheckTheCheck checkCheck,
+        IDeleteCheck checkDelete,
+        FoodsForFurnitureContainer foodsForFurnitureContainer,
+        IHandlerPause handlerPause,
+        INotificationGetter notificationManager)
+    {
+        _productsFactory = productsFactory;
+        _checkCheck = checkCheck;
+        _checkDelete = checkDelete;
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        _pauseHandler = handlerPause;
+        _pauseHandler.Add(this);
+        _notificationManager = notificationManager;
+    }
+    
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
-    }
-
-    private void Start()
-    {
-        //Debug.Log("Distribution Init");
     }
     
     private void OnTriggerEnter(Collider other)
@@ -72,30 +89,9 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         }
     }
     
-    // private void OnEnable()
-    // {
-    //     EventBus.PressE += CookingProcess;
-    // }
-    //
     private void OnDisable()
     {
         _pauseHandler.Remove(this);
-    }
-
-    [Inject]
-    private void ConstructZenject( 
-        ProductsFactory productsFactory,
-        ICheckTheCheck checkCheck,
-        IDeleteCheck checkDelete,
-        FoodsForFurnitureContainer foodsForFurnitureContainer,
-        IHandlerPause handlerPause)
-    {
-        _productsFactory = productsFactory;
-        _checkCheck = checkCheck;
-        _checkDelete = checkDelete;
-        _foodsForFurnitureContainer = foodsForFurnitureContainer;
-        _pauseHandler = handlerPause;
-        _pauseHandler.Add(this);
     }
     
     public void UpdateCondition()
@@ -179,13 +175,13 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         if (_isWork)
         {
             Debug.Log("Ждите блюдо еще не забрали");
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             return;
         }
         
         if(_heroik.IsBusyHands == false) // руки не заняты
         {
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            InvokeNotification().Forget();
             Debug.Log("У вас пустые руки");
             return;
         }
@@ -195,18 +191,19 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         {
             if (AcceptObject(_heroik.TryGiveIngredient(ListProduct)))
             {
+                InvokeNotification(true).Forget();
                 sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
                 TurnOn();
-                //StartCoroutine(ContinueWorkCoroutine());
             }
             else
             {
+                InvokeNotification().Forget();
                 Debug.Log("с предметом что-то пошло не так");
             }
             return;
         }
         
-        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        InvokeNotification().Forget();
         Debug.Log("Этого блюдо нет в чеках");
     }
     
@@ -227,7 +224,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             Debug.LogWarning("Раздача не работает");
             return false;
         }
@@ -239,21 +236,6 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
 
         return true;
     }
-    
-    // private IEnumerator ContinueWorkCoroutine()
-    // {
-    //     while (!_animator.GetCurrentAnimatorStateInfo(0).IsName(AnimAcceptDish))
-    //     {
-    //         yield return null;
-    //     }
-    //     
-    //     while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-    //     {
-    //         yield return null;
-    //     }
-    //     TakeToTheHall();
-    //     TurnOff();
-    // }
 
     public void EndCook() // для вызова аниматором
     {
@@ -263,5 +245,9 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         sounds.PlayOneShotClip(AudioNameGamePlay.DistributionSound);
     }
     
-    
+    private async UniTask InvokeNotification(bool isReady = false)
+    {
+        await _notificationManager.GetNotification(pointNotif, isReady);
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+    }
 }

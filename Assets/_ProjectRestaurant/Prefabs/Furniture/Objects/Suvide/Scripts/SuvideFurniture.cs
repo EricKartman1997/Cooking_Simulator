@@ -26,6 +26,7 @@ namespace SuvideFurniture
         [SerializeField] private Transform pointResult1;
         [SerializeField] private Transform pointResult2;
         [SerializeField] private Transform pointResult3;
+        [SerializeField] private Transform pointNotif;
         
         [SerializeField] private SoundsFurniture sounds;
         
@@ -49,10 +50,26 @@ namespace SuvideFurniture
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
         private ProductsFactory _productsFactory;
         private RecipeService _recipeService;
-        
         private IHandlerPause _pauseHandler;
+        private INotificationGetter _notificationManager;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Suvide.ListForFurniture;
+        
+        
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause pauseHandler,
+            INotificationGetter notificationManager)
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _pauseHandler = pauseHandler;
+            _notificationManager = notificationManager;
+        }
         
         private void Awake()
         {
@@ -68,8 +85,6 @@ namespace SuvideFurniture
             TimerFurniture timerFurniture3 = new TimerFurniture(timerPref,timeTimer,pointTimer3,_pauseHandler);
             _suvidePoints = new SuvidePoints(pointIngredient1, pointIngredient2, pointIngredient3, pointResult1, pointResult2, pointResult3);
             _suvideView = new SuvideView(waterPrefab, switchTimePrefab, switchTemperPrefab, timerFurniture1, timerFurniture2, timerFurniture3, _animator,_pauseHandler);
-            
-            //Debug.Log("SuvideFurniture Init");
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -104,29 +119,6 @@ namespace SuvideFurniture
                 ExitTrigger();
             }
         }
-        
-        [Inject]
-        private void ConstructZenject( 
-            RecipeService recipeService,
-            ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer,
-            IHandlerPause pauseHandler)
-        {
-            _productsFactory = productsFactory;
-            _recipeService = recipeService;
-            _foodsForFurnitureContainer = foodsForFurnitureContainer;
-            _pauseHandler = pauseHandler;
-        }
-        
-        // private void OnEnable()
-        // {
-        //     EventBus.PressE += CookingProcess;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     EventBus.PressE -= CookingProcess;
-        // }
         
         public void UpdateCondition()
         {
@@ -341,7 +333,7 @@ namespace SuvideFurniture
                     return;
                 }
                 
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 Debug.Log("Сувид пуст руки тоже");
                 ChangeView();
                 return;
@@ -361,6 +353,7 @@ namespace SuvideFurniture
                     }
                     else
                     {
+                        InvokeNotification().Forget();
                         Debug.Log("с предметом что-то пошло не так");
                     }
                     return;
@@ -379,6 +372,7 @@ namespace SuvideFurniture
                     }
                     else
                     {
+                        InvokeNotification().Forget();
                         Debug.Log("с предметом что-то пошло не так");
                     }
                     return;
@@ -396,12 +390,13 @@ namespace SuvideFurniture
                     }
                     else
                     {
+                        InvokeNotification().Forget();
                         Debug.Log("с предметом что-то пошло не так");
                     }
                     return;
                 }
                 
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 Debug.LogWarning("сувид заполнен");
                 ChangeView();
                 return;
@@ -437,7 +432,6 @@ namespace SuvideFurniture
         {
             if (_cookingdish1 == true || _cookingdish2 == true || _cookingdish3 == true )
             {
-                //sounds.PlayClip(AudioNameGamePlay.SuvideSound);
                 _suvideView.WorkingSuvide();
             }
             else
@@ -456,7 +450,7 @@ namespace SuvideFurniture
                 
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 Debug.LogWarning("Сувид не работает");
                 return false;
             }
@@ -471,6 +465,12 @@ namespace SuvideFurniture
         private void CleanObjOnTable(GameObject ingredient)
         {
             Destroy(ingredient);
+        }
+        
+        private async UniTask InvokeNotification(bool isReady = false)
+        {
+            await _notificationManager.GetNotification(pointNotif, isReady);
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
         }
     }
 

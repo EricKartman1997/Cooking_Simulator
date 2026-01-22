@@ -13,6 +13,7 @@ namespace OvenFurniture
         [SerializeField] private float timeTimer;
         [SerializeField] private Transform pointUp;
         [SerializeField] private Transform positionIngredient;
+        [SerializeField] private Transform pointNotif;
         [SerializeField] private SoundsFurniture sounds;
         
         private const string ANIMATIONCLOSE = "Close";
@@ -29,13 +30,28 @@ namespace OvenFurniture
         private Animator _animator;
         private DecorationFurniture _decorationFurniture;
         private Outline _outline;
+        
         private RecipeService _recipeService;
         private ProductsFactory _productsFactory;
         private FoodsForFurnitureContainer _foodsForFurnitureContainer;
-        
         private IHandlerPause _pauseHandler;
+        private INotificationGetter _notificationManager;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.Oven.ListForFurniture;
+        
+        
+        [Inject]
+        private void ConstructZenject( 
+            RecipeService recipeService,
+            ProductsFactory productsFactory,
+            FoodsForFurnitureContainer foodsForFurnitureContainer,
+            IHandlerPause handlerPause)
+        {
+            _productsFactory = productsFactory;
+            _recipeService = recipeService;
+            _foodsForFurnitureContainer = foodsForFurnitureContainer;
+            _pauseHandler = handlerPause;
+        }
         
         private void Awake()
         {
@@ -89,28 +105,6 @@ namespace OvenFurniture
             }
         }
         
-        [Inject]
-        private void ConstructZenject( 
-            RecipeService recipeService,
-            ProductsFactory productsFactory,
-            FoodsForFurnitureContainer foodsForFurnitureContainer,
-            IHandlerPause handlerPause)
-        {
-            _productsFactory = productsFactory;
-            _recipeService = recipeService;
-            _foodsForFurnitureContainer = foodsForFurnitureContainer;
-            _pauseHandler = handlerPause;
-        }
-        
-        // private void OnEnable()
-        // {
-        //     EventBus.PressE += CookingProcess;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     EventBus.PressE -= CookingProcess;
-        // }
         private GameObject GiveObj(GameObject giveObj)
         {
             return giveObj;
@@ -184,7 +178,7 @@ namespace OvenFurniture
             if (_isWork)
             {
                 Debug.Log("ждите блюдо готовится");
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 return;
             }
             
@@ -201,7 +195,7 @@ namespace OvenFurniture
                     
                 }
                 
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                InvokeNotification().Forget();
                 Debug.Log("печка пуста руки тоже");
             }
             else // заняты
@@ -209,7 +203,7 @@ namespace OvenFurniture
                 if (_result != null)
                 {
                     Debug.Log("Сначала заберите предмет");
-                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                    InvokeNotification().Forget();
                     return;
                 }
                 
@@ -221,6 +215,7 @@ namespace OvenFurniture
                     return;
                 }
                 
+                InvokeNotification().Forget();
                 Debug.Log("с предметом что-то пошло не так");
             }
         }
@@ -243,7 +238,7 @@ namespace OvenFurniture
             
             if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
             {
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+                InvokeNotification().Forget();
                 Debug.LogWarning("Печка не работает");
                 return false;
             }
@@ -255,22 +250,6 @@ namespace OvenFurniture
 
             return true;
         }
-        
-        // private void CreateResult()
-        // {
-        //     List<Product> listProducts = new List<Product>() {_ingredient.GetComponent<Product>()};
-        //     Product readyObj = _recipeService.GetDish(StationType.Oven,listProducts);
-        //     if (readyObj != null)
-        //     {
-        //         //TODO переделать на тип объкта
-        //         _result = _productsFactory.GetProduct(readyObj.gameObject,_ovenPoints.PointUp, _ovenPoints.PointUp);
-        //         //Destroy(readyObj);
-        //     }
-        //     else
-        //     {
-        //         Debug.LogError("Ошибка в CreateResult, такого ключа нет");
-        //     }
-        // }
         
         private void CreateResult()
         {
@@ -298,6 +277,11 @@ namespace OvenFurniture
             Destroy(ingredient);
         }
         
+        private async UniTask InvokeNotification(bool isReady = false)
+        {
+            await _notificationManager.GetNotification(pointNotif, isReady);
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        }
+        
     }
-
 }

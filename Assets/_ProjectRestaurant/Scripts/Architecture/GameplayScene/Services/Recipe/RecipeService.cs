@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecipeService : IDisposable
+public class RecipeService
 {
     private readonly Dictionary<FurnitureName,
         Dictionary<RecipeKey, IngredientName>> _recipes
@@ -12,8 +12,6 @@ public class RecipeService : IDisposable
     {
         Initialize(recipeContainer);
     }
-
-    public void Dispose() { }
 
     private void Initialize(RecipeContainer recipeContainer)
     {

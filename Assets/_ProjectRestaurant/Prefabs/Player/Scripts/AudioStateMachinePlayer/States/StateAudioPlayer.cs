@@ -18,7 +18,7 @@ public abstract class StateAudioPlayer : IStateAudioPlayer
 
     public virtual void Enter()
     {
-        Debug.Log("Enter");
+        //Debug.Log("Enter");
     }
 
     public virtual void Exit()

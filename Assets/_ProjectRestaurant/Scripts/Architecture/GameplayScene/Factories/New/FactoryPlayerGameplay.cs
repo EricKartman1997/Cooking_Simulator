@@ -3,7 +3,7 @@ using Cinemachine;
 using UnityEngine;
 using Zenject;
 
-public class FactoryPlayerGameplay : IDisposable
+public class FactoryPlayerGameplay
 {
     private DiContainer _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
@@ -16,12 +16,7 @@ public class FactoryPlayerGameplay : IDisposable
         _loadReleaseGameplay = loadReleaseGameplay;
         _soundsService = soundsService;
     }
-
-    public void Dispose()
-    {
-        //Debug.Log("FactoryPlayerGameplay.Dispose");
-    }
-
+    
     public void CreatePlayer(CinemachineVirtualCamera camera)
     {
         GameObject empty = new GameObject("Player_Test");

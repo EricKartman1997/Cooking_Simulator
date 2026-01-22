@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Zenject;
 
-public class FactoryEnvironment : IDisposable
+public class FactoryEnvironment
 {
     private IInstantiator _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
@@ -19,11 +19,6 @@ public class FactoryEnvironment : IDisposable
         _loadReleaseGameplay = loadReleaseGameplay;
         _itemsList = storageData.ItemsEnvironmentListRead;
     }
-    public void Dispose()
-    {
-        Debug.Log("FactoryEnvironment.Dispose");
-    }
-
     public async UniTask CreateFurnitureGamePlayAsync()
     {
         GameObject empty = new GameObject("Furniture_Test");

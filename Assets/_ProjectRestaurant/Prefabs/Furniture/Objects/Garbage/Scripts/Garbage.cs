@@ -1,28 +1,36 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
 public class Garbage : MonoBehaviour,IUseFurniture
 {
     [SerializeField] private SoundsFurniture sounds;
+    [SerializeField] private Transform pointNotif;
     private Heroik _heroik;
     private bool _isHeroikTrigger;
     private GameObject _obj;
     private Outline _outline;
-    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
     private DecorationFurniture _decorationFurniture;
     
+    private FoodsForFurnitureContainer _foodsForFurnitureContainer;
+    private INotificationGetter _notificationManager;
+    
     private List<Product> ListProduct => _foodsForFurnitureContainer.Garbage.ListForFurniture;
+
+    
+    [Inject]
+    private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,
+        INotificationGetter notificationManager)
+    {
+        _foodsForFurnitureContainer = foodsForFurnitureContainer;
+        _notificationManager = notificationManager;
+    }
 
     private void Awake()
     {
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
-    }
-
-    private void Start()
-    {
-        //Debug.Log("Garbage Init");
     }
     
     private void OnTriggerEnter(Collider other)
@@ -57,22 +65,6 @@ public class Garbage : MonoBehaviour,IUseFurniture
             _heroik.ToInteractAction.Unsubscribe(CookingProcess);
             ExitTrigger();
         }
-    }
-    
-    private void OnEnable()
-    {
-        //EventBus.PressE += CookingProcess;
-    }
-
-    private void OnDisable()
-    {
-        //EventBus.PressE -= CookingProcess;
-    }
-    
-    [Inject]
-    private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer)
-    {
-        _foodsForFurnitureContainer = foodsForFurnitureContainer;
     }
     
     public void UpdateCondition()
@@ -134,11 +126,12 @@ public class Garbage : MonoBehaviour,IUseFurniture
                 return;
             }
             
+            InvokeNotification().Forget();
             Debug.Log("с предметом что-то пошло не так");
             return;
         }
         
-        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        InvokeNotification().Forget();
         Debug.Log("Вам нечего выкидывать");
 
     }
@@ -159,7 +152,7 @@ public class Garbage : MonoBehaviour,IUseFurniture
             
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             Debug.LogWarning("Мусорка не работает");
             return false;
         }
@@ -170,6 +163,12 @@ public class Garbage : MonoBehaviour,IUseFurniture
         }
 
         return true;
+    }
+    
+    private async UniTask InvokeNotification(bool isReady = false)
+    {
+        await _notificationManager.GetNotification(pointNotif, isReady);
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
     }
     
 }

@@ -14,7 +14,7 @@ public class FinishStateAudioPlayer : StateAudioPlayer
     public override void Update()
     {
         base.Update();
-        if(TimeCurrent <= 1)
+        if(TimeCurrent <= 0.8f)
             return;
         // повторная проверка на прекращения движения игрока
         if(PlayerController.IsMoving == true)

@@ -33,7 +33,6 @@ public class TimerFurniture : IDisposable, IPause
     public void Dispose()
     {
         _pauseHandler.Remove(this);
-        Debug.Log("У объекта вызван Dispose : TimerFurniture");
     }
 
     public async UniTask StartTimerAsync()

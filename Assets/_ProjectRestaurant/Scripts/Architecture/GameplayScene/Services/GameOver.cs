@@ -30,7 +30,6 @@ public class GameOver : IDisposable
     public void Dispose()
     {
         EventBus.GameOver -= OnGameOverMethod;
-        
     }
     
     private void OnGameOverMethod()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -6,6 +7,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 {
     [SerializeField] private Transform ingredientPoint;
     [SerializeField] private Transform parentFood;
+    [SerializeField] private Transform pointNotif;
     [SerializeField] private SoundsFurniture sounds;
     
     private GameObject _ingredient;
@@ -17,14 +19,17 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     
     private List<Product> _productsList;
     private ProductsFactory _productsFactory;
+    private INotificationGetter _notificationManager;
 
     [Inject]
     private void ConstructZenject(
         FoodsForFurnitureContainer foodsForFurnitureContainer,
-        ProductsFactory productsFactory)
+        ProductsFactory productsFactory,
+        INotificationGetter notificationManager)
     {
         _productsFactory = productsFactory;
         _productsList = foodsForFurnitureContainer.GiveTable.ListForFurniture;
+        _notificationManager = notificationManager;
     }
 
     private void Awake()
@@ -35,12 +40,6 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     
     private void OnTriggerEnter(Collider other)
     {
-        // if (_isInit == false)
-        // {
-        //     Debug.Log("Инициализация не закончена");
-        //     return;
-        // }
-        
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
             _outline.OutlineWidth = 2f;
@@ -71,16 +70,6 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             ExitTrigger();
         }
     }
-    
-    // private void OnEnable()
-    // {
-    //     EventBus.PressE += CookingProcess;
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     EventBus.PressE -= CookingProcess;
-    // }
     
     private bool AcceptObject(GameObject acceptObj)
     {
@@ -143,7 +132,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             if (_ingredient == null) // ни одного активного объекта
             {
                 Debug.Log("У вас пустые руки и прилавок пуст");
-                _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                InvokeNotification().Forget();
                 return;
             }
             
@@ -155,7 +144,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
                 return;
             } 
             
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            InvokeNotification().Forget();
         }
         else // заняты
         {
@@ -163,7 +152,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             {
                 if (!AcceptObject(_heroik.TryGiveIngredient(_productsList)))
                 {
-                    _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+                    InvokeNotification().Forget();
                     Debug.Log("с предметом что-то пошло не так");
                     return;
                 }
@@ -172,7 +161,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
                 return;
             }
             
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.ForbiddenSound);
+            InvokeNotification().Forget();
             Debug.Log("У вас полные руки и прилавок полон");
         }
     }
@@ -192,7 +181,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         
         if (_decorationFurniture.DecorationTableTop == CustomFurnitureName.TurnOff )
         {
-            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+            InvokeNotification().Forget();
             Debug.LogWarning("Стол не работает");
             return false;
         }
@@ -203,6 +192,12 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         }
 
         return true;
+    }
+    
+    private async UniTask InvokeNotification(bool isReady = false)
+    {
+        await _notificationManager.GetNotification(pointNotif, isReady);
+        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
     }
     
 }
