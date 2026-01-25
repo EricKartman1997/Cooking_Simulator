@@ -10,7 +10,7 @@ public class Orders : IDisposable
 
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
-    private byte _stayedOrders; // осталось сделать заказов
+    //private byte _stayedOrders; // осталось сделать заказов
     
     public Orders()
     {
@@ -18,6 +18,7 @@ public class Orders : IDisposable
         EventBus.UpdateOrder += OnUpdateOrder;
         
         CreateOrders();
+        OnUpdateOrder();
         //Debug.Log("Создать объект: Orders");
     }
 
@@ -26,6 +27,12 @@ public class Orders : IDisposable
         EventBus.AddOrder -= OnAddMakeOrder;
         EventBus.UpdateOrder -= OnUpdateOrder;
         //Debug.Log("У объекта вызван Dispose : Orders");
+    }
+
+    public void UpdateOrder()
+    {
+        ShowOrders?.Invoke();
+        UpdateOrders?.Invoke(_makeOrders, _totalOrder);
     }
     
     private void CreateOrders()
@@ -37,8 +44,8 @@ public class Orders : IDisposable
     private void OnAddMakeOrder()
     {
         Debug.Log("+ заказ");
-        OnUpdateOrder();
         ++_makeOrders;
+        OnUpdateOrder();
     }
     
     private void OnUpdateOrder()

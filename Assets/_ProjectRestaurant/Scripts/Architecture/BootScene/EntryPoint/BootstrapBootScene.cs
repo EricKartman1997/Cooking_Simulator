@@ -38,11 +38,12 @@ public class BootstrapBootScene : MonoBehaviour
             //throw new System.Exception("Искусственная ошибка");
 
             ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
-            await importSheetsGoogle.LoadItemsSettingsProbnic(_storageData);
+            await importSheetsGoogle.LoadItemsSettingsEnvironment(_storageData);
+            await importSheetsGoogle.LoadItemsSettingsFurniture(_storageData);
             Debug.Log($"загрузил из интернета");
             
             _storageData.SaveDataJson(); // сохранить данные в Json
-            Debug.Log("(сохранение) Json Environment");
+            Debug.Log("(сохранение) Json Environment, Furniture");
         }
         catch (Exception e)
         {

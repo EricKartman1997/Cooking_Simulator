@@ -89,13 +89,6 @@ public class BootstrapGameplay : MonoBehaviour
         HideLoadingPanel();
     }
     
-    // private async UniTask EnableAudioAsync()
-    // {
-    //     _soundsServiceGameplay.SetMusic();
-    //     await UniTask.Yield();
-    //
-    // }
-    
     private async UniTask WaitForResourcesLoaded()
     {
         // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
@@ -143,7 +136,7 @@ public class BootstrapGameplay : MonoBehaviour
     {
         await _factoryEnvironment.CreateFurnitureGamePlayAsync();
         await UniTask.Yield();
-        _factoryEnvironment.CreateOtherEnvironmentGamePlay();
+        await _factoryEnvironment.CreateEnvironmentGamePlayAsync();
         await UniTask.Yield();
         _factoryEnvironment.CreateLightsGamePlay();
         await _notificationManager.CreateNotifications(3,3);

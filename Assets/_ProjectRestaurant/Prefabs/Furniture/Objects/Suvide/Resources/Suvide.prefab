@@ -114,7 +114,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7613165878020178105}
-  - component: {fileID: 9215380238358973623}
   m_Layer: 0
   m_Name: firstTimer
   m_TagString: Untagged
@@ -137,21 +136,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4806578820561247798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9215380238358973623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1250492254020189108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ff687d1ea32b64aaeae2e29ce94280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 9042140380267599083, guid: 3330011b22844fc489d3d3ce3e6acb0c, type: 3}
-  timerPoint: {fileID: 7613165878020178105}
-  timerParent: {fileID: 7613165878020178105}
 --- !u!1 &1283041738705430292
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +417,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4358301149382570490}
-  - component: {fileID: 7224286273150866783}
   m_Layer: 0
   m_Name: secondTimer
   m_TagString: Untagged
@@ -456,21 +439,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4806578820561247798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7224286273150866783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3006776504888677059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ff687d1ea32b64aaeae2e29ce94280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 9042140380267599083, guid: 3330011b22844fc489d3d3ce3e6acb0c, type: 3}
-  timerPoint: {fileID: 4358301149382570490}
-  timerParent: {fileID: 4358301149382570490}
 --- !u!1 &3522150401672616025
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,9 +1237,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3413655502055323474}
-  - component: {fileID: 4913515624172191510}
   - component: {fileID: 234590573433567253}
-  - component: {fileID: 8276749538721285263}
   m_Layer: 0
   m_Name: Suvide
   m_TagString: Untagged
@@ -1296,24 +1262,6 @@ Transform:
   - {fileID: 2639646909008937025}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4913515624172191510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6529638521897343141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 0
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!65 &234590573433567253
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1335,27 +1283,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 0.7, z: 1}
   m_Center: {x: 1, y: 2.2, z: 0}
---- !u!95 &8276749538721285263
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6529638521897343141}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7014194871528652627
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,7 +1459,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 735885198755602299}
-  - component: {fileID: 6433381714662217285}
   m_Layer: 0
   m_Name: thirdTimer
   m_TagString: Untagged
@@ -1555,18 +1481,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4806578820561247798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6433381714662217285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8755072470468843205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ff687d1ea32b64aaeae2e29ce94280, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: {fileID: 9042140380267599083, guid: 3330011b22844fc489d3d3ce3e6acb0c, type: 3}
-  timerPoint: {fileID: 735885198755602299}
-  timerParent: {fileID: 735885198755602299}

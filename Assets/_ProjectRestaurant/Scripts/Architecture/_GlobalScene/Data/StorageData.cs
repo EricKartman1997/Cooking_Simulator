@@ -7,11 +7,13 @@ public class StorageData: IReadStorageData
     private JsonHandler _jsonHandler;
     
     // поля для взаимодействия
-    public List<FurnitureItemData> _itemsEnvironmentList = new List<FurnitureItemData>();
+    public List<FurnitureItemData> _itemsFurnitureList = new List<FurnitureItemData>();
+    public List<EnvironmentItemData> _itemsEnvironmentList = new List<EnvironmentItemData>();
     private OperatingModeMainMenu _operatingModeMainMenu = OperatingModeMainMenu.WithAnInternetConnection;
 
     // свойства
-    public List<FurnitureItemData> ItemsEnvironmentListRead => _itemsEnvironmentList;
+    public List<FurnitureItemData> ItemsFurnitureListRead => _itemsFurnitureList;
+    public List<EnvironmentItemData> ItemsEnvironmentListRead => _itemsEnvironmentList;
     public OperatingModeMainMenu OperatingModeMainMenu => _operatingModeMainMenu;
 
     public StorageData(JsonHandler jsonHandler)
@@ -21,23 +23,36 @@ public class StorageData: IReadStorageData
 
     public void SaveDataJson()
     {
+        if (_itemsFurnitureList.Count == 0)
+        {
+            Debug.LogWarning("нет данных для сохранения");
+        }
+        FurnitureItems saveObj = new FurnitureItems(_itemsFurnitureList);
+        _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
+        Debug.Log("Прошел сохранение Furniture");
+        
         if (_itemsEnvironmentList.Count == 0)
         {
             Debug.LogWarning("нет данных для сохранения");
         }
-        EnvironmentItems saveObj = new EnvironmentItems(_itemsEnvironmentList);
-        _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj);
-        Debug.Log("Прошел сохранение");
+        EnvironmentItems saveObj1 = new EnvironmentItems(_itemsEnvironmentList);
+        _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj1);
+        Debug.Log("Прошел сохранение Environment");
     }
 
     public void DownloadDataJson()
     {
+        _jsonHandler.Load<FurnitureItems>(JsonPathName.FURNITURE_ITEMS_PATH, data =>
+        {
+            _itemsFurnitureList = data.ItemsFurnitureList;
+        });
+        
         _jsonHandler.Load<EnvironmentItems>(JsonPathName.ENVIRONMENT_ITEMS_PATH, data =>
         {
             _itemsEnvironmentList = data.ItemsEnvironmentList;
         });
         
-        if (_itemsEnvironmentList.Count == 0)
+        if (_itemsFurnitureList.Count == 0)
         {
             Debug.Log("данных нет - перезапустите игру, подключитесь к интернету");
             _operatingModeMainMenu = OperatingModeMainMenu.WithoutAnInternetConnection;
@@ -49,11 +64,6 @@ public class StorageData: IReadStorageData
         Debug.Log("данные есть, но игра без интернета");
         
     }
-
-    // public async void LoadItemsSheet()
-    // {
-    //     
-    // }
 
     public void ThereIsInternetConnection()
     {

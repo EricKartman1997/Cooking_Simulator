@@ -45,12 +45,14 @@ namespace OvenFurniture
             RecipeService recipeService,
             ProductsFactory productsFactory,
             FoodsForFurnitureContainer foodsForFurnitureContainer,
-            IHandlerPause handlerPause)
+            IHandlerPause handlerPause,
+            INotificationGetter notificationManager)
         {
             _productsFactory = productsFactory;
             _recipeService = recipeService;
             _foodsForFurnitureContainer = foodsForFurnitureContainer;
             _pauseHandler = handlerPause;
+            _notificationManager = notificationManager;
         }
         
         private void Awake()

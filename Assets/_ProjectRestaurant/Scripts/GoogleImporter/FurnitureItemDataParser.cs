@@ -24,7 +24,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    _storageData._itemsEnvironmentList.Add(_currentItemData);
+                    _storageData._itemsFurnitureList.Add(_currentItemData);
                     break;
 
                 case "Name":

@@ -11,6 +11,7 @@ public class OrdersMediator: IDisposable
         _orders = orders;
         _orders.UpdateOrders += OnUpdateOrders;
         _orders.ShowOrders += OnShow;
+        _orders.UpdateOrder();
     }
 
     public void Dispose()

@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 8601219333384912799}
   - component: {fileID: 1873097526303050204}
   - component: {fileID: 5410029777390457852}
-  - component: {fileID: 4790349040869250852}
   m_Layer: 0
   m_Name: TableGet
   m_TagString: Untagged
@@ -272,21 +271,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &4790349040869250852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4460735212660314580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2299b179d8463f549823d218115d3593, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  getTableConfig: {fileID: 11400000, guid: 9a30ef519b9c85641bc5c0a04ee28762, type: 2}
-  parentViewDish: {fileID: 5920461413688325881}
-  parentViewTable: {fileID: 7024675215152323293}
 --- !u!1 &5215260205979211737
 GameObject:
   m_ObjectHideFlags: 0

@@ -496,8 +496,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1237153504065100295}
   - component: {fileID: 130018865384237164}
-  - component: {fileID: 7937470939950176931}
-  - component: {fileID: 9113588283649906261}
   m_Layer: 0
   m_Name: TableGive
   m_TagString: Untagged
@@ -542,40 +540,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.15, y: 0.5, z: 0.7259081}
   m_Center: {x: -1.25, y: 2, z: 0}
---- !u!114 &7937470939950176931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6110955143682695660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 0
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &9113588283649906261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6110955143682695660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 693adc65810352647b30bc7cab1696f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _takingTablePoint: {fileID: 7309512998635355309}
-  _parentFood: {fileID: 7309512998635355309}
-  _unusableObjects:
-  - {fileID: 3151340753539164728, guid: 4046e04bf23c28b4abcb716a138b52b4, type: 3}
 --- !u!1 &7295390846572553871
 GameObject:
   m_ObjectHideFlags: 0

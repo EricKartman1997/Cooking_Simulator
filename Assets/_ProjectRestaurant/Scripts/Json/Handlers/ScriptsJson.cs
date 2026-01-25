@@ -67,17 +67,34 @@ public class BindingSettings
     // }
 }
 
+public class FurnitureItems
+{
+    public List<FurnitureItemData> ItemsFurnitureList;
+    
+    public FurnitureItems()
+    {
+        // Значения по умолчанию
+        ItemsFurnitureList = new List<FurnitureItemData>();
+    }
+    
+    public FurnitureItems(List<FurnitureItemData> itemsFurnitureList)
+    {
+        ItemsFurnitureList = itemsFurnitureList;
+    }
+    
+}
+
 public class EnvironmentItems
 {
-    public List<FurnitureItemData> ItemsEnvironmentList;
+    public List<EnvironmentItemData> ItemsEnvironmentList;
     
     public EnvironmentItems()
     {
         // Значения по умолчанию
-        ItemsEnvironmentList = new List<FurnitureItemData>();
+        ItemsEnvironmentList = new List<EnvironmentItemData>();
     }
     
-    public EnvironmentItems(List<FurnitureItemData> itemsEnvironmentList)
+    public EnvironmentItems(List<EnvironmentItemData> itemsEnvironmentList)
     {
         ItemsEnvironmentList = itemsEnvironmentList;
     }

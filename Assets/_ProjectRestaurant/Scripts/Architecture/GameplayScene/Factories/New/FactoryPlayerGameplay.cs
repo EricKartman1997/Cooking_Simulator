@@ -20,11 +20,11 @@ public class FactoryPlayerGameplay
     public void CreatePlayer(CinemachineVirtualCamera camera)
     {
         GameObject empty = new GameObject("Player_Test");
-        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], empty.transform.position, Quaternion.identity, empty.transform);
-        Heroik heroik = player.GetComponent<Heroik>();
+        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], new Vector3(0.19f,0,-6.12f), Quaternion.identity, empty.transform);
+        //Heroik heroik = player.GetComponent<Heroik>();
         //AudioListener audioListener = player.GetComponent<AudioListener>();
         EnableCamera(camera, player);
-        _container.Rebind<Heroik>().FromInstance(heroik).AsSingle(); //TODO нужно ли
+        //_container.Rebind<Heroik>().FromInstance(heroik).AsSingle(); //TODO нужно ли
         //_container.Rebind<AudioListener>().FromInstance(audioListener).AsSingle();
         
 

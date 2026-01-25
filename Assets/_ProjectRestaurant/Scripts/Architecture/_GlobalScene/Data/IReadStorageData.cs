@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IReadStorageData
 {
-    List<FurnitureItemData> ItemsEnvironmentListRead { get; }
+    List<FurnitureItemData> ItemsFurnitureListRead { get; }
+    List<EnvironmentItemData> ItemsEnvironmentListRead { get; }
 }

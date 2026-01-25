@@ -72,7 +72,7 @@ namespace GoogleSpreadsheets
                     {
                         var cell = row[j];
                         var header = _headers[j];
-                        //Debug.Log($"Header: {header}, Value: {cell}");
+                        Debug.Log($"Header: {header}, Value: {cell}");
                     
                         parser.Parse(header, cell.ToString());
                     }

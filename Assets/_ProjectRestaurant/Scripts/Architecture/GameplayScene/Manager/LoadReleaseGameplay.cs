@@ -98,7 +98,11 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         var loadTasks = new List<Task<GameObject>>
         {
             LoadGameObjectAsync("Floor"),
-            LoadGameObjectAsync("LightMain")
+            LoadGameObjectAsync("LightMain"),
+            LoadGameObjectAsync("Wall"),
+            LoadGameObjectAsync("WallAngle"),
+            LoadGameObjectAsync("WallWindow"),
+            LoadGameObjectAsync("WallDoor"),
             
         };
 
@@ -106,7 +110,10 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         
         _environmentDic.Add(OtherObjsName.Floor, results[0]);
         _environmentDic.Add(OtherObjsName.LightMain, results[1]);
-        //Debug.Log("прошел LoadEnvironmentPrefabsAsync");
+        _environmentDic.Add(OtherObjsName.Wall, results[2]);
+        _environmentDic.Add(OtherObjsName.WallAngle, results[3]);
+        _environmentDic.Add(OtherObjsName.WallWindow, results[4]);
+        _environmentDic.Add(OtherObjsName.WallDoor, results[5]);
     }
     
     private async Task LoadFurniturePrefabsAsync()
@@ -485,6 +492,10 @@ public enum FurnitureName
 public enum OtherObjsName
 {
     Floor,
+    Wall,
+    WallAngle,
+    WallWindow,
+    WallDoor,
     LightMain
 }
 

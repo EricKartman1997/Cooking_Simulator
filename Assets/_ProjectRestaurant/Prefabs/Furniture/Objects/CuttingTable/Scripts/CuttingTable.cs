@@ -199,7 +199,7 @@ namespace CuttingTableFurniture
 
             if (result == IngredientName.Rubbish)
             {
-                _productsFactory.GetProduct(
+                _result = _productsFactory.GetProduct(
                     result,
                     _cuttingTablePoints.PositionResult,
                     _cuttingTablePoints.PositionResult
