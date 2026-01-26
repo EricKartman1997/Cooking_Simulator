@@ -10,7 +10,6 @@ public class GlobalInstaller : MonoInstaller
         Container.Bind<AudioMixer>().FromInstance(mainAudioMixer).AsSingle();
 
         Container.BindInterfacesAndSelfTo<JsonHandler>().AsSingle();
-        //Container.Bind<ISaveReadGraphicSettings>().To<JsonHandler>().AsSingle();
             
         Container.BindInterfacesAndSelfTo<LoadReleaseGlobalScene>().AsSingle();
         Container.BindInterfacesAndSelfTo<SoundManager>().AsSingle();

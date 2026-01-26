@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Zenject;
 
@@ -12,40 +11,22 @@ public class FactoryUIGameplay
     private GameObject _gameOverWindow;
     private GameObject _menuWindow;
     
-    
-    // public GameObject GameWindow => _gameWindow;
-    //
-    // public GameObject GameOverWindow => _gameOverWindow;
-    // public GameObject MenuWindow => _menuWindow;
-
     public FactoryUIGameplay(DiContainer container, LoadReleaseGameplay loadReleaseGameplay)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
     }
+
+    public GameObject CreateShowLoading()
+    {
+        GameObject empty1 = new GameObject("ShowLoading_Test");
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], empty1.transform);
+        Canvas canvas = obj.GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
+        return obj;
+    }
     
-    // public void CreateUI(Transform parent)
-    // {
-    //     if (parent == null)
-    //     {
-    //         Debug.LogError("Ошибка создания UI");
-    //     }
-    //     GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.GameOverWindow], parent.transform.position, Quaternion.identity, parent.transform);
-    //     obj.transform.localPosition = Vector3.zero;
-    //     obj.transform.localRotation = Quaternion.Euler(Vector3.zero);
-    //     obj.transform.localScale = Vector3.one;
-    //     obj.SetActive(false);
-    //     
-    //     GameObject obj1 = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.GameWindow], parent.transform.position, Quaternion.identity, parent.transform);
-    //     RectTransform rect = obj1.GetComponent<RectTransform>();
-    //     rect.offsetMin = Vector2.zero;
-    //     rect.offsetMax = Vector2.zero;
-    //     obj1.transform.localRotation = Quaternion.Euler(Vector3.zero);
-    //     obj1.transform.localScale = Vector3.one;
-    //     //obj.GetComponent<Canvas>().worldCamera = Camera.main;
-    // }
-    
-    public GameObject CreateUI()
+    public void CreateUI()
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.MainFrameCanvas], empty.transform);
         obj.GetComponent<Canvas>().worldCamera = Camera.main;
@@ -67,9 +48,16 @@ public class FactoryUIGameplay
         _menuWindow = obj.GetComponentInChildren<MenuUI>(true).gameObject;
         _container.Bind<MenuUI>().FromInstance(_menuWindow.GetComponent<MenuUI>()).AsSingle(); //регистрация в контейнер
         _menuWindow.SetActive(false);
-        
-        return obj;
-        
+    }
+
+    public void HideUI()
+    {
+        empty.SetActive(false);
+    }
+    
+    public void ShowUI()
+    {
+        empty.SetActive(true);
     }
     
 }

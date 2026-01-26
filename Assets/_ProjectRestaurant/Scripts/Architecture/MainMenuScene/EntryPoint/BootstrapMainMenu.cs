@@ -100,9 +100,12 @@ public class BootstrapMainMenu : MonoBehaviour
     
     private void CreateLoadingPanel()
     {
-        Canvas canvas = _factoryUIMainMenuScene.CreateShowLoading();
-        _loadingPanel = canvas.gameObject;
-        Instantiate(_loadReleaseMainMenuScene.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
+        // Canvas canvas = _factoryUIMainMenuScene.CreateShowLoading();
+        // _loadingPanel = canvas.gameObject;
+        // Instantiate(_loadReleaseMainMenuScene.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
+        // ShowLoadingPanel();
+        
+        _loadingPanel = _factoryUIMainMenuScene.CreateShowLoading();
         ShowLoadingPanel();
     }
     

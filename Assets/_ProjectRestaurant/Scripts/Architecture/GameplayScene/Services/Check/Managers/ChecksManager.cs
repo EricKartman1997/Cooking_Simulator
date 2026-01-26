@@ -16,6 +16,8 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     private Check _check2;
     private Check _check3;
 
+    private List<CheckType> _dishList;
+
     public Check Check1 => _check1;
 
     public Check Check2 => _check2;
@@ -39,7 +41,8 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     public void AddCheck() // добавление чека
     {
         //System.Enum.GetValues(typeof(CheckType)).Length
-        CheckType type = (CheckType)Random.Range(0, 0); // поменять
+        //CheckType type = (CheckType)Random.Range(0, 0); // поменять
+        CheckType type = _dishList[Random.Range(0, _dishList.Count)]; // правильно
         if (_check1 == null)
         {
             _check1 = _checkFactoryScript.Create(type);
@@ -215,4 +218,15 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         _check2?.Tick();
         _check3?.Tick();
     }
+}
+
+public enum CheckType
+{
+    BakedFish,
+    BakedMeat,
+    BakedSalad,
+    FruitSalad,
+    CutletMedium,
+    WildBerryCocktail,
+    FreshnessCocktail
 }

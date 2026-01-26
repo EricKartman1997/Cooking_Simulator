@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class BootstrapGameplay : MonoBehaviour
 {
-    private GameObject _canvas;
+    
     private CinemachineVirtualCamera _virtualCamera;
     
     private LoadReleaseGameplay _loadReleaseGameplay;
@@ -25,6 +25,7 @@ public class BootstrapGameplay : MonoBehaviour
     private TimeGame _timeGame;
     
     private GameObject _loadingPanel;
+    private GameObject _gameUI;
 
     [Inject]
     public void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, LoadReleaseGlobalScene loadReleaseGlobalScene,
@@ -61,10 +62,12 @@ public class BootstrapGameplay : MonoBehaviour
         await InitAudioAsync();
         // создать камеры
         CreateCameras();
+        // создать экран загрузки
+        await CreateLoadingPanel();
+        // вкл загрузку
+        ShowLoadingPanel();
         //создать UI
         await CreateUI();
-        // вкл загрузку
-        await ShowLoadingPanel();
         // создание сервисов
         await CreateServiceAsync();
         // создать окружения (furniture, other environment,)
@@ -75,23 +78,27 @@ public class BootstrapGameplay : MonoBehaviour
         HideLoadingPanel();
         // вкл музыку
         await EnableMusic();
+        // запускаем игру
         await StartGame();
 
     }
     
     public async UniTask ExitLevel()
-    {
-        await ShowLoadingPanel();
-        // остановить музыку
-        // сохранить настройки
+    {   
+        // выкл UI игрока
+        _factoryUIGameplay.HideUI();
+        await UniTask.Yield();
+        // вкл загрузку
+        ShowLoadingPanel();
+        await UniTask.Yield();
         // переход на сцену меню
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
+        await UniTask.Yield();
         HideLoadingPanel();
     }
     
     private async UniTask WaitForResourcesLoaded()
     {
-        // если загрузчик не даёт Task напрямую — просто ждём, пока он готов
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
         //Debug.Log("Загружены все ресурсы для Gameplay");
     }
@@ -102,15 +109,22 @@ public class BootstrapGameplay : MonoBehaviour
         _virtualCamera = _factoryCamerasGameplay.CreateTopDownCamera();
     }
     
-    private async UniTask CreateUI()
+    
+    private async UniTask CreateLoadingPanel()
     {
-        _canvas = _factoryUIGameplay.CreateUI();
+        _loadingPanel = _factoryUIGameplay.CreateShowLoading();
         await UniTask.Yield();
     }
     
-    private async UniTask ShowLoadingPanel()
+    private void ShowLoadingPanel()
     {
-        _loadingPanel = Instantiate(_loadReleaseGameplay.GlobalPrefDic[GlobalPref.LoadingPanel], _canvas.transform);
+        if (_loadingPanel != null)
+            _loadingPanel.SetActive(true);
+    }
+    
+    private async UniTask CreateUI()
+    {
+        _factoryUIGameplay.CreateUI();
         await UniTask.Yield();
     }
     
@@ -123,11 +137,6 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTask CreateServiceAsync()
     {
-        //timeGame сделал
-        //Order сделал
-        //GameOver
-        //UpdateCheck
-        //ChecksManager сделал
         _container.Resolve<ManagerMediator>(); // ← Создаётся прямо здесь!
         await UniTask.Yield();
     }
@@ -151,7 +160,7 @@ public class BootstrapGameplay : MonoBehaviour
     private void HideLoadingPanel()
     {
         if (_loadingPanel != null)
-            Destroy(_loadingPanel);
+            _loadingPanel.SetActive(false);
     }
     
     private async UniTask EnableMusic()

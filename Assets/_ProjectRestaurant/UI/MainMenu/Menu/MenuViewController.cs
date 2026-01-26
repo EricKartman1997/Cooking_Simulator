@@ -80,6 +80,7 @@ public class MenuViewController : MonoBehaviour
     private void ChoiceLevelOnClick()
     {
         warringWindowsViewController.WarringWindow.Open();
+        warringWindowsViewController.WarringWindow.windowTitle.fontSize = 30;
     }
     
     private void ExitOnClick()

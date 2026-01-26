@@ -33,12 +33,21 @@ public class FactoryUIMainMenuScene
         
     }
     
-    public Canvas CreateShowLoading()
+    // public Canvas CreateShowLoading()
+    // {
+    //     GameObject empty1 = new GameObject("ShowLoading_Test");
+    //     Canvas canvas = _container.InstantiatePrefab(_loadReleaseMainMenuScene.UIDic[UINameMainMenu.CanvasShowLoading], empty1.transform).GetComponent<Canvas>();
+    //     canvas.worldCamera = Camera.main;
+    //     return canvas;
+    // }
+    
+    public GameObject CreateShowLoading()
     {
         GameObject empty1 = new GameObject("ShowLoading_Test");
-        Canvas canvas = _container.InstantiatePrefab(_loadReleaseMainMenuScene.UIDic[UINameMainMenu.CanvasShowLoading], empty1.transform).GetComponent<Canvas>();
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseMainMenuScene.GlobalPrefDic[GlobalPref.LoadingPanel], empty1.transform);
+        Canvas canvas = obj.GetComponent<Canvas>();
         canvas.worldCamera = Camera.main;
-        return canvas;
+        return obj;
     }
     
 }
