@@ -8,8 +8,6 @@ public class BootstrapBootScene : MonoBehaviour
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private StorageData _storageData;
-
-    private bool _isLoadSuccessful;
     
     [Inject]
     private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene, StorageData storageData)
@@ -25,6 +23,7 @@ public class BootstrapBootScene : MonoBehaviour
     private async UniTaskVoid InitializeAsync()
     {
         await LoadGoogleSheets();
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
         //await LoadJson();
         //Debug.Log("запуск сцены");
         await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
@@ -42,7 +41,7 @@ public class BootstrapBootScene : MonoBehaviour
             await importSheetsGoogle.LoadItemsSettingsFurniture(_storageData);
             Debug.Log($"загрузил из интернета");
             
-            _storageData.SaveDataJson(); // сохранить данные в Json
+            await _storageData.SaveDataJson(); // сохранить данные в Json
             Debug.Log("(сохранение) Json Environment, Furniture");
         }
         catch (Exception e)
@@ -54,14 +53,4 @@ public class BootstrapBootScene : MonoBehaviour
         }
         
     }
-    
-    // private async UniTask LoadJson()
-    // {
-    //     if (_isLoadSuccessful == false)
-    //     {
-    //         // загрузить данные из Json
-    //     }
-    //     // сохранить данные в Json
-    //     await UniTask.Yield();
-    // }
 }

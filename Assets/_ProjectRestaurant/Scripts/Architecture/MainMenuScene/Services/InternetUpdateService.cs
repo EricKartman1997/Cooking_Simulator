@@ -16,7 +16,7 @@ public class InternetUpdateService
         _menu = menu;
     }
 
-    public async void StartChecking()
+    public async UniTask StartChecking()
     {
         if (_isWorking)
             return;
@@ -45,7 +45,7 @@ public class InternetUpdateService
                 await importer.LoadItemsSettingsFurniture(_storageData);
                 await importer.LoadItemsSettingsEnvironment(_storageData);
 
-                _storageData.SaveDataJson();
+                await _storageData.SaveDataJson();
 
                 Debug.Log("Данные успешно загружены");
 

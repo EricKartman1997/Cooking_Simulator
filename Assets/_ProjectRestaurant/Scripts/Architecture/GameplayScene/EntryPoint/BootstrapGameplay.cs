@@ -81,6 +81,7 @@ public class BootstrapGameplay : MonoBehaviour
         // запускаем игру
         await StartGame();
 
+        Debug.Log($"{_storageData.OperatingModeMainMenu} BootstrapGameplay");
     }
     
     public async UniTask ExitLevel()

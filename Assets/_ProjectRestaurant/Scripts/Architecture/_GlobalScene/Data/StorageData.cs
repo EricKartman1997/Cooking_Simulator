@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class StorageData: IReadStorageData
@@ -20,21 +21,27 @@ public class StorageData: IReadStorageData
         _jsonHandler = jsonHandler;
     }
 
-    public void SaveDataJson()
+    public async UniTask SaveDataJson()
     {
         if (_itemsFurnitureList.Count == 0)
         {
             Debug.LogWarning("нет данных для сохранения");
+            return;
         }
+        
         FurnitureItems saveObj = new FurnitureItems(_itemsFurnitureList);
+        await UniTask.Yield();
         _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
         Debug.Log("Прошел сохранение Furniture");
         
         if (_itemsEnvironmentList.Count == 0)
         {
             Debug.LogWarning("нет данных для сохранения");
+            return;
         }
+        
         EnvironmentItems saveObj1 = new EnvironmentItems(_itemsEnvironmentList);
+        await UniTask.Yield();
         _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj1);
         Debug.Log("Прошел сохранение Environment");
     }

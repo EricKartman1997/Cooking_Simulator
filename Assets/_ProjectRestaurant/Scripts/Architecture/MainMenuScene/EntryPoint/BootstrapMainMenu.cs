@@ -84,7 +84,17 @@ public class BootstrapMainMenu : MonoBehaviour
 
         await EnableMusic();
         await StartLevel();
+        
     }
+    
+    // public async UniTask WaitInternetAndShow()
+    // {
+    //     await UniTask.WaitUntil(() =>
+    //         _storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithAnInternetConnection
+    //     );
+    //
+    //     ShowPanelWaitTheInternetAction?.Invoke();
+    // }
     
     private async UniTask WaitForResourcesLoaded()
     {
@@ -143,7 +153,7 @@ public class BootstrapMainMenu : MonoBehaviour
             _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
             _menuViewController.WarringWindowsViewController.NoConnectionTextButton();
             _menuViewController.TurnOffButtonsGame();
-            _internetUpdateService.StartChecking();
+            _internetUpdateService.StartChecking().Forget();
         }
 
         if (_storageData.OperatingModeMainMenu ==
@@ -151,7 +161,7 @@ public class BootstrapMainMenu : MonoBehaviour
         {
             _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet();
             _menuViewController.WarringWindowsViewController.UpdateDateTextButton();
-            _internetUpdateService.StartChecking();
+            _internetUpdateService.StartChecking().Forget();
         }
         
         await UniTask.Yield();
@@ -170,8 +180,8 @@ public class BootstrapMainMenu : MonoBehaviour
             HidePanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.HideWaitTheInternetConnection;
             HidePanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.ShowConnectionTheInternet;
             
-            ShowPanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
             ShowPanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.ShowWaitTheInternetConnection;
+            ShowPanelWaitTheInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
             
             ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
             ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideWaitTheInternetConnection;
