@@ -10,10 +10,12 @@ public class Orders : IDisposable
 
     private byte _totalOrder; // всего заказов в игре
     private byte _makeOrders; // сколько сделано заказов
-    //private byte _stayedOrders; // осталось сделать заказов
     
-    public Orders()
+    private GamePlaySceneSettings _settings;
+    
+    public Orders(GamePlaySceneSettings settings)
     {
+        _settings = settings;
         EventBus.AddOrder += OnAddMakeOrder;
         EventBus.UpdateOrder += OnUpdateOrder;
         
@@ -37,7 +39,7 @@ public class Orders : IDisposable
     
     private void CreateOrders()
     {
-        _totalOrder = (byte)Random.Range(3, 5);
+        _totalOrder = _settings.Orders;
         _makeOrders = 0; // Сбрасываем счетчик выполненных заказов
     }
 

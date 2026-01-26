@@ -24,13 +24,11 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
 
     public Check Check3 => _check3;
     
-    public ChecksManager(CheckFactory checksFactory,CheckPrefabFactory checkPrefabFactory)
+    public ChecksManager(CheckFactory checksFactory,CheckPrefabFactory checkPrefabFactory,GamePlaySceneSettings settings)
     {
+        _dishList = settings.DishList;
         _checkFactoryScript = checksFactory;
         _checkPrefabFactory = checkPrefabFactory;
-        //EventBus.DeleteCheck += DeleteOverdueCheck;
-
-        //Debug.Log("Создать объект: ChecksManager");
     }
     
     public void Tick()
@@ -40,9 +38,7 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
 
     public void AddCheck() // добавление чека
     {
-        //System.Enum.GetValues(typeof(CheckType)).Length
-        //CheckType type = (CheckType)Random.Range(0, 0); // поменять
-        CheckType type = _dishList[Random.Range(0, _dishList.Count)]; // правильно
+        CheckType type = _dishList[Random.Range(0, _dishList.Count)];
         if (_check1 == null)
         {
             _check1 = _checkFactoryScript.Create(type);

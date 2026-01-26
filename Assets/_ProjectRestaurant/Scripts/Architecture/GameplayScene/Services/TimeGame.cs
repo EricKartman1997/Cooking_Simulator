@@ -20,14 +20,16 @@ public class TimeGame : IDisposable, ITickable, IPause
     
     private bool _isPause;
     private IHandlerPause _pauseHandler;
+    private GamePlaySceneSettings _settings;
     
     public float[] TimeLevel => _timeLevel;
     public float CurrentSeconds => _currentSeconds;
 
     public float CurrentMinutes => _currentMinutes;
 
-    public TimeGame(IHandlerPause pauseHandler)
+    public TimeGame(IHandlerPause pauseHandler,GamePlaySceneSettings settings)
     {
+        _settings = settings;
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
         CreateTimeLevel();
@@ -41,13 +43,15 @@ public class TimeGame : IDisposable, ITickable, IPause
 
     private void CreateTimeLevel()
     {
-        _secondsLevel = Random.Range(45, 60);
-        _minutesLevel = Random.Range(1, 2);
+        // _secondsLevel = Random.Range(45, 60);
+        // _minutesLevel = Random.Range(1, 2);
+        _secondsLevel = _settings.Seconds;
+        _minutesLevel = _settings.Minutes;
+        
         _currentSeconds = _secondsLevel;
         _currentMinutes = _minutesLevel;
         _timeLevel = new float[]{_secondsLevel,_minutesLevel};
         
-        //Debug.Log("Создать объект: TimeGame");
     }
 
     public void Tick()
