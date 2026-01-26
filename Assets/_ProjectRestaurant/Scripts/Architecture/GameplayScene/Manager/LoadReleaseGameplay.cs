@@ -103,6 +103,9 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadGameObjectAsync("WallAngle"),
             LoadGameObjectAsync("WallWindow"),
             LoadGameObjectAsync("WallDoor"),
+            LoadGameObjectAsync("WallTransparent"),
+            LoadGameObjectAsync("WallAngleTransparent"),
+            LoadGameObjectAsync("AreaTransparent"),
             
         };
 
@@ -114,6 +117,9 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         _environmentDic.Add(OtherObjsName.WallAngle, results[3]);
         _environmentDic.Add(OtherObjsName.WallWindow, results[4]);
         _environmentDic.Add(OtherObjsName.WallDoor, results[5]);
+        _environmentDic.Add(OtherObjsName.WallTransparent, results[6]);
+        _environmentDic.Add(OtherObjsName.WallAngleTransparent, results[7]);
+        _environmentDic.Add(OtherObjsName.AreaTransparent, results[8]);
     }
     
     private async Task LoadFurniturePrefabsAsync()
@@ -129,6 +135,7 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
             LoadGameObjectAsync("Distribution"),
             LoadGameObjectAsync("Blender"),
             LoadGameObjectAsync("Stove"),
+
         };
 
         var results = await Task.WhenAll(loadTasks);
@@ -496,7 +503,10 @@ public enum OtherObjsName
     WallAngle,
     WallWindow,
     WallDoor,
-    LightMain
+    LightMain,
+    WallAngleTransparent,
+    WallTransparent,
+    AreaTransparent
 }
 
 public enum PlayerName

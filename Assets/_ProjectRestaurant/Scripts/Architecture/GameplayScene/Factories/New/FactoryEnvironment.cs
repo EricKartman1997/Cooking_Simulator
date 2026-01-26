@@ -86,6 +86,15 @@ public class FactoryEnvironment
                 case "WallWindow":
                     CreateWallWindow(item, empty.transform);
                     break;
+                case "WallTransparent":
+                    CreateWallTransparent(item, empty.transform);
+                    break;
+                case "WallAngleTransparent":
+                    CreateWallAngleTransparent(item, empty.transform);
+                    break;
+                case "AreaTransparent":
+                    CreateAreaTransparent(item, empty.transform);
+                    break;
             }
             await UniTask.Yield();
         }
@@ -135,6 +144,25 @@ public class FactoryEnvironment
     private GameObject CreateWallWindow(EnvironmentItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.WallWindow], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
+        return obj;
+    }
+    
+    private GameObject CreateWallTransparent(EnvironmentItemData itemData, Transform parent)
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.WallTransparent], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
+        return obj;
+    }
+    
+    private GameObject CreateWallAngleTransparent(EnvironmentItemData itemData, Transform parent)
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.WallAngleTransparent], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
+        return obj;
+    }
+    
+    private GameObject CreateAreaTransparent(EnvironmentItemData itemData, Transform parent)
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.AreaTransparent], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
+        obj.GetComponent<TransparentArea>().Init(parent);
         return obj;
     }
     
