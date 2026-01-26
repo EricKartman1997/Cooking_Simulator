@@ -248,6 +248,9 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
     private async UniTask InvokeNotification(bool isReady = false)
     {
         await _notificationManager.GetNotification(pointNotif, isReady);
-        _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        if (isReady == false)
+        {
+            _heroik.PlayOneShotClip?.Invoke(AudioNameGamePlay.NotWorkTableSound);
+        }
     }
 }
