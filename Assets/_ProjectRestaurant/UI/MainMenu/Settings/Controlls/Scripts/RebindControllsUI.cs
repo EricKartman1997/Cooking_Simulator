@@ -4,12 +4,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 
 public class RebindControllsUI : MonoBehaviour, RebindControllsUI.IResetToDefault
 {
     /// <summary>
     /// Ссылка на действие, которое нужно переназначить.
     /// </summary>
+    
+    private RebindSaveLoaderControlls _cachedLoader;
+
+    private void Awake()
+    {
+        // Ищем лоадер один раз при старте
+        _cachedLoader = Object.FindFirstObjectByType<RebindSaveLoaderControlls>();
+    }
+    
     public InputActionReference actionReference
     {
         get => m_Action;
@@ -208,23 +218,18 @@ public class RebindControllsUI : MonoBehaviour, RebindControllsUI.IResetToDefaul
     /// </summary>
     public void ResetToDefault()
     {
-        if (!ResolveActionAndBinding(out var action, out var bindingIndex))
-            return;
+        if (!ResolveActionAndBinding(out var action, out var bindingIndex)) return;
 
         if (action.bindings[bindingIndex].isComposite)
         {
-            // It's a composite. Remove overrides from part bindings.
             for (var i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; ++i)
                 action.RemoveBindingOverride(i);
         }
         else
-        {
             action.RemoveBindingOverride(bindingIndex);
-        }
+
         UpdateBindingDisplay();
-        
-        // Сохраняем изменения
-        SaveBindings();
+        SaveBindings(); // <--- Вызов сохранения
     }
 
     /// <summary>
@@ -486,11 +491,15 @@ public class RebindControllsUI : MonoBehaviour, RebindControllsUI.IResetToDefaul
 
     private void SaveBindings()
     {
-        //var rebinds = m_Action.action.actionMap.asset.SaveBindingOverridesAsJson();
-        //PlayerPrefs.SetString("rebinds", rebinds);
-        //PlayerPrefs.Save();
-        
-        m_Action.action.actionMap.asset.SaveBindingOverridesAsJson();
+        if (_cachedLoader != null)
+        {
+            _cachedLoader.SaveBindings();
+        }
+        else
+        {
+            // Failsafe: если не нашли лоадер, пишем в лог
+            Debug.LogWarning("RebindSaveLoaderControlls не найден на сцене! Данные не будут записаны в JSON.");
+        }
     }
 
     [Tooltip("Reference to action that is to be rebound from the UI.")]

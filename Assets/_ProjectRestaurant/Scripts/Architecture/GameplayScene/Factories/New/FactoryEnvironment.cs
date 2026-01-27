@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using GoogleSpreadsheets;
 using Newtonsoft.Json;
 using UnityEngine;
 using Zenject;
@@ -10,14 +9,16 @@ public class FactoryEnvironment
 {
     private IInstantiator _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
+    private OutlineManager _outlineManager;
     
     private List<FurnitureItemData> _furnitureItemsList;
     private List<EnvironmentItemData> _environmentItemsList;
 
-    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData)
+    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData,OutlineManager outlineManager)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
+        _outlineManager = outlineManager;
         _furnitureItemsList = storageData.ItemsFurnitureListRead;
         _environmentItemsList = storageData.ItemsEnvironmentListRead;
     }
@@ -59,8 +60,10 @@ public class FactoryEnvironment
             }
             await UniTask.Yield();
         }
+
+        _outlineManager.FindObjs(empty);
         // ждать окончание операции
-        
+
     }
     
     public async UniTask CreateEnvironmentGamePlayAsync()

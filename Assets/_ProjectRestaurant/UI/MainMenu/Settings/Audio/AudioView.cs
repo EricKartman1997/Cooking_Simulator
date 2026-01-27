@@ -28,26 +28,37 @@ public class AudioView: MonoBehaviour
         _saveObj.MusicVolum = musicSlider.mainSlider.value;
         _saveObj.SFXVolum = sfxSlider.mainSlider.value;
         _jsonHandler.Save(JsonPathName.AUDIO_SETTINGS_PATH,_saveObj);
-        //Debug.Log("(сохранение) Json Аудио");
-        //_saveObj.ShowValue();
-        //Debug.Log("OnDestroy GraphicsView");
     }
     private void Start()
     {
-        // Добавляем обработчики изменений
-        masterSlider.mainSlider.onValueChanged.AddListener(SetMasterVolume);
-        musicSlider.mainSlider.onValueChanged.AddListener(SetMusicVolume);
-        sfxSlider.mainSlider.onValueChanged.AddListener(SetSFXVolume);
-        
-        DownloadSettings();
+        // Сначала загружаем
+        _jsonHandler.Load<AudioSettings>(JsonPathName.AUDIO_SETTINGS_PATH, data =>
+        {
+            // 1. Устанавливаем значения в UI
+            masterSlider.mainSlider.value = data.MasterVolume;
+            musicSlider.mainSlider.value = data.MusicVolum;
+            sfxSlider.mainSlider.value = data.SFXVolum;
 
+            // 2. СРАЗУ применяем их к SoundManager (фикс для билда)
+            SetMasterVolume(data.MasterVolume);
+            SetMusicVolume(data.MusicVolum);
+            SetSFXVolume(data.SFXVolum);
+
+            // 3. И только теперь добавляем слушателей
+            // Это предотвратит лишние вызовы во время загрузки
+            masterSlider.mainSlider.onValueChanged.AddListener(SetMasterVolume);
+            musicSlider.mainSlider.onValueChanged.AddListener(SetMusicVolume);
+            sfxSlider.mainSlider.onValueChanged.AddListener(SetSFXVolume);
+        
+            Debug.Log("Audio Settings Loaded and Applied");
+        });
     }
     
     private void DownloadSettings()
     {
         _jsonHandler.Load<AudioSettings>(JsonPathName.AUDIO_SETTINGS_PATH, data =>
         {
-            masterSlider.mainSlider.value = data.MasterVolume;// не работает
+            masterSlider.mainSlider.value = data.MasterVolume;
             musicSlider.mainSlider.value = data.MusicVolum;
             sfxSlider.mainSlider.value = data.SFXVolum;
 
@@ -59,19 +70,19 @@ public class AudioView: MonoBehaviour
     private void SetMasterVolume(float volume)
     {
         SoundManager.SetMasterVolume(volume);
-        //Debug.Log("Движение Master");
+        Debug.Log("Движение Master");
     }
     
     private void SetMusicVolume(float volume)
     {
         SoundManager.SetMusicVolume(volume);
-        //Debug.Log("Движение Music");
+        Debug.Log("Движение Music");
     }
     
     private void SetSFXVolume(float volume)
     {
         SoundManager.SetSFXVolume(volume);
-        //Debug.Log("Движение SFX");
+        Debug.Log("Движение SFX");
     }
 
 

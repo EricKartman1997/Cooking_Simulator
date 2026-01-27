@@ -46,13 +46,8 @@ public class GraphicsView : MonoBehaviour
         horizontalSelector.items[1].onItemSelect.AddListener(SetQualityMedium);
         horizontalSelector.items[2].onItemSelect.AddListener(SetQualityHigh);
         horizontalSelector.items[3].onItemSelect.AddListener(SetQualityUltra);
-        //dropdown.onValueChanged.AddListener(SetResolution);
-
-        //JsonDownload
-        DownloadSettings();
-        //EnabeleSounds();
-        //_soundsService.UnMuteSources();
         
+        DownloadSettings();
     }
 
     private void DownloadSettings()
@@ -76,18 +71,6 @@ public class GraphicsView : MonoBehaviour
         nextButton.soundSource = _soundsService.SourceSfx;
         backButton.soundSource = _soundsService.SourceSfx;
         dropdown.soundSource = _soundsService.SourceSfx;
-    }
-    
-    private void EnabeleSounds()
-    {
-        // nextButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
-        // nextButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        //
-        // backButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton] ;
-        // backButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
-        //
-        // dropdown.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
-        // dropdown.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
     }
     
     private void SetFullScreen(bool isFullScreen)
@@ -120,9 +103,9 @@ public class GraphicsView : MonoBehaviour
         //_saveObj.QualityLevel = horizontalSelector.index;
     }
 
-    private void SetResolution(int index)
-    {
-        //_saveObj.ResolutionSize = index;
-    }
+    // private void SetResolution(int index)
+    // {
+    //     //_saveObj.ResolutionSize = index;
+    // }
     
 }

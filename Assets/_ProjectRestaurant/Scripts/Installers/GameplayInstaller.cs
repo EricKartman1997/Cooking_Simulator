@@ -18,13 +18,14 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<FoodsForFurnitureContainer>().FromInstance(foodsForFurnitureContainer);
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
+        
         Container.Bind<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
         
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
-        
+        Container.BindInterfacesAndSelfTo<OutlineManager>().AsSingle();
         
         Container.Bind<FactoryPlayerGameplay>().AsSingle();
         Container.Bind<FactoryEnvironment>().AsSingle();

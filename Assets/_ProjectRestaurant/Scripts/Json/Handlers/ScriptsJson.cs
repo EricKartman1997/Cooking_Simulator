@@ -6,6 +6,7 @@ public class ScriptsJson
         
 }
 
+[System.Serializable]
 public class GraphicSettings
 {
     public bool IsFullScreen;
@@ -26,6 +27,7 @@ public class GraphicSettings
     }
 }
 
+[System.Serializable] // Добавь это!
 public class AudioSettings
 {
     public float MasterVolume;
@@ -34,7 +36,6 @@ public class AudioSettings
     
     public AudioSettings()
     {
-        // Значения по умолчанию
         MasterVolume = 80f;
         MusicVolum = 80f;
         SFXVolum = 80f;
@@ -46,6 +47,7 @@ public class AudioSettings
     }
 }
 
+[System.Serializable]
 public class BindingSettings
 {
     public string Rebinds;

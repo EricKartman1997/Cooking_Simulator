@@ -43,12 +43,23 @@ public class SoundManager: IDisposable, IInitializable
     }
     
     // Установка общей громкости
+    // public void SetMasterVolume(float volume)
+    // {
+    //     // Сохраняем значение
+    //     //PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, volume);
+    //     // Применяем к микшеру
+    //     _audioMixer.SetFloat("Master", VolumeToDecibelLogarithmic(volume));
+    // }
+    
     public void SetMasterVolume(float volume)
     {
-        // Сохраняем значение
-        //PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, volume);
-        // Применяем к микшеру
-        _audioMixer.SetFloat("Master", VolumeToDecibelLogarithmic(volume));
+        float normalized = Mathf.Clamp(volume / 100f, 0.0001f, 1f);
+        float dB = Mathf.Log10(normalized) * 20f;
+
+        // В билде микшер может не успеть инициализироваться, 
+        // поэтому мы проверяем результат или вызываем чуть позже
+        bool result = _audioMixer.SetFloat("Master", dB);
+        if (!result) Debug.LogError("Микшер отклонил установку громкости Master! Проверьте Exposed Parameters.");
     }
     
     // Установка громкости музыки
@@ -65,30 +76,30 @@ public class SoundManager: IDisposable, IInitializable
         _audioMixer.SetFloat("SFX", VolumeToDecibelLogarithmic(volume));
     }
     
-    // Загрузка сохраненных настроек
-    private void LoadVolumeSettings()
-    {
-        SetMasterVolume(PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME));
-        SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME));
-        SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME));
-
-    }
+    // // Загрузка сохраненных настроек
+    // private void LoadVolumeSettings()
+    // {
+    //     SetMasterVolume(PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME));
+    //     SetMusicVolume(PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME));
+    //     SetSFXVolume(PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME));
+    //
+    // }
     
-    // Получение текущих значений громкости
-    public float GetMasterVolume()
-    {
-        return PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME);
-    }
-    
-    public float GetMusicVolume()
-    {
-        return PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME);
-    }
-    
-    public float GetSFXVolume()
-    {
-        return PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME);
-    }
+    // // Получение текущих значений громкости
+    // public float GetMasterVolume()
+    // {
+    //     return PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, DEFAULT_VOLUME);
+    // }
+    //
+    // public float GetMusicVolume()
+    // {
+    //     return PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, DEFAULT_VOLUME);
+    // }
+    //
+    // public float GetSFXVolume()
+    // {
+    //     return PlayerPrefs.GetFloat(SFX_VOLUME_KEY, DEFAULT_VOLUME);
+    // }
 
 
 }

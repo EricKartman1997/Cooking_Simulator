@@ -10,6 +10,7 @@ public class ViewControlls : MonoBehaviour
     [SerializeField] private List<ButtonManager> buttonsList;
     [SerializeField] private List<RebindControllsUI> defaulControllsList;
     [SerializeField] private ButtonManager defaulAllButton;
+    [SerializeField] private RebindSaveLoaderControlls saveLoader; // Перетащи лоадер сюда в инспекторе!
 
     private ISoundsService _soundsService;
 
@@ -29,27 +30,28 @@ public class ViewControlls : MonoBehaviour
     private void ResetToDefault()
     {
         _resetedDefaultAction?.Invoke();
+        
+        // Сразу сохраняем дефолтное состояние
+        if (saveLoader != null)
+            saveLoader.SaveBindings();
     }
 
     private void EnableSoundSource()
     {
-        defaulAllButton.soundSource = _soundsService.SourceSfx;
-        
+        if(defaulAllButton != null) defaulAllButton.soundSource = _soundsService.SourceSfx;
         foreach (var button in buttonsList)
         {
-            button.soundSource = _soundsService.SourceSfx;
+            if(button != null) button.soundSource = _soundsService.SourceSfx;
         }
     }
 
     private void CreatDefaultAllButton()
     {
+        _resetedDefaultAction = null;
         foreach (var button in defaulControllsList)
         {
-            if (button.GetComponent<RebindControllsUI.IResetToDefault>() != null)
-            {
-                _resetedDefaultAction += button.GetComponent<RebindControllsUI.IResetToDefault>().ResetToDefault;
-            }
-            
+            if (button != null)
+                _resetedDefaultAction += button.ResetToDefault;
         }
     }
 }

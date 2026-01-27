@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class TransparentArea : MonoBehaviour
     void Start()
     {
         _objsList = _parent.GetComponentsInChildren<TransparentObjs>();
-        Debug.Log("закончил поиск");
+        //Debug.Log("закончил поиск");
     }
 
     private void OnTriggerEnter(Collider other)
