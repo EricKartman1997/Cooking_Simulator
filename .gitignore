@@ -70,3 +70,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Google API Credentials (защита от утечки)
+/[Aa]ssets/[Ss]treamingAssets/cookingsimulator-*.json
+/[Aa]ssets/[Ss]treamingAssets/cookingsimulator-*.json.meta

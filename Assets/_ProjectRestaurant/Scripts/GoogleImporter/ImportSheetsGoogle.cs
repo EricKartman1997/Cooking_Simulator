@@ -7,7 +7,7 @@ namespace GoogleSpreadsheets
     public class ImportSheetsGoogle
     {
         private const string SPREADSHEET_ID = "1egofOmJAB6kx-TRCUNWvBhR6os8RO5oIzNOYsXNL3t8";
-        private const string CREDENTIALS_FILE = "cookingsimulator-e8861e55a891.json";
+        private const string CREDENTIALS_FILE = "cookingsimulator-144f6e89dc6c.json";
         
         private const string ITEM_SHEETS_NAME_FURNITURE = "FurnitureDemoLevel";
         private const string ITEM_SHEETS_NAME_ENVIRONMENT = "EnvironmentDemoLevel";
