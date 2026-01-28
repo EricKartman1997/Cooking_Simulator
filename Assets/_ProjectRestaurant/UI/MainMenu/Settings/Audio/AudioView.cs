@@ -50,7 +50,7 @@ public class AudioView: MonoBehaviour
             musicSlider.mainSlider.onValueChanged.AddListener(SetMusicVolume);
             sfxSlider.mainSlider.onValueChanged.AddListener(SetSFXVolume);
         
-            Debug.Log("Audio Settings Loaded and Applied");
+            //Debug.Log("Audio Settings Loaded and Applied");
         });
     }
     
@@ -69,20 +69,20 @@ public class AudioView: MonoBehaviour
     
     private void SetMasterVolume(float volume)
     {
+        Debug.Log($"AudioView Master {volume}");
         SoundManager.SetMasterVolume(volume);
-        Debug.Log("Движение Master");
     }
     
     private void SetMusicVolume(float volume)
     {
         SoundManager.SetMusicVolume(volume);
-        Debug.Log("Движение Music");
+        //Debug.Log("Движение Music");
     }
     
     private void SetSFXVolume(float volume)
     {
         SoundManager.SetSFXVolume(volume);
-        Debug.Log("Движение SFX");
+        //Debug.Log("Движение SFX");
     }
 
 

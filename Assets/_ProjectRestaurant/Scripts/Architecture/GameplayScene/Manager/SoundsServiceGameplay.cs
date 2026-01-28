@@ -33,6 +33,19 @@ public class SoundsServiceGameplay : ISoundsService
         _sourceSFX = obj.GetComponent<AudioSource>();
         _sourceMusic = obj1.GetComponent<AudioSource>();
         
+        if (_sourceSFX.outputAudioMixerGroup == null)
+        {
+            Debug.LogError("BootstrapMainMenu SFX == null");
+        }
+        
+        if (_sourceMusic.outputAudioMixerGroup == null)
+        {
+            Debug.LogError("BootstrapMainMenu Music == null");
+        }
+        
+        _sourceMusic.outputAudioMixerGroup = _soundManager.MusicGroup;
+        _sourceSFX.outputAudioMixerGroup = _soundManager.SFXGroup;
+        
         _container.Bind<AudioSource>().WithId("SFX").FromInstance(_sourceSFX);
         _container.Bind<AudioSource>().WithId("Music").FromInstance(_sourceMusic);
     }

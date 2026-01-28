@@ -6,15 +6,22 @@ public class SoundsFurniture : MonoBehaviour,IPause
     [SerializeField] private AudioSource audioSource;
     private LoadReleaseGameplay _loadReleaseGameplay;
     private AudioClip _audioClipCurrent;
+    private SoundsServiceGameplay _soundsServiceGameplay;
     
     private IHandlerPause _pauseHandler;
     
     [Inject]
-    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay,IHandlerPause pauseHandler)
+    private void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay,IHandlerPause pauseHandler,SoundsServiceGameplay soundsServiceGameplay)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
+        _soundsServiceGameplay = soundsServiceGameplay;
+    }
+
+    private void Start()
+    {
+        audioSource.outputAudioMixerGroup = _soundsServiceGameplay.SoundManager.SFXGroup;
     }
 
     private void OnDestroy()
@@ -113,7 +120,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
             Debug.Log("дубляж клипа остановлен");
             return;
         }
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.SuvideSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.SuvideSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -121,7 +128,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayCuttingTableSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.CuttingTableSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.CuttingTableSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -129,7 +136,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayWorkOvenSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.WorkOvenSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.WorkOvenSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -137,7 +144,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayStoveSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.StoveSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.StoveSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -145,7 +152,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayBlenderSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.BlenderSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.BlenderSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -153,7 +160,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOvenSecondSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.OvenSecondSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.OvenSecondSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -161,7 +168,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayTimerSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.TimerSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.TimerSound];
         audioSource.clip = _audioClipCurrent;
         audioSource.loop = true;
         audioSource.Play();
@@ -169,7 +176,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOneShotTakeOnTheTableSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.TakeOnTheTableSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.TakeOnTheTableSound];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = false;
         audioSource.PlayOneShot(_audioClipCurrent);
@@ -177,7 +184,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOneShotPutOnTheTableSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.PutOnTheTableSound2];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.PutOnTheTableSound2];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = false;
         audioSource.PlayOneShot(_audioClipCurrent);
@@ -185,13 +192,13 @@ public class SoundsFurniture : MonoBehaviour,IPause
 
     private void PlayOneShotDistributionSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.DistributionSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.DistributionSound];
         audioSource.PlayOneShot(_audioClipCurrent);
     }
     
     private void PlayOneShotRubbishSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.RubbishSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.RubbishSound];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = true;
         audioSource.PlayOneShot(_audioClipCurrent);
@@ -199,7 +206,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOneShotStartOvenSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.StartOvenSound];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.StartOvenSound];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = true;
         audioSource.PlayOneShot(_audioClipCurrent);
@@ -207,7 +214,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOneShotPutTheBerryBlenderSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.PutTheBerryBlender];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.PutTheBerryBlender];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = true;
         audioSource.PlayOneShot(_audioClipCurrent);
@@ -215,7 +222,7 @@ public class SoundsFurniture : MonoBehaviour,IPause
     
     private void PlayOneShotPutTheWaterSound()
     {
-        _audioClipCurrent = _loadReleaseGameplay.AudioDic[AudioNameGamePlay.PutTheWater];
+        _audioClipCurrent = _soundsServiceGameplay.AudioDictionary[AudioNameGamePlay.PutTheWater];
         //audioSource.clip = _audioClipCurrent;
         //audioSource.loop = true;
         audioSource.PlayOneShot(_audioClipCurrent);

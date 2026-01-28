@@ -73,9 +73,9 @@ public class BootstrapMainMenu : MonoBehaviour
     private async UniTask InitializeAsync()
     {
         await WaitForResourcesLoaded();
+        await InitAudioAsync();
         await CreateCameras();
         CreateLoadingPanel();
-        await InitAudioAsync();
         await CreateUI();
         
         // небольшая пауза

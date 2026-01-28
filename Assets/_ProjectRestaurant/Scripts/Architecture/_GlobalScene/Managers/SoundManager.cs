@@ -1,31 +1,33 @@
-using System;
 using UnityEngine;
 using UnityEngine.Audio;
-using Zenject;
 
-public class SoundManager: IDisposable, IInitializable
+public class SoundManager//: IDisposable, IInitializable
 {
-    private const string MASTER_VOLUME_KEY = "MasterVolume";
-    private const string MUSIC_VOLUME_KEY = "MusicVolume";
-    private const string SFX_VOLUME_KEY = "SFXVolume";
-    
-    private const float DEFAULT_VOLUME = 80f;
-    
     private AudioMixer _audioMixer;
+    
+    
+    public AudioMixerGroup MusicGroup { get; private set; }
+    public AudioMixerGroup SFXGroup { get; private set; }
+    public AudioMixerGroup MasterGroup { get; private set; }
+    public AudioMixer AudioMixer => _audioMixer;
 
     public SoundManager(AudioMixer audioMixer)
     {
         _audioMixer = audioMixer;
-    }
-    
-    public void Initialize()
-    {
-        //LoadVolumeSettings();
+
+        // Инициализация групп при создании
+        InitGroups();
     }
 
-    public void Dispose()
+    private void InitGroups()
     {
-        //Debug.Log("Dispose SoundManager");
+        var music = _audioMixer.FindMatchingGroups("Music");
+        var sfx   = _audioMixer.FindMatchingGroups("SFX");
+        var master = _audioMixer.FindMatchingGroups("Master");
+
+        if (music.Length > 0) MusicGroup = music[0];
+        if (sfx.Length > 0) SFXGroup = sfx[0];
+        if (master.Length > 0) MasterGroup = master[0];
     }
     
     private float VolumeToDecibelLogarithmic(float volume)
@@ -40,6 +42,7 @@ public class SoundManager: IDisposable, IInitializable
         float logarithmic = Mathf.Log10(normalized * 9f + 1f);
         
         return logarithmic * 20f - 20f; // -20dB до 0dB
+        
     }
     
     // Установка общей громкости
@@ -55,11 +58,10 @@ public class SoundManager: IDisposable, IInitializable
     {
         float normalized = Mathf.Clamp(volume / 100f, 0.0001f, 1f);
         float dB = Mathf.Log10(normalized) * 20f;
-
-        // В билде микшер может не успеть инициализироваться, 
-        // поэтому мы проверяем результат или вызываем чуть позже
+        
         bool result = _audioMixer.SetFloat("Master", dB);
         if (!result) Debug.LogError("Микшер отклонил установку громкости Master! Проверьте Exposed Parameters.");
+        Debug.Log($"SoundManager Master (пришло){volume} -> (SetFloat){dB}");
     }
     
     // Установка громкости музыки

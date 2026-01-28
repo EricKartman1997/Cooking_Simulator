@@ -44,7 +44,7 @@ public class LoadReleaseGlobalScene : IDisposable
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            Debug.Log("Сцена загружена и активирована.");
+            //Debug.Log("Сцена загружена и активирована.");
         }
         else
         {
