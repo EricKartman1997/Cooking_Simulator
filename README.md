@@ -1,6 +1,6 @@
 <div style="font-size: 18px">
 
-<h1 align="center"><strong>🍳 Cooking Simulator</strong></h1>
+<h1 align="center"><strong>🍳 Cooking Simulator 🤖</strong></h1>
 
 <h3 align="center" style="font-size: 22px">
 Симулятор ресторана на Unity с системой приготовления блюд, выполнением заказов, чистой архитектурой и интеграцией с внешними сервисами.
