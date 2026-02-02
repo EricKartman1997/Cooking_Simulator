@@ -1,21 +1,18 @@
 using System;
-using UnityEngine;
 
-public class Score : IDisposable
+public class ScoreService : IDisposable
 {
-    private TimeGame _timeGame;
+    private TimeGameService _timeGameService;
     private float _score;
     private ScoreCheckVisitore _checkVisitore;
     private CheckContainer _checkContainer;
     
     public float ScorePlayer => _checkVisitore.Score ;
 
-    public Score(TimeGame timeGame,CheckContainer checkContainer)
+    public ScoreService(TimeGameService timeGameService,CheckContainer checkContainer)
     {
-        _timeGame = timeGame;
+        _timeGameService = timeGameService;
         _checkContainer = checkContainer;
-        
-        EventBus.AddScore += AddScore;
         
         _checkVisitore = new ScoreCheckVisitore(_checkContainer); // создать медиатор
         
@@ -23,23 +20,18 @@ public class Score : IDisposable
 
     public void Dispose()
     {
-        EventBus.AddScore -= AddScore;
-    }
 
-    // public void AddScore(int score)
-    // {
-    //     _score += score + AdditionalScore();
-    // }
+    }
     
-    private void AddScore(int score, Check check)
+    public void AddScore(int score, Check check)
     {
         check.Accept(_checkVisitore);
         _checkVisitore.Score += score + AdditionalScore();
     }
     private float AdditionalScore()
     {
-        var remSeconds = _timeGame.TimeLevel[0] - _timeGame.CurrentSeconds;
-        var remMinutes = _timeGame.TimeLevel[1] - _timeGame.CurrentMinutes;
+        var remSeconds = _timeGameService.TimeLevel[0] - _timeGameService.CurrentSeconds;
+        var remMinutes = _timeGameService.TimeLevel[1] - _timeGameService.CurrentMinutes;
         var multiplyMinutes = remMinutes * 60;
         var result = multiplyMinutes + remSeconds;
         return result;

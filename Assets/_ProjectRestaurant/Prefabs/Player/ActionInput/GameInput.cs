@@ -64,7 +64,6 @@ public class GameInput : MonoBehaviour
         if (_pauseHandler.IsPause == false)
         {
             _menu.Show();
-            EventBus.PauseOn.Invoke();
         }
         else
         {

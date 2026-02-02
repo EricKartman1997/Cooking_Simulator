@@ -69,7 +69,7 @@ public class AudioView: MonoBehaviour
     
     private void SetMasterVolume(float volume)
     {
-        Debug.Log($"AudioView Master {volume}");
+        //Debug.Log($"AudioView Master {volume}");
         SoundManager.SetMasterVolume(volume);
     }
     

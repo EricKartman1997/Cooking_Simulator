@@ -1,23 +1,25 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class ChecksPanalUI : MonoBehaviour
+public class ChecksPanalUI : MonoBehaviour,IPause
 {
     [SerializeField] private GameObject content;
     
     private Dictionary<Check,GameObject> _dictionaryChecks = new Dictionary<Check, GameObject>();
+    private IHandlerPause _handlerPause;
 
-    private void Awake()
+    [Inject]
+    public void ConstructZenject(IHandlerPause handlerPause)
     {
-        EventBus.PauseOn += HideChecks;
-        EventBus.PauseOff += ShowChecks;
+        _handlerPause = handlerPause;
+        _handlerPause.Add(this);
     }
 
     private void OnDestroy()
     {
-        EventBus.PauseOn -= HideChecks;
-        EventBus.PauseOff -= ShowChecks;
+        _handlerPause.Remove(this);
     }
 
     public void AddCheck(Check check, CheckPrefabFactory checksFactory, CheckType type)
@@ -83,5 +85,17 @@ public class ChecksPanalUI : MonoBehaviour
     private void ShowChecks()
     {
         content.SetActive(true);
+    }
+
+    public void SetPause(bool isPaused)
+    {
+        if (isPaused == true)
+        {
+            HideChecks();
+        }
+        else
+        {
+            ShowChecks();
+        }
     }
 }

@@ -4,14 +4,11 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class TimeGame : IDisposable, ITickable, IPause
+public class TimeGameService : IDisposable, ITickable, IPause
 {
-    public event Action<float,float> UpdateTime;
-    public event Action ShowTime;
+    public event Action GameOver;
     
-    public bool Work;
-    private TextMeshProUGUI _timeText;
-    
+    private bool _work;
     private float[] _timeLevel;
     private float _currentSeconds;
     private float _currentMinutes;
@@ -21,24 +18,34 @@ public class TimeGame : IDisposable, ITickable, IPause
     private bool _isPause;
     private IHandlerPause _pauseHandler;
     private GamePlaySceneSettings _settings;
+    private TimeGameUI _timeGameUI;
+    private FactoryUIGameplay _factoryUIGameplay;
     
     public float[] TimeLevel => _timeLevel;
     public float CurrentSeconds => _currentSeconds;
 
     public float CurrentMinutes => _currentMinutes;
 
-    public TimeGame(IHandlerPause pauseHandler,GamePlaySceneSettings settings)
+    public TimeGameService(IHandlerPause pauseHandler,GamePlaySceneSettings settings,FactoryUIGameplay factoryUIGameplay)
     {
         _settings = settings;
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
+        _factoryUIGameplay = factoryUIGameplay;
+        //_timeGameUI = factoryUIGameplay.TimeGameUI;
         CreateTimeLevel();
     }
     
     public void Dispose()
     {
         _pauseHandler.Remove(this);
-        //Debug.Log("У объекта вызван Dispose : TimeGame");
+        //Debug.Log("У объекта вызван Dispose : TimeGameService");
+    }
+    
+    public void Init()
+    {
+        _work = true;
+        _timeGameUI = _factoryUIGameplay.TimeGameUI;
     }
 
     private void CreateTimeLevel()
@@ -56,20 +63,19 @@ public class TimeGame : IDisposable, ITickable, IPause
 
     public void Tick()
     {
-        if(Work == false)
+        if(_work == false)
             return;
         
         if(_isPause)
             return;
-        //Debug.Log("Пауза не вызвана");
         
         _currentSeconds -= Time.deltaTime;
         
         if (_currentMinutes <= 0f && _currentSeconds <= 0f)
         {
             //Debug.Log("Game Over");
-            EventBus.GameOver.Invoke();
-            Debug.Log("Сработал GameOver в TimeGame");
+            GameOver?.Invoke();
+            Debug.Log("Сработал GameOverService в TimeGameService");
         }
         else
         {
@@ -79,9 +85,8 @@ public class TimeGame : IDisposable, ITickable, IPause
                 _currentSeconds = 60f;
             }
         }
-        // _timeText.text = string.Format("{0:00}:{1:00}", _currentMinutes, _currentSeconds);
-        ShowTime?.Invoke();
-        UpdateTime?.Invoke(_currentMinutes, _currentSeconds);
+        _timeGameUI.Show();
+        _timeGameUI.UpdateTime(_currentMinutes, _currentSeconds);
     }
 
     public void SetPause(bool isPaused) => _isPause = isPaused;

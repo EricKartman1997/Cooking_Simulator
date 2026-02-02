@@ -40,17 +40,15 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<ProductsFactory>().AsSingle();
         Container.Bind<ViewFactory>().AsSingle();
         Container.Bind<HelperScriptFactory>().AsSingle();
-
+        
+        Container.BindInterfacesAndSelfTo<TimeGameService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<OrdersService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<ScoreService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<GameOverService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
+        
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
-        
-        Container.BindInterfacesAndSelfTo<TimeGame>().AsSingle();
-        Container.BindInterfacesAndSelfTo<Orders>().AsSingle();
-        Container.BindInterfacesAndSelfTo<GameOver>().AsSingle();
-        Container.BindInterfacesAndSelfTo<Score>().AsSingle();
-        Container.Bind<Menu>().AsSingle();
-        
-        Container.Bind<ManagerMediator>().AsSingle().Lazy();
         
         BindCheckFactory();
         BindCheckPrefabFactory();

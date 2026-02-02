@@ -4,13 +4,16 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCheck, IActionCheck, ICheckTheCheck
+public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCheck, ICheckTheCheck,IDisposable
 {
-    public event Action<Check, CheckPrefabFactory, CheckType> AddCheckAction;
-    public event Action<Check> RemoveCheckAction;
     
     private CheckFactory _checkFactoryScript;
     private CheckPrefabFactory _checkPrefabFactory;
+    private OrdersService _ordersService;
+    private ScoreService _scoreService;
+    private ChecksPanalUI _checksPanalUI;
+    private BootstrapGameplay _bootstrapGameplay;
+    private FactoryUIGameplay _factoryUIGameplay;
 
     private Check _check1;
     private Check _check2;
@@ -24,11 +27,28 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
 
     public Check Check3 => _check3;
     
-    public ChecksManager(CheckFactory checksFactory,CheckPrefabFactory checkPrefabFactory,GamePlaySceneSettings settings)
+    public ChecksManager(CheckFactory checksFactory,CheckPrefabFactory checkPrefabFactory,GamePlaySceneSettings settings,
+        OrdersService ordersService,ScoreService scoreService,FactoryUIGameplay factoryUIGameplay)//,BootstrapGameplay bootstrapGameplay
     {
         _dishList = settings.DishList;
         _checkFactoryScript = checksFactory;
         _checkPrefabFactory = checkPrefabFactory;
+        _ordersService = ordersService;
+        _scoreService = scoreService;
+        _factoryUIGameplay = factoryUIGameplay;
+        //_checksPanalUI = factoryUIGameplay.ChecksPanalUI;
+        //_bootstrapGameplay = bootstrapGameplay;
+        //_bootstrapGameplay.InitChecksManager += Init;
+    }
+
+    public void Dispose()
+    {
+        //_bootstrapGameplay.InitChecksManager -= Init;
+    }
+
+    public void Init()
+    {
+        _checksPanalUI = _factoryUIGameplay.ChecksPanalUI;
     }
     
     public void Tick()
@@ -42,17 +62,17 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         if (_check1 == null)
         {
             _check1 = _checkFactoryScript.Create(type);
-            AddCheckAction?.Invoke(_check1, _checkPrefabFactory, type);
+            _checksPanalUI.AddCheck(_check1, _checkPrefabFactory, type);
         }
         else if (_check2 == null)
         {
             _check2 = _checkFactoryScript.Create(type);
-            AddCheckAction?.Invoke(_check2, _checkPrefabFactory, type);
+            _checksPanalUI.AddCheck(_check2, _checkPrefabFactory, type);
         }
         else if (_check3 == null)
         {
             _check3 = _checkFactoryScript.Create(type);
-            AddCheckAction?.Invoke(_check3, _checkPrefabFactory, type);
+            _checksPanalUI.AddCheck(_check3, _checkPrefabFactory, type);
         }
         else
         {
@@ -64,34 +84,34 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     {
         if (_check1 == check)
         {
-            EventBus.AddScore.Invoke(0,_check1);
-            RemoveCheckAction?.Invoke(_check1);
+            _scoreService.AddScore(0,_check1);
+            _checksPanalUI.RemoveCheck(_check1);
             _check1.Dispose();
             _check1 = null;
-            EventBus.AddOrder.Invoke();
-            EventBus.UpdateOrder.Invoke();
+            _ordersService.AddOrder();
+            _ordersService.UpdateOrder();
             return;
         }
         
         if (_check2 == check)
         {
-            EventBus.AddScore.Invoke(0,_check2);
-            RemoveCheckAction?.Invoke(_check2);
+            _scoreService.AddScore(0,_check2);
+            _checksPanalUI.RemoveCheck(_check2);
             _check2.Dispose();
             _check2 = null;
-            EventBus.AddOrder.Invoke();
-            EventBus.UpdateOrder.Invoke();
+            _ordersService.AddOrder();
+            _ordersService.UpdateOrder();
             return;
         }
         
         if (_check3 == check)
         {
-            EventBus.AddScore.Invoke(0,_check3);
-            RemoveCheckAction?.Invoke(_check3);
+            _scoreService.AddScore(0,_check3);
+            _checksPanalUI.RemoveCheck(_check3);
             _check3.Dispose();
             _check3 = null;
-            EventBus.AddOrder.Invoke();
-            EventBus.UpdateOrder.Invoke();
+            _ordersService.AddOrder();
+            _ordersService.UpdateOrder();
             return;
         }
         
@@ -157,17 +177,17 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     {
         // Object.Destroy(_cloneCheck1);
         // _check1 = null;
-        RemoveCheckAction?.Invoke(_check1);
+        _checksPanalUI.RemoveCheck(_check1);
         //Debug.Log("удалил первый чек");
         
         // Object.Destroy(_cloneCheck2);
         // _check2 = null;
-        RemoveCheckAction?.Invoke(_check2);
+        _checksPanalUI.RemoveCheck(_check2);
         //Debug.Log("удалил второй чек");
         
         // Object.Destroy(_cloneCheck3);
         // _check3 = null;
-        RemoveCheckAction?.Invoke(_check3);
+        _checksPanalUI.RemoveCheck(_check3);
         //Debug.Log("удалил третий чек");
     }
     
@@ -177,7 +197,7 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         {
             // Object.Destroy(_cloneCheck1);
             // _cloneCheck1 = null;
-            RemoveCheckAction?.Invoke(_check1);
+            _checksPanalUI.RemoveCheck(_check1);
             _check1 = null;
 
             //Debug.Log("просрочен 1 чек");
@@ -186,7 +206,7 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         {
             // Object.Destroy(_cloneCheck2);
             // _cloneCheck2 = null;
-            RemoveCheckAction?.Invoke(_check2);
+            _checksPanalUI.RemoveCheck(_check2);
             _check2 = null;
             
             //Debug.Log("просрочен 2 чек");
@@ -196,7 +216,7 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         {
             // Object.Destroy(_cloneCheck3);
             // _cloneCheck3 = null;
-            RemoveCheckAction?.Invoke(_check3);
+            _checksPanalUI.RemoveCheck(_check3);
             _check3 = null;
 
             //Debug.Log("просрочен 3 чек");

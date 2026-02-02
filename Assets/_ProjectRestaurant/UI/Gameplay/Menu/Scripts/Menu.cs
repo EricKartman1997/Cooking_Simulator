@@ -2,25 +2,42 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Menu
+public class Menu : IDisposable
 {
-    public event Action ShowMenuAction;
-    public event Action HideMenuAction;
-    public event Action HideSettingsAction;
-    public event Func<bool> IsOpenSettingsAction;
-    
-    private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    // public event Action ShowMenuAction;
+    // public event Action HideMenuAction;
+    // public event Action HideSettingsAction;
+    // public event Func<bool> IsOpenSettingsAction;
+    //
     private PauseHandler _pauseHandler;
     private BootstrapGameplay _bootstrapGameplay;
+    private MenuUI _menuUI;
+    private FactoryUIGameplay _factoryUIGameplay;
     
     private GameObject _panelSettings;
     
-    public Menu(LoadReleaseGlobalScene loadReleaseGlobalScene,PauseHandler pauseHandler,
-                BootstrapGameplay bootstrapGameplay)
+    public Menu(PauseHandler pauseHandler, BootstrapGameplay bootstrapGameplay,FactoryUIGameplay factoryUIGameplay)
     {
         _bootstrapGameplay = bootstrapGameplay;
         _pauseHandler = pauseHandler;
-        _loadReleaseGlobalScene = loadReleaseGlobalScene;
+        _factoryUIGameplay = factoryUIGameplay;
+        //_menuUI = factoryUIGameplay.MenuUI;
+
+        _bootstrapGameplay.InitMenuButtons += Init;
+    }
+    
+    public void Dispose()
+    {
+        _menuUI.ContinueAction -= ContinueButton;
+        _menuUI.ExitAction -= ExitButton;
+        _bootstrapGameplay.InitMenuButtons -= Init;
+    }
+    
+    private void Init()
+    {
+        _menuUI = _factoryUIGameplay.MenuUI;
+        _menuUI.ContinueAction += ContinueButton;
+        _menuUI.ExitAction += ExitButton;
     }
     
     public void ContinueButton()
@@ -50,18 +67,17 @@ public class Menu
     public void Show()
     {
         _pauseHandler.SetPause(true,InputBlockType.Movement | InputBlockType.OnPressE);
-        ShowMenuAction?.Invoke();
+        _menuUI.ShowMenu();
     }
     
     public void Hide()
     {
-        if (IsOpenSettingsAction != null && IsOpenSettingsAction.Invoke())
+        if ( _menuUI.IsOpen)
         {
-            HideSettingsAction?.Invoke();
+            _menuUI.HideSettingsPanel();
             return;
         }
         _pauseHandler.SetPause(false,InputBlockType.Movement | InputBlockType.OnPressE);
-        HideMenuAction?.Invoke();
-        EventBus.PauseOff.Invoke();
+        _menuUI.HideMenu();
     }
 }

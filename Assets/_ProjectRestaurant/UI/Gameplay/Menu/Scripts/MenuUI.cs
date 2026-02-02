@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MenuUI : MonoBehaviour
 {
     public event Action ContinueAction;
-    public event Action SettingsAction;
+    //public event Action SettingsAction;
     public event Func<UniTask> ExitAction;
     
     [SerializeField] private Button continueButton;
@@ -37,7 +37,7 @@ public class MenuUI : MonoBehaviour
     {
         // открыть настройки
         OpenSettingsPanel();
-        SettingsAction?.Invoke();
+        //SettingsAction?.Invoke();
     }
     
     private void ExitButton()
@@ -51,21 +51,23 @@ public class MenuUI : MonoBehaviour
         _settingsViewController.OpenPanel();
     }
     
-    public void Show()
+    public void HideSettingsPanel()
+    {
+        _settingsViewController.ClosePanel();
+    }
+    
+    public void ShowMenu()
     {
         gameObject.SetActive(true);
     }
     
-    public void Hide()
+    public void HideMenu()
     {
         settingsViewController.FinishCloseAnim();
         gameObject.SetActive(false);
     }
     
-    public void HideSettingsPanel()
-    {
-        _settingsViewController.ClosePanel();
-    }
+    
     
     
     public bool IsOpenSettingsPanel()

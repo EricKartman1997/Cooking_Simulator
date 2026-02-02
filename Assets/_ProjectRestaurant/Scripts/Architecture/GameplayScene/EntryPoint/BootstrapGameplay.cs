@@ -2,9 +2,11 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Cinemachine;
+using System;
 
 public class BootstrapGameplay : MonoBehaviour
 {
+    public event Action InitMenuButtons;
     
     private CinemachineVirtualCamera _virtualCamera;
     
@@ -17,12 +19,15 @@ public class BootstrapGameplay : MonoBehaviour
     private SoundsServiceGameplay _soundsServiceGameplay;
     private StorageData _storageData;
     private NotificationManager _notificationManager;
+    private OrdersService _ordersService;
+    private ChecksManager _checksManager;
+    private GameOverService _gameOverService;
     
     private DiContainer _container;
     
     //ВКЛ игры
     private UpdateChecks _updateChecks;
-    private TimeGame _timeGame;
+    private TimeGameService _timeGameService;
     
     private GameObject _loadingPanel;
     private GameObject _gameUI;
@@ -31,8 +36,9 @@ public class BootstrapGameplay : MonoBehaviour
     public void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, LoadReleaseGlobalScene loadReleaseGlobalScene,
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
-        SoundsServiceGameplay soundsServiceGameplay, TimeGame timeGame,
-        UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager)
+        SoundsServiceGameplay soundsServiceGameplay, TimeGameService timeGameService,
+        UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager,
+        OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -41,11 +47,15 @@ public class BootstrapGameplay : MonoBehaviour
         _factoryEnvironment = factoryEnvironment;
         _factoryCamerasGameplay = factoryCamerasGameplay;
         _soundsServiceGameplay = soundsServiceGameplay;
-        _timeGame = timeGame;
+        _timeGameService = timeGameService;
         _updateChecks = updateChecks;
         _container = container;
         _storageData = storageData;
         _notificationManager = notificationManager;
+        _ordersService = ordersService;
+        _checksManager = checksManager;
+        _gameOverService = gameOverService;
+        //_menu = menu;
     }
     
     private void Start()
@@ -138,7 +148,6 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTask CreateServiceAsync()
     {
-        _container.Resolve<ManagerMediator>(); // ← Создаётся прямо здесь!
         await UniTask.Yield();
     }
     
@@ -172,8 +181,16 @@ public class BootstrapGameplay : MonoBehaviour
     
     private async UniTask StartGame()
     {
-        _timeGame.Work = true;
+        _checksManager.Init();
+        //InitChecksManager?.Invoke();
+        _ordersService.Init();
+        InitMenuButtons?.Invoke();
+        _timeGameService.Init();
+        _gameOverService.Init();
+        
         _updateChecks.Work = true;
+        
+        _ordersService.UpdateOrder();
         await UniTask.Yield();
     }
     

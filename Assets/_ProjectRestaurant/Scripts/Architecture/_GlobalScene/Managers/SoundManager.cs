@@ -61,7 +61,7 @@ public class SoundManager//: IDisposable, IInitializable
         
         bool result = _audioMixer.SetFloat("Master", dB);
         if (!result) Debug.LogError("Микшер отклонил установку громкости Master! Проверьте Exposed Parameters.");
-        Debug.Log($"SoundManager Master (пришло){volume} -> (SetFloat){dB}");
+        //Debug.Log($"SoundManager Master (пришло){volume} -> (SetFloat){dB}");
     }
     
     // Установка громкости музыки
