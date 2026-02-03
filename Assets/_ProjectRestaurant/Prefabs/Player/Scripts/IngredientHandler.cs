@@ -133,6 +133,9 @@ public class IngredientHandler: IDisposable
     private void CreateObj(GameObject obj)
     {
         _currentTakenObjects = _productsFactory.GetProduct(obj, _ingredientPosition, _ingredientParent, true);
+        _currentTakenObjects.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        _currentTakenObjects.transform.localScale = Vector3.one;
+        _currentTakenObjects.transform.localPosition = Vector3.zero;
         _isBusyHands = true;
     }
 }  

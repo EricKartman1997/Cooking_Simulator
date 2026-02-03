@@ -25,18 +25,18 @@ public class GameOverService : IDisposable
 
     public void Init()
     {
-        _timeGameService.GameOver += GameServiceOver;
-        _ordersService.GameOver += GameServiceOver;
+        _timeGameService.GameOver += GameOver;
+        _ordersService.GameOver += GameOver;
         _gameOverUI = _factoryUIGameplay.GameOverUI;
     }
 
     public void Dispose()
     {
-        _timeGameService.GameOver -= GameServiceOver;
-        _ordersService.GameOver -= GameServiceOver;
+        _timeGameService.GameOver -= GameOver;
+        _ordersService.GameOver -= GameOver;
     }
     
-    private void GameServiceOver()
+    public void GameOver()
     {
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true, InputBlockType.All);

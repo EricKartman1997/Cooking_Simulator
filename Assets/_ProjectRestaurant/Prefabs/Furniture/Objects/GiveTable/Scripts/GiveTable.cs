@@ -79,6 +79,9 @@ public class GiveTable : MonoBehaviour,IUseFurniture
             return false;
         }
         _ingredient = _productsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
+        _ingredient.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        _ingredient.transform.localScale = Vector3.one;
+        _ingredient.transform.localPosition = Vector3.zero;
         _heroik.CleanObjOnHands();
         return true;
     }

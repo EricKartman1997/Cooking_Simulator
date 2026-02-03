@@ -123,6 +123,8 @@ public class GetTable : MonoBehaviour, IUseFurniture
 
     private GameObject GiveObj(GameObject giveObj)
     {
+        giveObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        giveObj.transform.localScale = Vector3.one;
         return giveObj;
     }
     

@@ -1,4 +1,3 @@
-using System;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -7,6 +6,7 @@ public class FactoryCamerasGameplay
 {
     private LoadReleaseGameplay _loadReleaseGameplay;
     private DiContainer _container;
+    private IInstantiator _instantiator;
     private GameObject empty = new GameObject("Cameras_Test");
 
     public FactoryCamerasGameplay(LoadReleaseGameplay loadReleaseGameplay, DiContainer container)

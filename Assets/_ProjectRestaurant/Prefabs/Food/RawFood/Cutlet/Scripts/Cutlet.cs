@@ -21,6 +21,7 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
     
     private bool _isPause;
     private IHandlerPause _pauseHandler;
+    private GameOverService _gameOverService;
 
     public Action StopSoundAction
     {
@@ -103,10 +104,20 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
             if (value == true)
             {
                 _stopSound?.Invoke();
+                _gameOverService.GameOver();
             }
             
             _isFire = value;
         } 
+    }
+
+    [Inject]
+    private void ConstructZenject(GameOverService gameOverService,IHandlerPause handlerPause)
+    {
+        _gameOverService = gameOverService;
+        _pauseHandler = handlerPause;
+        _pauseHandler.Add(this);
+        Debug.Log("зашел в конструктор");
     }
 
     private void Awake()
@@ -124,12 +135,6 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
     private void OnDestroy()
     {
         _stopSound?.Invoke();
-    }
-    
-    public void Init(PauseHandler pauseHandler)
-    {
-        _pauseHandler = pauseHandler;
-        _pauseHandler.Add(this);
     }
     
     public void Delete()

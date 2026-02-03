@@ -137,9 +137,11 @@ public class Stove : MonoBehaviour, IUseFurniture
             return false;
         }
         _ingredient = _productsFactory.GetProduct(acceptObj,_stovePoints.PositionRawFood,_stovePoints.PositionRawFood, true);
+        _ingredient.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        _ingredient.transform.localScale = Vector3.one;
+        _ingredient.transform.localPosition = Vector3.zero;
         _heroik.CleanObjOnHands();
         _componentForStove = _ingredient.GetComponent<IForStove>();
-        _componentForStove.Init(_pauseHandler);
         _componentForStove.StopSoundAction += StopSoundAction;
         _componentForStove.PlaySoundAction += PlaySoundAction;
         return true;

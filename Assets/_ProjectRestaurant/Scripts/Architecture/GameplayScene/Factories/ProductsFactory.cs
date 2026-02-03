@@ -1,14 +1,16 @@
-using System;
 using UnityEngine;
+using Zenject;
 using Object = UnityEngine.Object;
 
 public class ProductsFactory
 {
     private LoadReleaseGameplay _loadReleaseGameplay;
+    private IInstantiator _instantiator;
 
-    public ProductsFactory(LoadReleaseGameplay loadReleaseGameplay)
+    public ProductsFactory(LoadReleaseGameplay loadReleaseGameplay,IInstantiator instantiator)
     {
         _loadReleaseGameplay = loadReleaseGameplay;
+        _instantiator = instantiator;
     }
     
     public GameObject GetCutlet(EnumRoasting roasting)
@@ -27,25 +29,10 @@ public class ProductsFactory
 
         return null;
     }
-    
-    public GameObject GetProduct(GameObject pref,Transform transform,Transform parent)
-     {
-         GameObject obj = Object.Instantiate(pref, transform.position, Quaternion.identity,parent);
-         obj.name = pref.name;
-         return obj;
-     }
-     
-     public GameObject GetProduct(GameObject pref, bool setActive = true)
-     {
-         GameObject obj = Object.Instantiate(pref);
-         obj.name = pref.name;
-         obj.SetActive(setActive);
-         return obj;
-     }
      
      public GameObject GetProduct(GameObject pref, Transform transform,Transform parent, bool setActive = true, bool zero = false)
      {
-         GameObject obj = Object.Instantiate(pref, transform.position, Quaternion.identity,parent);
+         GameObject obj = _instantiator.InstantiatePrefab(pref, transform.position, Quaternion.identity,parent);
          obj.name = pref.name;
          obj.SetActive(setActive);
          if (zero == true)
@@ -59,14 +46,16 @@ public class ProductsFactory
      public GameObject GetProduct(IngredientName enumGiveFood, Transform transform,Transform parent)
      {
          GameObject obj1 = GetProductRef(enumGiveFood);
-         GameObject obj = Object.Instantiate(obj1, transform.position, Quaternion.identity,parent);
+         GameObject obj = _instantiator.InstantiatePrefab(obj1, transform.position, Quaternion.identity,parent);
          return obj;
      }
      
      public GameObject GetProductRef(IngredientName enumGiveFood)
      {
          if (_loadReleaseGameplay.IngredientDic.TryGetValue(enumGiveFood, out var prefab))
+         {
              return prefab;
+         }
 
          Debug.LogWarning($"Unknown product type: {enumGiveFood}");
          return null;
@@ -74,15 +63,15 @@ public class ProductsFactory
      
     private GameObject GetRawCutlet()
     {
-        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.RawCutlet]);
+        return _instantiator.InstantiatePrefab(_loadReleaseGameplay.IngredientDic[IngredientName.RawCutlet]);
     }
     private GameObject GetMediumCutlet()
     {
-        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.MediumCutlet]);
+        return _instantiator.InstantiatePrefab(_loadReleaseGameplay.IngredientDic[IngredientName.MediumCutlet]);
     }
     private GameObject GetBurnCutlet()
     {
-        return Object.Instantiate(_loadReleaseGameplay.IngredientDic[IngredientName.BurnCutlet]);
+        return _instantiator.InstantiatePrefab(_loadReleaseGameplay.IngredientDic[IngredientName.BurnCutlet]);
     }
     
 }

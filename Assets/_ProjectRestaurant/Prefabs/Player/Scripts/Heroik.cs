@@ -78,11 +78,6 @@ public class Heroik : MonoBehaviour
         Debug.LogWarning("Объект не подходит для этой furniture");
         return null;
     }
-    
-    public bool CanGiveIngredient(List<Product> forbiddenIngredients) // проверка на отдачу объекта из рук по списку объектов
-    {
-        return _ingredientHandler.CanGiveIngredient(forbiddenIngredients); 
-    }
 
     public void CleanObjOnHands()
     {
