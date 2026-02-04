@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Menu : IDisposable
 {
-    // public event Action ShowMenuAction;
-    // public event Action HideMenuAction;
-    // public event Action HideSettingsAction;
-    // public event Func<bool> IsOpenSettingsAction;
-    //
+    
     private PauseHandler _pauseHandler;
     private BootstrapGameplay _bootstrapGameplay;
     private MenuUI _menuUI;
