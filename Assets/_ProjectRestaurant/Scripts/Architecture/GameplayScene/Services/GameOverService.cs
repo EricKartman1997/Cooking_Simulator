@@ -9,7 +9,7 @@ public class GameOverService : IDisposable
     private readonly PauseHandler _pauseHandler;
     private readonly FactoryUIGameplay _factoryUIGameplay;
     
-    private GameOverUI _gameOverUI;
+    private StatisticWindowUI _statisticWindowUI;
 
 
     public GameOverService(ScoreService scoreService, TimeGameService timeGameService,OrdersService ordersService,PauseHandler pauseHandler,
@@ -27,7 +27,7 @@ public class GameOverService : IDisposable
     {
         _timeGameService.GameOver += GameOver;
         _ordersService.GameOver += GameOver;
-        _gameOverUI = _factoryUIGameplay.GameOverUI;
+        _statisticWindowUI = _factoryUIGameplay.StatisticWindowUI;
     }
 
     public void Dispose()
@@ -40,7 +40,7 @@ public class GameOverService : IDisposable
     {
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true, InputBlockType.All);
-        _gameOverUI.Show(_scoreService,_timeGameService);
+        _statisticWindowUI.Show(_scoreService,_timeGameService);
     }
     
 }

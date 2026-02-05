@@ -15,14 +15,14 @@ public class FactoryUIGameplay
     private OrdersUI _ordersUI;
     private ChecksPanalUI _checksPanalUI;
     private MenuUI _menuUI;
-    private GameOverUI _gameOverUI;
+    private StatisticWindowUI _statisticWindowUI;
 
     public TimeGameUI TimeGameUI => _timeGameUI;
 
     public OrdersUI OrdersUI => _ordersUI;
     public ChecksPanalUI ChecksPanalUI => _checksPanalUI;
     public MenuUI MenuUI => _menuUI;
-    public GameOverUI GameOverUI => _gameOverUI;
+    public StatisticWindowUI StatisticWindowUI => _statisticWindowUI;
 
     //GameObject
     public GameObject GameWindow => _gameWindow;
@@ -50,8 +50,8 @@ public class FactoryUIGameplay
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.MainFrameCanvas], empty.transform);
         obj.GetComponent<Canvas>().worldCamera = Camera.main;
         
-        _gameOverWindow = obj.GetComponentInChildren<GameOverUI>(true).gameObject;
-        _gameOverUI = obj.GetComponentInChildren<GameOverUI>(true);
+        _gameOverWindow = obj.GetComponentInChildren<StatisticWindowUI>(true).gameObject;
+        _statisticWindowUI = obj.GetComponentInChildren<StatisticWindowUI>(true);
         //_container.Bind<GameOverUI>().FromInstance(_gameOverWindow.GetComponent<GameOverUI>()).AsSingle(); //регистрация в контейнер
         _gameOverWindow.SetActive(false);
         
