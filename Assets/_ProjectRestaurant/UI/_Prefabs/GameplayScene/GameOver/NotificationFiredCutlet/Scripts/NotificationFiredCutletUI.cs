@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Michsky.MUIP;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class NotificationFiredCutletUI : MonoBehaviour
     [SerializeField] private ButtonManager continueButtton;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panel;
+    
+    public event Action OnHidden;
+    
     private SoundsServiceGameplay _soundsService;
 
     [Inject]
@@ -45,6 +49,7 @@ public class NotificationFiredCutletUI : MonoBehaviour
 
     public void Show()
     {
+        gameObject.SetActive(true);
         PlayAnimation();
     }
     
@@ -55,7 +60,6 @@ public class NotificationFiredCutletUI : MonoBehaviour
     
     private void PlayAnimation()
     {
-        gameObject.SetActive(true);
         Sequence seq = DOTween.Sequence();
 
         // 1. Плавное появление + увеличение
@@ -82,10 +86,10 @@ public class NotificationFiredCutletUI : MonoBehaviour
         seq.Append(panel.DOScale(0f, 0.65f).SetEase(Ease.InBack));
         seq.Join(canvasGroup.DOFade(0f, 0.6f).SetEase(Ease.InQuad));
 
-        // // 3. В конце можно отключить объект
-        // seq.OnComplete(() =>
-        // {
-        //     gameObject.SetActive(false);
-        // });
+        seq.OnComplete(() =>
+        {
+            gameObject.SetActive(false);
+            OnHidden?.Invoke();   // 🔥 уведомляем, что закрыли
+        });
     }
 }

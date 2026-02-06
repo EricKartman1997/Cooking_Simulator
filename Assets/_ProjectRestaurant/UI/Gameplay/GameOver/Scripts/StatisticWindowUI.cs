@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Michsky.MUIP;
@@ -15,20 +16,31 @@ public class StatisticWindowUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panel;
     
+    public event Action OnShown;
+    
     private BootstrapGameplay _bootstrapGameplay;
+    private SoundsServiceGameplay _soundsService;
     
 
     [Inject]
-    public void ConstructZenject(BootstrapGameplay bootstrapGameplay)
+    public void ConstructZenject(BootstrapGameplay bootstrapGameplay,SoundsServiceGameplay soundsServiceGameplay)
     {
         _bootstrapGameplay = bootstrapGameplay;
+        _soundsService = soundsServiceGameplay;
     }
-    
-    private void Start()
+
+    private void Awake()
     {
         canvasGroup.alpha = 0;
         panel.localScale = Vector3.zero;
         continueButton.onClick.AddListener(ButtonExit);
+    }
+
+    private void Start()
+    {
+        continueButton.soundSource = _soundsService.SourceSfx;
+        continueButton.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
+        continueButton.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
     
     // private void Update()
@@ -64,11 +76,13 @@ public class StatisticWindowUI : MonoBehaviour
     private void PlayAnimation()
     {
         gameObject.SetActive(true);
+        
         Sequence seq = DOTween.Sequence();
         
         seq.Append(canvasGroup.DOFade(1f, 0.7f).SetEase(Ease.OutQuad));
         seq.Join(panel.DOScale(1f, 0.7f).SetEase(Ease.OutBack));
-        seq.Play();
+        
+        seq.OnComplete(() => OnShown?.Invoke());
     }
     
     private void PlayHideAnimation()

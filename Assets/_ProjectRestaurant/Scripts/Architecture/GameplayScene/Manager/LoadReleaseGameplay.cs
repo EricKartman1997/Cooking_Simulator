@@ -268,15 +268,17 @@ public class LoadReleaseGameplay : IDisposable, IInitializable //,ILoadRelease<A
         var loadTasks = new List<Task<GameObject>>
         {
             LoadGameObjectAsync("GameWindow"),
-            LoadGameObjectAsync("GameOverWindow"),
-            LoadGameObjectAsync("MainFrameCanvas")
+            LoadGameObjectAsync("StatisticsWindow"),
+            LoadGameObjectAsync("MainFrameCanvas"),
+            LoadGameObjectAsync("NotificationFiredCutlet")
         };
 
         var results = await Task.WhenAll(loadTasks);
         
         _uiDic.Add(UIName.GameWindow, results[0]);
-        _uiDic.Add(UIName.GameOverWindow, results[1]);
+        _uiDic.Add(UIName.StatisticsWindow, results[1]);
         _uiDic.Add(UIName.MainFrameCanvas, results[2]);
+        _uiDic.Add(UIName.NotificationFiredCutlet, results[3]);
         
         //Debug.Log("прошел LoadUIPrefabsAsync");
     }
@@ -555,8 +557,9 @@ public enum ServiceNameGamePlay
 public enum UIName
 {
     GameWindow,
-    GameOverWindow,
-    MainFrameCanvas
+    MainFrameCanvas,
+    NotificationFiredCutlet,
+    StatisticsWindow
 }
 
 public enum CamerasNameGameplay

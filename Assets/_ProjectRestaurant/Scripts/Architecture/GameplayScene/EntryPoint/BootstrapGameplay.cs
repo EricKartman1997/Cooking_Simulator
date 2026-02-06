@@ -137,6 +137,10 @@ public class BootstrapGameplay : MonoBehaviour
     {
         _factoryUIGameplay.CreateUI();
         await UniTask.Yield();
+        _factoryUIGameplay.CreateStatisticsWindow();
+        await UniTask.Yield();
+        _factoryUIGameplay.CreateNotificationFiredCutlet();
+        await UniTask.Yield();
     }
     
     private async UniTask InitAudioAsync()

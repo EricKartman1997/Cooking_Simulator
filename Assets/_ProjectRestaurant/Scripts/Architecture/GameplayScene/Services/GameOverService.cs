@@ -10,6 +10,7 @@ public class GameOverService : IDisposable
     private readonly FactoryUIGameplay _factoryUIGameplay;
     
     private StatisticWindowUI _statisticWindowUI;
+    private NotificationFiredCutletUI _notificationFiredCutletUI;
 
 
     public GameOverService(ScoreService scoreService, TimeGameService timeGameService,OrdersService ordersService,PauseHandler pauseHandler,
@@ -28,6 +29,7 @@ public class GameOverService : IDisposable
         _timeGameService.GameOver += GameOver;
         _ordersService.GameOver += GameOver;
         _statisticWindowUI = _factoryUIGameplay.StatisticWindowUI;
+        _notificationFiredCutletUI = _factoryUIGameplay.NotificationFiredCutletUI;
     }
 
     public void Dispose()
@@ -41,6 +43,28 @@ public class GameOverService : IDisposable
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true, InputBlockType.All);
         _statisticWindowUI.Show(_scoreService,_timeGameService);
+    }
+    
+    public void GameOverFireCutlet()
+    {
+        Debug.Log("Игра закончена, котлета сгорела");
+
+        _pauseHandler.SetPause(true, InputBlockType.All);
+
+        // 1. Подписываемся на событие закрытия Notification
+        _notificationFiredCutletUI.OnHidden += OnNotificationHidden;
+
+        // 2. Показываем Notification
+        _notificationFiredCutletUI.Show();
+    }
+
+    private void OnNotificationHidden()
+    {
+        // Отписываемся, чтобы не срабатывало повторно
+        _notificationFiredCutletUI.OnHidden -= OnNotificationHidden;
+
+        // 3. Показываем окно статистики
+        _statisticWindowUI.Show(_scoreService, _timeGameService);
     }
     
 }

@@ -16,6 +16,7 @@ public class FactoryUIGameplay
     private ChecksPanalUI _checksPanalUI;
     private MenuUI _menuUI;
     private StatisticWindowUI _statisticWindowUI;
+    private NotificationFiredCutletUI _notificationFiredCutletUI;
 
     public TimeGameUI TimeGameUI => _timeGameUI;
 
@@ -23,6 +24,7 @@ public class FactoryUIGameplay
     public ChecksPanalUI ChecksPanalUI => _checksPanalUI;
     public MenuUI MenuUI => _menuUI;
     public StatisticWindowUI StatisticWindowUI => _statisticWindowUI;
+    public NotificationFiredCutletUI NotificationFiredCutletUI => _notificationFiredCutletUI;
 
     //GameObject
     public GameObject GameWindow => _gameWindow;
@@ -50,11 +52,6 @@ public class FactoryUIGameplay
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.MainFrameCanvas], empty.transform);
         obj.GetComponent<Canvas>().worldCamera = Camera.main;
         
-        _gameOverWindow = obj.GetComponentInChildren<StatisticWindowUI>(true).gameObject;
-        _statisticWindowUI = obj.GetComponentInChildren<StatisticWindowUI>(true);
-        //_container.Bind<GameOverUI>().FromInstance(_gameOverWindow.GetComponent<GameOverUI>()).AsSingle(); //регистрация в контейнер
-        _gameOverWindow.SetActive(false);
-        
         _gameWindow = obj.GetComponentInChildren<TimeGameUI>(true).gameObject;
         _timeGameUI = obj.GetComponentInChildren<TimeGameUI>(true);
         //_container.Bind<TimeGameUI>().FromInstance(_gameWindow.GetComponent<TimeGameUI>()).AsSingle(); //регистрация в контейнер
@@ -70,6 +67,23 @@ public class FactoryUIGameplay
         _menuUI = obj.GetComponentInChildren<MenuUI>(true);
         //_container.Bind<MenuUI>().FromInstance(_menuWindow.GetComponent<MenuUI>()).AsSingle(); //регистрация в контейнер
         _menuWindow.SetActive(false);
+        
+    }
+
+    public void CreateStatisticsWindow()
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.StatisticsWindow], empty.transform);
+        obj.GetComponent<Canvas>().worldCamera = Camera.main;
+        _statisticWindowUI = obj.GetComponentInChildren<StatisticWindowUI>(true);
+        _statisticWindowUI.gameObject.SetActive(false);
+    }
+    
+    public void CreateNotificationFiredCutlet()
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.NotificationFiredCutlet], empty.transform);
+        obj.GetComponent<Canvas>().worldCamera = Camera.main;
+        _notificationFiredCutletUI = obj.GetComponentInChildren<NotificationFiredCutletUI>(true);
+        _notificationFiredCutletUI.gameObject.SetActive(false);
     }
 
     public void HideUI()

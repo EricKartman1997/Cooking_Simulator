@@ -91,7 +91,7 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
             
             _playSound?.Invoke();
             _isOnStove = value;
-            Debug.Log("прошел");
+            //Debug.Log("прошел");
 
         }
     }
@@ -104,7 +104,7 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
             if (value == true)
             {
                 _stopSound?.Invoke();
-                _gameOverService.GameOver();
+                _gameOverService.GameOverFireCutlet();
             }
             
             _isFire = value;
@@ -117,7 +117,7 @@ public class Cutlet : MonoBehaviour,IForStove, IPause
         _gameOverService = gameOverService;
         _pauseHandler = handlerPause;
         _pauseHandler.Add(this);
-        Debug.Log("зашел в конструктор");
+        //Debug.Log("зашел в конструктор");
     }
 
     private void Awake()
