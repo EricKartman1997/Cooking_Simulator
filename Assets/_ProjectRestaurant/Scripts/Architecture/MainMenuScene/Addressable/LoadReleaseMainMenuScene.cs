@@ -88,6 +88,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
         {
             LoadGameObjectAsync("UIPanel"),
             LoadGameObjectAsync("CanvasShowLoading"),
+            LoadGameObjectAsync("NotificationTraining"),
 
         };
 
@@ -95,6 +96,7 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
         
         _uiDic.Add(UINameMainMenu.UIPanel, results[0]);
         _uiDic.Add(UINameMainMenu.CanvasShowLoading, results[1]);
+        _uiDic.Add(UINameMainMenu.NotificationTraining, results[2]);
 
     }
     
@@ -199,7 +201,8 @@ public enum PrefUINameMainMenu
 public enum UINameMainMenu
 {
     UIPanel,
-    CanvasShowLoading
+    CanvasShowLoading,
+    NotificationTraining
 }
 
 public enum ServiceNameMeinMenu

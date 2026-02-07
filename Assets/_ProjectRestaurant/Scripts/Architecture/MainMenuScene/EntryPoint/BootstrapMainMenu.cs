@@ -45,11 +45,18 @@ public class BootstrapMainMenu : MonoBehaviour
         InitializeAsync().Forget();
     }
     
-    public async UniTask ExitLevel()
+    public async UniTask LoadGameplayLevel()
     {
         _soundsServiceMainMenu.StopSounds();
         ShowLoadingPanel();
-        await _loadReleaseGlobalScene.LoadSceneAsync("SceneGameplay");
+        await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_GAMEPLAY);
+    }
+    
+    public async UniTask LoadTrainingLevel()
+    {
+        _soundsServiceMainMenu.StopSounds();
+        ShowLoadingPanel();
+        await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_TRAINING);
     }
 
     private void HideLoadingPanel(bool isPlaySounds = true)
@@ -132,6 +139,10 @@ public class BootstrapMainMenu : MonoBehaviour
         
         await UniTask.Yield();
         
+        _factoryUIMainMenuScene.NotificationTrainingUI();
+        
+        await UniTask.Yield();
+        
         DescribeTheInternet();
         
         await UniTask.Yield();
@@ -163,6 +174,10 @@ public class BootstrapMainMenu : MonoBehaviour
             _menuViewController.WarringWindowsViewController.UpdateDateTextButton();
             _internetUpdateService.StartChecking().Forget();
         }
+        
+        await UniTask.Yield();
+        
+        _menuViewController.Init();
         
         await UniTask.Yield();
 

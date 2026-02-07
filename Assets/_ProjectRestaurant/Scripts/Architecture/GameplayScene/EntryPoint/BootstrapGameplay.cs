@@ -103,7 +103,7 @@ public class BootstrapGameplay : MonoBehaviour
         ShowLoadingPanel();
         await UniTask.Yield();
         // переход на сцену меню
-        await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
+        await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
         await UniTask.Yield();
         HideLoadingPanel();
     }

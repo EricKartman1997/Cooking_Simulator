@@ -34,8 +34,6 @@ public class LoadReleaseGlobalScene : IDisposable
     
     public async Task LoadSceneAsync(string address)
     {
-        //await Addressables.LoadAssetAsync<Scene>(address).Task; // дописать
-        
         AsyncOperationHandle<SceneInstance> handle = 
             Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single);
 

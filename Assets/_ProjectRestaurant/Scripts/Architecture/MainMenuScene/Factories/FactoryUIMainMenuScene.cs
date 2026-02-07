@@ -8,38 +8,30 @@ public class FactoryUIMainMenuScene
     private LoadReleaseMainMenuScene _loadReleaseMainMenuScene;
     private GameObject empty = new GameObject("UI_Test");
 
+    private NotificationTrainingUI _notificationTrainingUI;
+
+    public NotificationTrainingUI NotificationTraining => _notificationTrainingUI;
+
     public FactoryUIMainMenuScene(IInstantiator container, LoadReleaseMainMenuScene loadReleaseMainMenuScene)
     {
         _container = container;
         _loadReleaseMainMenuScene = loadReleaseMainMenuScene;
     }
     
-    // public GameObject Get(PrefUINameMainMenu uiName, Transform parent)
-    // {
-    //     switch (uiName)
-    //     {
-    //         case PrefUINameMainMenu.UIPanel:
-    //             return _container.InstantiatePrefab(_loadReleaseMainMenuScene.PrefDic[PrefUINameMainMenu.UIPanel], parent);
-    //         default:
-    //             throw new ArgumentException(nameof(uiName));
-    //     }
-    // }
-    
     public GameObject CreateUI()
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseMainMenuScene.UIDic[UINameMainMenu.UIPanel], empty.transform);
         
         return obj;
-        
     }
     
-    // public Canvas CreateShowLoading()
-    // {
-    //     GameObject empty1 = new GameObject("ShowLoading_Test");
-    //     Canvas canvas = _container.InstantiatePrefab(_loadReleaseMainMenuScene.UIDic[UINameMainMenu.CanvasShowLoading], empty1.transform).GetComponent<Canvas>();
-    //     canvas.worldCamera = Camera.main;
-    //     return canvas;
-    // }
+    public void NotificationTrainingUI()
+    {
+        GameObject obj = _container.InstantiatePrefab(_loadReleaseMainMenuScene.UIDic[UINameMainMenu.NotificationTraining], empty.transform);
+        obj.GetComponent<Canvas>().worldCamera = Camera.main;
+        _notificationTrainingUI = obj.GetComponent<NotificationTrainingUI>();
+        obj.gameObject.SetActive(false);
+    }
     
     public GameObject CreateShowLoading()
     {

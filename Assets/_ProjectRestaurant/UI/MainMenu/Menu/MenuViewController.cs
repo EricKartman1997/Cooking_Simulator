@@ -13,20 +13,22 @@ public class MenuViewController : MonoBehaviour
     [SerializeField] private WarringWindowsViewController warringWindowsViewController;
     [SerializeField] private SettingsViewController settingsViewController;
     [SerializeField] private SocialNetViewController socialNetViewController;
-
-    private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    
     private BootstrapMainMenu _bootstrapMainMenu;
     private SoundsServiceMainMenu _soundsService;
+    private FactoryUIMainMenuScene _factoryUIMainMenuScene;
+
+    private NotificationTrainingUI _notificationTraining;
 
     public WarringWindowsViewController WarringWindowsViewController => warringWindowsViewController;
 
     [Inject]
-    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene,BootstrapMainMenu bootstrapMainMenu,
-        SoundsServiceMainMenu soundsService)
+    private void ConstructZenject(BootstrapMainMenu bootstrapMainMenu,
+        SoundsServiceMainMenu soundsService,FactoryUIMainMenuScene factoryUIMainMenuScene)
     {
-        _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _bootstrapMainMenu = bootstrapMainMenu;
         _soundsService = soundsService;
+        _factoryUIMainMenuScene = factoryUIMainMenuScene;
     }
     private void OnEnable()
     {
@@ -59,6 +61,11 @@ public class MenuViewController : MonoBehaviour
         buttonChoiceLevel.onClick.RemoveListener(ChoiceLevelOnClick);
         buttonExit.onClick.RemoveListener(ExitOnClick);
     }
+    
+    public void Init()
+    {
+        _notificationTraining = _factoryUIMainMenuScene.NotificationTraining;
+    }
 
     public void TurnOffButtonsGame()
     {
@@ -72,9 +79,9 @@ public class MenuViewController : MonoBehaviour
         buttonChoiceLevel.isInteractable = true;
     }
     
-    private async void StartOnClick()
+    private void StartOnClick()
     {
-        await _bootstrapMainMenu.ExitLevel();
+        _notificationTraining.Show();
     }
     
     private void ChoiceLevelOnClick()

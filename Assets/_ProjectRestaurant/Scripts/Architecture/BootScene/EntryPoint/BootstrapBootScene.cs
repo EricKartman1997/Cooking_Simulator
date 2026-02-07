@@ -26,7 +26,7 @@ public class BootstrapBootScene : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         //await LoadJson();
         //Debug.Log("запуск сцены");
-        await _loadReleaseGlobalScene.LoadSceneAsync("SceneMainMenu");
+        await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
         //Debug.Log("загрузил сцену");
     }
 

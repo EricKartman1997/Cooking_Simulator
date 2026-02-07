@@ -34,6 +34,11 @@ public class NotificationFiredCutletUI : MonoBehaviour
         continueButtton.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         continueButtton.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
+    
+    private void OnDisable()
+    {
+        continueButtton.onClick.RemoveListener(Hide);
+    }
 
     // private void Update()
     // {
