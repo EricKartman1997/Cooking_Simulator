@@ -1,15 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class GameplayInstaller : MonoInstaller
+public class TrainingInstaller : MonoInstaller
 {
-    // ScriptableObject
     [SerializeField] private FoodsForFurnitureContainer foodsForFurnitureContainer;
     [SerializeField] private RecipeContainer recipeContainer;
     [SerializeField] private CheckContainer checkContainer;
-    
-    [SerializeField] private BootstrapGameplay bootstrapGameplay;
+    [SerializeField] private BootstrapTraining bootstrapTraining;
     public override void InstallBindings()
     {
         Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle();
@@ -19,7 +19,7 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<RecipeContainer>().FromInstance(recipeContainer);
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
         
-        Container.BindInterfacesAndSelfTo<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
+        Container.BindInterfacesAndSelfTo<BootstrapTraining>().FromInstance(bootstrapTraining).AsSingle();
         
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
@@ -54,7 +54,7 @@ public class GameplayInstaller : MonoInstaller
         BindCheckPrefabFactory();
         //Debug.Log("завершил инициализацию GameplayInstaller");
     }
-
+    
     private void BindCheckFactory()
     {
         Container.BindFactory<CheckType, Check, CheckFactory>()

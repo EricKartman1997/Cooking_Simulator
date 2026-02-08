@@ -1,10 +1,10 @@
+using System;
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
-using Cinemachine;
-using System;
 
-public class BootstrapGameplay : MonoBehaviour, IExitLevel
+public class BootstrapTraining : MonoBehaviour, IExitLevel
 {
     public event Action InitMenuButtons;
     
@@ -31,16 +31,16 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     
     private GameObject _loadingPanel;
     private GameObject _gameUI;
-
+    
     [Inject]
-    public void ConstructZenject(LoadReleaseGameplay loadReleaseGameplay, LoadReleaseGlobalScene loadReleaseGlobalScene,
+    public void ConstructZenject(LoadReleaseGameplay loadRelease, LoadReleaseGlobalScene loadReleaseGlobalScene,
         FactoryUIGameplay factoryUIGameplay, FactoryPlayerGameplay factoryPlayerGameplay,
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGameService timeGameService,
         UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager,
         OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService)
     {
-        _loadReleaseGameplay = loadReleaseGameplay;
+        _loadReleaseGameplay = loadRelease;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         _factoryUIGameplay = factoryUIGameplay;
         _factoryPlayerGameplay = factoryPlayerGameplay;
@@ -79,7 +79,7 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         //создать UI
         await CreateUI();
         // создание сервисов
-        await CreateServiceAsync();
+        //await CreateServiceAsync();
         // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
         // создать игрока
@@ -111,7 +111,12 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     private async UniTask WaitForResourcesLoaded()
     {
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
-        //Debug.Log("Загружены все ресурсы для Gameplay");
+    }
+    
+    private async UniTask InitAudioAsync()
+    {
+        _soundsServiceGameplay.CreateSounds();
+        await UniTask.Yield();
     }
     
     private void CreateCameras()
@@ -119,7 +124,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         _factoryCamerasGameplay.CreateMainCamera();
         _virtualCamera = _factoryCamerasGameplay.CreateTopDownCamera();
     }
-    
     
     private async UniTask CreateLoadingPanel()
     {
@@ -133,7 +137,7 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
             _loadingPanel.SetActive(true);
     }
     
-    private async UniTask CreateUI()
+    private async UniTask CreateUI() //меняем на UI с обучением
     {
         _factoryUIGameplay.CreateUI();
         await UniTask.Yield();
@@ -143,20 +147,9 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         await UniTask.Yield();
     }
     
-    private async UniTask InitAudioAsync()
+    private async UniTask CreateEnvironmentAsync() //создаем меньшее кол-во для обучения
     {
-        _soundsServiceGameplay.CreateSounds();
-        await UniTask.Yield();
-    }
-    
-    private async UniTask CreateServiceAsync()
-    {
-        await UniTask.Yield();
-    }
-    
-    private async UniTask CreateEnvironmentAsync()
-    {
-        await _factoryEnvironment.CreateFurnitureGamePlayAsync();
+        await _factoryEnvironment.CreateFurnitureTrainingGamePlayAsync();
         await UniTask.Yield();
         await _factoryEnvironment.CreateEnvironmentGamePlayAsync();
         await UniTask.Yield();
@@ -166,10 +159,10 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     
     private async UniTask CreatePlayerAsync()
     {
-       _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
-        await UniTask.Yield(); // отдаём управление кадру
+        _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
+        await UniTask.Yield();
     }
-
+    
     private void HideLoadingPanel()
     {
         if (_loadingPanel != null)
@@ -185,7 +178,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     private async UniTask StartGame()
     {
         _checksManager.Init();
-        //InitChecksManager?.Invoke();
         _ordersService.Init();
         InitMenuButtons?.Invoke();
         _timeGameService.Init();
@@ -196,5 +188,4 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         _ordersService.UpdateOrder();
         await UniTask.Yield();
     }
-    
 }

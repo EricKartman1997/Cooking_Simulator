@@ -43,6 +43,7 @@ public class InternetUpdateService
                 //throw new System.Exception("Искусственная ошибка");
                 var importer = new ImportSheetsGoogle();
                 await importer.LoadItemsSettingsFurniture(_storageData);
+                await importer.LoadItemsSettingsFurnitureTraining(_storageData);
                 await importer.LoadItemsSettingsEnvironment(_storageData);
 
                 await _storageData.SaveDataJson();

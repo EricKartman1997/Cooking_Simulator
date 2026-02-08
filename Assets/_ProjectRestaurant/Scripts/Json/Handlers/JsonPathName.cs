@@ -5,5 +5,6 @@ public static class JsonPathName
     public const string BINDINGS_SETTINGS_PATH = "bindings_settings";
     
     public const string FURNITURE_ITEMS_PATH = "furniture_items";
+    public const string FURNITURE_TRAINING_ITEMS_PATH = "furniture_training_items";
     public const string ENVIRONMENT_ITEMS_PATH = "environment_items";
 }

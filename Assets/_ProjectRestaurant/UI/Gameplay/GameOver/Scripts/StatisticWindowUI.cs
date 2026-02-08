@@ -18,12 +18,12 @@ public class StatisticWindowUI : MonoBehaviour
     
     public event Action OnShown;
     
-    private BootstrapGameplay _bootstrapGameplay;
+    private IExitLevel _bootstrapGameplay;
     private SoundsServiceGameplay _soundsService;
     
 
     [Inject]
-    public void ConstructZenject(BootstrapGameplay bootstrapGameplay,SoundsServiceGameplay soundsServiceGameplay)
+    public void ConstructZenject(IExitLevel bootstrapGameplay,SoundsServiceGameplay soundsServiceGameplay)
     {
         _bootstrapGameplay = bootstrapGameplay;
         _soundsService = soundsServiceGameplay;

@@ -12,7 +12,6 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     private OrdersService _ordersService;
     private ScoreService _scoreService;
     private ChecksPanalUI _checksPanalUI;
-    private BootstrapGameplay _bootstrapGameplay;
     private FactoryUIGameplay _factoryUIGameplay;
 
     private Check _check1;

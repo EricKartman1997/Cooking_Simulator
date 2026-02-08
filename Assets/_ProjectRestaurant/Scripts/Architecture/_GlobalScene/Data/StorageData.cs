@@ -8,11 +8,13 @@ public class StorageData: IReadStorageData
     
     // поля для взаимодействия
     public List<FurnitureItemData> _itemsFurnitureList = new List<FurnitureItemData>();
+    public List<FurnitureItemData> _itemsFurnitureTrainingList = new List<FurnitureItemData>();
     public List<EnvironmentItemData> _itemsEnvironmentList = new List<EnvironmentItemData>();
     private OperatingModeMainMenu _operatingModeMainMenu = OperatingModeMainMenu.WithAnInternetConnection;
 
     // свойства
     public List<FurnitureItemData> ItemsFurnitureListRead => _itemsFurnitureList;
+    public List<FurnitureItemData> ItemsFurnitureTrainingListRead => _itemsFurnitureTrainingList;
     public List<EnvironmentItemData> ItemsEnvironmentListRead => _itemsEnvironmentList;
     public OperatingModeMainMenu OperatingModeMainMenu => _operatingModeMainMenu;
 
@@ -34,6 +36,17 @@ public class StorageData: IReadStorageData
         _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
         //Debug.Log("Прошел сохранение Furniture");
         
+        if (_itemsFurnitureTrainingList.Count == 0)
+        {
+            Debug.LogWarning("нет данных для сохранения");
+            return;
+        }
+        
+        FurnitureTrainingItems saveObj2 = new FurnitureTrainingItems(_itemsFurnitureTrainingList);
+        await UniTask.Yield();
+        _jsonHandler.Save(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH,saveObj2);
+        //Debug.Log("Прошел сохранение Furniture");
+        
         if (_itemsEnvironmentList.Count == 0)
         {
             Debug.LogWarning("нет данных для сохранения");
@@ -53,12 +66,17 @@ public class StorageData: IReadStorageData
             _itemsFurnitureList = data.ItemsFurnitureList;
         });
         
+        _jsonHandler.Load<FurnitureTrainingItems>(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH, data =>
+        {
+            _itemsFurnitureTrainingList = data.ItemsFurnitureList;
+        });
+        
         _jsonHandler.Load<EnvironmentItems>(JsonPathName.ENVIRONMENT_ITEMS_PATH, data =>
         {
             _itemsEnvironmentList = data.ItemsEnvironmentList;
         });
         
-        if (_itemsFurnitureList.Count == 0)
+        if (_itemsFurnitureList.Count == 0 || _itemsEnvironmentList.Count == 0 || _itemsFurnitureTrainingList.Count == 0)
         {
             Debug.Log("данных нет - перезапустите игру, подключитесь к интернету");
             _operatingModeMainMenu = OperatingModeMainMenu.WithoutAnInternetConnection;

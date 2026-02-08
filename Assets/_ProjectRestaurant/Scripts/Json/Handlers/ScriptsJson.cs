@@ -86,6 +86,23 @@ public class FurnitureItems
     
 }
 
+public class FurnitureTrainingItems
+{
+    public List<FurnitureItemData> ItemsFurnitureList;
+    
+    public FurnitureTrainingItems()
+    {
+        // Значения по умолчанию
+        ItemsFurnitureList = new List<FurnitureItemData>();
+    }
+    
+    public FurnitureTrainingItems(List<FurnitureItemData> itemsFurnitureList)
+    {
+        ItemsFurnitureList = itemsFurnitureList;
+    }
+    
+}
+
 public class EnvironmentItems
 {
     public List<EnvironmentItemData> ItemsEnvironmentList;

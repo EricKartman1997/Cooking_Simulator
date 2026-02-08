@@ -39,7 +39,7 @@ public class BootstrapBootScene : MonoBehaviour
             ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
             await importSheetsGoogle.LoadItemsSettingsEnvironment(_storageData);
             await importSheetsGoogle.LoadItemsSettingsFurniture(_storageData);
-            //Debug.Log($"загрузил из интернета");
+            await importSheetsGoogle.LoadItemsSettingsFurnitureTraining(_storageData);
             
             await _storageData.SaveDataJson(); // сохранить данные в Json
             //Debug.Log("(сохранение) Json Environment, Furniture");

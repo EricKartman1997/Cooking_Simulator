@@ -12,6 +12,7 @@ public class FactoryEnvironment
     private OutlineManager _outlineManager;
     
     private List<FurnitureItemData> _furnitureItemsList;
+    private List<FurnitureItemData> _furnitureItemsTrainingList;
     private List<EnvironmentItemData> _environmentItemsList;
 
     public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData,OutlineManager outlineManager)
@@ -20,6 +21,7 @@ public class FactoryEnvironment
         _loadReleaseGameplay = loadReleaseGameplay;
         _outlineManager = outlineManager;
         _furnitureItemsList = storageData.ItemsFurnitureListRead;
+        _furnitureItemsTrainingList = storageData.ItemsFurnitureTrainingListRead;
         _environmentItemsList = storageData.ItemsEnvironmentListRead;
     }
     public async UniTask CreateFurnitureGamePlayAsync()
@@ -27,6 +29,50 @@ public class FactoryEnvironment
         GameObject empty = new GameObject("Furniture_Test");
         
         foreach (var item in _furnitureItemsList)
+        {
+            switch (item.Name)
+            {
+                case "GetTable":
+                    CreateGetTable(item, empty.transform);
+                    break;
+                case "GiveTable":
+                    CreateGiveTable(item, empty.transform);
+                    break;
+                case "CuttingTable":
+                    CreateCuttingTable(item, empty.transform);
+                    break;
+                case "Garbage":
+                    CreateGarbage(item, empty.transform);
+                    break;
+                case "Stove":
+                    CreateStove(item, empty.transform);
+                    break;
+                case "Distribution":
+                    CreateDistribution(item, empty.transform);
+                    break;
+                case "Oven":
+                    CreateOven(item, empty.transform);
+                    break;
+                case "Blender":
+                    CreateBlender(item, empty.transform);
+                    break;
+                case "Suvide":
+                    CreateSuvide(item, empty.transform);
+                    break;
+            }
+            await UniTask.Yield();
+        }
+
+        _outlineManager.FindObjs(empty);
+        // ждать окончание операции
+
+    }
+    
+    public async UniTask CreateFurnitureTrainingGamePlayAsync()
+    {
+        GameObject empty = new GameObject("FurnitureTraining_Test");
+        
+        foreach (var item in _furnitureItemsTrainingList)
         {
             switch (item.Name)
             {

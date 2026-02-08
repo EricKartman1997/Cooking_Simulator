@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Menu : IDisposable
 {
-    
     private PauseHandler _pauseHandler;
-    private BootstrapGameplay _bootstrapGameplay;
+    private IExitLevel _bootstrapGameplay;
     private MenuUI _menuUI;
     private FactoryUIGameplay _factoryUIGameplay;
     
     private GameObject _panelSettings;
     
-    public Menu(PauseHandler pauseHandler, BootstrapGameplay bootstrapGameplay,FactoryUIGameplay factoryUIGameplay)
+    public Menu(PauseHandler pauseHandler, IExitLevel bootstrapGameplay,FactoryUIGameplay factoryUIGameplay)
     {
         _bootstrapGameplay = bootstrapGameplay;
         _pauseHandler = pauseHandler;

@@ -24,7 +24,5 @@ public class FactoryCamerasGameplay
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.CamerasDic[CamerasNameGameplay.TopDownCamera], empty.transform);
         return obj.GetComponent<CinemachineVirtualCamera>();;
-        //CinemachineVirtualCamera _topDownCamera = obj.GetComponent<CinemachineVirtualCamera>();
-        //_container.Rebind<CinemachineVirtualCamera>().FromInstance(_topDownCamera).AsSingle();
     }
 }
