@@ -16,7 +16,6 @@ public class OrdersService : IDisposable
     {
         _settings = settings;
         _factoryUIGameplay = factoryUIGameplay;
-        //_ordersUI = factoryUIGameplay.OrdersUI;
         
         CreateOrders();
     }
@@ -26,9 +25,19 @@ public class OrdersService : IDisposable
         //Debug.Log("У объекта вызван Dispose : OrdersService");
     }
 
-    public void Init()
+    public void Init(bool isTutorialLevel = false)
     {
         _ordersUI = _factoryUIGameplay.OrdersUI;
+        if (isTutorialLevel)
+        {
+            CreateOrdersTutorial();
+        }
+    }
+    
+    private void CreateOrdersTutorial()
+    {
+        _totalOrder = 1;
+        _makeOrders = 0; // Сбрасываем счетчик выполненных заказов
     }
     
     

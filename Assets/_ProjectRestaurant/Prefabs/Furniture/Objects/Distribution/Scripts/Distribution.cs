@@ -26,6 +26,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
     private IDeleteCheck _checkDelete;
     private IHandlerPause _pauseHandler;
     private INotificationGetter _notificationManager;
+    private DistributionTutorialDecorator _tutorialDecorator;
 
     private List<Product> ListProduct => _foodsForFurnitureContainer.Distribution.ListForFurniture;
 
@@ -53,6 +54,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         _animator = GetComponent<Animator>();
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
+        _tutorialDecorator = GetComponent<DistributionTutorialDecorator>();
     }
     
     private void OnTriggerEnter(Collider other)
@@ -193,6 +195,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
             {
                 InvokeNotification(true).Forget();
                 sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
+
                 TurnOn();
             }
             else
@@ -243,6 +246,8 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         TakeToTheHall();
         TurnOff();
         sounds.PlayOneShotClip(AudioNameGamePlay.DistributionSound);
+        if (_tutorialDecorator != null)
+            _tutorialDecorator.InvokeDishAccepted();
     }
     
     private async UniTask InvokeNotification(bool isReady = false)

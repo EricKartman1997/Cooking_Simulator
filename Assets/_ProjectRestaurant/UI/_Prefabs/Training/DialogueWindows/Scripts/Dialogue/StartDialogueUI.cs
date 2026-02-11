@@ -10,6 +10,8 @@ public class StartDialogueUI : MonoBehaviour
     [SerializeField] private RectTransform panel;
     private SoundsServiceGameplay _soundsService;
 
+    public ButtonManager Button => button;
+
     [Inject]
     private void ConstructZenject(SoundsServiceGameplay serviceGameplay)
     {

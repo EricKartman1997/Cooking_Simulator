@@ -54,10 +54,34 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
     {
         TickChecks();
     }
-
+    
     public void AddCheck() // добавление чека
     {
         CheckType type = _dishList[Random.Range(0, _dishList.Count)];
+        if (_check1 == null)
+        {
+            _check1 = _checkFactoryScript.Create(type);
+            _checksPanalUI.AddCheck(_check1, _checkPrefabFactory, type);
+        }
+        else if (_check2 == null)
+        {
+            _check2 = _checkFactoryScript.Create(type);
+            _checksPanalUI.AddCheck(_check2, _checkPrefabFactory, type);
+        }
+        else if (_check3 == null)
+        {
+            _check3 = _checkFactoryScript.Create(type);
+            _checksPanalUI.AddCheck(_check3, _checkPrefabFactory, type);
+        }
+        else
+        {
+            throw new InvalidOperationException("Невозможно добавить чек: все слоты заняты");
+        }
+    }
+
+    public void AddCheckTutorial() // добавление чека
+    {
+        CheckType type = CheckType.FruitSalad;
         if (_check1 == null)
         {
             _check1 = _checkFactoryScript.Create(type);

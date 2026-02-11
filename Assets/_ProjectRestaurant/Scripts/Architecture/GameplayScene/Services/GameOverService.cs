@@ -11,8 +11,7 @@ public class GameOverService : IDisposable
     
     private StatisticWindowUI _statisticWindowUI;
     private NotificationFiredCutletUI _notificationFiredCutletUI;
-
-
+    
     public GameOverService(ScoreService scoreService, TimeGameService timeGameService,OrdersService ordersService,PauseHandler pauseHandler,
         FactoryUIGameplay factoryUIGameplay)
     {
@@ -24,8 +23,12 @@ public class GameOverService : IDisposable
         //_gameOverUI = factoryUIGameplay.GameOverUI;
     }
 
-    public void Init()
+    public void Init(bool isTutorialLevel = false)
     {
+        if (isTutorialLevel)
+        {
+            _ordersService.GameOver += GameOverTutorial;
+        }
         _timeGameService.GameOver += GameOver;
         _ordersService.GameOver += GameOver;
         _statisticWindowUI = _factoryUIGameplay.StatisticWindowUI;
@@ -43,6 +46,15 @@ public class GameOverService : IDisposable
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true, InputBlockType.All);
         _statisticWindowUI.Show(_scoreService,_timeGameService);
+    }
+    
+    public void GameOverTutorial()
+    {
+        Debug.Log("Игра закончена, tutorial");
+        _pauseHandler.SetPause(true, InputBlockType.All);
+        //_factoryUIGameplay.EndDialogueUI.Show();
+        
+        // вызвать DialogueManager.StartGoodbye()!!!!!!!!!!!!
     }
     
     public void GameOverFireCutlet()

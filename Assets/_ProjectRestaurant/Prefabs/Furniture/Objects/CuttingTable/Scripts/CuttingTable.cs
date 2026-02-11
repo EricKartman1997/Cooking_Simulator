@@ -36,8 +36,10 @@ namespace CuttingTableFurniture
         
         private IHandlerPause _pauseHandler;
         private INotificationGetter _notificationManager;
+        private CuttingTableTutorialDecorator _tutorialDecorator;
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
+        
     
         
         [Inject]
@@ -56,6 +58,7 @@ namespace CuttingTableFurniture
             _animator = GetComponent<Animator>();
             _outline = GetComponent<Outline>();
             _decorationFurniture = GetComponent<DecorationFurniture>();
+            _tutorialDecorator = GetComponent<CuttingTableTutorialDecorator>();
         }
     
         private void Start()
@@ -194,25 +197,17 @@ namespace CuttingTableFurniture
                 _ingredient2.GetComponent<Product>()
             };
 
-            // Новый универсальный вызов
-            IngredientName result = _recipeService.GetDish(FurnitureName.CuttingTable, ingredients);
-
-            if (result == IngredientName.Rubbish)
-            {
-                _result = _productsFactory.GetProduct(
-                    result,
-                    _cuttingTablePoints.PositionResult,
-                    _cuttingTablePoints.PositionResult
-                );
-
-                Debug.Log("произведен мусор");
-            }
+            IngredientName result =
+                _recipeService.GetDish(FurnitureName.CuttingTable, ingredients);
 
             _result = _productsFactory.GetProduct(
                 result,
                 _cuttingTablePoints.PositionResult,
                 _cuttingTablePoints.PositionResult
             );
+
+            if (_tutorialDecorator != null)
+                _tutorialDecorator.SetCreatedIngredient(result);
         }
         
         private void CookingProcess()
@@ -296,8 +291,12 @@ namespace CuttingTableFurniture
         
         private void CleanObjOnTable(GameObject ingredient)
         {
+            if (_tutorialDecorator != null)
+                _tutorialDecorator.ClearCreatedIngredient();
+
             Destroy(ingredient);
         }
+
         
         private bool CheckCookingProcess()
         {

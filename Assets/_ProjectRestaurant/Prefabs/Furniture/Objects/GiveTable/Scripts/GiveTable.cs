@@ -20,6 +20,7 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     private List<Product> _productsList;
     private ProductsFactory _productsFactory;
     private INotificationGetter _notificationManager;
+    private GiveTableTutorialDecorator _tutorialDecorator;
 
     [Inject]
     private void ConstructZenject(
@@ -36,7 +37,9 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     {
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
+        _tutorialDecorator = GetComponent<GiveTableTutorialDecorator>();
     }
+
     
     private void OnTriggerEnter(Collider other)
     {
@@ -74,17 +77,30 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     private bool AcceptObject(GameObject acceptObj)
     {
         if (acceptObj == null)
-        {
-            Debug.Log("Объект не передался");
             return false;
-        }
-        _ingredient = _productsFactory.GetProduct(acceptObj, ingredientPoint, parentFood,true);
-        _ingredient.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        _ingredient = _productsFactory.GetProduct(
+            acceptObj,
+            ingredientPoint,
+            parentFood,
+            true);
+
+        _ingredient.transform.localRotation = Quaternion.identity;
         _ingredient.transform.localScale = Vector3.one;
         _ingredient.transform.localPosition = Vector3.zero;
+
+        // ---- ДОБАВЛЕНО ----
+        if (_tutorialDecorator != null)
+        {
+            var product = _ingredient.GetComponent<Product>();
+            _tutorialDecorator.SetCurrentIngredient(product.Name);
+        }
+        // -------------------
+
         _heroik.CleanObjOnHands();
         return true;
     }
+
     
     private GameObject GiveObj(GameObject giveObj)
     {
@@ -126,51 +142,67 @@ public class GiveTable : MonoBehaviour,IUseFurniture
     private void CookingProcess()
     {
         if (CheckCookingProcess() == false)
-        {
             return;
-        }
-        
-        if(_heroik.IsBusyHands == false) // руки не заняты
+
+        // -----------------------------
+        // РУКИ ПУСТЫ
+        // -----------------------------
+        if (_heroik.IsBusyHands == false)
         {
-            if (_ingredient == null) // ни одного активного объекта
+            if (_ingredient == null)
             {
-                Debug.Log("У вас пустые руки и прилавок пуст");
                 InvokeNotification().Forget();
                 return;
             }
-            
-            // на столе что-то есть
+
             if (_heroik.TryPickUp(GiveObj(_ingredient)))
             {
                 sounds.PlayOneShotClip(AudioNameGamePlay.TakeOnTheTableSound);
                 CleanObjOnTable(_ingredient);
                 return;
-            } 
-            
+            }
+
             InvokeNotification().Forget();
+            return;
         }
-        else // заняты
+
+        // -----------------------------
+        // РУКИ ЗАНЯТЫ
+        // -----------------------------
+        if (_ingredient == null)
         {
-            if (_ingredient == null) // ни одного активного объекта
+            // ------ Tutorial ограничение ------
+            if (_tutorialDecorator != null)
             {
-                if (!AcceptObject(_heroik.TryGiveIngredient(_productsList)))
+                IngredientName ingredientName = _heroik.CurrentTakenObjects.GetComponent<Product>().Name;
+
+                if (_tutorialDecorator.CanAccept(ingredientName) == false)
                 {
                     InvokeNotification().Forget();
-                    Debug.Log("с предметом что-то пошло не так");
                     return;
                 }
-                
-                sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
+            }
+            // ----------------------------------
+
+            if (!AcceptObject(_heroik.TryGiveIngredient(_productsList)))
+            {
+                InvokeNotification().Forget();
                 return;
             }
-            
-            InvokeNotification().Forget();
-            Debug.Log("У вас полные руки и прилавок полон");
+
+            sounds.PlayOneShotClip(AudioNameGamePlay.PutOnTheTableSound2);
+            return;
         }
+
+        InvokeNotification().Forget();
     }
+
 
     private void CleanObjOnTable(GameObject ingredient)
     {
+        if (_tutorialDecorator != null)
+            _tutorialDecorator.ClearCurrentIngredient();
+
         Destroy(ingredient);
     }
 

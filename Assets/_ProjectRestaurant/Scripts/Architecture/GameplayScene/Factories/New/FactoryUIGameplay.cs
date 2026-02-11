@@ -91,6 +91,31 @@ public class FactoryUIGameplay
         empty.SetActive(false);
     }
     
+    public void HideTime()
+    {
+        _timeGameUI.gameObject.SetActive(false);
+    }
+    
+    public void HideOrder()
+    {
+        _ordersUI.gameObject.SetActive(false);
+    }
+    
+    public void HideChecks()
+    {
+        _checksPanalUI.gameObject.SetActive(false);
+    }
+    
+    public void ShowOrder()
+    {
+        _ordersUI.gameObject.SetActive(true);
+    }
+    
+    public void ShowChecks()
+    {
+        _checksPanalUI.gameObject.SetActive(true);
+    }
+    
     public void ShowUI()
     {
         empty.SetActive(true);

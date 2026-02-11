@@ -22,6 +22,7 @@ public class GetTable : MonoBehaviour, IUseFurniture
     private ViewFactory _viewFactory;
     private ProductsFactory _productsFactory;
     private INotificationGetter _notificationManager;
+    private GetTableTutorialDecorator _tutorialDecorator;
     
     
     [Inject]
@@ -34,11 +35,12 @@ public class GetTable : MonoBehaviour, IUseFurniture
         _viewFactory = viewFactory;
         _notificationManager = notificationManager;
     }
-    
+
     private void Awake()
     {
         _outline = GetComponent<Outline>();
         _decorationFurniture = GetComponent<DecorationFurniture>();
+        _tutorialDecorator = GetComponent<GetTableTutorialDecorator>();
     }
 
     private void Start()

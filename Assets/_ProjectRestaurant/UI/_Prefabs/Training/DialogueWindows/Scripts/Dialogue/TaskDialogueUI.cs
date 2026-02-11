@@ -14,6 +14,8 @@ public class TaskDialogueUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI description;
     
     private SoundsServiceGameplay _soundsService;
+    
+    public ButtonManager Button => button;
 
     [Inject]
     private void ConstructZenject(SoundsServiceGameplay serviceGameplay)

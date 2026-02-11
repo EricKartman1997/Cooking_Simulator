@@ -145,6 +145,9 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         await UniTask.Yield();
         _factoryUIGameplay.CreateNotificationFiredCutlet();
         await UniTask.Yield();
+        _factoryUIGameplay.HideChecks();
+        _factoryUIGameplay.HideOrder();
+        _factoryUIGameplay.HideTime();
     }
     
     private async UniTask CreateEnvironmentAsync() //создаем меньшее кол-во для обучения
@@ -178,14 +181,13 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     private async UniTask StartGame()
     {
         _checksManager.Init();
-        _ordersService.Init();
+        _ordersService.Init(true);
         InitMenuButtons?.Invoke();
-        _timeGameService.Init();
-        _gameOverService.Init();
+        _gameOverService.Init(true);
         
-        _updateChecks.Work = true;
+        _updateChecks.Work = false;
         
-        _ordersService.UpdateOrder();
+        _dialogueManger.StartWedding();
         await UniTask.Yield();
     }
 }
