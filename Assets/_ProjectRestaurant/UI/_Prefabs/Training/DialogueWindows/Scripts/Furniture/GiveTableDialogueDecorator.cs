@@ -1,31 +1,43 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class GiveTableTutorialDecorator : MonoBehaviour
+public class GiveTableTutorialDecorator : MonoBehaviour,IPause
 {
     public Action PutSalatAction;
+    
     [SerializeField] private Outline outline;
+    [SerializeField] private List<IngredientName> allowedIngredients = new() {IngredientName.FruitSalad };
 
-    [SerializeField]
-    private List<IngredientName> allowedIngredients = new()
-    {
-        IngredientName.FruitSalad
-    };
-
+    private IHandlerPause _pauseHandler;
+    private bool _isPause;
+    
     private bool _isBlinking;
     private float _blinkSpeed = 4f;
 
-    public IngredientName? CurrentIngredientOnTable { get; private set; }
-
+    
+    [Inject]
+    private void ConstructZenject(IHandlerPause pauseHandler)
+    {
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
+    }
+    
     private void Update()
     {
+        if (_isPause == true) return;
         if (!_isBlinking) return;
 
         float value = Mathf.PingPong(Time.time * _blinkSpeed, 2f);
         outline.OutlineWidth = value;
     }
 
+    public void OnDisable()
+    {
+        _pauseHandler.Remove(this);
+    }
+    
     public void StartBlink()
     {
         _isBlinking = true;
@@ -41,14 +53,10 @@ public class GiveTableTutorialDecorator : MonoBehaviour
     {
         return allowedIngredients.Contains(ingredient);
     }
-
-    public void SetCurrentIngredient(IngredientName ingredient)
+    
+    public void SetPause(bool isPaused)
     {
-        CurrentIngredientOnTable = ingredient;
-    }
-
-    public void ClearCurrentIngredient()
-    {
-        CurrentIngredientOnTable = null;
+        _isPause = isPaused;
+        outline.OutlineWidth = 0f;
     }
 }

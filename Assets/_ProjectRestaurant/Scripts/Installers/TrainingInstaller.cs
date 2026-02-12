@@ -23,13 +23,16 @@ public class TrainingInstaller : MonoInstaller
         
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
+        Container.BindInterfacesAndSelfTo<LoadReleaseTraining>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<SoundsServiceGameplay>().AsSingle();
         Container.BindInterfacesAndSelfTo<OutlineManager>().AsSingle();
         
         Container.Bind<FactoryPlayerGameplay>().AsSingle();
         Container.Bind<FactoryEnvironment>().AsSingle();
+        Container.Bind<FactoryEnvironmentTraining>().AsSingle();
         Container.Bind<FactoryUIGameplay>().AsSingle();
+        Container.Bind<FactoryUITraining>().AsSingle();
         Container.Bind<FactoryCamerasGameplay>().AsSingle();
         Container.Bind<NotificationFactory>().AsSingle();
         
@@ -49,6 +52,8 @@ public class TrainingInstaller : MonoInstaller
         
         Container.BindInterfacesAndSelfTo<ChecksManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateChecks>().AsSingle();
+        
+        Container.Bind<DialogueManager>().AsSingle();
         
         BindCheckFactory();
         BindCheckPrefabFactory();

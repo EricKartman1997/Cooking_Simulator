@@ -300,9 +300,6 @@ namespace CuttingTableFurniture
         
         private void CleanObjOnTable(GameObject ingredient)
         {
-            if (_tutorialDecorator != null)
-                _tutorialDecorator.ClearCreatedIngredient();
-
             Destroy(ingredient);
         }
 

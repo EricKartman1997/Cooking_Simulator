@@ -11,10 +11,13 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     private CinemachineVirtualCamera _virtualCamera;
     
     private LoadReleaseGameplay _loadReleaseGameplay;
+    private LoadReleaseTraining _loadReleaseTraining;
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     private FactoryUIGameplay _factoryUIGameplay;
+    private FactoryUITraining _factoryUITraining;
     private FactoryPlayerGameplay _factoryPlayerGameplay;
     private FactoryEnvironment _factoryEnvironment;
+    private FactoryEnvironmentTraining _factoryEnvironmentTraining;
     private FactoryCamerasGameplay _factoryCamerasGameplay;
     private SoundsServiceGameplay _soundsServiceGameplay;
     private StorageData _storageData;
@@ -39,10 +42,12 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGameService timeGameService,
         UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager,
-        OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService, DialogueManager dialogueManager)
+        OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService, DialogueManager dialogueManager,
+        FactoryEnvironmentTraining factoryEnvironmentTraining,LoadReleaseTraining loadReleaseTraining,FactoryUITraining factoryUITraining)
     {
         _loadReleaseGameplay = loadRelease;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
+        _loadReleaseTraining = loadReleaseTraining;
         _factoryUIGameplay = factoryUIGameplay;
         _factoryPlayerGameplay = factoryPlayerGameplay;
         _factoryEnvironment = factoryEnvironment;
@@ -57,6 +62,8 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         _checksManager = checksManager;
         _gameOverService = gameOverService;
         _dialogueManager = dialogueManager;
+        _factoryEnvironmentTraining = factoryEnvironmentTraining;
+        _factoryUITraining = factoryUITraining;
         //_menu = menu;
     }
     
@@ -113,6 +120,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     private async UniTask WaitForResourcesLoaded()
     {
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
+        await UniTask.WaitUntil(() => _loadReleaseTraining.IsLoaded);
     }
     
     private async UniTask InitAudioAsync()
@@ -143,18 +151,22 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     {
         _factoryUIGameplay.CreateUI();
         await UniTask.Yield();
-        _factoryUIGameplay.CreateStatisticsWindow();
+        _factoryUITraining.CreateStartDialogue();
         await UniTask.Yield();
-        _factoryUIGameplay.CreateNotificationFiredCutlet();
+        _factoryUITraining.CreateEndDialogue();
+        await UniTask.Yield();
+        _factoryUITraining.CreateTaskDialogue();
+        await UniTask.Yield();
+        _factoryUITraining.CreateMiniTaskDialogue();
         await UniTask.Yield();
         _factoryUIGameplay.HideChecks();
         _factoryUIGameplay.HideOrder();
         _factoryUIGameplay.HideTime();
     }
     
-    private async UniTask CreateEnvironmentAsync() //создаем меньшее кол-во для обучения
+    private async UniTask CreateEnvironmentAsync()
     {
-        await _factoryEnvironment.CreateFurnitureTrainingGamePlayAsync();
+        await _factoryEnvironmentTraining.CreateFurnitureTrainingGamePlayAsync();
         await UniTask.Yield();
         await _factoryEnvironment.CreateEnvironmentGamePlayAsync();
         await UniTask.Yield();
@@ -164,7 +176,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     
     private async UniTask CreatePlayerAsync()
     {
-        _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
+        _factoryPlayerGameplay.CreatePlayerTraining(_virtualCamera);
         await UniTask.Yield();
     }
     

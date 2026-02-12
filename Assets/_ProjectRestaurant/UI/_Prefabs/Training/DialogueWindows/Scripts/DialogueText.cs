@@ -16,6 +16,9 @@ public static class DialogueText
         //StartWaitOrder
     public const string WAIT_ORDER_TITLE = "Ожидание заказа";
     public const string WAIT_ORDER_DESCRIPTION = "Теперь всё готово к работе.\nПодождём, пока поступит заказ от клиента.\nКак только он появится, мы сразу приступим к приготовлению.";
+        //StartGiveTable
+    public const string GIVE_TABLE_TITLE = "Подготовка к подаче";
+    public const string GIVE_TABLE_DESCRIPTION = "Положи блюдо на стол и дождись появления заказа от клиента.\nКак только заказ поступит, мы сможем завершить подачу.";
     
     // Task
         //StartCompliment

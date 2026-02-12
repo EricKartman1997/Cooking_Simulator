@@ -12,7 +12,6 @@ public class FactoryEnvironment
     private OutlineManager _outlineManager;
     
     private List<FurnitureItemData> _furnitureItemsList;
-    private List<FurnitureItemData> _furnitureItemsTrainingList;
     private List<EnvironmentItemData> _environmentItemsList;
 
     public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData,OutlineManager outlineManager)
@@ -21,7 +20,6 @@ public class FactoryEnvironment
         _loadReleaseGameplay = loadReleaseGameplay;
         _outlineManager = outlineManager;
         _furnitureItemsList = storageData.ItemsFurnitureListRead;
-        _furnitureItemsTrainingList = storageData.ItemsFurnitureTrainingListRead;
         _environmentItemsList = storageData.ItemsEnvironmentListRead;
     }
     public async UniTask CreateFurnitureGamePlayAsync()
@@ -29,50 +27,6 @@ public class FactoryEnvironment
         GameObject empty = new GameObject("Furniture_Test");
         
         foreach (var item in _furnitureItemsList)
-        {
-            switch (item.Name)
-            {
-                case "GetTable":
-                    CreateGetTable(item, empty.transform);
-                    break;
-                case "GiveTable":
-                    CreateGiveTable(item, empty.transform);
-                    break;
-                case "CuttingTable":
-                    CreateCuttingTable(item, empty.transform);
-                    break;
-                case "Garbage":
-                    CreateGarbage(item, empty.transform);
-                    break;
-                case "Stove":
-                    CreateStove(item, empty.transform);
-                    break;
-                case "Distribution":
-                    CreateDistribution(item, empty.transform);
-                    break;
-                case "Oven":
-                    CreateOven(item, empty.transform);
-                    break;
-                case "Blender":
-                    CreateBlender(item, empty.transform);
-                    break;
-                case "Suvide":
-                    CreateSuvide(item, empty.transform);
-                    break;
-            }
-            await UniTask.Yield();
-        }
-
-        _outlineManager.FindObjs(empty);
-        // ждать окончание операции
-
-    }
-    
-    public async UniTask CreateFurnitureTrainingGamePlayAsync()
-    {
-        GameObject empty = new GameObject("FurnitureTraining_Test");
-        
-        foreach (var item in _furnitureItemsTrainingList)
         {
             switch (item.Name)
             {
@@ -165,7 +119,8 @@ public class FactoryEnvironment
             empty.transform
         );
     }
-    
+
+    #region Environment
     private GameObject CreateFloor(EnvironmentItemData itemData, Transform parent)
     {
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.Floor], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
@@ -214,7 +169,9 @@ public class FactoryEnvironment
         obj.GetComponent<TransparentArea>().Init(parent);
         return obj;
     }
-    
+    #endregion
+
+    #region Furniture
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
         //itemData.ShowConnectionTheInternet();
@@ -280,30 +237,8 @@ public class FactoryEnvironment
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         return obj;
     }
+    #endregion
 }
-
-// [Serializable]
-// public class FurnitureItemData
-// {
-//     public int Id;
-//     public string Name;
-//     public Vector3 Position;
-//     public Vector3 Rotation;
-//     public CustomFurnitureName DecorationTableTop;
-//     public CustomFurnitureName DecorationLowerSurface;
-//     public IngredientName GiveFood;
-//     public ViewDishName ViewFood;
-//
-//     public void Show()
-//     {
-//         Debug.Log($"ID = {Id}, Name = {Name}, Position = {Position}, Rotation = {Rotation}," +
-//                   $" DecorationTableTop = {DecorationTableTop}," +
-//                   $" DecorationLowerSurface = {DecorationLowerSurface}, GiveFood = {GiveFood}," +
-//                   $" ViewFood = {ViewFood}");
-//     }
-// }
-
-
 
 [Serializable]
 public class FurnitureItemData

@@ -1,4 +1,3 @@
-using System;
 using Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -21,13 +20,16 @@ public class FactoryPlayerGameplay
     {
         GameObject empty = new GameObject("Player_Test");
         GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], new Vector3(0.19f,0,-6.12f), Quaternion.identity, empty.transform);
-        //Heroik heroik = player.GetComponent<Heroik>();
-        //AudioListener audioListener = player.GetComponent<AudioListener>();
+        player.GetComponent<HeroikSoundsControl>().InitStateMachine();
         EnableCamera(camera, player);
-        //_container.Rebind<Heroik>().FromInstance(heroik).AsSingle(); //TODO нужно ли
-        //_container.Rebind<AudioListener>().FromInstance(audioListener).AsSingle();
-        
-
+    }
+    
+    public void CreatePlayerTraining(CinemachineVirtualCamera camera)
+    {
+        GameObject empty = new GameObject("Player_Test");
+        GameObject player = _container.InstantiatePrefab(_loadReleaseGameplay.PlayerDic[PlayerName.RobotPlayer], new Vector3(0.19f,0,-6.12f), Quaternion.identity, empty.transform);
+        player.GetComponent<HeroikSoundsControl>();
+        EnableCamera(camera, player);
     }
     
     private void EnableCamera(CinemachineVirtualCamera camera, GameObject target)

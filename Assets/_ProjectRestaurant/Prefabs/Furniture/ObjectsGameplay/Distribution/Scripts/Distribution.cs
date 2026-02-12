@@ -247,7 +247,7 @@ public class Distribution : MonoBehaviour, IUseFurniture, IPause
         TurnOff();
         sounds.PlayOneShotClip(AudioNameGamePlay.DistributionSound);
         if (_tutorialDecorator != null)
-            _tutorialDecorator.InvokeDishAccepted();
+            _tutorialDecorator.WasReadyOrderAction?.Invoke();
     }
     
     private async UniTask InvokeNotification(bool isReady = false)

@@ -89,14 +89,6 @@ public class GiveTable : MonoBehaviour,IUseFurniture
         _ingredient.transform.localScale = Vector3.one;
         _ingredient.transform.localPosition = Vector3.zero;
 
-        // ---- ДОБАВЛЕНО ----
-        if (_tutorialDecorator != null)
-        {
-            var product = _ingredient.GetComponent<Product>();
-            _tutorialDecorator.SetCurrentIngredient(product.Name);
-        }
-        // -------------------
-
         _heroik.CleanObjOnHands();
         return true;
     }
@@ -202,9 +194,6 @@ public class GiveTable : MonoBehaviour,IUseFurniture
 
     private void CleanObjOnTable(GameObject ingredient)
     {
-        if (_tutorialDecorator != null)
-            _tutorialDecorator.ClearCurrentIngredient();
-
         Destroy(ingredient);
     }
 

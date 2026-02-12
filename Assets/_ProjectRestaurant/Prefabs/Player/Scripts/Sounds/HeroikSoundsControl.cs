@@ -11,6 +11,7 @@ public class HeroikSoundsControl : MonoBehaviour, IPause
     private bool _isPause;
     private IHandlerPause _pauseHandler;
     private AudioStateMachinePlayer _audioStateMachinePlayer;
+    private bool _isTraining = true;
     
     public bool IsPause => _isPause;
 
@@ -25,16 +26,14 @@ public class HeroikSoundsControl : MonoBehaviour, IPause
 
     private void Awake()
     {
-        _audioStateMachinePlayer = new AudioStateMachinePlayer(this,GetComponent<PlayerController>());
         audioSource.outputAudioMixerGroup = _soundsServiceGameplay.SoundManager.SFXGroup;
-
-        _observable = new ObservableAudioSource(audioSource);
-        _observable.OnClipChanged += OnClipChanged;
     }
-    
 
     private void Update()
     {
+        if (_audioStateMachinePlayer == null)
+            return;
+        
         _audioStateMachinePlayer.Update();
     }
 
@@ -46,7 +45,16 @@ public class HeroikSoundsControl : MonoBehaviour, IPause
     private void OnDisable()
     {
         _pauseHandler.Remove(this);
-        _observable.OnClipChanged -= OnClipChanged;
+        if(_isTraining == false)
+            _observable.OnClipChanged -= OnClipChanged;
+    }
+    
+    public void InitStateMachine()
+    {
+        _audioStateMachinePlayer = new AudioStateMachinePlayer(this,GetComponent<PlayerController>());
+        _observable = new ObservableAudioSource(audioSource);
+        _observable.OnClipChanged += OnClipChanged;
+        _isTraining = false;
     }
 
     public void PlayOneShotClip(AudioNameGamePlay nameClip)

@@ -1,21 +1,39 @@
 using System;
 using UnityEngine;
+using Zenject;
 
-public class DistributionTutorialDecorator : MonoBehaviour
+public class DistributionTutorialDecorator : MonoBehaviour,IPause
 {
+    public Action WasReadyOrderAction;
+    
     [SerializeField] private Outline outline;
+    
+    private IHandlerPause _pauseHandler;
+    private bool _isPause;
 
     private bool _isBlinking;
     private float _blinkSpeed = 4f;
 
-    public event Action OnDishAccepted;
-
+    
+    [Inject]
+    private void ConstructZenject(IHandlerPause pauseHandler)
+    {
+        _pauseHandler = pauseHandler;
+        _pauseHandler.Add(this);
+    }
+    
     private void Update()
     {
+        if (_isPause == true) return;
         if (!_isBlinking) return;
 
         float value = Mathf.PingPong(Time.time * _blinkSpeed, 2f);
         outline.OutlineWidth = value;
+    }
+    
+    public void OnDisable()
+    {
+        _pauseHandler.Remove(this);
     }
 
     public void StartBlink()
@@ -28,9 +46,10 @@ public class DistributionTutorialDecorator : MonoBehaviour
         _isBlinking = false;
         outline.OutlineWidth = 0f;
     }
-
-    public void InvokeDishAccepted()
+    
+    public void SetPause(bool isPaused)
     {
-        OnDishAccepted?.Invoke();
+        _isPause = isPaused;
+        outline.OutlineWidth = 0f;
     }
 }
