@@ -1,3 +1,5 @@
+using Zenject;
+
 public class DialogueManager
 {
     private EndDialogueUI _endDialogue;
@@ -12,9 +14,22 @@ public class DialogueManager
     private DistributionTutorialDecorator _distribution;
     
     private FactoryUIGameplay _factoryUIGameplay;
+    private OrdersService _ordersService;
+    private readonly IInputBlocker _inputBlocker;
+    private ChecksManager _checksManager;
+
+    
+    [Inject]
+    public DialogueManager(OrdersService ordersService, IInputBlocker inputBlocker,ChecksManager checksManager)
+    {
+        _ordersService = ordersService;
+        _inputBlocker = inputBlocker;
+        _checksManager = checksManager;
+    }
     
     private void StartWedding()
     {
+        DisableMovement();
         _startDialogue.Show();
         _startDialogue.Button.onClick.AddListener(StartCookingSalat);
     }
@@ -32,19 +47,19 @@ public class DialogueManager
         _taskDialogue.Button.onClick.RemoveListener(StartTakeApple);
         _miniTaskDialogue.Show();
         _getTableApple.StartBlink();
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл заказы 
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл управление
+        _miniTaskDialogue.Button.onClick.AddListener(_factoryUIGameplay.ShowOrder);// вкл заказы 
+        _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
     }
     
     //взял яблоко
     private void StartTellGarbage()
     {
-        _miniTaskDialogue.Button.onClick.RemoveListener();// отписка
-        _miniTaskDialogue.Button.onClick.RemoveListener();// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(_factoryUIGameplay.ShowOrder);// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         
         _getTableApple.StopBlink();
-        // выкл управление
-        // меняем текст (рассказать про мусорку что можно выкинуть предмет)
+        DisableMovement(); // выкл управление
+        _miniTaskDialogue.ChangeText(DialogueText.GARBAGE_TITLE,DialogueText.GARBAGE_DESCRIPTION);// меняем текст (рассказать про мусорку что можно выкинуть предмет)
         _miniTaskDialogue.Show();
         
         _miniTaskDialogue.Button.onClick.AddListener(StartBringCuttingTable);
@@ -55,57 +70,50 @@ public class DialogueManager
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(StartBringCuttingTable);// отписка
         
-        // меняем текст (задание положить предмет на разделочный стол)
+        _miniTaskDialogue.ChangeText(DialogueText.CUTTING_TABLE_TITLE,DialogueText.CUTTING_TABLE_DESCRIPTION);// меняем текст (задание положить предмет на разделочный стол)
         _miniTaskDialogue.Show();
         
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл управление
+        _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
         _miniTaskDialogue.Button.onClick.AddListener(_cuttingTable.StartBlink);// вкл мигание
         
-        //_miniTaskDialogue.ChangeText();
-        //_miniTaskDialogue.Show();
-        //_cuttingTable.StartBlink();
     }
     
     // положил яблоко на разделочный стол
     private void StartTakeOrange()
     {
-        _miniTaskDialogue.Button.onClick.RemoveListener();// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_cuttingTable.StartBlink);// отписка
 
         _cuttingTable.StopBlink();
-        // выкл управление
-        // меняем текст (взять апельсин)
+        DisableMovement(); // выкл управление
+        _miniTaskDialogue.ChangeText(DialogueText.TAKE_ORANGE_TITLE,DialogueText.TAKE_ORANGE_DESCRIPTION);// меняем текст (взять апельсин)
         _miniTaskDialogue.Show();
 
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл управление
+        _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
         _miniTaskDialogue.Button.onClick.AddListener(_getTableOrange.StartBlink);// вкл мигание
-
-        //_miniTaskDialogue.ChangeText();
-        //_miniTaskDialogue.Show();
-        //_getTableOrange.StartBlink();
     }
 
     // взял апельсин
     private void StartSecondBringCuttingTable()
     {
-        _miniTaskDialogue.Button.onClick.RemoveListener();// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_getTableOrange.StartBlink);// отписка
         
         _cuttingTable.StopBlink();
-        // выкл управление
-        // меняем текст ()
+        DisableMovement(); // выкл управление
+        _miniTaskDialogue.ChangeText(DialogueText.SECOND_CUTTING_TABLE_TITLE,DialogueText.SECOND_CUTTING_TABLE_DESCRIPTION);// меняем текст ()
         _miniTaskDialogue.Show();
         
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл управление
+        _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
     }
     
     // салат был приготовлен
     private void StartCompliment()
     {
-        _miniTaskDialogue.Button.onClick.RemoveListener();// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         
-        // выкл управление
-        // меняем текст ()
+        DisableMovement(); // выкл управление
+        _taskDialogue.ChangeText(DialogueText.COMPLIMENT_TITLE,DialogueText.COMPLIMENT_DESCRIPTION); // меняем текст ()
         _taskDialogue.Show();
         _taskDialogue.Button.onClick.AddListener(StartWaitOrder);
     }
@@ -114,25 +122,35 @@ public class DialogueManager
     {
         _taskDialogue.Button.onClick.RemoveListener(StartWaitOrder);// отписка
         
-        // меняем текст ()
+        _miniTaskDialogue.ChangeText(DialogueText.WAIT_ORDER_TITLE,DialogueText.WAIT_ORDER_DESCRIPTION);// меняем текст ()
         _miniTaskDialogue.Show();
         
-        _miniTaskDialogue.Button.onClick.AddListener();// вкл управление
-        _miniTaskDialogue.Button.onClick.AddListener();// добавить чек
+        _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
+        _miniTaskDialogue.Button.onClick.AddListener(_checksManager.AddCheckTutorial);// добавить чек
         _miniTaskDialogue.Button.onClick.AddListener(_distribution.StartBlink);// вкл мигание
     }
     
     // чек появился
     // заказ на Distribution
     // анимация закончена
-   
     
     private void StartGoodbye()
     {
-        _miniTaskDialogue.Button.onClick.RemoveListener();// вкл управление
-        _miniTaskDialogue.Button.onClick.RemoveListener();// добавить чек
-        _miniTaskDialogue.Button.onClick.RemoveListener(_distribution.StartBlink);// вкл мигание
+        _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(_checksManager.AddCheckTutorial);// отписка
+        _miniTaskDialogue.Button.onClick.RemoveListener(_distribution.StartBlink);// отписка
         _endDialogue.Show();
     }
+    
+    private void DisableMovement()
+    {
+        _inputBlocker.Block(this, InputBlockType.Movement);
+    }
+
+    private void EnableMovement()
+    {
+        _inputBlocker.Unblock(this, InputBlockType.Movement);
+    }
+
 
 }
