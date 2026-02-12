@@ -14,7 +14,7 @@ public class DialogueManager
     private DistributionTutorialDecorator _distribution;
     
     private FactoryUIGameplay _factoryUIGameplay;
-    private OrdersService _ordersService;
+    //private OrdersService _ordersService;
     private readonly IInputBlocker _inputBlocker;
     private ChecksManager _checksManager;
 
@@ -22,19 +22,19 @@ public class DialogueManager
     [Inject]
     public DialogueManager(OrdersService ordersService, IInputBlocker inputBlocker,ChecksManager checksManager)
     {
-        _ordersService = ordersService;
+        //_ordersService = ordersService;
         _inputBlocker = inputBlocker;
         _checksManager = checksManager;
     }
     
-    private void StartWedding()
+    public void StartWedding() //вызывается из BootstrapTraining
     {
         DisableMovement();
         _startDialogue.Show();
         _startDialogue.Button.onClick.AddListener(StartCookingSalat);
     }
     
-    private void StartCookingSalat()
+    private void StartCookingSalat() //вызывается из this
     {
         _startDialogue.Button.onClick.RemoveListener(StartCookingSalat);
         _taskDialogue.Show();
@@ -42,7 +42,7 @@ public class DialogueManager
     }
     
     // выдали задание взять яблоко
-    private void StartTakeApple()
+    private void StartTakeApple() //вызывается из this
     {
         _taskDialogue.Button.onClick.RemoveListener(StartTakeApple);
         _miniTaskDialogue.Show();
@@ -52,7 +52,7 @@ public class DialogueManager
     }
     
     //взял яблоко
-    private void StartTellGarbage()
+    private void StartTellGarbage() //вызывается из GetTableApple
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(_factoryUIGameplay.ShowOrder);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
@@ -66,7 +66,7 @@ public class DialogueManager
     }
     
     // рассказали про мусорку
-    private void StartBringCuttingTable() 
+    private void StartBringCuttingTable() //вызывается из this
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(StartBringCuttingTable);// отписка
         
@@ -79,7 +79,7 @@ public class DialogueManager
     }
     
     // положил яблоко на разделочный стол
-    private void StartTakeOrange()
+    private void StartTakeOrange() //вызывается из CuttingTable
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_cuttingTable.StartBlink);// отписка
@@ -94,7 +94,7 @@ public class DialogueManager
     }
 
     // взял апельсин
-    private void StartSecondBringCuttingTable()
+    private void StartSecondBringCuttingTable() //вызывается из GetTableOrange
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_getTableOrange.StartBlink);// отписка
@@ -108,7 +108,7 @@ public class DialogueManager
     }
     
     // салат был приготовлен
-    private void StartCompliment()
+    private void StartCompliment() //вызывается из CuttingTable когда приготовился салат
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         
@@ -118,7 +118,7 @@ public class DialogueManager
         _taskDialogue.Button.onClick.AddListener(StartWaitOrder);
     }
     
-    private void StartWaitOrder()
+    private void StartWaitOrder() //вызывается из this
     {
         _taskDialogue.Button.onClick.RemoveListener(StartWaitOrder);// отписка
         
@@ -134,7 +134,7 @@ public class DialogueManager
     // заказ на Distribution
     // анимация закончена
     
-    private void StartGoodbye()
+    private void StartGoodbye() //вызывается из Distribution когда заказ принят
     {
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_checksManager.AddCheckTutorial);// отписка

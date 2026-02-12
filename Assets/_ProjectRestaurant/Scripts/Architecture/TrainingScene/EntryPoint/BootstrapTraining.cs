@@ -22,6 +22,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     private OrdersService _ordersService;
     private ChecksManager _checksManager;
     private GameOverService _gameOverService;
+    private DialogueManager _dialogueManager;
     
     private DiContainer _container;
     
@@ -38,7 +39,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         FactoryEnvironment factoryEnvironment, FactoryCamerasGameplay factoryCamerasGameplay,
         SoundsServiceGameplay soundsServiceGameplay, TimeGameService timeGameService,
         UpdateChecks updateChecks,DiContainer container,StorageData storageData,NotificationManager notificationManager,
-        OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService)
+        OrdersService ordersService,ChecksManager checksManager,GameOverService gameOverService, DialogueManager dialogueManager)
     {
         _loadReleaseGameplay = loadRelease;
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
@@ -55,6 +56,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         _ordersService = ordersService;
         _checksManager = checksManager;
         _gameOverService = gameOverService;
+        _dialogueManager = dialogueManager;
         //_menu = menu;
     }
     
@@ -187,7 +189,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         
         _updateChecks.Work = false;
         
-        _dialogueManger.StartWedding();
+        _dialogueManager.StartWedding();
         await UniTask.Yield();
     }
 }
