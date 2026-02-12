@@ -127,6 +127,15 @@ public class GetTable : MonoBehaviour, IUseFurniture
     {
         giveObj.transform.localRotation = Quaternion.Euler(Vector3.zero);
         giveObj.transform.localScale = Vector3.one;
+        
+        if (_tutorialDecorator != null)
+        {
+            if(_objectOnTheTable.GetComponent<Product>().Name == IngredientName.Apple)
+                _tutorialDecorator.TookAppleAction?.Invoke();
+            if(_objectOnTheTable.GetComponent<Product>().Name == IngredientName.Orange)
+                _tutorialDecorator.TookOrangeAction?.Invoke();
+        }
+        
         return giveObj;
     }
     

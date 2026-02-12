@@ -1,7 +1,12 @@
+using System;
 using UnityEngine;
 
 public class CuttingTableTutorialDecorator : MonoBehaviour
 {
+    public Action PutAppleAction;
+    public Action PutOrangeAction;
+    public Action CookedSalatAction;
+    
     [SerializeField] private Outline outline;
 
     private bool _isBlinking;

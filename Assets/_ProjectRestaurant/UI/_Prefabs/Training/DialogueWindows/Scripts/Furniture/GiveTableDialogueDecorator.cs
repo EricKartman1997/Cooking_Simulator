@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GiveTableTutorialDecorator : MonoBehaviour
 {
+    public Action PutSalatAction;
     [SerializeField] private Outline outline;
 
     [SerializeField]
     private List<IngredientName> allowedIngredients = new()
     {
-        IngredientName.Apple,
-        IngredientName.Orange,
         IngredientName.FruitSalad
     };
 

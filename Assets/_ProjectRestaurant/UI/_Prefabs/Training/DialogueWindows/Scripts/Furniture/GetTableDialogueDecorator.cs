@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class GetTableTutorialDecorator : MonoBehaviour
 {
+    public Action TookOrangeAction;
+    public Action TookAppleAction;
     [SerializeField] private Outline outline;
 
     private bool _isBlinking;

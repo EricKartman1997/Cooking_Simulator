@@ -181,6 +181,8 @@ public class GiveTable : MonoBehaviour,IUseFurniture
                     InvokeNotification().Forget();
                     return;
                 }
+
+                _tutorialDecorator.PutSalatAction?.Invoke();
             }
             // ----------------------------------
 

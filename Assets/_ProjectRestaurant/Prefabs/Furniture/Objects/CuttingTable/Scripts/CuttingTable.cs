@@ -40,7 +40,6 @@ namespace CuttingTableFurniture
         
         private List<Product> ListProduct => _foodsForFurnitureContainer.CuttingTable.ListForFurniture;
         
-    
         
         [Inject]
         private void ConstructZenject(FoodsForFurnitureContainer foodsForFurnitureContainer,RecipeService recipeService,
@@ -154,13 +153,23 @@ namespace CuttingTableFurniture
                 _ingredient1 = _productsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient1,
                     _cuttingTablePoints.PositionIngredient1,true);
                 _heroik.CleanObjOnHands();
+                if (_tutorialDecorator != null)
+                {
+                    if(acceptObj.GetComponent<Product>().Name == IngredientName.Apple)
+                        _tutorialDecorator.PutAppleAction?.Invoke();
+                }
                 return true;
             }
-            else if (_ingredient2 == null)
+            if (_ingredient2 == null)
             {
                  _ingredient2 = _productsFactory.GetProduct(acceptObj, _cuttingTablePoints.PositionIngredient2,
                     _cuttingTablePoints.PositionIngredient2,true);
                  _heroik.CleanObjOnHands();
+                 if (_tutorialDecorator != null)
+                 {
+                     if(acceptObj.GetComponent<Product>().Name == IngredientName.Orange)
+                         _tutorialDecorator.PutOrangeAction?.Invoke();
+                 }
                  return true;
             }
             else
@@ -206,8 +215,8 @@ namespace CuttingTableFurniture
                 _cuttingTablePoints.PositionResult
             );
 
-            if (_tutorialDecorator != null)
-                _tutorialDecorator.SetCreatedIngredient(result);
+            if (_tutorialDecorator != null && result == IngredientName.FruitSalad)
+                _tutorialDecorator.CookedSalatAction?.Invoke();
         }
         
         private void CookingProcess()

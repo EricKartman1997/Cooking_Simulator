@@ -47,13 +47,17 @@ public class DialogueManager
         _taskDialogue.Button.onClick.RemoveListener(StartTakeApple);
         _miniTaskDialogue.Show();
         _getTableApple.StartBlink();
+        
+        _getTableApple.TookAppleAction += StartTellGarbage; //вызывается
         _miniTaskDialogue.Button.onClick.AddListener(_factoryUIGameplay.ShowOrder);// вкл заказы 
         _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
+        
     }
     
     //взял яблоко
     private void StartTellGarbage() //вызывается из GetTableApple
     {
+        _getTableApple.TookAppleAction -= StartTellGarbage;// отписываюсь
         _miniTaskDialogue.Button.onClick.RemoveListener(_factoryUIGameplay.ShowOrder);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         
@@ -73,6 +77,7 @@ public class DialogueManager
         _miniTaskDialogue.ChangeText(DialogueText.CUTTING_TABLE_TITLE,DialogueText.CUTTING_TABLE_DESCRIPTION);// меняем текст (задание положить предмет на разделочный стол)
         _miniTaskDialogue.Show();
         
+        _cuttingTable.PutAppleAction += StartTakeOrange; //вызывается
         _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
         _miniTaskDialogue.Button.onClick.AddListener(_cuttingTable.StartBlink);// вкл мигание
         
@@ -81,6 +86,7 @@ public class DialogueManager
     // положил яблоко на разделочный стол
     private void StartTakeOrange() //вызывается из CuttingTable
     {
+        _cuttingTable.PutAppleAction -= StartTakeOrange;// отписываюсь
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_cuttingTable.StartBlink);// отписка
 
@@ -89,6 +95,7 @@ public class DialogueManager
         _miniTaskDialogue.ChangeText(DialogueText.TAKE_ORANGE_TITLE,DialogueText.TAKE_ORANGE_DESCRIPTION);// меняем текст (взять апельсин)
         _miniTaskDialogue.Show();
 
+        _getTableOrange.TookOrangeAction += StartSecondBringCuttingTable; //вызывается
         _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
         _miniTaskDialogue.Button.onClick.AddListener(_getTableOrange.StartBlink);// вкл мигание
     }
@@ -96,6 +103,7 @@ public class DialogueManager
     // взял апельсин
     private void StartSecondBringCuttingTable() //вызывается из GetTableOrange
     {
+        _getTableOrange.TookOrangeAction -= StartSecondBringCuttingTable;// отписываюсь
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         _miniTaskDialogue.Button.onClick.RemoveListener(_getTableOrange.StartBlink);// отписка
         
@@ -103,24 +111,42 @@ public class DialogueManager
         DisableMovement(); // выкл управление
         _miniTaskDialogue.ChangeText(DialogueText.SECOND_CUTTING_TABLE_TITLE,DialogueText.SECOND_CUTTING_TABLE_DESCRIPTION);// меняем текст ()
         _miniTaskDialogue.Show();
-        
+
+        _cuttingTable.CookedSalatAction += StartCompliment; //вызывается
         _miniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
     }
     
     // салат был приготовлен
     private void StartCompliment() //вызывается из CuttingTable когда приготовился салат
     {
+        _cuttingTable.CookedSalatAction -= StartCompliment;// отписываюсь
         _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         
         DisableMovement(); // выкл управление
         _taskDialogue.ChangeText(DialogueText.COMPLIMENT_TITLE,DialogueText.COMPLIMENT_DESCRIPTION); // меняем текст ()
         _taskDialogue.Show();
-        _taskDialogue.Button.onClick.AddListener(StartWaitOrder);
+        _taskDialogue.Button.onClick.AddListener(StartGiveTable);
     }
     
-    private void StartWaitOrder() //вызывается из this
+    private void StartGiveTable() //вызывается из this
     {
-        _taskDialogue.Button.onClick.RemoveListener(StartWaitOrder);// отписка
+        _taskDialogue.Button.onClick.RemoveListener(StartGiveTable); // отписка
+        
+        _miniTaskDialogue.ChangeText();// меняем текст
+        _miniTaskDialogue.Show();
+        // _cuttingTable.CookedSalatAction -= StartCompliment;// отписываюсь
+        // _miniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
+        //
+        // DisableMovement(); // выкл управление
+        // _taskDialogue.ChangeText(DialogueText.COMPLIMENT_TITLE,DialogueText.COMPLIMENT_DESCRIPTION); // меняем текст ()
+        // _taskDialogue.Show();
+        // _taskDialogue.Button.onClick.AddListener(StartWaitOrder);
+    }
+    
+    // положил салат на GiveTable
+    private void StartWaitOrder() //вызывается из GiveTable
+    {
+        _taskDialogue.Button.onClick.RemoveListener();// отписка
         
         _miniTaskDialogue.ChangeText(DialogueText.WAIT_ORDER_TITLE,DialogueText.WAIT_ORDER_DESCRIPTION);// меняем текст ()
         _miniTaskDialogue.Show();
