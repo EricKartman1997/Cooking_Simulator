@@ -56,7 +56,7 @@ public class Menu : IDisposable
     
     public async UniTask ExitButton()
     {
-        await _bootstrapGameplay.ExitLevel();
+        await _bootstrapGameplay.ExitInMenuLevel();
     }
 
     public void Show()

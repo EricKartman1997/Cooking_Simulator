@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameOverService : IDisposable
 {
+    public Action GameOverTraining;
+    
     private readonly ScoreService _scoreService;
     private readonly TimeGameService _timeGameService;
     private readonly OrdersService _ordersService;
@@ -28,6 +30,7 @@ public class GameOverService : IDisposable
         if (isTutorialLevel)
         {
             _ordersService.GameOver += GameOverTutorial;
+            return;
         }
         _timeGameService.GameOver += GameOver;
         _ordersService.GameOver += GameOver;
@@ -41,20 +44,18 @@ public class GameOverService : IDisposable
         _ordersService.GameOver -= GameOver;
     }
     
-    public void GameOver()
+    private void GameOver()
     {
         Debug.Log("Игра закончена, время больше не идет");
         _pauseHandler.SetPause(true, InputBlockType.All);
         _statisticWindowUI.Show(_scoreService,_timeGameService);
     }
     
-    public void GameOverTutorial()
+    private void GameOverTutorial()
     {
         Debug.Log("Игра закончена, tutorial");
         _pauseHandler.SetPause(true, InputBlockType.All);
-        //_factoryUIGameplay.EndDialogueUI.Show();
-        
-        // вызвать DialogueManager.StartGoodbye()!!!!!!!!!!!!
+        GameOverTraining?.Invoke();
     }
     
     public void GameOverFireCutlet()

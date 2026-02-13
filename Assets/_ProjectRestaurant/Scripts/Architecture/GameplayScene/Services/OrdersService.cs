@@ -31,6 +31,7 @@ public class OrdersService : IDisposable
         if (isTutorialLevel)
         {
             CreateOrdersTutorial();
+            UpdateOrderTraining();
         }
     }
     
@@ -64,6 +65,17 @@ public class OrdersService : IDisposable
         }
         _ordersUI.Show();
         _ordersUI.UpdateOrders(_makeOrders, _totalOrder);
+    }
+    
+    private void UpdateOrderTraining()
+    {
+        if(_ordersUI == null) Debug.LogError("Ошибка OrderUI");
+        _ordersUI.UpdateOrders(_makeOrders, _totalOrder);
+        if (_makeOrders >= _totalOrder)
+        {
+            GameOver?.Invoke();
+            Debug.Log("Заказы сделаны");
+        }
     }
 }
 

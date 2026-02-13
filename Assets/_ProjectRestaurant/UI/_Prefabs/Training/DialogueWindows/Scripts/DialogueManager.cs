@@ -28,12 +28,16 @@ public class DialogueManager
 
 
     [Inject]
-    public DialogueManager(IInputBlocker inputBlocker,ChecksManager checksManager,FactoryUITraining factoryUITraining, FactoryEnvironmentTraining factoryEnvironmentTraining)
+    public DialogueManager(IInputBlocker inputBlocker,ChecksManager checksManager
+        ,FactoryUITraining factoryUITraining, FactoryEnvironmentTraining factoryEnvironmentTraining,
+        FactoryUIGameplay factoryUIGameplay,GameOverService gameOverService)
     {
         _inputBlocker = inputBlocker;
         _checksManager = checksManager;
         _factoryUITraining = factoryUITraining;
         _factoryEnvironmentTraining = factoryEnvironmentTraining;
+        _factoryUIGameplay = factoryUIGameplay;
+        gameOverService.GameOverTraining += StartGoodbye;
     }
     
     public void StartWedding() //вызывается из BootstrapTraining
@@ -55,11 +59,11 @@ public class DialogueManager
     {
         TaskDialogue.Button.onClick.RemoveListener(StartTakeApple);
         MiniTaskDialogue.Show();
-        GetTableApple.StartBlink();
         
         GetTableApple.TookAppleAction += StartTellGarbage; //вызывается
         MiniTaskDialogue.Button.onClick.AddListener(_factoryUIGameplay.ShowOrder);// вкл заказы 
         MiniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
+        MiniTaskDialogue.Button.onClick.AddListener(GetTableApple.StartBlink);// вкл мигание
         
     }
     
@@ -69,19 +73,22 @@ public class DialogueManager
         GetTableApple.TookAppleAction -= StartTellGarbage;// отписываюсь
         MiniTaskDialogue.Button.onClick.RemoveListener(_factoryUIGameplay.ShowOrder);// отписка
         MiniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
+        MiniTaskDialogue.Button.onClick.RemoveListener(GetTableApple.StartBlink);// вкл мигание
         
         GetTableApple.StopBlink();
         DisableMovement(); // выкл управление
         MiniTaskDialogue.ChangeText(DialogueText.GARBAGE_TITLE,DialogueText.GARBAGE_DESCRIPTION);// меняем текст (рассказать про мусорку что можно выкинуть предмет)
         MiniTaskDialogue.Show();
         
-        MiniTaskDialogue.Button.onClick.AddListener(StartBringCuttingTable);
+        //MiniTaskDialogue.Button.onClick.AddListener(StartBringCuttingTable);
+        MiniTaskDialogue.OnHidden += StartBringCuttingTable;
     }
     
     // рассказали про мусорку
     private void StartBringCuttingTable() //вызывается из this
     {
-        MiniTaskDialogue.Button.onClick.RemoveListener(StartBringCuttingTable);// отписка
+        MiniTaskDialogue.OnHidden -= StartBringCuttingTable;
+        //MiniTaskDialogue.Button.onClick.RemoveListener(StartBringCuttingTable);// отписка
         
         MiniTaskDialogue.ChangeText(DialogueText.CUTTING_TABLE_TITLE,DialogueText.CUTTING_TABLE_DESCRIPTION);// меняем текст (задание положить предмет на разделочный стол)
         MiniTaskDialogue.Show();
@@ -116,13 +123,14 @@ public class DialogueManager
         MiniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
         MiniTaskDialogue.Button.onClick.RemoveListener(GetTableOrange.StartBlink);// отписка
         
-        CuttingTable.StopBlink();
+        GetTableOrange.StopBlink();
         DisableMovement(); // выкл управление
         MiniTaskDialogue.ChangeText(DialogueText.SECOND_CUTTING_TABLE_TITLE,DialogueText.SECOND_CUTTING_TABLE_DESCRIPTION);// меняем текст ()
         MiniTaskDialogue.Show();
 
         CuttingTable.CookedSalatAction += StartCompliment; //вызывается
         MiniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
+        MiniTaskDialogue.Button.onClick.AddListener(CuttingTable.StartBlink);
     }
     
     // салат был приготовлен
@@ -130,16 +138,18 @@ public class DialogueManager
     {
         CuttingTable.CookedSalatAction -= StartCompliment;// отписываюсь
         MiniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
+        MiniTaskDialogue.Button.onClick.RemoveListener(CuttingTable.StartBlink);
         
+        CuttingTable.StopBlink();
         DisableMovement(); // выкл управление
         TaskDialogue.ChangeText(DialogueText.COMPLIMENT_TITLE,DialogueText.COMPLIMENT_DESCRIPTION); // меняем текст ()
         TaskDialogue.Show();
-        TaskDialogue.Button.onClick.AddListener(StartGiveTable);
+        TaskDialogue.OnHidden += StartGiveTable;
     }
     
     private void StartGiveTable() //вызывается из this
     {
-        TaskDialogue.Button.onClick.RemoveListener(StartGiveTable); // отписка
+        TaskDialogue.OnHidden -= StartGiveTable;
         
         MiniTaskDialogue.ChangeText(DialogueText.GIVE_TABLE_TITLE,DialogueText.GIVE_TABLE_DESCRIPTION);// меняем текст
         MiniTaskDialogue.Show();
@@ -162,20 +172,22 @@ public class DialogueManager
         
         Distribution.WasReadyOrderAction += StartGoodbye; //вызывается
         MiniTaskDialogue.Button.onClick.AddListener(EnableMovement);// вкл управление
-        MiniTaskDialogue.Button.onClick.AddListener(_checksManager.AddCheckTutorial);// добавить чек
+        MiniTaskDialogue.Button.onClick.AddListener(_factoryUIGameplay.ShowChecks);// вкл чек
         MiniTaskDialogue.Button.onClick.AddListener(Distribution.StartBlink);// вкл мигание
+        MiniTaskDialogue.OnHidden += _checksManager.AddCheckTutorial;// добавить чек 
     }
     
     // чек появился
     // заказ на Distribution
     // анимация закончена
     
-    private void StartGoodbye() //вызывается из Distribution когда заказ принят
+    public void StartGoodbye() //вызывается из GameOverService когда заказ принят
     {
+        MiniTaskDialogue.OnHidden -= _checksManager.AddCheckTutorial;// добавить чек 
         Distribution.WasReadyOrderAction -= StartGoodbye; // отписка
         MiniTaskDialogue.Button.onClick.RemoveListener(EnableMovement);// отписка
-        MiniTaskDialogue.Button.onClick.RemoveListener(_checksManager.AddCheckTutorial);// отписка
         MiniTaskDialogue.Button.onClick.RemoveListener(Distribution.StartBlink);// отписка
+        MiniTaskDialogue.Button.onClick.RemoveListener(_factoryUIGameplay.ShowChecks);// выкл чек
         
         Distribution.StopBlink();
         EndDialogue.Show();

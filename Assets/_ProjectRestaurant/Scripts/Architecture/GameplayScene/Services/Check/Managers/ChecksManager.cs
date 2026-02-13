@@ -86,21 +86,10 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         {
             _check1 = _checkFactoryScript.Create(type);
             _checksPanalUI.AddCheck(_check1, _checkPrefabFactory, type);
+            _check1.IsStop = true;
+            _check1.ChangeTimeForTutorial();
         }
-        else if (_check2 == null)
-        {
-            _check2 = _checkFactoryScript.Create(type);
-            _checksPanalUI.AddCheck(_check2, _checkPrefabFactory, type);
-        }
-        else if (_check3 == null)
-        {
-            _check3 = _checkFactoryScript.Create(type);
-            _checksPanalUI.AddCheck(_check3, _checkPrefabFactory, type);
-        }
-        else
-        {
-            throw new InvalidOperationException("Невозможно добавить чек: все слоты заняты");
-        }
+       
     }
     
     public void DeleteCheck(Check check) // удаление чека

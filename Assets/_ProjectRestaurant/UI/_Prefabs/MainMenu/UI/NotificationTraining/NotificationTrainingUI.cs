@@ -57,10 +57,12 @@ public class NotificationTrainingUI : MonoBehaviour
         agreeButton.onClick.AddListener(LoadTrainLevel);
         disagreeButton.onClick.AddListener(LoadDemoLevel);
         anticlicker.onClick.AddListener(Hide);
+        agreeButton.enableButtonSounds = true;
         agreeButton.soundSource = _soundsService.SourceSfx;
         agreeButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
         agreeButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];
         
+        disagreeButton.enableButtonSounds = true;
         disagreeButton.soundSource = _soundsService.SourceSfx;
         disagreeButton.hoverSound = _soundsService.AudioDictionary[AudioNameMainMenu.HoverButton];
         disagreeButton.clickSound = _soundsService.AudioDictionary[AudioNameMainMenu.ClickButton];

@@ -94,7 +94,7 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         Debug.Log($"{_storageData.OperatingModeMainMenu} BootstrapGameplay");
     }
     
-    public async UniTask ExitLevel()
+    public async UniTask ExitInMenuLevel()
     {   
         // выкл UI игрока
         _factoryUIGameplay.HideUI();

@@ -27,12 +27,13 @@ public class StartDialogueUI : MonoBehaviour
     }
     private void Start()
     {
+        button.enableButtonSounds = true;
         button.soundSource = _soundsService.SourceSfx;
         button.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         button.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
     
-    private void OnDisable()
+    private void OnDestroy()
     {
         button.onClick.RemoveListener(Hide);
     }
@@ -62,18 +63,13 @@ public class StartDialogueUI : MonoBehaviour
     private void PlayHideAnimation()
     {
         Sequence seq = DOTween.Sequence();
-
-        // 1. Мини-вибрация перед исчезновением (приятный акцент)
-        //seq.Append(panel.DOShakeAnchorPos(0.25f, new Vector2(6f, 4f), 10, 90, false, true));
-
-        // 2. Масштабирование вниз + затем исчезновение
+        
         seq.Append(panel.DOScale(0f, 0.65f).SetEase(Ease.InBack));
         seq.Join(canvasGroup.DOFade(0f, 0.6f).SetEase(Ease.InQuad));
 
         seq.OnComplete(() =>
         {
             gameObject.SetActive(false);
-            //OnHidden?.Invoke();   // 🔥 уведомляем, что закрыли
         });
     }
 }

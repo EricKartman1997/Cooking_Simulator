@@ -38,22 +38,11 @@ public class StatisticWindowUI : MonoBehaviour
 
     private void Start()
     {
+        continueButton.enableButtonSounds = true;
         continueButton.soundSource = _soundsService.SourceSfx;
         continueButton.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         continueButton.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
-    
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.F))
-    //     {
-    //         Show();
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.C))
-    //     {
-    //         Hide();
-    //     }
-    // }
     
     public void Show(ScoreService scoreService,TimeGameService timeGameService)
     {
@@ -102,6 +91,6 @@ public class StatisticWindowUI : MonoBehaviour
     
     private void ButtonExit()
     {
-        _bootstrapGameplay.ExitLevel().Forget();
+        _bootstrapGameplay.ExitInMenuLevel().Forget();
     }
 }

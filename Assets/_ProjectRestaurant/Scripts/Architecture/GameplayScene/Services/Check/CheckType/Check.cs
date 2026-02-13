@@ -50,6 +50,11 @@ public abstract class Check: IDisposable, ITickable, IPause
         UpdateTime();
     }
 
+    public void ChangeTimeForTutorial()
+    {
+        _startTime = 0f;
+    }
+
     private void UpdateTime()
     {
         if (_startTime > 0)

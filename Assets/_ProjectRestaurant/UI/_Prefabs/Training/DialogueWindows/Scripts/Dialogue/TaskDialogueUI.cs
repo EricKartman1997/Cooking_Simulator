@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Michsky.MUIP;
 using TMPro;
@@ -6,6 +7,7 @@ using Zenject;
 
 public class TaskDialogueUI : MonoBehaviour
 {
+    public Action OnHidden;
     [SerializeField] private ButtonManager button;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panel;
@@ -32,12 +34,13 @@ public class TaskDialogueUI : MonoBehaviour
     }
     private void Start()
     {
+        button.enableButtonSounds = true;
         button.soundSource = _soundsService.SourceSfx;
         button.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         button.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
     
-    private void OnDisable()
+    private void OnDestroy()
     {
         button.onClick.RemoveListener(Hide);
     }
@@ -84,7 +87,7 @@ public class TaskDialogueUI : MonoBehaviour
         seq.OnComplete(() =>
         {
             gameObject.SetActive(false);
-            //OnHidden?.Invoke();   // 🔥 уведомляем, что закрыли
+            OnHidden?.Invoke();   // 🔥 уведомляем, что закрыли
         });
     }
 }

@@ -5,5 +5,6 @@ public interface IExitLevel
 {
     event Action InitMenuButtons;
     
-    UniTask ExitLevel();
+    UniTask ExitInMenuLevel();
+    
 }

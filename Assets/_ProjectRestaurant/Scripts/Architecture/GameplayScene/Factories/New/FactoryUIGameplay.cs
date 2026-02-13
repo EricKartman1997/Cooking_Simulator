@@ -52,16 +52,14 @@ public class FactoryUIGameplay
         GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.UINameDic[UIName.MainFrameCanvas], empty.transform);
         obj.GetComponent<Canvas>().worldCamera = Camera.main;
         
-        _gameWindow = obj.GetComponentInChildren<TimeGameUI>(true).gameObject;
-        _timeGameUI = obj.GetComponentInChildren<TimeGameUI>(true);
-        //_container.Bind<TimeGameUI>().FromInstance(_gameWindow.GetComponent<TimeGameUI>()).AsSingle(); //регистрация в контейнер
+        _gameWindow = obj.GetComponentInChildren<GameWindowGameplay>(true).gameObject;
         _gameWindow.SetActive(true);
         
-        _ordersUI  = obj.GetComponentInChildren<OrdersUI>(true);
-        //_container.Bind<OrdersUI>().FromInstance(ordersUI).AsSingle(); //регистрация в контейнер
+        _timeGameUI = _gameWindow.GetComponentInChildren<TimeGameUI>(true);
         
-        _checksPanalUI  = obj.GetComponentInChildren<ChecksPanalUI>(true);
-        //_container.Bind<ChecksPanalUI>().FromInstance(checksPanalUI).AsSingle(); //регистрация в контейнер
+        _ordersUI  = _gameWindow.GetComponentInChildren<OrdersUI>(true);
+        
+        _checksPanalUI  = _gameWindow.GetComponentInChildren<ChecksPanalUI>(true);
         
         _menuWindow = obj.GetComponentInChildren<MenuUI>(true).gameObject;
         _menuUI = obj.GetComponentInChildren<MenuUI>(true);

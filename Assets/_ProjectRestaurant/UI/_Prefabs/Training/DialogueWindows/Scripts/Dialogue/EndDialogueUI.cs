@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Michsky.MUIP;
 using UnityEngine;
@@ -10,11 +11,13 @@ public class EndDialogueUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panel;
     private SoundsServiceGameplay _soundsService;
+    private BootstrapTraining _bootstrapTraining;
 
     [Inject]
-    private void ConstructZenject(SoundsServiceGameplay serviceGameplay)
+    private void ConstructZenject(SoundsServiceGameplay serviceGameplay,BootstrapTraining bootstrapTraining)
     {
         _soundsService = serviceGameplay;
+        _bootstrapTraining = bootstrapTraining;
     }
     
     private void Awake()
@@ -27,16 +30,18 @@ public class EndDialogueUI : MonoBehaviour
     }
     private void Start()
     {
+        buttonMenu.enableButtonSounds = true;
         buttonMenu.soundSource = _soundsService.SourceSfx;
         buttonMenu.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         buttonMenu.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
         
+        buttonGameplayLevel.enableButtonSounds = true;
         buttonGameplayLevel.soundSource = _soundsService.SourceSfx;
         buttonGameplayLevel.hoverSound = _soundsService.AudioDictionary[AudioNameGamePlay.HoverButton];
         buttonGameplayLevel.clickSound = _soundsService.AudioDictionary[AudioNameGamePlay.ClickButton];
     }
     
-    private void OnDisable()
+    private void OnDestroy()
     {
         buttonMenu.onClick.RemoveListener(TransitionToMenu);
         buttonGameplayLevel.onClick.RemoveListener(TransitionToGameplayLevel);
@@ -55,12 +60,12 @@ public class EndDialogueUI : MonoBehaviour
     
     private void TransitionToMenu()
     {
-        
+        _bootstrapTraining.ExitInMenuLevel().Forget();
     }
     
     private void TransitionToGameplayLevel()
     {
-        
+        _bootstrapTraining.ExitInGameplayLevel().Forget();
     }
 
     private void PlayShowAnimation()

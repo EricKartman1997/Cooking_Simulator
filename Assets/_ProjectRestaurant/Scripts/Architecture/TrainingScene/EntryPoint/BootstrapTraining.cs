@@ -103,7 +103,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         Debug.Log($"{_storageData.OperatingModeMainMenu} BootstrapGameplay");
     }
     
-    public async UniTask ExitLevel()
+    public async UniTask ExitInMenuLevel()
     {   
         // выкл UI игрока
         _factoryUIGameplay.HideUI();
@@ -113,6 +113,20 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         await UniTask.Yield();
         // переход на сцену меню
         await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
+        await UniTask.Yield();
+        HideLoadingPanel();
+    }
+    
+    public async UniTask ExitInGameplayLevel()
+    {   
+        // выкл UI игрока
+        _factoryUIGameplay.HideUI();
+        await UniTask.Yield();
+        // вкл загрузку
+        ShowLoadingPanel();
+        await UniTask.Yield();
+        // переход на сцену меню
+        await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_GAMEPLAY);
         await UniTask.Yield();
         HideLoadingPanel();
     }
