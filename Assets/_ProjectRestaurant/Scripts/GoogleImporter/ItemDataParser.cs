@@ -2,18 +2,24 @@ using GoogleSpreadsheets;
 
 public class ItemDataParser: IGoogleSheetParser
 {
-    protected StorageData StorageData;
+    protected IStorageJson JsonHandler;
     
     public virtual  string NameSheet { get; }
     
     
-    public void Init(StorageData storageData)
+    public void Init(IStorageJson jsonHandler)
     {
-        StorageData = storageData;
+        JsonHandler = jsonHandler;
     }
     
     public virtual void Parse(string header, string token)
     {
         
     }
+
+    public virtual void Save()
+    {
+        
+    }
+    
 }

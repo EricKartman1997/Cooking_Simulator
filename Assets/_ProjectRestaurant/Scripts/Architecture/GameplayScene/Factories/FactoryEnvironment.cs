@@ -10,23 +10,23 @@ public class FactoryEnvironment
     private IInstantiator _container;
     private LoadReleaseGameplay _loadReleaseGameplay;
     private OutlineManager _outlineManager;
-    
-    private List<FurnitureItemData> _furnitureItemsList;
-    private List<EnvironmentItemData> _environmentItemsList;
+    private IStorageJson _jsonHandler;
 
-    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,IReadStorageData storageData,OutlineManager outlineManager)
+    public FactoryEnvironment(IInstantiator container, LoadReleaseGameplay loadReleaseGameplay,OutlineManager outlineManager, IStorageJson jsonHandler)
     {
         _container = container;
         _loadReleaseGameplay = loadReleaseGameplay;
         _outlineManager = outlineManager;
-        _furnitureItemsList = storageData.ItemsFurnitureListRead;
-        _environmentItemsList = storageData.ItemsEnvironmentListRead;
+        _jsonHandler = jsonHandler;
     }
     public async UniTask CreateFurnitureGamePlayAsync()
     {
         GameObject empty = new GameObject("Furniture_Test");
+
+        List<FurnitureItemData> furnitureItemsList = new List<FurnitureItemData>();
+        _jsonHandler.Load<FurnitureItems>(JsonPathName.FURNITURE_ITEMS_PATH, data => furnitureItemsList = data.ItemsFurnitureList);
         
-        foreach (var item in _furnitureItemsList)
+        foreach (var item in furnitureItemsList)
         {
             switch (item.Name)
             {
@@ -62,15 +62,16 @@ public class FactoryEnvironment
         }
 
         _outlineManager.FindObjs(empty);
-        // ждать окончание операции
-
     }
     
     public async UniTask CreateEnvironmentGamePlayAsync()
     {
         GameObject empty = new GameObject("Environment_Test");
+        
+        List<EnvironmentItemData> environmentItemsList = new List<EnvironmentItemData>();
+        _jsonHandler.Load<EnvironmentItems>(JsonPathName.ENVIRONMENT_ITEMS_PATH, data => environmentItemsList = data.ItemsEnvironmentList);
 
-        foreach (var item in _environmentItemsList)
+        foreach (var item in environmentItemsList)
         {
             switch (item.Name)
             {
@@ -101,14 +102,6 @@ public class FactoryEnvironment
             }
             await UniTask.Yield();
         }
-        // ждать окончание операции
-        
-    }
-
-    public void CreateOtherEnvironmentGamePlay()
-    {
-        GameObject empty = new GameObject("Environment_Test");
-        GameObject obj = _container.InstantiatePrefab(_loadReleaseGameplay.EnvironmentDic[OtherObjsName.Floor], empty.transform.position, Quaternion.identity, empty.transform);
     }
     
     public void CreateLightsGamePlay()
@@ -257,7 +250,7 @@ public class FurnitureItemData
     [NonSerialized] private Vector3? _cachedPosition;
     [NonSerialized] private Vector3? _cachedRotation;
 
-    [JsonIgnore] // <= ВАЖНО
+    [JsonIgnore]
     public Vector3 PositionVector
     {
         get
@@ -268,7 +261,7 @@ public class FurnitureItemData
         }
     }
 
-    [JsonIgnore] // <= ВАЖНО
+    [JsonIgnore]
     public Vector3 RotationVector
     {
         get
@@ -292,7 +285,7 @@ public class EnvironmentItemData
     [NonSerialized] private Vector3? _cachedPosition;
     [NonSerialized] private Vector3? _cachedRotation;
 
-    [JsonIgnore] // <= ВАЖНО
+    [JsonIgnore]
     public Vector3 PositionVector
     {
         get
@@ -303,7 +296,7 @@ public class EnvironmentItemData
         }
     }
 
-    [JsonIgnore] // <= ВАЖНО
+    [JsonIgnore]
     public Vector3 RotationVector
     {
         get

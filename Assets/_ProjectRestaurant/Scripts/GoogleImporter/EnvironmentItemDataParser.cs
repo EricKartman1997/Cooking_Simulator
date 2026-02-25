@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace GoogleSpreadsheets
@@ -8,6 +9,7 @@ namespace GoogleSpreadsheets
     {
         private const string NAMESHEET = "EnvironmentDemoLevel";
         private EnvironmentItemData _currentItemData;
+        private List<EnvironmentItemData> _itemsList = new List<EnvironmentItemData>();
         
         public override string NameSheet => NAMESHEET;
         
@@ -20,7 +22,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    StorageData._itemsEnvironmentList.Add(_currentItemData);
+                    _itemsList.Add(_currentItemData);
                     break;
         
                 case "Name":
@@ -38,6 +40,13 @@ namespace GoogleSpreadsheets
                     throw new Exception($"Invalid header: {header}");
             }
         }
+        
+        public override void Save()
+        {
+            EnvironmentItems saveObj = new EnvironmentItems(_itemsList);
+            JsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj);
+        }
+        
 
         private Vector3 ParseVector3(string token)
         {

@@ -8,8 +8,7 @@ public class FactoryEnvironmentTraining
     private IInstantiator _container;
     private LoadReleaseTraining _loadRelease;
     private OutlineManager _outlineManager;
-    
-    private List<FurnitureItemData> _furnitureItemsTrainingList;
+    private IStorageJson _jsonHandler;
     
     private GetTableTutorialDecorator _getTableApple;
     private GetTableTutorialDecorator _getTableOrange;
@@ -28,19 +27,22 @@ public class FactoryEnvironmentTraining
     public DistributionTutorialDecorator Distribution => _distribution;
 
 
-    public FactoryEnvironmentTraining(IInstantiator container, LoadReleaseTraining loadRelease,IReadStorageData storageData,OutlineManager outlineManager)
+    public FactoryEnvironmentTraining(IInstantiator container, LoadReleaseTraining loadRelease,OutlineManager outlineManager, IStorageJson jsonHandler)
     {
         _outlineManager = outlineManager;
         _container = container;
         _loadRelease = loadRelease;
-        _furnitureItemsTrainingList = storageData.ItemsFurnitureTrainingListRead;
+        _jsonHandler = jsonHandler;
     }
     
     public async UniTask CreateFurnitureTrainingGamePlayAsync()
     {
         GameObject empty = new GameObject("FurnitureTraining_Test");
         
-        foreach (var item in _furnitureItemsTrainingList)
+        List<FurnitureItemData> furnitureItemsList = new List<FurnitureItemData>();
+        _jsonHandler.Load<FurnitureTrainingItems>(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH, data => furnitureItemsList = data.ItemsFurnitureList);
+        
+        foreach (var item in furnitureItemsList)
         {
             switch (item.Name)
             {

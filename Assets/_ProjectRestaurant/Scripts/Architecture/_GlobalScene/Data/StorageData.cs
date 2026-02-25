@@ -21,38 +21,38 @@ public class StorageData: IReadStorageData
         _jsonHandler = jsonHandler;
     }
 
-    public async UniTask SaveDataJson()
-    {
-        if (_itemsFurnitureList.Count == 0)
-        {
-            Debug.LogWarning("нет данных для сохранения");
-            return;
-        }
-        
-        FurnitureItems saveObj = new FurnitureItems(_itemsFurnitureList);
-        await UniTask.Yield();
-        _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
-        
-        if (_itemsFurnitureTrainingList.Count == 0)
-        {
-            Debug.LogWarning("нет данных для сохранения");
-            return;
-        }
-        
-        FurnitureTrainingItems saveObj2 = new FurnitureTrainingItems(_itemsFurnitureTrainingList);
-        await UniTask.Yield();
-        _jsonHandler.Save(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH,saveObj2);
-        
-        if (_itemsEnvironmentList.Count == 0)
-        {
-            Debug.LogWarning("нет данных для сохранения");
-            return;
-        }
-        
-        EnvironmentItems saveObj1 = new EnvironmentItems(_itemsEnvironmentList);
-        await UniTask.Yield();
-        _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj1);
-    }
+    // public async UniTask SaveDataJson()
+    // {
+    //     if (_itemsFurnitureList.Count == 0)
+    //     {
+    //         Debug.LogWarning("нет данных для сохранения");
+    //         return;
+    //     }
+    //     
+    //     FurnitureItems saveObj = new FurnitureItems(_itemsFurnitureList);
+    //     await UniTask.Yield();
+    //     _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
+    //     
+    //     if (_itemsFurnitureTrainingList.Count == 0)
+    //     {
+    //         Debug.LogWarning("нет данных для сохранения");
+    //         return;
+    //     }
+    //     
+    //     FurnitureTrainingItems saveObj2 = new FurnitureTrainingItems(_itemsFurnitureTrainingList);
+    //     await UniTask.Yield();
+    //     _jsonHandler.Save(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH,saveObj2);
+    //     
+    //     if (_itemsEnvironmentList.Count == 0)
+    //     {
+    //         Debug.LogWarning("нет данных для сохранения");
+    //         return;
+    //     }
+    //     
+    //     EnvironmentItems saveObj1 = new EnvironmentItems(_itemsEnvironmentList);
+    //     await UniTask.Yield();
+    //     _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj1);
+    // }
 
     public void DownloadDataJson()
     {

@@ -75,6 +75,7 @@ namespace GoogleSpreadsheets
                 }
                 
                 Debug.Log($"Sheet parsed successfully.");
+                parser.Save(); // сохранение распарсенных данных в json
             }
             else
             {

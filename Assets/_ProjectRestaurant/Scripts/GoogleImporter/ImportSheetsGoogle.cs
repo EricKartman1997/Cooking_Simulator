@@ -12,11 +12,11 @@ namespace GoogleSpreadsheets
         private string CredentialsPath =>
             Path.Combine(Application.streamingAssetsPath, CREDENTIALS_FILE);
 
-        public async UniTask LoadItemsSettings<T>(StorageData storageData) where T : ItemDataParser, new()
+        public async UniTask LoadItemsSettings<T>(IStorageJson jsonHandler) where T : ItemDataParser, new()
         {
             var sheetsImporter = new GoogleSheetsImporter(CredentialsPath, SPREADSHEET_ID);
             var itemParser = new T();
-            itemParser.Init(storageData);
+            itemParser.Init(jsonHandler);
             await sheetsImporter.DownloadAndParseSheet(itemParser.NameSheet, itemParser);
         }
     }

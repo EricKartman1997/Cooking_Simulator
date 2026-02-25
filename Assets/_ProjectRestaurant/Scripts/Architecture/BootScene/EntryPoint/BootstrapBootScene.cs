@@ -7,13 +7,14 @@ using GoogleSpreadsheets;
 public class BootstrapBootScene : MonoBehaviour
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
+    private IStorageJson _jsonHandler;
     private StorageData _storageData;
     
     [Inject]
-    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene, StorageData storageData)
+    private void ConstructZenject(LoadReleaseGlobalScene loadReleaseGlobalScene, IStorageJson jsonHandler, StorageData storageData)
     {
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
-        _storageData = storageData;
+        _jsonHandler = jsonHandler;
     }
     private void Start()
     {
@@ -23,7 +24,7 @@ public class BootstrapBootScene : MonoBehaviour
     private async UniTaskVoid InitializeAsync()
     {
         await LoadGoogleSheets();
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        //await UniTask.Delay(TimeSpan.FromSeconds(1));
         await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
     }
 
@@ -32,11 +33,9 @@ public class BootstrapBootScene : MonoBehaviour
         try
         {
             ImportSheetsGoogle importSheetsGoogle = new ImportSheetsGoogle();
-            await importSheetsGoogle.LoadItemsSettings<FurnitureTrainingItemDataParser>(_storageData);
-            await importSheetsGoogle.LoadItemsSettings<FurnitureItemDataParser>(_storageData);
-            await importSheetsGoogle.LoadItemsSettings<EnvironmentItemDataParser>(_storageData);
-
-            await _storageData.SaveDataJson();
+            await importSheetsGoogle.LoadItemsSettings<FurnitureTrainingItemDataParser>(_jsonHandler);
+            await importSheetsGoogle.LoadItemsSettings<FurnitureItemDataParser>(_jsonHandler);
+            await importSheetsGoogle.LoadItemsSettings<EnvironmentItemDataParser>(_jsonHandler);
         }
         catch (Exception e)
         {

@@ -7,13 +7,15 @@ public class InternetUpdateService
 {
     private readonly StorageData _storageData;
     private readonly BootstrapMainMenu _menu;
+    private IStorageJson _jsonHandler;
 
     private bool _isWorking;
 
-    public InternetUpdateService(StorageData storageData, BootstrapMainMenu menu)
+    public InternetUpdateService(StorageData storageData, BootstrapMainMenu menu,IStorageJson jsonHandler)
     {
         _storageData = storageData;
         _menu = menu;
+        _jsonHandler = jsonHandler;
     }
 
     public async UniTask StartChecking()
@@ -39,11 +41,9 @@ public class InternetUpdateService
             try
             {
                 var importer = new ImportSheetsGoogle();
-                await importer.LoadItemsSettings<FurnitureTrainingItemDataParser>(_storageData);
-                await importer.LoadItemsSettings<FurnitureItemDataParser>(_storageData);
-                await importer.LoadItemsSettings<EnvironmentItemDataParser>(_storageData);
-
-                await _storageData.SaveDataJson();
+                await importer.LoadItemsSettings<FurnitureTrainingItemDataParser>(_jsonHandler);
+                await importer.LoadItemsSettings<FurnitureItemDataParser>(_jsonHandler);
+                await importer.LoadItemsSettings<EnvironmentItemDataParser>(_jsonHandler);
 
                 Debug.Log("Данные успешно загружены");
 
