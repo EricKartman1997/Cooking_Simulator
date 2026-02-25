@@ -1,6 +1,4 @@
-using System;
-
-public class ScoreService : IDisposable
+public class ScoreService
 {
     private TimeGameService _timeGameService;
     private float _score;
@@ -14,13 +12,7 @@ public class ScoreService : IDisposable
         _timeGameService = timeGameService;
         _checkContainer = checkContainer;
         
-        _checkVisitore = new ScoreCheckVisitore(_checkContainer); // создать медиатор
-        
-    }
-
-    public void Dispose()
-    {
-
+        _checkVisitore = new ScoreCheckVisitore(_checkContainer);
     }
     
     public void AddScore(int score, Check check)
@@ -45,7 +37,6 @@ public class ScoreService : IDisposable
         public ScoreCheckVisitore(CheckContainer checkContainer)
         {
             _checkContainer = checkContainer;
-            //Debug.Log("Создать объект: ScoreCheckVisitore");
         }
 
         public void Visit(BakedFishCheck bakedFish)

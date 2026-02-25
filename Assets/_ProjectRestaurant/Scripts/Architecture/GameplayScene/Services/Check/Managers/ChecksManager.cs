@@ -4,9 +4,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Zenject;
 
-public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCheck, ICheckTheCheck,IDisposable
+public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCheck, ICheckTheCheck
 {
-    
     private CheckFactory _checkFactoryScript;
     private CheckPrefabFactory _checkPrefabFactory;
     private OrdersService _ordersService;
@@ -35,14 +34,6 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         _ordersService = ordersService;
         _scoreService = scoreService;
         _factoryUIGameplay = factoryUIGameplay;
-        //_checksPanalUI = factoryUIGameplay.ChecksPanalUI;
-        //_bootstrapGameplay = bootstrapGameplay;
-        //_bootstrapGameplay.InitChecksManager += Init;
-    }
-
-    public void Dispose()
-    {
-        //_bootstrapGameplay.InitChecksManager -= Init;
     }
 
     public void Init()
@@ -143,8 +134,7 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
             {
                 continue;
             }
-
-            // Находим чек для текущего блюда с минимальным временем
+            
             if (HaveSameProductComponent(check.Dish,dish) && check.StartTime < minTime)
             {
                 minTime = check.StartTime;
@@ -161,12 +151,10 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
             throw new ArgumentNullException(nameof(obj1), "Первый объект не может быть null");
         if (obj2 == null) 
             throw new ArgumentNullException(nameof(obj2), "Второй объект не может быть null");
-
-        // Получаем компоненты Product с проверкой количества
+        
         Product[] products1 = GetSingleProductComponent(obj1);
         Product[] products2 = GetSingleProductComponent(obj2);
-
-        // Сравниваем типы единственных компонентов
+        
         return products1[0].GetType() == products2[0].GetType();
     }
 
@@ -184,54 +172,23 @@ public class ChecksManager :ITickable, IDeleteCheck, IDeleteOverdueCheck, IAddCh
         
         return products;
     }
-
-    public void DeleteAllChecks()
-    {
-        // Object.Destroy(_cloneCheck1);
-        // _check1 = null;
-        _checksPanalUI.RemoveCheck(_check1);
-        //Debug.Log("удалил первый чек");
-        
-        // Object.Destroy(_cloneCheck2);
-        // _check2 = null;
-        _checksPanalUI.RemoveCheck(_check2);
-        //Debug.Log("удалил второй чек");
-        
-        // Object.Destroy(_cloneCheck3);
-        // _check3 = null;
-        _checksPanalUI.RemoveCheck(_check3);
-        //Debug.Log("удалил третий чек");
-    }
     
     public void DeleteOverdueCheck(Check check) // удаление просроченного чека
     {
         if (_check1 != null && _check1.StartTime <= 0f)
         {
-            // Object.Destroy(_cloneCheck1);
-            // _cloneCheck1 = null;
             _checksPanalUI.RemoveCheck(_check1);
             _check1 = null;
-
-            //Debug.Log("просрочен 1 чек");
         }
         else if (_check2 != null && _check2.StartTime <= 0f)
         {
-            // Object.Destroy(_cloneCheck2);
-            // _cloneCheck2 = null;
             _checksPanalUI.RemoveCheck(_check2);
             _check2 = null;
-            
-            //Debug.Log("просрочен 2 чек");
-
         }
         else if (_check3 != null && _check3.StartTime <= 0f)
         {
-            // Object.Destroy(_cloneCheck3);
-            // _cloneCheck3 = null;
             _checksPanalUI.RemoveCheck(_check3);
             _check3 = null;
-
-            //Debug.Log("просрочен 3 чек");
         }
         else
         {

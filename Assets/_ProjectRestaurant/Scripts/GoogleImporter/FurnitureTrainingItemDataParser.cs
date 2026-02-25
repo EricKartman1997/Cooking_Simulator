@@ -4,17 +4,14 @@ using UnityEngine;
 
 namespace GoogleSpreadsheets
 {
-    public class FurnitureTrainingItemDataParser: IGoogleSheetParser
+    public class FurnitureTrainingItemDataParser: ItemDataParser
     {
-        private readonly StorageData _storageData;
+        private const string NAMESHEET = "FurnitureTrainingLevel";
         private FurnitureItemData _currentItemData;
         
-        public FurnitureTrainingItemDataParser(StorageData storageData)
-        {
-            _storageData = storageData;
-        }
+        public override string NameSheet => NAMESHEET;
         
-        public void Parse(string header, string token)
+        public override void Parse(string header, string token)
         {
             switch (header)
             {
@@ -23,7 +20,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    _storageData._itemsFurnitureTrainingList.Add(_currentItemData);
+                    StorageData._itemsFurnitureTrainingList.Add(_currentItemData);
                     break;
 
                 case "Name":
@@ -68,7 +65,7 @@ namespace GoogleSpreadsheets
                 return Vector3.zero;
             }
 
-            token = token.Replace(',', '.'); // если в Google Sheets числа через запятую
+            token = token.Replace(',', '.');
 
             var parts = token.Split(';');
             if (parts.Length != 3)
@@ -76,13 +73,11 @@ namespace GoogleSpreadsheets
                 Debug.Log("ZERO-2");
                 return Vector3.zero;
             }
-                
-
+            
             if (float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) &&
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
                 float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
             {
-                //Debug.Log($"X = {x}, Y = {y}, Z = {z}");
                 return new Vector3(x, y, z);
             }
             Debug.Log("ZERO-3");

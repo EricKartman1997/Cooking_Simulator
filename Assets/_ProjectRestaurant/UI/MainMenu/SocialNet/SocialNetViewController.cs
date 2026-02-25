@@ -112,5 +112,4 @@ public class SocialNetViewController : MonoBehaviour
     {
         _isPlayAnim = false;
     }
-    
 }

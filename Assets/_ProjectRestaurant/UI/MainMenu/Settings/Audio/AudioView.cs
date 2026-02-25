@@ -31,26 +31,19 @@ public class AudioView: MonoBehaviour
     }
     private void Start()
     {
-        // Сначала загружаем
         _jsonHandler.Load<AudioSettings>(JsonPathName.AUDIO_SETTINGS_PATH, data =>
         {
-            // 1. Устанавливаем значения в UI
             masterSlider.mainSlider.value = data.MasterVolume;
             musicSlider.mainSlider.value = data.MusicVolum;
             sfxSlider.mainSlider.value = data.SFXVolum;
-
-            // 2. СРАЗУ применяем их к SoundManager (фикс для билда)
+            
             SetMasterVolume(data.MasterVolume);
             SetMusicVolume(data.MusicVolum);
             SetSFXVolume(data.SFXVolum);
-
-            // 3. И только теперь добавляем слушателей
-            // Это предотвратит лишние вызовы во время загрузки
+            
             masterSlider.mainSlider.onValueChanged.AddListener(SetMasterVolume);
             musicSlider.mainSlider.onValueChanged.AddListener(SetMusicVolume);
             sfxSlider.mainSlider.onValueChanged.AddListener(SetSFXVolume);
-        
-            //Debug.Log("Audio Settings Loaded and Applied");
         });
     }
     

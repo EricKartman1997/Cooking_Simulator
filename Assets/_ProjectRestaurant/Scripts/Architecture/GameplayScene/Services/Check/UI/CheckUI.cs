@@ -20,6 +20,5 @@ public class CheckUI : MonoBehaviour
     private void Update()
     {
         remTimeText.text = string.Format("{0:00}:{1:00}", 0f,  _check.StartTime);
-        //Debug.Log("я работаю");
     }
 }

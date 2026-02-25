@@ -30,13 +30,11 @@ namespace GoogleSpreadsheets
             });
         }
     
-        public async Task DownloadAndParseSheet(string sheetName, IGoogleSheetParser parser) //
+        public async Task DownloadAndParseSheet(string sheetName, IGoogleSheetParser parser)
         {
             Debug.Log($"Starting downloading sheet (${sheetName})...");
-
-            // Define the range of the table to download
+            
             var range = $"{sheetName}!A1:Z";
-            // Make the request to Google Sheets API
             var request = _service.Spreadsheets.Values.Get(_spreadsheetId, range);
 
             ValueRange response;
@@ -49,8 +47,7 @@ namespace GoogleSpreadsheets
                 Debug.LogError($"Error retrieving Google Sheets data: {e.Message}");
                 throw;
             }
-
-            // Parse the received data
+            
             if (response != null && response.Values != null)
             {
                 var tableArray = response.Values;
@@ -72,7 +69,6 @@ namespace GoogleSpreadsheets
                     {
                         var cell = row[j];
                         var header = _headers[j];
-                        //Debug.Log($"Header: {header}, Value: {cell}");
                     
                         parser.Parse(header, cell.ToString());
                     }

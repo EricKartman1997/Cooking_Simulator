@@ -4,7 +4,6 @@ using Zenject;
 
 public class GameplayInstaller : MonoInstaller
 {
-    // ScriptableObject
     [SerializeField] private FoodsForFurnitureContainer foodsForFurnitureContainer;
     [SerializeField] private RecipeContainer recipeContainer;
     [SerializeField] private CheckContainer checkContainer;
@@ -20,7 +19,6 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<CheckContainer>().FromInstance(checkContainer);
         
         Container.BindInterfacesAndSelfTo<BootstrapGameplay>().FromInstance(bootstrapGameplay).AsSingle();
-        
         
         Container.BindInterfacesAndSelfTo<LoadReleaseGameplay>().AsSingle();
         
@@ -42,8 +40,8 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<HelperScriptFactory>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<TimeGameService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<OrdersService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ScoreService>().AsSingle();
+        Container.Bind<OrdersService>().AsSingle();
+        Container.Bind<ScoreService>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameOverService>().AsSingle();
         Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
         
@@ -52,7 +50,6 @@ public class GameplayInstaller : MonoInstaller
         
         BindCheckFactory();
         BindCheckPrefabFactory();
-        //Debug.Log("завершил инициализацию GameplayInstaller");
     }
 
     private void BindCheckFactory()
@@ -87,9 +84,6 @@ public class GameplayInstaller : MonoInstaller
                     CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
                     _ => throw new ArgumentOutOfRangeException()
                 };
-
-                //container.Inject(instance);
-                //Debug.Log("Сделал инджект в объект");
 
                 return instance;
             });

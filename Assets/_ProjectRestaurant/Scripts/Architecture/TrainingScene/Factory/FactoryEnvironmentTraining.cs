@@ -64,13 +64,10 @@ public class FactoryEnvironmentTraining
         }
 
         _outlineManager.FindObjs(empty);
-        // ждать окончание операции
-
     }
     
     private GameObject CreateGetTable(FurnitureItemData itemData, Transform parent)
     {
-        //itemData.ShowConnectionTheInternet();
         GameObject obj = _container.InstantiatePrefab(_loadRelease.FurnitureDic[FurnitureNameTraining.GetTableTraining], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<GetTable>().Init(itemData.GiveFood, itemData.ViewFood);
         if (itemData.GiveFood == IngredientName.Apple)
@@ -111,7 +108,6 @@ public class FactoryEnvironmentTraining
     
     private GameObject CreateDistribution(FurnitureItemData itemData, Transform parent)
     {
-        //itemData.ShowConnectionTheInternet();
         GameObject obj = _container.InstantiatePrefab(_loadRelease.FurnitureDic[FurnitureNameTraining.DistributionTraining], itemData.PositionVector, Quaternion.Euler(itemData.RotationVector), parent);
         obj.GetComponent<DecorationFurniture>().Init(itemData.DecorationTableTop, itemData.DecorationLowerSurface);
         _distribution = obj.GetComponent<DistributionTutorialDecorator>();

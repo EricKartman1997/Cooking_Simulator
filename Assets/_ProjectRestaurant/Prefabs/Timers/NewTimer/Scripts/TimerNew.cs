@@ -31,12 +31,7 @@ public class TimerNew : MonoBehaviour, IPause
     {
         _pauseHandler.Remove(this);
     }
-
-    // public void Init(float time,float currentTime)
-    // {
-    //     _time = time;
-    //     _currentTime = currentTime;
-    // }
+    
     
     public void SetParentTimer(Transform parent)
     {
@@ -59,17 +54,13 @@ public class TimerNew : MonoBehaviour, IPause
             float angle = 360f * progress;
 
             arrow.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            //await UniTask.WaitUntil(() => _isWork == true);
+            
             await UniTask.WaitUntil(() => _isPause == false);
-            await UniTask.Yield(); // ждём кадр
+            await UniTask.Yield();
         }
-
-        //_isFinish = true;
         _isWork = false;
         gameObject.SetActive(false);
     }
     
     public void SetPause(bool isPaused) => _isPause = isPaused;
-    //public void SetWork(bool isWork) => _isWork = isWork;
 }

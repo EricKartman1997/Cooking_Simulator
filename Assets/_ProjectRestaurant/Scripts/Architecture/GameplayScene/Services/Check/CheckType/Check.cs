@@ -30,7 +30,6 @@ public abstract class Check: IDisposable, ITickable, IPause
         _deleteCheck = deleteCheck;
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
-        //Debug.Log($"Check created: {GetType().Name}, startTime={_startTime}");
     }
     
     public void Dispose()
@@ -40,7 +39,6 @@ public abstract class Check: IDisposable, ITickable, IPause
     
     public void Tick()
     {
-        //Debug.Log("я работаю 3");
         if (IsStop == true)
             return;
         

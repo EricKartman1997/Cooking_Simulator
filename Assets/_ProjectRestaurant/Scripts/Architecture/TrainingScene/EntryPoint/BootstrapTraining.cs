@@ -29,7 +29,6 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     
     private DiContainer _container;
     
-    //ВКЛ игры
     private UpdateChecks _updateChecks;
     private TimeGameService _timeGameService;
     
@@ -64,7 +63,6 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
         _dialogueManager = dialogueManager;
         _factoryEnvironmentTraining = factoryEnvironmentTraining;
         _factoryUITraining = factoryUITraining;
-        //_menu = menu;
     }
     
     private void Start()
@@ -75,29 +73,16 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     
     private async UniTaskVoid InitializeAsync()
     {
-        // ждем загрузки всех ресурсов
         await WaitForResourcesLoaded();
-        // инициализация музыки
         await InitAudioAsync();
-        // создать камеры
         CreateCameras();
-        // создать экран загрузки
         await CreateLoadingPanel();
-        // вкл загрузку
         ShowLoadingPanel();
-        //создать UI
         await CreateUI();
-        // создание сервисов
-        //await CreateServiceAsync();
-        // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
-        // создать игрока
         await CreatePlayerAsync();
-        // выключить экран загрузки (удаляется)
         HideLoadingPanel();
-        // вкл музыку
         await EnableMusic();
-        // запускаем игру
         await StartGame();
 
         Debug.Log($"{_storageData.OperatingModeMainMenu} BootstrapGameplay");
@@ -105,13 +90,10 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     
     public async UniTask ExitInMenuLevel()
     {   
-        // выкл UI игрока
         _factoryUIGameplay.HideUI();
         await UniTask.Yield();
-        // вкл загрузку
         ShowLoadingPanel();
         await UniTask.Yield();
-        // переход на сцену меню
         await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
         await UniTask.Yield();
         HideLoadingPanel();
@@ -119,13 +101,10 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
     
     public async UniTask ExitInGameplayLevel()
     {   
-        // выкл UI игрока
         _factoryUIGameplay.HideUI();
         await UniTask.Yield();
-        // вкл загрузку
         ShowLoadingPanel();
         await UniTask.Yield();
-        // переход на сцену меню
         await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_GAMEPLAY);
         await UniTask.Yield();
         HideLoadingPanel();
@@ -161,7 +140,7 @@ public class BootstrapTraining : MonoBehaviour, IExitLevel
             _loadingPanel.SetActive(true);
     }
     
-    private async UniTask CreateUI() //меняем на UI с обучением
+    private async UniTask CreateUI()
     {
         _factoryUIGameplay.CreateUI();
         await UniTask.Yield();

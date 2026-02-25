@@ -10,8 +10,6 @@ public class MainMenuInstaller : MonoInstaller
         
         Container.BindInterfacesAndSelfTo<LoadReleaseMainMenuScene>().AsSingle();
         
-        //Container.Bind<SoundManager>().AsSingle().Lazy(); // ← добавляем сюда
-        
         Container.BindInterfacesAndSelfTo<SoundsServiceMainMenu>().AsSingle();
 
         Container.Bind<FactoryUIMainMenuScene>().AsSingle();

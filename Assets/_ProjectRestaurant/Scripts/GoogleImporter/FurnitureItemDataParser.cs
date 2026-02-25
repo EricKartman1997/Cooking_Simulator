@@ -1,21 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
 namespace GoogleSpreadsheets
 {
-    public class FurnitureItemDataParser: IGoogleSheetParser
+    public class FurnitureItemDataParser: ItemDataParser
     {
-        private readonly StorageData _storageData;
+        private const string NAMESHEET = "FurnitureDemoLevel";
         private FurnitureItemData _currentItemData;
-        
-        public FurnitureItemDataParser(StorageData storageData)
-        {
-            _storageData = storageData;
-        }
-        
-        public void Parse(string header, string token)
+
+        public override string NameSheet => NAMESHEET;
+
+        public override void Parse(string header, string token)
         {
             switch (header)
             {
@@ -24,7 +20,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    _storageData._itemsFurnitureList.Add(_currentItemData);
+                    StorageData._itemsFurnitureList.Add(_currentItemData);
                     break;
 
                 case "Name":
@@ -69,7 +65,7 @@ namespace GoogleSpreadsheets
                 return Vector3.zero;
             }
 
-            token = token.Replace(',', '.'); // если в Google Sheets числа через запятую
+            token = token.Replace(',', '.');
 
             var parts = token.Split(';');
             if (parts.Length != 3)
@@ -83,7 +79,6 @@ namespace GoogleSpreadsheets
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
                 float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
             {
-                //Debug.Log($"X = {x}, Y = {y}, Z = {z}");
                 return new Vector3(x, y, z);
             }
             Debug.Log("ZERO-3");

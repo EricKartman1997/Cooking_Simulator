@@ -73,8 +73,6 @@ public class LoadReleaseTraining : IDisposable, IInitializable
         _uiDic.Add(UINameTraining.EndTraining, results[1]);
         _uiDic.Add(UINameTraining.MiniTaskTraining, results[2]);
         _uiDic.Add(UINameTraining.StartTraining, results[3]);
-        
-        //Debug.Log("прошел LoadUIPrefabsAsync");
     }
     
     private async Task<GameObject> LoadGameObjectAsync(string address)

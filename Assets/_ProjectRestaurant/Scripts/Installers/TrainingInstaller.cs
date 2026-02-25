@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -45,8 +43,8 @@ public class TrainingInstaller : MonoInstaller
         Container.Bind<HelperScriptFactory>().AsSingle();
         
         Container.BindInterfacesAndSelfTo<TimeGameService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<OrdersService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<ScoreService>().AsSingle();
+        Container.Bind<OrdersService>().AsSingle();
+        Container.Bind<ScoreService>().AsSingle();
         Container.BindInterfacesAndSelfTo<GameOverService>().AsSingle();
         Container.BindInterfacesAndSelfTo<Menu>().AsSingle();
         
@@ -57,7 +55,6 @@ public class TrainingInstaller : MonoInstaller
         
         BindCheckFactory();
         BindCheckPrefabFactory();
-        //Debug.Log("завершил инициализацию GameplayInstaller");
     }
     
     private void BindCheckFactory()
@@ -92,10 +89,6 @@ public class TrainingInstaller : MonoInstaller
                     CheckType.FreshnessCocktail => new FreshnessCocktailCheck(config.Prefab, config.StartTime, config.Score, config.Dish, checksManager,pauseHandler),
                     _ => throw new ArgumentOutOfRangeException()
                 };
-
-                //container.Inject(instance);
-                //Debug.Log("Сделал инджект в объект");
-
                 return instance;
             });
 

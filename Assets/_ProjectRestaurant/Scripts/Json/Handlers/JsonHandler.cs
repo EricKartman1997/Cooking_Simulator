@@ -32,10 +32,8 @@ public class JsonHandler : IDisposable, IStorageJson
         {
             if (!File.Exists(path))
             {
-                // Создаём новый объект с конструктором по умолчанию
                 var defaultData = new T();
-
-                // Сохраняем его как новый JSON-файл
+                
                 var defaultJson = JsonConvert.SerializeObject(defaultData, Formatting.Indented);
                 File.WriteAllText(path, defaultJson);
 
@@ -43,8 +41,7 @@ public class JsonHandler : IDisposable, IStorageJson
                 callback?.Invoke(defaultData);
                 return;
             }
-
-            // Если файл существует — читаем и десериализуем
+            
             filestream = new StreamReader(path);
             var json = filestream.ReadToEnd();
             var data = JsonConvert.DeserializeObject<T>(json);

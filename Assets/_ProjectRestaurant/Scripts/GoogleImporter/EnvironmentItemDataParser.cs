@@ -4,17 +4,14 @@ using System.Globalization;
 
 namespace GoogleSpreadsheets
 {
-    public class EnvironmentItemDataParser: IGoogleSheetParser
+    public class EnvironmentItemDataParser: ItemDataParser
     {
-        private readonly StorageData _storageData;
+        private const string NAMESHEET = "EnvironmentDemoLevel";
         private EnvironmentItemData _currentItemData;
         
-        public EnvironmentItemDataParser(StorageData storageData)
-        {
-            _storageData = storageData;
-        }
+        public override string NameSheet => NAMESHEET;
         
-         public void Parse(string header, string token)
+        public override void Parse(string header, string token)
         {
             switch (header)
             {
@@ -23,7 +20,7 @@ namespace GoogleSpreadsheets
                     {
                         Id = Convert.ToInt32(token)
                     };
-                    _storageData._itemsEnvironmentList.Add(_currentItemData);
+                    StorageData._itemsEnvironmentList.Add(_currentItemData);
                     break;
         
                 case "Name":
@@ -50,7 +47,7 @@ namespace GoogleSpreadsheets
                 return Vector3.zero;
             }
 
-            token = token.Replace(',', '.'); // если в Google Sheets числа через запятую
+            token = token.Replace(',', '.');
 
             var parts = token.Split(';');
             if (parts.Length != 3)
@@ -63,7 +60,6 @@ namespace GoogleSpreadsheets
                 float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y) &&
                 float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
             {
-                //Debug.Log($"X = {x}, Y = {y}, Z = {z}");
                 return new Vector3(x, y, z);
             }
             Debug.Log("ZERO-3");

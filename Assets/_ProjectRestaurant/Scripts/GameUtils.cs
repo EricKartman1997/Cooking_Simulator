@@ -47,7 +47,7 @@ public static class GameUtils
 
         using (var request = UnityWebRequest.Head(url))
         {
-            request.timeout = 5; // таймаут 5 секунд
+            request.timeout = 5;
 
             try
             {

@@ -11,7 +11,6 @@ public abstract class NotificationObject : MonoBehaviour
     private void Awake()
     {
         _animator =  GetComponent<Animator>();
-        //_isPlaying = true;
     }
 
     private void OnDisable()

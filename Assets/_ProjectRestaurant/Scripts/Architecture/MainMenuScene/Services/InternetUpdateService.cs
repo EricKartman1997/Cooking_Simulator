@@ -25,10 +25,8 @@ public class InternetUpdateService
 
         while (_isWorking)
         {
-            // ждём 5 секунд между попытками
             await UniTask.Delay(TimeSpan.FromSeconds(5));
-
-            // реальная проверка доступности Google
+            
             if (!await GameUtils.IsGoogleSheetAvailable("1egofOmJAB6kx-TRCUNWvBhR6os8RO5oIzNOYsXNL3t8"))
             {
                 Debug.Log("Google недоступен, ждём...");
@@ -40,11 +38,10 @@ public class InternetUpdateService
 
             try
             {
-                //throw new System.Exception("Искусственная ошибка");
                 var importer = new ImportSheetsGoogle();
-                await importer.LoadItemsSettingsFurniture(_storageData);
-                await importer.LoadItemsSettingsFurnitureTraining(_storageData);
-                await importer.LoadItemsSettingsEnvironment(_storageData);
+                await importer.LoadItemsSettings<FurnitureTrainingItemDataParser>(_storageData);
+                await importer.LoadItemsSettings<FurnitureItemDataParser>(_storageData);
+                await importer.LoadItemsSettings<EnvironmentItemDataParser>(_storageData);
 
                 await _storageData.SaveDataJson();
 

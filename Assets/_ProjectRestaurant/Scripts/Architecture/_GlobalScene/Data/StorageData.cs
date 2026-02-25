@@ -6,13 +6,11 @@ public class StorageData: IReadStorageData
 {
     private JsonHandler _jsonHandler;
     
-    // поля для взаимодействия
     public List<FurnitureItemData> _itemsFurnitureList = new List<FurnitureItemData>();
     public List<FurnitureItemData> _itemsFurnitureTrainingList = new List<FurnitureItemData>();
     public List<EnvironmentItemData> _itemsEnvironmentList = new List<EnvironmentItemData>();
     private OperatingModeMainMenu _operatingModeMainMenu = OperatingModeMainMenu.WithAnInternetConnection;
-
-    // свойства
+    
     public List<FurnitureItemData> ItemsFurnitureListRead => _itemsFurnitureList;
     public List<FurnitureItemData> ItemsFurnitureTrainingListRead => _itemsFurnitureTrainingList;
     public List<EnvironmentItemData> ItemsEnvironmentListRead => _itemsEnvironmentList;
@@ -34,7 +32,6 @@ public class StorageData: IReadStorageData
         FurnitureItems saveObj = new FurnitureItems(_itemsFurnitureList);
         await UniTask.Yield();
         _jsonHandler.Save(JsonPathName.FURNITURE_ITEMS_PATH,saveObj);
-        //Debug.Log("Прошел сохранение Furniture");
         
         if (_itemsFurnitureTrainingList.Count == 0)
         {
@@ -45,7 +42,6 @@ public class StorageData: IReadStorageData
         FurnitureTrainingItems saveObj2 = new FurnitureTrainingItems(_itemsFurnitureTrainingList);
         await UniTask.Yield();
         _jsonHandler.Save(JsonPathName.FURNITURE_TRAINING_ITEMS_PATH,saveObj2);
-        //Debug.Log("Прошел сохранение Furniture");
         
         if (_itemsEnvironmentList.Count == 0)
         {
@@ -56,7 +52,6 @@ public class StorageData: IReadStorageData
         EnvironmentItems saveObj1 = new EnvironmentItems(_itemsEnvironmentList);
         await UniTask.Yield();
         _jsonHandler.Save(JsonPathName.ENVIRONMENT_ITEMS_PATH,saveObj1);
-        //Debug.Log("Прошел сохранение Environment");
     }
 
     public void DownloadDataJson()
@@ -81,7 +76,6 @@ public class StorageData: IReadStorageData
             Debug.Log("данных нет - перезапустите игру, подключитесь к интернету");
             _operatingModeMainMenu = OperatingModeMainMenu.WithoutAnInternetConnection;
             return;
-            //данных нет - перезапустите игру, подключитесь к интернету
         }
         
         _operatingModeMainMenu = OperatingModeMainMenu.WithoutAnInternetConnectionButOutdatedData;

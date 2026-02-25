@@ -84,24 +84,10 @@ public class BootstrapMainMenu : MonoBehaviour
         await CreateCameras();
         CreateLoadingPanel();
         await CreateUI();
-        
-        // небольшая пауза
-        await UniTask.Delay(1200);
-        //await UniTask.Delay(1);
-
         await EnableMusic();
         await StartLevel();
         
     }
-    
-    // public async UniTask WaitInternetAndShow()
-    // {
-    //     await UniTask.WaitUntil(() =>
-    //         _storageData.OperatingModeMainMenu == OperatingModeMainMenu.WithAnInternetConnection
-    //     );
-    //
-    //     ShowPanelWaitTheInternetAction?.Invoke();
-    // }
     
     private async UniTask WaitForResourcesLoaded()
     {
@@ -117,11 +103,6 @@ public class BootstrapMainMenu : MonoBehaviour
     
     private void CreateLoadingPanel()
     {
-        // Canvas canvas = _factoryUIMainMenuScene.CreateShowLoading();
-        // _loadingPanel = canvas.gameObject;
-        // Instantiate(_loadReleaseMainMenuScene.GlobalPrefDic[GlobalPref.LoadingPanel], canvas.transform);
-        // ShowLoadingPanel();
-        
         _loadingPanel = _factoryUIMainMenuScene.CreateShowLoading();
         ShowLoadingPanel();
     }
@@ -201,8 +182,6 @@ public class BootstrapMainMenu : MonoBehaviour
             ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
             ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideWaitTheInternetConnection;
             ThereIsInternetAction += _menuViewController.TurnOnButtonsGame;
-            
-            //ThereIsInternetAction += _menuViewController.WarringWindowsViewController.HideConnectionTheInternet;
         }
     }
     

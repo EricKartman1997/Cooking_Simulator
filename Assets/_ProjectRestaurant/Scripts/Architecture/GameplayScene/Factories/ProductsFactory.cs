@@ -1,6 +1,5 @@
 using UnityEngine;
 using Zenject;
-using Object = UnityEngine.Object;
 
 public class ProductsFactory
 {

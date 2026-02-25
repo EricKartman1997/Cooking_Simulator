@@ -16,7 +16,6 @@ public class Menu : IDisposable
         _bootstrapGameplay = bootstrapGameplay;
         _pauseHandler = pauseHandler;
         _factoryUIGameplay = factoryUIGameplay;
-        //_menuUI = factoryUIGameplay.MenuUI;
 
         _bootstrapGameplay.InitMenuButtons += Init;
     }
@@ -37,9 +36,6 @@ public class Menu : IDisposable
     
     public void ContinueButton()
     {
-        // выкл паузу
-        // Time.timeScale = 1f;
-        // AudioListener.pause = false;
         Hide();
     }
     

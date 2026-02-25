@@ -25,7 +25,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     
     private DiContainer _container;
     
-    //ВКЛ игры
     private UpdateChecks _updateChecks;
     private TimeGameService _timeGameService;
     
@@ -55,7 +54,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
         _ordersService = ordersService;
         _checksManager = checksManager;
         _gameOverService = gameOverService;
-        //_menu = menu;
     }
     
     private void Start()
@@ -66,29 +64,17 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     
     private async UniTaskVoid InitializeAsync()
     {
-        // ждем загрузки всех ресурсов
         await WaitForResourcesLoaded();
-        // инициализация музыки
         await InitAudioAsync();
-        // создать камеры
         CreateCameras();
-        // создать экран загрузки
         await CreateLoadingPanel();
-        // вкл загрузку
         ShowLoadingPanel();
-        //создать UI
         await CreateUI();
-        // создание сервисов
         await CreateServiceAsync();
-        // создать окружения (furniture, other environment,)
         await CreateEnvironmentAsync();
-        // создать игрока
         await CreatePlayerAsync();
-        // выключить экран загрузки (удаляется)
         HideLoadingPanel();
-        // вкл музыку
         await EnableMusic();
-        // запускаем игру
         await StartGame();
 
         Debug.Log($"{_storageData.OperatingModeMainMenu} BootstrapGameplay");
@@ -96,13 +82,10 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     
     public async UniTask ExitInMenuLevel()
     {   
-        // выкл UI игрока
         _factoryUIGameplay.HideUI();
         await UniTask.Yield();
-        // вкл загрузку
         ShowLoadingPanel();
         await UniTask.Yield();
-        // переход на сцену меню
         await _loadReleaseGlobalScene.LoadSceneAsync(ScenesNames.SCENE_MAINMENU);
         await UniTask.Yield();
         HideLoadingPanel();
@@ -111,7 +94,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     private async UniTask WaitForResourcesLoaded()
     {
         await UniTask.WaitUntil(() => _loadReleaseGameplay.IsLoaded);
-        //Debug.Log("Загружены все ресурсы для Gameplay");
     }
     
     private void CreateCameras()
@@ -167,7 +149,7 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     private async UniTask CreatePlayerAsync()
     {
        _factoryPlayerGameplay.CreatePlayer(_virtualCamera);
-        await UniTask.Yield(); // отдаём управление кадру
+       await UniTask.Yield();
     }
 
     private void HideLoadingPanel()
@@ -185,7 +167,6 @@ public class BootstrapGameplay : MonoBehaviour, IExitLevel
     private async UniTask StartGame()
     {
         _checksManager.Init();
-        //InitChecksManager?.Invoke();
         _ordersService.Init();
         InitMenuButtons?.Invoke();
         _timeGameService.Init();

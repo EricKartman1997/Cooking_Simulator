@@ -17,8 +17,6 @@ public class WarringWindowsViewController : MonoBehaviour
 
     public ModalWindowManager WarringWindow => warringWindow;
 
-    //public ButtonManager Button => _button;
-
     private void Awake()
     {
         _animatorWaitTheInternetConnection = waitTheInternetConnection.GetComponent<Animator>();
@@ -26,7 +24,6 @@ public class WarringWindowsViewController : MonoBehaviour
         _button = connectionTheInternet.GetComponentInChildren<ButtonManager>();
     }
     
-    //WaitTheInternetConnection
     public void ShowWaitTheInternetConnection()
     {
         waitTheInternetConnection.SetActive(true);
@@ -39,7 +36,6 @@ public class WarringWindowsViewController : MonoBehaviour
         _animatorWaitTheInternetConnection.SetBool(BOOLANIM,false);
     }
     
-    //ConnectionTheInternet
     public void ShowConnectionTheInternet()
     {
         _animatorConnectionTheInternet.SetBool(BOOLANIM,true);

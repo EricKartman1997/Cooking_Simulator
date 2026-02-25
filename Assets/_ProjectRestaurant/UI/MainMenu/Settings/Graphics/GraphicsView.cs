@@ -30,9 +30,6 @@ public class GraphicsView : MonoBehaviour
         _saveObj.QualityLevel = horizontalSelector.index;
         _saveObj.IsFullScreen = toggle.toggleObject.isOn;
         _jsonHandler.Save(JsonPathName.GRAPHIC_SETTINGS_PATH,_saveObj);
-        //Debug.Log("(сохранение) Json Graphic");
-        //_saveObj.ShowValue();
-        //Debug.Log("OnDestroy GraphicsView");
     }
     
     private void Start()
@@ -61,8 +58,6 @@ public class GraphicsView : MonoBehaviour
             horizontalSelector.index = data.QualityLevel;
             horizontalSelector.UpdateUI();
             dropdown.SetDropdownIndex(data.ResolutionSize);
-            //Debug.Log("(загрузка) Json Graphic");
-            //data.ShowValue();
         });
     }
 
@@ -76,36 +71,26 @@ public class GraphicsView : MonoBehaviour
     private void SetFullScreen(bool isFullScreen)
     {
         _graphic.SetFullScreen(isFullScreen);
-        //_saveObj.IsFullScreen = toggle.toggleObject.isOn;
     }
     
     private void SetQualityLow()
     {
         _graphic.SetQuality(Quality.Low);
-        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityMedium()
     {
         _graphic.SetQuality(Quality.Medium);
-        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityHigh()
     {
         _graphic.SetQuality(Quality.High);
-        //_saveObj.QualityLevel = horizontalSelector.index;
     }
     
     private void SetQualityUltra()
     {
         _graphic.SetQuality(Quality.Ultra);
-        //_saveObj.QualityLevel = horizontalSelector.index;
     }
-
-    // private void SetResolution(int index)
-    // {
-    //     //_saveObj.ResolutionSize = index;
-    // }
     
 }

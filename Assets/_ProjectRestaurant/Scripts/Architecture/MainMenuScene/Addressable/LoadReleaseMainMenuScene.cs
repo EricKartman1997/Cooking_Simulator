@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 using Zenject;
 
-public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRelease<AudioNameMainMenu>
+public class LoadReleaseMainMenuScene : IInitializable, IDisposable
 {
     private LoadReleaseGlobalScene _loadReleaseGlobalScene;
     
@@ -35,10 +34,8 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
         _loadReleaseGlobalScene = loadReleaseGlobalScene;
         
         _audioDic = new Dictionary<AudioNameMainMenu, AudioClip>();
-        //_prefDic = new Dictionary<PrefUINameMainMenu, GameObject>();
         _loadedClips = new List<AudioClip>();
         _loadedPrefabs = new List<GameObject>();
-        //Debug.Log("Enter LoadReleaseMainMenuScene");
     }
     
     public async void Initialize()
@@ -50,12 +47,10 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
             ServicePrefabsAsync()
         );
         _isLoaded = true;
-        //Debug.Log("Initialize LoadReleaseMainMenuScene");
     }
     
     public void Dispose()
     {
-        //ReleaseMenuAudio();
         ReleaseMenuPrefabs();
         _isLoaded = false;
     }
@@ -123,8 +118,6 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
         var results = await Task.WhenAll(loadTasks);
         
         _serviceDic.Add(ServiceNameMeinMenu.SoundsObject, results[0]);
-        
-        //Debug.Log("прошел LoadCustomPrefabsAsync");
     }
     
     #endregion
@@ -172,7 +165,6 @@ public class LoadReleaseMainMenuScene : IInitializable, IDisposable //,ILoadRele
             Addressables.Release(prefab);
         }
         _loadedPrefabs.Clear();
-        //_prefDic.Clear();
     }
     
     #endregion
@@ -190,11 +182,6 @@ public enum AudioNameMainMenu
 
 public enum PrefUINameMainMenu
 {
-    //MenuPanel,
-    //SettingsPanel,
-    //SocialNetworksPanel,
-    //Sounds,
-    //WarringWindows,
     UIPanel
 }
 

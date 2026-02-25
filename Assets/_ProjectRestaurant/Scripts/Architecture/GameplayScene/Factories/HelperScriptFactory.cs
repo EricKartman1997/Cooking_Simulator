@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class HelperScriptFactory
 {
-    // Stove
     public StovePoints GetStovePoints(Transform positionRawFood)
     {
         StovePoints stovePoints = new StovePoints(positionRawFood);

@@ -15,7 +15,6 @@ public class GraphicSettings
     
     public GraphicSettings()
     {
-        // Значения по умолчанию
         IsFullScreen = true;
         QualityLevel = 1;
         ResolutionSize = 0;
@@ -27,7 +26,7 @@ public class GraphicSettings
     }
 }
 
-[System.Serializable] // Добавь это!
+[System.Serializable]
 public class AudioSettings
 {
     public float MasterVolume;
@@ -54,7 +53,6 @@ public class BindingSettings
     
     public BindingSettings()
     {
-        // Значения по умолчанию
         Rebinds = "";
     }
     
@@ -62,11 +60,6 @@ public class BindingSettings
     {
         Rebinds = rebinds;
     }
-
-    // public void ShowValue()
-    // {
-    //     Debug.Log($"Rebinds = {Rebinds}");
-    // }
 }
 
 public class FurnitureItems
@@ -75,7 +68,6 @@ public class FurnitureItems
     
     public FurnitureItems()
     {
-        // Значения по умолчанию
         ItemsFurnitureList = new List<FurnitureItemData>();
     }
     
@@ -92,7 +84,6 @@ public class FurnitureTrainingItems
     
     public FurnitureTrainingItems()
     {
-        // Значения по умолчанию
         ItemsFurnitureList = new List<FurnitureItemData>();
     }
     
@@ -109,7 +100,6 @@ public class EnvironmentItems
     
     public EnvironmentItems()
     {
-        // Значения по умолчанию
         ItemsEnvironmentList = new List<EnvironmentItemData>();
     }
     

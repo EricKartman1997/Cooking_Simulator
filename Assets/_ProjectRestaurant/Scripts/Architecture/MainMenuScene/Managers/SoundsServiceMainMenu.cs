@@ -57,7 +57,6 @@ public class SoundsServiceMainMenu : ISoundsService
     public void SetMusic()
     {
         _sourceMusic.clip = _loadReleaseMainMenuScene.AudioDic[AudioNameMainMenu.MenuFonMusic];
-        //_sourceMusic.Play();
     }
     
     public void PlaySounds()
@@ -81,12 +80,10 @@ public class SoundsServiceMainMenu : ISoundsService
     public void MuteSources()
     {
         _sourceSFX.mute = true;
-        //_sourceMusic.mute = true;
     }
 
     public void UnMuteSources()
     {
         _sourceSFX.mute = false;
-        //_sourceMusic.mute = false;
     }
 }

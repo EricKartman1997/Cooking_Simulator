@@ -53,7 +53,6 @@ public class LoadReleaseGameplay : IDisposable, IInitializable
     {
         ReleasePlayerPrefabs();
         _isLoaded = false;
-        //Debug.Log("Dispose LoadReleaseGameplay");
     }
     
     public async void Initialize()

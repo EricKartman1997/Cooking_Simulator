@@ -21,7 +21,6 @@ public class GameInput : MonoBehaviour
         IInputBlocker inputBlocker,
         PauseHandler pauseHandler)
     {
-        //_heroik = heroik;
         _menu = menu;
         _inputBlocker = inputBlocker;
         _pauseHandler = pauseHandler;

@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using UnityEngine.SceneManagement;
 
 public class LoadReleaseGlobalScene : IDisposable
 {
@@ -17,7 +16,6 @@ public class LoadReleaseGlobalScene : IDisposable
     public LoadReleaseGlobalScene()
     {
         InitGlobal();
-        //Debug.Log("завершил инициализацию LoadReleaseGlobalScene");
     }
 
     public void Dispose()
@@ -36,8 +34,7 @@ public class LoadReleaseGlobalScene : IDisposable
     {
         AsyncOperationHandle<SceneInstance> handle = 
             Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single);
-
-        // Дожидаемся окончания загрузки
+        
         await handle.Task;
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -53,17 +50,14 @@ public class LoadReleaseGlobalScene : IDisposable
     private void InitGlobal()
     {
         
-        // Синхронная загрузка через Addressables (блокирующий вызов)
         var loadingPanelOperation = Addressables.LoadAssetAsync<GameObject>("LoadingPanel");
         
-        // Ожидаем завершения операции
         var loadingPanelPrefab = loadingPanelOperation.WaitForCompletion();
         
         if (loadingPanelPrefab != null)
         {
             _globalPrefDic.Add(GlobalPref.LoadingPanel, loadingPanelPrefab);
             _loadedPrefabs.Add(loadingPanelPrefab);
-            //Debug.Log("Создал панель");
         }
         else
         {

@@ -1,7 +1,5 @@
 using System;
-using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using Zenject;
 
 public class TimeGameService : IDisposable, ITickable, IPause
@@ -32,14 +30,12 @@ public class TimeGameService : IDisposable, ITickable, IPause
         _pauseHandler = pauseHandler;
         _pauseHandler.Add(this);
         _factoryUIGameplay = factoryUIGameplay;
-        //_timeGameUI = factoryUIGameplay.TimeGameUI;
         CreateTimeLevel();
     }
     
     public void Dispose()
     {
         _pauseHandler.Remove(this);
-        //Debug.Log("У объекта вызван Dispose : TimeGameService");
     }
     
     public void Init()
@@ -50,8 +46,6 @@ public class TimeGameService : IDisposable, ITickable, IPause
 
     private void CreateTimeLevel()
     {
-        // _secondsLevel = Random.Range(45, 60);
-        // _minutesLevel = Random.Range(1, 2);
         _secondsLevel = _settings.Seconds;
         _minutesLevel = _settings.Minutes;
         
@@ -73,7 +67,6 @@ public class TimeGameService : IDisposable, ITickable, IPause
         
         if (_currentMinutes <= 0f && _currentSeconds <= 0f)
         {
-            //Debug.Log("Game Over");
             GameOver?.Invoke();
             Debug.Log("Сработал GameOverService в TimeGameService");
         }

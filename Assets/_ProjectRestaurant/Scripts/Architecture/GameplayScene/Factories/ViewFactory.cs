@@ -1,16 +1,8 @@
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using System.Collections;
 
 public class ViewFactory
 {
-    //private GameManager _gameManager;
-    //private MonoBehaviour _coroutineMonoBehaviour;
-    //private ProductsContainer _productsContainer;
-    //private bool _isInit;
-    
-    //public bool IsInit => _isInit;
     private LoadReleaseGameplay _loadReleaseGameplay;
     
     public ViewFactory(LoadReleaseGameplay loadReleaseGameplay)
